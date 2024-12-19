@@ -25,7 +25,6 @@
 1. 嘘つきみーくんと壊れたまーちゃん とっておきの嘘
    > 深藏的谎言
 2. ヒトクイ
-3. Liar Game
 
 ### 🎮 Games
 
@@ -37,7 +36,7 @@
 4. Steins;Gate
 5. 7 年後で待ってる
 6. Astlibra Revision
-7. 带我去地下城吧！！
+7. 帶我去地下城吧！！
 8. Flowers -Le volume sur ete-
 
 ### 🎵 Music

@@ -12,6 +12,10 @@
 - Kill Me Baby
 - 未確認で進行形
 
+### 电影
+
+- Liar Game
+
 ### 游戏
 
 - Black Desert Mobile
