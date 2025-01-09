@@ -11,6 +11,7 @@
 - Guilty Crown
 - Kill Me Baby
 - 未確認で進行形
+- 甘城ブリリアントパーク
 
 ### 电影
 
