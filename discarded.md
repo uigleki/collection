@@ -34,6 +34,8 @@
 
 ### 音乐
 
+- COP - 尘降
+- COP - 灰烬
 - Candy_Wind - 青空
 - ClariS - ヒトリゴト
 - DAISHI DANCE feat. Cécile Corbel - Take Me Hands
@@ -62,7 +64,6 @@
 - 南征北战 NZBZ - 骄傲的少年
 - 孙燕姿 - 一起走到
 - 张妙格 - 我期待的不是雪 (Live 合唱版)
-- 星尘 & COP - 尘降
 - 朝香智子 - post-script
 - 李如意 - 明天会更好
 - 水瀬いのり & 久保ユリカ - 動く、動く
@@ -187,7 +188,6 @@
 - 洛天依 & Soda 纯白 - 中华铄金娘
 - 洛天依 & 乐正绫 & Soda 纯白 & litterzy - 阳山绝
 - 洛天依 & 乐正绫 - 清明上河图
-- 洛天依 & 言和 & 無藏 - 灰烬
 - 洛天依 - Brightness
 - 洛天依 - Hello & Bye , Days
 - 洛天依 - I LOVE U

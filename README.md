@@ -41,6 +41,7 @@
 
 ### 🎵 Music
 
+- COP - 同归世界线
 - Capchii & 凛々咲 - Letters from Heaven
 - Cream puff - Mermaid girl
 - D'elf - Synchronicity
@@ -56,7 +57,6 @@
 - himmel - 远枫
 - iolli - Through Mist and Fog
 - やくしまるえつこ - Unknown World Map
-- 乐正绫 - 同归世界线
 - 清漪 - 但叹清风错
 - 甘茶の音楽工房 - 赤い风船とメリーゴーランド
 
