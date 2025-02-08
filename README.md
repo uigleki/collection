@@ -79,7 +79,7 @@
 - minato & 初音ミク - 朧月
 - niki feat. Lily - Jitter doll
 - あやりす - 愛を誓いしヒメ飾り
-- いとうかなこ - アマデウス
+- いとうかなこ - Amadeus
 - 琉芸 Miruku & 缨缨 Ei - 花月夜 (中文版)
 - 竹達彩奈 & 巽悠衣子 - Balance KISS
 - 蝶々 P feat. GUMI - 心做し
