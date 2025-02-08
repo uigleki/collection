@@ -10,7 +10,6 @@
 2. 偽物語
 3. Hi Score Girl
 4. 少女終末旅行
-5. ふしぎの海のナディア
 
 ### 🎬 Movies
 
@@ -18,7 +17,6 @@
    > 谢谢你圆我一场青春的梦
 2. Penguin Highway
 3. Charlie and the Chocolate Factory
-4. Summer Ghost
 
 ### 📚 Manga
 

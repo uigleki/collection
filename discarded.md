@@ -10,12 +10,16 @@
 - Girls und Panzer
 - Guilty Crown
 - Kill Me Baby
+- One Room
+- ふしぎの海のナディア
 - 未確認で進行形
 - 甘城ブリリアントパーク
+- 謎の彼女 X
 
 ### 电影
 
 - Liar Game
+- Summer Ghost
 
 ### 游戏
 
