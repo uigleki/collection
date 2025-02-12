@@ -2,216 +2,149 @@
 
 在这个文件中，收录了目前被排除在接近完美之列的作品。虽然它们未达到标准，但依然具有一定的价值，值得记录在案。未来可能会根据新的评价标准或重新审视后将部分作品重新纳入推荐列表。
 
-## 作品分类
+## 📺 Anime
 
-### 动画
-
-- BanG Dream! It's MyGO!!!!!
 - Girls und Panzer
 - Guilty Crown
 - Kill Me Baby
 - One Room
-- ふしぎの海のナディア
-- 未確認で進行形
 - 甘城ブリリアントパーク
 - 謎の彼女 X
 
-### 电影
+## 🎬 Movies
 
 - Liar Game
 - Summer Ghost
 
-### 游戏
+## 🎮 Games
 
 - Black Desert Mobile
 - Deemo
+- Flowers -Le volume sur ete-
 - GRIS
 - Guardian Tales
 - Hellblade: Senua's Sacrifice
-- Inotia 4
 - Titanfall 2
 - osu!
-- アリスの精神裁判
-- 四ツ目神
 - 彼女と彼女と私の七日
 - 蒼の彼方のフォーリズム
 
-### 音乐
-
-- COP - 尘降
-- COP - 灰烬
-- Candy_Wind - 青空
-- ClariS - ヒトリゴト
-- DAISHI DANCE feat. Cécile Corbel - Take Me Hands
-- DECO＊27 & 初音ミク - 初嵐
-- Daishi Dance - MUSIC LIFE IN FOREST
-- Gala - 追梦赤子心
-- Goose house - 光るなら
-- KOKIA - たった 1 つの想い
-- MIMI - 水音とカーテン
-- MY FIRST STORY - 不可逆リプレイス
-- Narsil from Ring - Lavuestia Mutanz
-- Schnuffel - Häschenparty
-- Schnuffel - Ich hab' dich lieb
-- Schnuffel - Nur mit Dir
-- YOASOBI - 夜に駆ける
-- Yonder Voice - 花月夜
-- angela - gravitation
-- daniwellP & MAYU - Love Logic
-- daniwellP - ねこみみスイッチ
-- fripSide - LEVEL5-judgelight-
-- fripSide - only my railgun
-- いとうかなこ - スカイクラッドの観測者
-- 上村 叶恵 - 雨霧
-- 亜咲花 - Open your eyes
-- 削除 - Lost Memory
-- 南征北战 NZBZ - 骄傲的少年
-- 孙燕姿 - 一起走到
-- 张妙格 - 我期待的不是雪 (Live 合唱版)
-- 朝香智子 - post-script
-- 李如意 - 明天会更好
-- 水瀬いのり & 久保ユリカ - 動く、動く
-- 汐音社 & 初音ミク - 大荒碑
-- 洛天依 & 纯白 P - 中华缘木娘 (Album Version)
-- 玉置成実 - Reason
-- 程响 - 世界这么大还是遇见你
-- 胡歌 - 一吻天荒
-- 蔡健雅 - 红色高跟鞋
-- 闻人听書\_ - 虞兮叹
-
----
+## 🎵 Music
 
 - 40mP feat. 初音ミク - からくりピエロ
-- Adam Christopher - So Far Away (Acoustic)
 - Aimer - Last Stardust
+- Akino With Bless4 - Extra Magic Hour
 - AniFace - Where are you
 - AniFace - 夜、萤火虫和你
 - Aosaki & himawari - 惊梦
-- BaseSon - 夢笑顔
+- Approaching Nirvana - You
+- BRILLIANT4 - 素晴ラシキ FUN!TASY
 - BeMax - Sweet Little Bumble Bee
-- Beauz & Dallas - Outerspace
-- Beauz & JVNA - Crazy
 - CHiCO with HoneyWorks - アイのシナリオ
-- COP & 洛天依 - 凉雨
+- CMJ - 所念皆星河
+- COP - Hello & Bye , Days
+- COP - 尘降
 - Candee! - Ein Kleines Lied
+- Candy_Wind - 青空
 - Capo Productions - Journey
-- Ceui - 今、歩き出す君へ
-- Chester Young & Castion - PYRO
-- ClariS - With You
-- ClariS - 桜咲く
-- Coopex & Donovan's Playground & Lujavo & Britt Lari - Stereo Love
-- Cymophane - Tassel
-- DJ Project feat. Giulia - Nu (video version)
+- D'elf - Code： Answer
+- D'elf - Synchronicity
+- DAISHI DANCE feat. Cécile Corbel - Take Me Hands
+- Daishi Dance - MUSIC LIFE IN FOREST
 - Dec 顾令 & 乐正绫 & 踏云社 - 闲云志
-- Dion Timmer feat. The Arcturians - The Best Of Me
+- Dj Okawari - Flower Dance
 - Dreamcatcher - YOU AND I
-- Dxrk ダーク - RAVE
+- EastNewSound - relate
 - F.I.R.飞儿乐团 - 千年之恋
-- Fall Out Boy - The Last Of The Real Ones
-- FrogMonster - Remember Our Winter
 - Frogmonster - Remember Our Summer
+- Gala - 追梦赤子心
 - Glitter＊Green - Don't be afraid!
+- Goose house - 光るなら
 - H-el-ical／／ - Altern-ate-
 - HHMR, Krbread & Sofuu - Once More
-- Heidi Montag - I'll Do It
-- Hello, Happy World! - Dragon Night (Cover)
-- JUSF 周存 - 心跳同步的时光 (Memory Ver.)
-- JUSF 周存 - 潘多拉パンドーラー
-- Kirara Magic - Aurora Vip
+- KOKIA - たった 1 つの想い
+- MY FIRST STORY - 不可逆リプレイス
+- MYTH & ROID - STYX HELIX
 - Maroon 5 - Payphone [Clean]
-- Miani - Tu vivi nellaria (Remix Gigi DAgastino Minions Version)
-- Mikk Mäe, Cartoon, Jéja & Futuristik - C U Again
-- Mono Inc. feat. Tilo Wolff, Joachim Witt & Chris Harms - Children of the Dark
-- Neru & 镜音铃 & 镜音レン & z5 - 病名は爱だった
+- MoreanP - 忆夏思乡
+- Narsil from Ring - Lavuestia Mutanz
 - Nick Strand, Hoaprox & Mio - With You (Ngẫu Hứng)
-- Olly Murs - That Girl
+- NoKANY - 無人区-Vacuum TrackADD8E6-
 - Orangestar - Daybreak Frontline
-- Pastel＊Palettes - Happy Synthesizer (Cover)
-- Pastel＊Palettes - きゅ～まい＊flower
-- Poppin'Party - Tear Drops
-- Rameses B & Anna Yvette - Neon Rainbow
-- Raven & Kreyn & Nino Lucarelli - This Far (RudeLies Remix)
+- Pianoboy 高至豪 - The truth that you leave
 - Rigel Theatre - Grad Erlija -Retrospektiva-
-- Robin Hustin, Jex & Tobimorrow - Light It Up
-- SiM - KiLLiNG ME
+- SawanoHiroyuki[nZk] feat. mizuki - Avid
 - Supercell - 君の知らない物語
-- TAIGA - Middle Of The Night (Original Mix)
-- TRASH - 终究还是因为爱
 - Taylor Swift - Love Story
-- Tez Cadey - Seve (Radio Edit)
-- The Chainsmokers & Coldplay - Something Just Like This
-- The Little Singers of Tokyo - エラモレセラモル
-- Triplo Max & Vanessa Campagna - My Soul Is Your Soul
-- Tungevaag & Raaban feat. Richard Smitt - All For Love
-- Vicetone - Walk Thru Fire
-- Vicetone feat. Cozi Zuehlsdorff - Nevada
-- cosMo@暴走 P & 初音未来 - 初音ミクの消失
-- doriko & 初音未来 - 茜コントラスト
-- doriko - ロミオとシンデレラ
-- doriko - 歌に形はないけれど
+- Valentin - A Little Story
+- YOASOBI - 夜に駆ける
+- Yonder Voice - 花月夜
+- angela - gravitation
+- cosMo＠暴走 P - 初音ミクの消失
+- daniwellP - Love Logic
+- daniwellP - ねこみみスイッチ
 - effe - Corridor of reminiscence
+- fripSide - LEVEL5-judgelight-
+- fripSide - only my railgun
 - himmel - 未梦
 - nano - Nevereverland
 - tsunenori a.k.a Marukabis & Kotomi & T-NOX - さよならさよなら
 - yuiko - ASPIRE
 - いとうかなこ - Another Heaven
-- いとうかなこ - Find the blue
+- いとうかなこ - スカイクラッドの観測者
 - つなまる & 初音未来 - paranoia
 - てぃあら - SAYONARA
-- とあ feat. 初音ミク - ツギハギスタッカート
-- めありー - DAYBREAK FRONTLINE
 - アトラスサウンドチーム - 祭囃子・万象ノ真理ノ調
-- エリオをかまってちゃん - Os-宇宙人
-- 七森中 ☆ ごらく部 - ゆりゆららららゆるゆり大事件
 - 久石让 - Summer (PIANO VER.)
 - 乐正绫 & 洛天依 & 玖玲 - 玉人歌
 - 乐正绫 & 洛天依 - 亡国祸水《四•国殇》
-- 买辣椒也用券 - 起风了 (旧版)
+- 亜咲花 - Open your eyes
 - 光良 - 童话
-- 初音未来 & Anamanaguchi - Miku
+- 削除 - Lost Memory
 - 前田玲奈 - アメフラシの歌～ Beautiful Rain ～
 - 千坂 - At The Edge
 - 千坂 - Fragments
-- 原子邦妮 - 在名为未来的波浪里
+- 南征北战 NZBZ - 骄傲的少年
 - 呦猫 UNEKO - 梦回还
 - 呦猫 UNEKO - 轮回
 - 喵九 & 乐正绫 - 樱花绽放时
 - 天游 - Dreamrainer
+- 孙燕姿 - 一起走到
 - 小峰理纱 - Resuscitated Hope
-- 山下智久 - Loveless
 - 平行四界 Quadimension - Seattle 物语 II
-- 彩音 - いつもこの場所で
+- 张妙格 - 我期待的不是雪 (Live 合唱版)
 - 彳亍 P & 洛天依 - 马步谣
 - 括号君 - 盲
-- 接个吻，开一枪, 沈以誠 & 薛黛霏 - 失眠飞行
 - 斎藤千和 - staple stable
 - 早稻叽 - STAY (女声版)
 - 星尘 - 彼方
 - 星尘 - 曙光
 - 星尘 - 海棠仙 (Album Version)
+- 李如意 - 明天会更好
+- 水瀬いのり & 久保ユリカ - 動く、動く
+- 汐音社 & 初音ミク - 大荒碑
 - 洛天依 & Soda 纯白 - 中华铄金娘
 - 洛天依 & 乐正绫 & Soda 纯白 & litterzy - 阳山绝
-- 洛天依 & 乐正绫 - 清明上河图
 - 洛天依 - Brightness
-- 洛天依 - Hello & Bye , Days
 - 洛天依 - I LOVE U
 - 洛天依 - 一梦千朝
-- 洛天依 - 世末积雨云
 - 洛天依 - 仙居谣
-- 洛天依 - 八辈子
 - 洛天依 - 末日 DISCO
 - 洛天依 - 权御天下
 - 海鲜面 - 万神纪
-- 澤野弘之 & 小林未郁 - βios
+- 玉置成実 - Reason
 - 玖玲 & 初音ミク - Plot： 0
-- 皮卡丘多多 - 百花香
+- 琉芸 Miruku & 缨缨 Ei - 花月夜 (中文版)
+- 程响 - 世界这么大还是遇见你
+- 纯白 P - 中华缘木娘 (Album Version)
+- 胡歌 - 一吻天荒
 - 花束 P feat. 初音ミク - さよならのかわりに、花束を (tearsMIX)
 - 葉月ゆら - HAMELN
-- 蔡健雅 - Letting Go
+- 蔡健雅 - 红色高跟鞋
+- 蝶々 P feat. GUMI - 心做し
 - 言和 - 梦之雨
 - 逆时针向 - Asphyxia
-- 钉宫理惠 & 堀江由衣 & 喜多村英梨 - プレパレード
-- 银临 & Aki 阿杰 - 牵丝戏
+- 闻人听書\_ - 虞兮叹
 - 阿良良木健 & 洛天依 - CONNECT
 - 阿良良木健 & 洛天依 - 绝体绝命
 - 高橋洋子 - 残酷な天使のテーゼ (Directors Edit Version)
