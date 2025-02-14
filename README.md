@@ -12,22 +12,18 @@
 ## 🎬 Movies
 
 1. 打ち上げ花火、下から見るか？横から見るか？
-   > 谢谢你圆我一场青春的梦
 2. Penguin Highway
 3. Charlie and the Chocolate Factory
 
 ## 📚 Manga
 
 1. 嘘つきみーくんと壊れたまーちゃん とっておきの嘘
-   > 深藏的谎言
 2. ヒトクイ
 
 ## 🎮 Games
 
 1. To the Moon
-   > 一个关于执念与爱的故事
 2. What Remains of Edith Finch
-   > 最佳叙事，实至名归
 3. Finding Paradise
 4. Steins;Gate
 5. 7 年後で待ってる
