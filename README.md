@@ -28,7 +28,7 @@
 4. Steins;Gate
 5. 7 年後で待ってる
 6. Astlibra Revision
-7. 帶我去地下城吧！！
+7. Take me to the dungeon!!
 
 ## 🎵 Music
 
