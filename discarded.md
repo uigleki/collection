@@ -31,7 +31,7 @@
 
 ## 🎵 Music
 
-- 40mP feat. 初音ミク - からくりピエロ
+- 40mP - からくりピエロ
 - Aimer - Last Stardust
 - Akino With Bless4 - Extra Magic Hour
 - AniFace - Where are you
@@ -40,7 +40,7 @@
 - Approaching Nirvana - You
 - BRILLIANT4 - 素晴ラシキ FUN!TASY
 - BeMax - Sweet Little Bumble Bee
-- CHiCO with HoneyWorks - アイのシナリオ
+- CHiCO & HoneyWorks - アイのシナリオ
 - CMJ - 所念皆星河
 - COP - Hello & Bye , Days
 - COP - 尘降
@@ -114,8 +114,7 @@
 - 平行四界 Quadimension - Seattle 物语 II
 - 张妙格 - 我期待的不是雪 (Live 合唱版)
 - 彳亍 P & 洛天依 - 马步谣
-- 括号君 - 盲
-- 斎藤千和 - staple stable
+- 斎藤千和 - Staple Stable
 - 早稻叽 - STAY (女声版)
 - 星尘 - 彼方
 - 星尘 - 曙光
@@ -148,4 +147,3 @@
 - 阿良良木健 & 洛天依 - CONNECT
 - 阿良良木健 & 洛天依 - 绝体绝命
 - 高橋洋子 - 残酷な天使のテーゼ (Directors Edit Version)
-- 麻枝准 & やなぎなぎ - 終わりの世界から

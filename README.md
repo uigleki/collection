@@ -32,7 +32,6 @@
 
 ## 🎵 Music
 
-- BaseSon - 夢笑顔
 - COP - 世末积雨云
 - COP - 凉雨
 - COP - 同归世界线
@@ -42,7 +41,7 @@
 - ClariS - With You
 - ClariS - ヒトリゴト
 - ClariS - 桜咲く
-- Cream puff - Mermaid girl
+- Cream puff - Mermaid girl (Extended RRver.)
 - DECO＊27 & 初音ミク - 初嵐
 - EGOIST - The Everlasting Guilty Crown
 - JUSF 周存 - 心跳同步的时光 (Memory Ver.)
@@ -73,11 +72,12 @@
 - あやりす - 愛を誓いしヒメ飾り
 - いとうかなこ - Amadeus
 - やくしまるえつこ - Unknown World Map
-- 上村 叶恵 - 雨霧
+- 上村叶恵 - 雨霧
 - 朝香智子 - post-script
 - 清漪 - 但叹清风错
 - 甘茶の音楽工房 - 赤い风船とメリーゴーランド
 - 竹達彩奈 & 巽悠衣子 - Balance KISS
+- 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
 
 ## 📄 License
