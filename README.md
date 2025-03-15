@@ -44,7 +44,7 @@ Second Best:
 - COP - 同归世界线
 - COP - 灰烬
 - Capchii & 凛々咲 - Letters from Heaven
-- Ceui - 今、歩き出す君へ
+- Ceui - 今、歩き出す君へ。
 - ClariS - With You
 - ClariS - ヒトリゴト
 - ClariS - 桜咲く
@@ -56,6 +56,7 @@ Second Best:
 - MIMI - 水音とカーテン
 - Mili - Nine Point Eight
 - MoreanP - Feeling The Rain
+- Neuro-sama - LIFE
 - Poppin'Party - Returns
 - Schnuffel - Häschenparty
 - Schnuffel - Ich hab' dich lieb
