@@ -1,6 +1,6 @@
 # collection
 
-🌟 A collection of works that [approach perfection](criteria/README.md)
+🌟 A collection of works that [approach perfection](docs/criteria-quick.md)
 
 ## 📺 Anime
 
