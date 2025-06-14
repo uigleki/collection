@@ -83,6 +83,11 @@ Second Best:
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
 
+## 🧭 Additional Notes
+
+- [Philosophy](docs/philosophy.md): how I define and seek artistic perfection
+- [Reviews](docs/reviews.md): deep dives into works that reflect this ideal
+
 ## 📄 License
 
 [CC BY-SA 4.0](LICENSE)
