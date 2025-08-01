@@ -6,13 +6,13 @@
 
 1. 化物語
 2. 偽物語
-3. Hi Score Girl
+3. ハイスコアガール
 4. 少女終末旅行
 
 ## 🎬 Movies
 
 1. 打ち上げ花火、下から見るか？横から見るか？
-2. Penguin Highway
+2. ペンギン・ハイウェイ
 3. Charlie and the Chocolate Factory
 
 ## 🎮 Games
@@ -22,7 +22,7 @@
 3. Finding Paradise
 4. Steins;Gate
 5. 7 年後で待ってる
-6. Astlibra Revision
+6. ASTLIBRA Revision
 
 ## 🎨 Artists
 
@@ -70,15 +70,15 @@ Second Best:
 - doriko - 茜コントラスト
 - iolli - Through Mist and Fog
 - minato & 初音ミク - 朧月
-- niki feat. Lily - Jitter doll
-- niki feat. Lily - Terrorist
+- niki feat. Lily - ジッタードール
+- niki feat. Lily - テロリスト
 - あやりす - 愛を誓いしヒメ飾り
-- いとうかなこ - Amadeus
-- やくしまるえつこ - Unknown World Map
+- いとうかなこ - アマデウス
+- やくしまるえつこ - アンノウン・ワールドマップ
 - 上村叶恵 - 雨霧
 - 朝香智子 - post-script
 - 甘茶の音楽工房 - 赤い风船とメリーゴーランド
-- 竹達彩奈 & 巽悠衣子 - Balance KISS
+- 竹達彩奈 & 巽悠衣子 - バランス KISS
 - 纯白 P - 海棠仙 (Album Version)
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
