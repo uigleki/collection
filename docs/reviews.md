@@ -4,7 +4,7 @@
 
 ## 📺 Anime
 
-### Hi Score Girl
+### ハイスコアガール
 
 "街机厅里的最强羁绊"
 
@@ -52,7 +52,7 @@
 
 - **部分转折略显刻意**：过度追求悬念导致一些情节转折不够自然
 
-### Astlibra Revision
+### ASTLIBRA Revision
 
 "追寻命运的冒险诗篇"
 
