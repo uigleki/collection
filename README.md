@@ -83,7 +83,6 @@
 ## 📖 Documentation
 
 - [Why These Works](docs/why.md)
-- [How to Identify](docs/how.md)
 - [Reviews](docs/reviews.md)
 
 ## 📄 License
