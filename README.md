@@ -1,6 +1,6 @@
-# collection
+# Perfect Collection
 
-🌟 A collection of works that [approach perfection](docs/criteria-quick.md)
+🌟 Works that achieve excellence through authentic expression rather than psychological manipulation.
 
 ## 📺 Anime
 
@@ -30,15 +30,6 @@
 
 ## 🎵 Music
 
-- SOUNDORBIS - LIFE
-- Supercell - My Dearest
-- daniwellP - UZ
-- daniwellP - 夏の終わりの彼女は
-- himmel - 远枫
-- 清漪 - 但叹清风错
-
-Second Best:
-
 - COP - 世末积雨云
 - COP - 凉雨
 - COP - 同归世界线
@@ -58,16 +49,21 @@ Second Best:
 - MoreanP - Feeling The Rain
 - Neuro-sama - LIFE
 - Poppin'Party - Returns
+- SOUNDORBIS - LIFE
 - Schnuffel - Häschenparty
 - Schnuffel - Ich hab' dich lieb
 - Schnuffel - Nur mit Dir
 - Shirfine - Illusionary Daytime
+- Supercell - My Dearest
 - Xad - Birds
 - azusa - 真夏のフォトグラフ
+- daniwellP - UZ
 - daniwellP - てすてすブロードキャスト.proj
+- daniwellP - 夏の終わりの彼女は
 - doriko - ロミオとシンデレラ
 - doriko - 歌に形はないけれど
 - doriko - 茜コントラスト
+- himmel - 远枫
 - iolli - Through Mist and Fog
 - minato & 初音ミク - 朧月
 - niki feat. Lily - ジッタードール
@@ -77,16 +73,18 @@ Second Best:
 - やくしまるえつこ - アンノウン・ワールドマップ
 - 上村叶恵 - 雨霧
 - 朝香智子 - post-script
+- 清漪 - 但叹清风错
 - 甘茶の音楽工房 - 赤い風船とメリーゴーランド
 - 竹達彩奈 & 巽悠衣子 - バランス KISS
 - 纯白 P - 海棠仙 (Album Version)
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
 
-## 🧭 Additional Notes
+## 📖 Documentation
 
-- [Philosophy](docs/philosophy.md): how I define and seek artistic perfection
-- [Reviews](docs/reviews.md): deep dives into works that reflect this ideal
+- [Why These Works](docs/why.md)
+- [How to Identify](docs/how.md)
+- [Reviews](docs/reviews.md)
 
 ## 📄 License
 
