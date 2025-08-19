@@ -1,109 +1,109 @@
 # Reviews
 
-深入解析收藏作品的艺术价值与独特魅力。
+Brief impressions designed to aid memory and recognition while avoiding spoilers.
 
 ## 📺 Anime
 
 ### ハイスコアガール
 
-"街机厅里的最强羁绊"
+_The strongest bond forged in arcades_
 
-- **深刻的情感塑造**：男女主展现出超越语言的理解与默契，以游戏交手诠释心灵相通
-- **完美的人物关系**：两人既是最强劲的对手，又是最懂彼此的伙伴，在游戏与人生中互相成长
-- **精妙的无声表达**：女主全程零台词却通过细腻的动作与表情传达丰富感情
-- **考究的游戏还原**：完美重现 90 年代格斗游戏文化，让怀旧与剧情自然交融
-- **出色的音乐配合**：OP 传达热血与执着，ED 展现坚韧与信念，与剧情形成共鸣
+- **Profound emotional development**: Protagonists demonstrate understanding and connection that transcends language, expressing spiritual communion through competitive play
+- **Perfect character dynamics**: Two individuals who are simultaneously fiercest rivals and most understanding companions, growing together through games and life
+- **Masterful silent storytelling**: The female lead conveys rich emotions through subtle gestures and expressions without speaking a single word
+- **Authentic period recreation**: Meticulous restoration of 90s fighting game culture, seamlessly weaving nostalgia into narrative
+- **Exceptional musical integration**: Opening theme captures passion and determination, ending theme reflects resilience and faith, both resonating deeply with the story
 
 ### 化物語
 
-"青春期的怪异物语"
+_Supernatural tales of adolescent awakening_
 
-- **创新的叙事手法**：快速对白、文字特效与画面切换构建出独特节奏美
-- **精湛的视觉艺术**：新房昭之标志性的构图与色彩，将内心风景具象化
-- **巧妙的怪异设定**：用超自然现象折射青春期的困惑与成长
-- **深邃的对话艺术**：充满文字游戏与哲理的对白，展现角色的思想深度
-- **细腻的人物刻画**：每个角色都有独特的心理创伤与救赎历程
+- **Innovative narrative technique**: Rapid-fire dialogue, visual text effects, and dynamic scene transitions creating distinctive rhythmic beauty
+- **Exquisite visual artistry**: Akiyuki Shinbo's signature composition and color palette, transforming inner psychological landscapes into concrete imagery
+- **Ingenious supernatural framework**: Using paranormal phenomena to mirror adolescent confusion and personal growth
+- **Profound conversational depth**: Dialogue rich with wordplay and philosophical insight, revealing the intellectual complexity of characters
+- **Delicate character portraiture**: Each character carrying unique psychological wounds and paths to redemption
 
 ## 🎬 Movies
 
 ### 打ち上げ花火、下から見るか？横から見るか？
 
-"圆一场青春的光影梦境"
+_Fulfilling youth's luminous summer reverie_
 
-- **深邃的意识流演出**：新房昭之将少年心事与现实交织，构建出独特的心灵维度
-- **纯粹的情感描绘**：男女主角率真温暖的互动，展现最动人的青春心绪
-- **巧妙的时空构思**：以烟花是圆是扁的疑问为引，展开对永恒瞬间的追寻
-- **精妙的瞬间捕捉**：通过 if 球的循环，诠释对美好可能性的不懈追寻
-- **震撼的视听体验**：将海边、烟花与奇幻元素融为唯美的夏日诗篇
+- **Stream-of-consciousness cinematography**: Shinbo weaves boyhood emotions with reality, constructing unique psychological dimensions
+- **Pure emotional portrayal**: Genuine, warm interactions between protagonists capturing the essence of moving youthful sentiment
+- **Ingenious temporal concept**: Using the question of fireworks' shape as gateway to exploring the pursuit of eternal moments
+- **Exquisite moment preservation**: Through mystical temporal loops, expressing relentless pursuit of beautiful possibilities
+- **Stunning audiovisual symphony**: Fusing seaside settings, fireworks, and fantastical elements into poetic summer imagery
 
 ## 🎮 Games
 
 ### 7 年後で待ってる
 
-"穿越七年光阴的约定"
+_A promise spanning seven years_
 
-- **珍贵的感情羁绊**：跨越时空的约定凝聚着最真挚的情感
-- **巧妙的悬念设计**：每一章都以精心设计的转折吸引玩家探索真相
-- **独特的记忆探索**：通过寻回记忆碎片逐步展开故事
-- **深刻的时空主题**：探讨命运与选择的永恒课题
-- **动人的音乐配乐**：尤其是决意之曲 _LIFE_ 带来震撼心灵的共鸣
+- **Precious emotional bonds**: Cross-temporal commitments crystallizing the most sincere feelings
+- **Masterful suspense construction**: Each chapter drawing players forward through carefully crafted revelations
+- **Unique memory exploration**: Story gradually unveiled through recovered fragments of recollection
+- **Profound temporal themes**: Exploring eternal questions of destiny and choice
+- **Moving musical accompaniment**: Particularly the resolution theme _LIFE_, striking profound emotional resonance
 
-**缺点**：
+**Shortcomings**:
 
-- **部分转折略显刻意**：过度追求悬念导致一些情节转折不够自然
+- **Some forced narrative turns**: Excessive pursuit of suspense occasionally resulting in less organic plot developments
 
 ### ASTLIBRA Revision
 
-"追寻命运的冒险诗篇"
+_Epic quest in pursuit of destiny_
 
-- **跌宕起伏的剧情**：通过天平改变过去带来的意想不到的发展
-- **出色的音乐体验**：配乐与场景完美契合，从战斗到剧情皆令人沉浸
-- **震撼的关键场景**：重要剧情时刻的演出充满使命感与震撼力
-- **怀旧的游戏风格**：保留经典 RPG 的纯粹乐趣，让人重拾童年记忆
+- **Dramatic narrative progression**: Unexpected developments emerging from altering the past through mystical scales
+- **Outstanding musical experience**: Soundtrack perfectly complementing scenes, creating full immersion from combat to story
+- **Impactful climactic moments**: Key story beats filled with gravitas and emotional weight
+- **Nostalgic gameplay aesthetic**: Preserving the pure joy of classic RPGs, rekindling childhood wonder
 
-**缺点**：
+**Shortcomings**:
 
-- **严苛的战斗系统**：后期怪物与 Boss 战难度曲线过于陡峭
-- **重复的养成环节**：需要投入大量时间进行练级与装备收集
+- **Punishing combat difficulty**: Late-game encounters featuring overly steep challenge curves
+- **Repetitive progression systems**: Requiring substantial time investment in character development and equipment gathering
 
 ### Finding Paradise
 
-"追寻完美人生的心灵旅程"
+_A soul's journey toward perfect existence_
 
-- **独特的记忆探索**：从生命两端向中间汇聚的奇妙叙事结构
-- **温暖的人生思考**：关于理想、现实与遗憾的深刻探讨
-- **动人的剧情设计**：现实与想象交织的情感共鸣
-- **精妙的音乐配合**：为故事增添更深层的感动
+- **Unique memory exploration**: Remarkable narrative structure converging from both ends of life toward the center
+- **Warm life contemplation**: Thoughtful examination of ideals, reality, and regret
+- **Moving plot construction**: Emotional resonance born from interweaving imagination with reality
+- **Exquisite musical collaboration**: Adding deeper emotional layers to the storytelling
 
 ### Steins;Gate
 
-"来自神明的最后通牒"
+_Fate's ultimate decree_
 
-- **严谨的科幻设定**：完整且自洽的时间穿越世界观
-- **精妙的伏笔设计**：从开场到结局的每个细节都经过精心安排
-- **深刻的情感抉择**：面对拯救与牺牲的艰难选择
-- **真挚的感情羁绊**：在穿越世界线的过程中逐渐加深的羁绊
+- **Rigorous scientific framework**: Complete and internally consistent time travel mythology
+- **Masterful narrative foreshadowing**: Every detail from opening to conclusion meticulously placed
+- **Profound emotional decisions**: Confronting harrowing choices between salvation and sacrifice
+- **Sincere emotional connections**: Bonds deepening through traversal across world lines
 
-**缺点**：
+**Shortcomings**:
 
-- **前期节奏较慢**：需要耐心体验日常剧情铺垫
-- **真结局条件隐晦**：关键选项设计过于刁钻
+- **Slow initial pacing**: Requiring patience through slice-of-life narrative foundation
+- **Cryptic true ending requirements**: Key decision points designed with excessive subtlety
 
 ### To the Moon
 
-"穿越记忆拥抱最后的月光誓约"
+_A memory journey embracing final moonlight vows_
 
-- **感人至深的爱情**：通过记忆碎片展现的深邃情感
-- **独特的叙事视角**：逆序揭示的记忆之旅别具匠心
-- **细腻的人物刻画**：通过细节展现角色的独特性格
-- **动人的配乐设计**：主题曲 _For River_ 完美升华情感
-- **巧妙的意象运用**：兔子、月亮等贯穿始终的象征符号
+- **Deeply moving romance**: Profound emotions revealed through fragmentary recollections
+- **Unique narrative perspective**: Reverse memory journey crafted with distinctive ingenuity
+- **Delicate character development**: Personalities unveiled through nuanced details
+- **Moving soundtrack design**: Theme song _For River_ perfectly elevating emotional impact
+- **Clever symbolic imagery**: Rabbits, moonlight, and other motifs threading throughout the narrative
 
 ### What Remains of Edith Finch
 
-"无法逃离的家族宿命终幕"
+_The inescapable finale of family destiny_
 
-- **创新的叙事手法**：每个故事都以独特的方式呈现
-- **精妙的空间设计**：每个房间都是一个独立的记忆剧场
-- **沉浸式的体验**：第一人称视角下的奇幻冒险
-- **深刻的主题表达**：将幻想与现实完美融合
+- **Innovative storytelling methods**: Each tale presented through unique narrative devices
+- **Exquisite spatial design**: Every room serving as an independent theater of memory
+- **Immersive experience**: Fantastical adventures viewed through first-person perspective
+- **Profound thematic expression**: Seamless fusion of fantasy and reality
