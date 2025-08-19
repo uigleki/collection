@@ -1,5 +1,7 @@
 # Why These Works
 
+To understand true excellence, we must first recognize the manipulation techniques that create false impressions of greatness.
+
 ## Perceptual Tricks That Create False Masterpieces
 
 ### Contrast Effects & Peak-End Rule
