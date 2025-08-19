@@ -14,18 +14,18 @@ True excellence doesn't need these tricks. Genuinely exceptional works captivate
 
 ### Negativity Bias Exploitation
 
-The laziest path to emotional impact: kill beloved characters or inflict excessive suffering. This hijacks our evolutionary tendency to focus intensely on negative events (**negativity bias**), creating memorable experiences that feel profound but actually drain audiences without offering genuine insight or growth.
+The laziest path to emotional impact: kill beloved characters or inflict excessive suffering. This hijacks our evolutionary tendency to focus intensely on negative events (**negativity bias**), creating memorable experiences that feel profound but actually drain audiences emotionally without providing meaningful insight or personal growth.
 
 ### Intellectual Disrespect
 
 Rather than crafting believable scenarios, creators take mental shortcuts:
 
-- Characters make impossibly noble moral choices (forgiving genocidal villains) to manufacture feel-good moments
+- Characters make impossibly noble moral choices (forgiving genocidal villains) to create artificial moral superiority
 - Protagonists with no genuine appeal somehow attract devoted followers who solve their problems
 
-These approaches exploit **cognitive miserliness**—our tendency to accept simple explanations rather than engage with complexity. They disrespect audience intelligence while avoiding the hard work of authentic character development.
+These approaches exploit **cognitive miserliness**—our tendency to accept simple explanations rather than grapple with genuine complexity. They disrespect audience intelligence while avoiding the hard work of authentic character development.
 
-## Audience Exploitation
+## Audience Shortcuts
 
 ### Overstimulation Dependency
 
@@ -35,7 +35,7 @@ Overwhelming electronic effects, excessive complexity, and artificial intensity 
 
 Catchy hooks and repetitive structures exploit the **mere exposure effect**—we quickly grow to like familiar patterns. However, this same mechanism causes **habituation**—rapid decline in interest once the novelty wears off. This creates the cycle of songs that become instantly popular but just as quickly fade from memory.
 
-## Observational Insights
+## Additional Observations
 
 ### Expressiveness Paradox
 
@@ -49,7 +49,7 @@ Paradoxically, virtual singers' **expressive limitations** force creators to foc
 
 These constraints actually promote more solid foundational structures, resulting in works with greater long-term listening value.
 
-This demonstrates how apparent "advantages" can become psychological traps—complexity and richness aren't inherently superior if they overwhelm rather than serve the core artistic vision.
+This shows how apparent "advantages" can actually become traps—complexity and richness aren't inherently superior if they overwhelm rather than serve the core artistic vision.
 
 ## What True Excellence Offers
 
@@ -60,7 +60,7 @@ Works in this collection refuse all these shortcuts. They achieve profound impac
 - Respect for audience intelligence with realistic, complex scenarios
 - Sustainable engagement that deepens rather than diminishes over time
 
-Excellence proves that genuine artistic expression is more powerful than any psychological trick—it just requires creators willing to do the harder work of authentic artistry.
+True artistic expression can be more powerful than any psychological trick—it just requires creators willing to do the harder work of authentic artistry.
 
 ---
 
