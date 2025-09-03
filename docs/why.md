@@ -30,7 +30,9 @@ This creates the **false masterpiece formula**: tedious opening + moderate impro
 
 **In contrast**: True excellence captivates from the first moment and maintains quality throughout.
 
-## Creator Shortcuts
+## Narrative Shortcuts
+
+What happens when creators lack genuine storytelling ability? They exploit psychological vulnerabilities instead of developing authentic craft.
 
 ### Negativity Bias Exploitation
 
@@ -50,7 +52,9 @@ These approaches exploit **cognitive miserliness**: our tendency to accept simpl
 
 **In contrast**: Exceptional works create believable scenarios where characters earn their positions through consistent actions.
 
-## Audience Shortcuts
+## Musical Shortcuts
+
+How does mediocre music achieve instant popularity? Through engineering addiction rather than creating art.
 
 ### Overstimulation Dependency
 
@@ -65,6 +69,8 @@ Catchy hooks and repetitive structures exploit the **mere exposure effect**: we 
 **In contrast**: Enduring works reveal new details upon repeated experience through coherent structural design.
 
 ## Additional Observations
+
+Beyond established patterns, certain phenomena merit documentation though their broader implications remain under investigation.
 
 ### Expressiveness Paradox
 
@@ -83,5 +89,3 @@ This shows how apparent "advantages" can become traps: complexity isn't inherent
 ---
 
 _I honor the creators who refuse these shortcuts and the audiences who recognize authentic art when they experience it._
-
-_True masterpieces don't take from you. They give._
