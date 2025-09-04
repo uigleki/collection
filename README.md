@@ -1,6 +1,6 @@
 # Perfect Collection
 
-🌟 Works that achieve excellence through authentic expression rather than psychological manipulation.
+🌟 Works that enrich rather than drain - created from love, not manipulation.
 
 ## 📺 Anime
 
