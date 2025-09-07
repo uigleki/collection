@@ -16,7 +16,7 @@ Every authentic work manifests three inseparable qualities:
 
 ### Creative Love
 
-The creator loved the work itself, not the response it would generate. Just as parents who truly love their children want them to be happy rather than to bring glory to the family, creators who truly love their work cannot bear to inflict darkness without purpose, cannot tolerate arbitrariness, cannot accept incompleteness.
+The creator loved the work itself, not the response it would generate. Just as parents who truly love their children want them to be happy rather than bring glory to the family, creators who truly love their work cannot bear to inflict darkness without purpose, cannot tolerate arbitrariness, cannot accept incompleteness.
 
 ### Internal Coherence
 
@@ -36,7 +36,7 @@ Most acclaimed works achieve their effect through psychological exploitation rat
 
 Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.
 
-**The trick**: Kill the beloved character. Deploy terminal illness. Betray trust. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love - just cruelty. You leave these works diminished. They prove only that humans can be manipulated, not that life has meaning.
+**The trick**: Kill the beloved character. Deploy terminal illness. Betray trust. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love - just cruelty. These works leave you diminished. They prove only that humans can be manipulated, not that life has meaning.
 
 **The truth**: True works create equally lasting impressions through elevation rather than trauma. Life affirms itself through creation, not destruction. Not what makes you cry, but what makes you believe.
 
