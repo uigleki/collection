@@ -1,5 +1,7 @@
 # Why These Works
 
+_The finger pointing at the moon is not the moon._
+
 ## The Fundamental Question
 
 If we're here to experience beauty, what beauty is worth our finite time?
