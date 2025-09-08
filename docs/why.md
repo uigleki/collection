@@ -26,7 +26,7 @@ Nothing is random. Everything connects. A single line advances plot, reveals cha
 
 The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift - the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.
 
-These three are one truth viewed from different angles. Love manifests as coherence. Love chooses beauty. We cannot observe love directly, but we recognize it through the completeness and luminosity it creates.
+These three are one truth viewed from different angles. Love manifests as coherence. Love chooses beauty. Though we cannot observe love directly, we recognize it through the completeness and luminosity it creates.
 
 ## The Shortcuts to False Impact
 
