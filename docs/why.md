@@ -36,31 +36,31 @@ Most acclaimed works achieve their effect through psychological exploitation rat
 
 Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.
 
-**The trick**: Kill the beloved character. Deploy terminal illness. Torture every childhood. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love - just cruelty. These works leave you diminished. They prove only that humans can be manipulated, not that life has meaning.
+**The trick:** Kill the beloved character. Deploy terminal illness. Torture every childhood. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love - just cruelty. These works leave you diminished. **They prove only that humans can be manipulated, not that life has meaning.**
 
-**The truth**: True works create equally lasting impressions through elevation rather than trauma. Life affirms itself through creation, not destruction. Not what makes you cry, but what makes you believe.
+**The truth:** True works create equally lasting impressions through elevation rather than trauma. **Life affirms itself through creation, not destruction. Not what makes you cry, but what makes you believe.**
 
 ### Mere Exposure Effect
 
 Repetition breeds familiarity, and familiarity breeds preference - a psychological phenomenon where we favor what we've encountered before.
 
-**The trick**: The chorus that loops until embedded. The formula repeated across a catalog. Familiarity masquerading as affection. These works obsess then exhaust, revealing their hollowness once the chemical trick fades.
+**The trick:** The chorus that loops until embedded. The formula repeated across a catalog. Familiarity masquerading as affection. These works obsess then exhaust, revealing their hollowness once the chemical trick fades.
 
-**The truth**: True works reveal new dimensions with each encounter rather than exhausting their one trick. Time strengthens their impact rather than exposing their emptiness.
+**The truth:** True works reveal new dimensions with each encounter rather than exhausting their one trick. Time strengthens their impact rather than exposing their emptiness.
 
 ### Peak-End Rule
 
 Memory doesn't record experiences faithfully - it disproportionately weights emotional peaks and endings, forgetting the journey between.
 
-**The trick**: Coast on emptiness, deploy one manipulative climax. "It gets good after episode X." Memory rewrites the experience, making you forget how much nothing you endured.
+**The trick:** Coast on emptiness, deploy one manipulative climax. "It gets good after episode X." Memory rewrites the experience, making you forget how much nothing you endured.
 
-**The truth**: True works respect your time from the first moment. They captivate immediately while building toward earned crescendos. Every moment justified, not just the ones you'll remember.
+**The truth:** **True works respect your time from the first moment.** They captivate immediately while building toward earned crescendos. Every moment justified, not just the ones you'll remember.
 
 Not what haunts you, but what heals you. Not what takes, but what gives.
 
 ## The Final Recognition
 
-I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. I needed to believe that somewhere, creators refused the easy path and chose the true one.
+I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. **I needed to believe that somewhere, creators refused the easy path and chose the true one.**
 
 They did. They're here.
 
