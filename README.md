@@ -1,6 +1,6 @@
 # Perfect Collection
 
-🌟 Works that enrich rather than drain - created from love, not manipulation.
+Works that enrich rather than drain - created from love, not manipulation.
 
 ## 📺 Anime
 
@@ -80,11 +80,11 @@
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
 
-## 📖 Documentation
+## Documentation
 
 - [Why These Works](docs/why.md)
 - [Reviews](docs/reviews.md)
 
-## 📄 License
+## License
 
 [CC BY-SA 4.0](LICENSE)
