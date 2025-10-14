@@ -6,7 +6,7 @@ _The finger pointing at the moon is not the moon._
 
 **If we're here to experience beauty, what beauty is worth our finite time?**
 
-Not what critics validate. Not what defines generations. Not what "everyone should know." Only what enriches rather than diminishes. Only what proves life has meaning rather than proving humans can be manipulated.
+Not what critics validate. Not what defines generations. Not what "everyone should know." Only what enriches rather than diminishes. Only what proves life has meaning rather than proves humans can be manipulated.
 
 These works. Only these.
 
