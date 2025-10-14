@@ -1,6 +1,6 @@
 # Perfect Collection
 
-Works that enrich rather than drain - created from love, not manipulation.
+Works that enrich rather than diminish - created from love, not manipulation.
 
 ## 📺 Anime
 
