@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Lint documentation
+        uses: oxsecurity/megalinter/flavors/documentation@v9
+        env:
+          DISABLE_LINTERS: SPELL_CSPELL
+          FLAVOR_SUGGESTIONS: false
