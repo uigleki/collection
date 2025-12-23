@@ -252,7 +252,11 @@ This irreplaceable now was worth every yesterday
 
 ### daniwellP - UZ
 
+The universe speaks in frequencies
+
 ### daniwellP - てすてすブロードキャスト.proj
+
+Even through static, I'll find your frequency
 
 ### daniwellP - 夏の終わりの彼女は
 
@@ -264,19 +268,35 @@ Take me far away where only our story matters
 
 ### doriko - 歌に形はないけれど
 
+What has no form cannot fade with time
+
 ### doriko - 茜コントラスト
+
+Unspoken love stays perfect in memory
 
 ### himmel - 远枫
 
+Autumn teaches us to let go so spring can return
+
 ### iolli - Through Mist and Fog
+
+I walk through fog because stopping is not an option
 
 ### minato & 初音ミク - 朧月
 
+My light may blur with distance but never disappears
+
 ### niki feat. Lily - ジッタードール
+
+Love exists because it defies logic, not despite it
 
 ### niki feat. Lily - テロリスト
 
+Choosing to love yourself is the bravest uprising
+
 ### あやりす - 愛を誓いしヒメ飾り
+
+If freedom means forgetting you, I choose captivity
 
 ### いとうかなこ - アマデウス
 
@@ -288,16 +308,32 @@ My heart races as the unknown world unfolds before me
 
 ### 上村叶恵 - 雨霧
 
+Raindrops race faster than thoughts can follow
+
 ### 朝香智子 - post-script
+
+Time moved on, my heart stayed behind with you
 
 ### 清漪 - 但叹清风错
 
+Time flows, and everything beautiful shifts with it
+
 ### 甘茶の音楽工房 - 赤い風船とメリーゴーランド
+
+Joy preserved in a music box sounds like longing
 
 ### 竹達彩奈 & 巽悠衣子 - バランス KISS
 
+Happiness needs no explanation to those who feel it
+
 ### 纯白 P - 海棠仙 (Album Version)
+
+I crossed a thousand years just to understand your wait
 
 ### 茶太 - 夢笑顔
 
+I'll keep smiling so you remember warmth, not goodbye
+
 ### 高橋李依 - 気まぐれロマンティック
+
+My whims hide what my heart can't yet confess
