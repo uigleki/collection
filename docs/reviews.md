@@ -156,7 +156,7 @@ This time when the world ends, I won't let you face it alone
 
 ### COP - 灰烬
 
-Let me shine once before I crumble into dust
+I chose to burn with you rather than exist without you
 
 ### Capchii & 凛々咲 - Letters from Heaven
 
@@ -312,11 +312,11 @@ Raindrops race faster than thoughts can follow
 
 ### 朝香智子 - post-script
 
-Time moved on, my heart stayed behind with you
+Time moved on, my heart stayed with you
 
 ### 清漪 - 但叹清风错
 
-Time flows, and everything beautiful shifts with it
+Time changes everything beautiful, but not what it meant
 
 ### 甘茶の音楽工房 - 赤い風船とメリーゴーランド
 
