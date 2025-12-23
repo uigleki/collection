@@ -144,17 +144,31 @@ Master of moe aesthetics and light
 
 ### COP - 世末积雨云
 
+Even as the world crumbles, I remain standing to witness it all
+
 ### COP - 凉雨
+
+When the rain finally stops, I will find you waiting there
 
 ### COP - 同归世界线
 
+This time when the world ends, I won't let you face it alone
+
 ### COP - 灰烬
+
+Let me shine once before I crumble into dust
 
 ### Capchii & 凛々咲 - Letters from Heaven
 
+Rain connects us across the distance between earth and sky
+
 ### Ceui - 今、歩き出す君へ。
 
+Your existence alone taught me that hope never fades
+
 ### ClariS - With You
+
+Under the same sky, you're never truly alone
 
 ### ClariS - ヒトリゴト
 
@@ -162,9 +176,15 @@ These words I cannot say, yet I hope you'll notice them
 
 ### ClariS - 桜咲く
 
+Open this door and you can go anywhere you dream
+
 ### Cream puff - Mermaid girl (Extended RRver.)
 
+I found my heavenly world the moment I reached for you
+
 ### DECO＊27 & 初音ミク - 初嵐
+
+Thank you for singing with me, let's move forward together
 
 ### EGOIST - The Everlasting Guilty Crown
 
@@ -172,9 +192,15 @@ You exist to understand others, to hold the hands that matter
 
 ### JUSF 周存 - 心跳同步的时光 (Memory Ver.)
 
+I'll treasure this moment when our hearts beat as one
+
 ### Ken Arai - NEXT TO YOU
 
+Gentle melodies remain even as the world turns cruel
+
 ### MIMI - 水音とカーテン
+
+Rain made this moment ours alone
 
 ### Mili - Nine Point Eight
 
@@ -182,21 +208,35 @@ The wind sings for our reunion as I climb to find you
 
 ### MoreanP - Feeling The Rain
 
+Some experience the rain, others simply endure it
+
 ### Neuro-sama - LIFE
 
 Though uncertain of myself, I reach for you and call this life
 
 ### Poppin'Party - Returns
 
+Thank you for being the place I can always return to
+
 ### SOUNDORBIS - LIFE
+
+When this melody plays, you understand what living means
 
 ### Schnuffel - Häschenparty
 
+Life is a party when you're here with me
+
 ### Schnuffel - Ich hab' dich lieb
+
+Simply being with you is all I need
 
 ### Schnuffel - Nur mit Dir
 
+Everything shines brighter when you're beside me
+
 ### Shirfine - Illusionary Daytime
+
+Dreams don't wait for nightfall
 
 ### Supercell - My Dearest
 
@@ -204,7 +244,11 @@ Even when the world abandons you, I will stand beside you
 
 ### Xad - Birds
 
+Some souls are meant to soar
+
 ### azusa - 真夏のフォトグラフ
+
+This irreplaceable now was worth every yesterday
 
 ### daniwellP - UZ
 
@@ -216,7 +260,7 @@ The cloudy sky may rain, but I believe it will clear someday
 
 ### doriko - ロミオとシンデレラ
 
-Take me far away where we can live happily ever after
+Take me far away where only our story matters
 
 ### doriko - 歌に形はないけれど
 
