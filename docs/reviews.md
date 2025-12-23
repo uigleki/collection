@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD026 -->
+
 # Reviews
 
 Brief impressions designed to aid memory and recognition while avoiding spoilers.
@@ -137,3 +139,121 @@ Master of moe aesthetics and light
 - **Masterful light and shadow**: Strong compositional ability with exquisite lighting effects. Technical precision in every piece.
 - **Moe perfected**: Vibrant colors, lively expressions, meticulous detail. Characters leap from the page through carefully drawn faces and emotions.
 - **Unwavering consistency**: Every illustration maintains exceptional quality. Colors balanced, lines stable, anatomy precise. Professional reliability across all works.
+
+## 🎵 Music
+
+### COP - 世末积雨云
+
+### COP - 凉雨
+
+### COP - 同归世界线
+
+### COP - 灰烬
+
+### Capchii & 凛々咲 - Letters from Heaven
+
+### Ceui - 今、歩き出す君へ。
+
+### ClariS - With You
+
+### ClariS - ヒトリゴト
+
+These words I cannot say, yet I hope you'll notice them
+
+### ClariS - 桜咲く
+
+### Cream puff - Mermaid girl (Extended RRver.)
+
+### DECO＊27 & 初音ミク - 初嵐
+
+### EGOIST - The Everlasting Guilty Crown
+
+You exist to understand others, to hold the hands that matter
+
+### JUSF 周存 - 心跳同步的时光 (Memory Ver.)
+
+### Ken Arai - NEXT TO YOU
+
+### MIMI - 水音とカーテン
+
+### Mili - Nine Point Eight
+
+The wind sings for our reunion as I climb to find you
+
+### MoreanP - Feeling The Rain
+
+### Neuro-sama - LIFE
+
+Though uncertain of myself, I reach for you and call this life
+
+### Poppin'Party - Returns
+
+### SOUNDORBIS - LIFE
+
+### Schnuffel - Häschenparty
+
+### Schnuffel - Ich hab' dich lieb
+
+### Schnuffel - Nur mit Dir
+
+### Shirfine - Illusionary Daytime
+
+### Supercell - My Dearest
+
+Even when the world abandons you, I will stand beside you
+
+### Xad - Birds
+
+### azusa - 真夏のフォトグラフ
+
+### daniwellP - UZ
+
+### daniwellP - てすてすブロードキャスト.proj
+
+### daniwellP - 夏の終わりの彼女は
+
+The cloudy sky may rain, but I believe it will clear someday
+
+### doriko - ロミオとシンデレラ
+
+Take me far away where we can live happily ever after
+
+### doriko - 歌に形はないけれど
+
+### doriko - 茜コントラスト
+
+### himmel - 远枫
+
+### iolli - Through Mist and Fog
+
+### minato & 初音ミク - 朧月
+
+### niki feat. Lily - ジッタードール
+
+### niki feat. Lily - テロリスト
+
+### あやりす - 愛を誓いしヒメ飾り
+
+### いとうかなこ - アマデウス
+
+Even if miracles defy logic, I will rewrite them as your destiny
+
+### やくしまるえつこ - アンノウン・ワールドマップ
+
+My heart races as the unknown world unfolds before me
+
+### 上村叶恵 - 雨霧
+
+### 朝香智子 - post-script
+
+### 清漪 - 但叹清风错
+
+### 甘茶の音楽工房 - 赤い風船とメリーゴーランド
+
+### 竹達彩奈 & 巽悠衣子 - バランス KISS
+
+### 纯白 P - 海棠仙 (Album Version)
+
+### 茶太 - 夢笑顔
+
+### 高橋李依 - 気まぐれロマンティック
