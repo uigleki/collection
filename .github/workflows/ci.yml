@@ -15,14 +15,35 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint docs
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Lint docs
-        uses: oxsecurity/megalinter/flavors/documentation@v9
+      - name: Lint
+        uses: oxsecurity/megalinter/flavors/javascript@v9
         env:
-          DISABLE_LINTERS: SPELL_CSPELL
+          DISABLE_LINTERS: REPOSITORY_GRYPE,SPELL_CSPELL,TYPESCRIPT_STANDARD
           FLAVOR_SUGGESTIONS: false
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install and build
+        run: |
+          pnpm install
+          pnpm build

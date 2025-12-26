@@ -1,0 +1,56 @@
+/* stylelint-disable import-notation */
+@import "tailwindcss";
+/* stylelint-enable import-notation */
+
+:root {
+  --font-sans: "Ubuntu", sans-serif;
+  --color-surface: #fff;
+  --color-surface-elevated: #f8f8f8;
+  --color-text: #1a1a1a;
+  --color-text-secondary: #666;
+  --color-text-muted: #999;
+  --color-border: #e5e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface: #0a0a0b;
+    --color-surface-elevated: #141416;
+    --color-text: #e8e6e3;
+    --color-text-secondary: #8a8a8a;
+    --color-text-muted: #5a5a5a;
+    --color-border: #2a2a2c;
+  }
+}
+
+/* stylelint-disable at-rule-no-unknown */
+@theme {
+  --font-sans: var(--font-sans);
+  --color-surface: var(--color-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-text: var(--color-text);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+}
+/* stylelint-enable at-rule-no-unknown */
+
+html {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+::selection {
+  background-color: rgb(167 139 250 / 30%);
+}
+
+strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
