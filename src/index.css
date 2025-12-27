@@ -3,24 +3,15 @@
 /* stylelint-enable import-notation */
 
 :root {
-  --font-sans: "Ubuntu", sans-serif;
-  --color-surface: #fff;
-  --color-surface-elevated: #f8f8f8;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #666;
-  --color-text-muted: #999;
-  --color-border: #e5e5e5;
-}
+  color-scheme: light dark;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-surface: #0a0a0b;
-    --color-surface-elevated: #141416;
-    --color-text: #e8e6e3;
-    --color-text-secondary: #8a8a8a;
-    --color-text-muted: #5a5a5a;
-    --color-border: #2a2a2c;
-  }
+  --font-sans: "Ubuntu", sans-serif;
+  --color-surface: light-dark(#fff, #0a0a0b);
+  --color-surface-elevated: light-dark(#f8f8f8, #141416);
+  --color-text: light-dark(#1a1a1a, #e8e6e3);
+  --color-text-secondary: light-dark(#666, #8a8a8a);
+  --color-text-muted: light-dark(#999, #5a5a5a);
+  --color-border: light-dark(#e5e5e5, #2a2a2c);
 }
 
 /* stylelint-disable at-rule-no-unknown */
