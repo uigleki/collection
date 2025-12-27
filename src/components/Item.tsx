@@ -1,7 +1,7 @@
 import { useExpand } from "@/context";
 import type { Item as ItemType, Line } from "@/data/types";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 
 interface ItemProps {
   item: ItemType;
@@ -36,9 +36,16 @@ export function Item({ item }: ItemProps) {
   const isExpanded = expanded || localExpanded;
   const hasContent = item.lines && item.lines.length > 0;
 
-  const handleClick = () => {
+  const toggle = () => {
     if (!expanded && hasContent) {
       setLocalExpanded((e) => !e);
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
     }
   };
 
@@ -52,9 +59,11 @@ export function Item({ item }: ItemProps) {
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={handleClick}
+      onClick={toggle}
+      onKeyDown={hasContent ? handleKeyDown : undefined}
       role={hasContent ? "button" : undefined}
       tabIndex={hasContent ? 0 : undefined}
+      aria-expanded={hasContent ? isExpanded : undefined}
       layout
     >
       <h3 className="text-xl text-text">{item.title}</h3>

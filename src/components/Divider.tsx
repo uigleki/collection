@@ -1,5 +1,5 @@
 import { useExpand } from "@/context";
-import { useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import { HoverReveal } from "./HoverReveal";
 
 interface DividerProps {
@@ -12,12 +12,26 @@ export function Divider({ symbol = "start" }: DividerProps) {
 
   const icon = symbol === "start" ? "✦" : "◇";
 
+  const toggle = () => setExpanded((e) => !e);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggle();
+    }
+  };
+
   return (
     <div
       className="my-16 cursor-pointer"
-      onClick={() => setExpanded((e) => !e)}
+      onClick={toggle}
+      onKeyDown={handleKeyDown}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      role="button"
+      tabIndex={0}
+      aria-pressed={expanded}
+      aria-label={expanded ? "Collapse all items" : "Expand all items"}
     >
       <div className="relative flex items-center justify-center">
         <div className="absolute inset-0 flex items-center">
