@@ -1,5 +1,6 @@
 import { useExpand } from "@/context";
 import type { Item as ItemType, Line } from "@/data/types";
+import { parseEmphasis } from "@/utils/parseEmphasis";
 import { AnimatePresence, motion } from "framer-motion";
 import { type KeyboardEvent, useState } from "react";
 
@@ -9,21 +10,13 @@ interface ItemProps {
 
 function LineContent({ line }: { line: Line }) {
   if (typeof line === "string") {
-    return (
-      <span
-        className="text-text-secondary"
-        dangerouslySetInnerHTML={{ __html: line }}
-      />
-    );
+    return <span className="text-text-secondary">{parseEmphasis(line)}</span>;
   }
 
   return (
     <>
       <span className="text-text font-medium">{line.label}:</span>{" "}
-      <span
-        className="text-text-secondary"
-        dangerouslySetInnerHTML={{ __html: line.text }}
-      />
+      <span className="text-text-secondary">{parseEmphasis(line.text)}</span>
     </>
   );
 }

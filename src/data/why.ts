@@ -4,7 +4,7 @@ export const whyData = {
   epigraph: "The finger pointing at the moon is not the moon.",
 
   opening: [
-    "<strong>If we're here to experience beauty, what beauty is worth our finite time?</strong>",
+    "**If we're here to experience beauty, what beauty is worth our finite time?**",
     'Not what critics validate. Not what defines generations. Not what "everyone should know." Only what enriches rather than diminishes. Only what proves life has meaning rather than proves humans can be manipulated.',
     "These works. Only these.",
   ],
@@ -59,7 +59,7 @@ export const whyData = {
             },
             {
               label: "The truth",
-              text: "True works create equally lasting impressions through elevation rather than trauma. <strong>Life affirms itself through creation, not destruction.</strong> <strong>Not what makes you cry, but what makes you believe.</strong>",
+              text: "True works create equally lasting impressions through elevation rather than trauma. **Life affirms itself through creation, not destruction.** **Not what makes you cry, but what makes you believe.**",
             },
           ],
         },
@@ -91,7 +91,7 @@ export const whyData = {
             },
             {
               label: "The truth",
-              text: "<strong>True works respect your time from the first moment.</strong> They captivate immediately while building toward earned crescendos. Every moment justified, not just the ones you'll remember.",
+              text: "**True works respect your time from the first moment.** They captivate immediately while building toward earned crescendos. Every moment justified, not just the ones you'll remember.",
             },
           ],
         },
@@ -102,7 +102,7 @@ export const whyData = {
   ] as Section[],
 
   closing: [
-    "I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. <strong>I needed to believe that somewhere, creators refused the easy path and chose the true one.</strong>",
+    "I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. **I needed to believe that somewhere, creators refused the easy path and chose the true one.**",
     "They did. They're here.",
     "After experiencing these works, you'll know what I know: that humans at their best can create beauty that enriches rather than diminishes, elevates rather than exploits, lasts rather than fades. You'll have touched the genuine pinnacle - not the marketed one, not the academic one, but the real one.",
     "Most importantly, you can rest. You won't lie awake wondering what you've missed. You've experienced what matters. The search can end.",

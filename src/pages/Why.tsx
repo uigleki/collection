@@ -3,6 +3,7 @@ import { Divider } from "@/components/Divider";
 import { Footer } from "@/components/Footer";
 import { WhySection } from "@/components/Section";
 import { whyData } from "@/data/why";
+import { parseEmphasis } from "@/utils/parseEmphasis";
 import { motion } from "framer-motion";
 
 export function Why() {
@@ -22,11 +23,9 @@ export function Why() {
       <section className="mb-16">
         <h1 className="text-4xl text-text mb-8">The Fundamental Question</h1>
         {whyData.opening.map((para, i) => (
-          <p
-            key={i}
-            className="text-text-secondary mb-4"
-            dangerouslySetInnerHTML={{ __html: para }}
-          />
+          <p key={i} className="text-text-secondary mb-4">
+            {parseEmphasis(para)}
+          </p>
         ))}
       </section>
 
@@ -41,11 +40,9 @@ export function Why() {
       <section className="mb-16">
         <h2 className="text-3xl text-text mb-8">The Final Recognition</h2>
         {whyData.closing.map((para, i) => (
-          <p
-            key={i}
-            className="text-text-secondary mb-4"
-            dangerouslySetInnerHTML={{ __html: para }}
-          />
+          <p key={i} className="text-text-secondary mb-4">
+            {parseEmphasis(para)}
+          </p>
         ))}
       </section>
 
