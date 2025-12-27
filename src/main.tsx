@@ -6,20 +6,38 @@ import { NotFound } from "@/pages/NotFound";
 import { Why } from "@/pages/Why";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  ScrollRestoration,
+} from "react-router";
+
+function Root() {
+  return (
+    <ErrorBoundary>
+      <ExpandProvider>
+        <Outlet />
+        <ScrollRestoration />
+      </ExpandProvider>
+    </ErrorBoundary>
+  );
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "why", element: <Why /> },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+]);
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary>
-        <ExpandProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/why" element={<Why />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ExpandProvider>
-      </ErrorBoundary>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </StrictMode>,
 );

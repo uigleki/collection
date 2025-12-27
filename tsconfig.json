@@ -2,18 +2,22 @@
   "compilerOptions": {
     "target": "ES2024",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
+    "module": "preserve",
+    "moduleDetection": "force",
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true,
+    "noImplicitOverride": true,
+
+    "noEmit": true,
+    "jsx": "react-jsx",
+
     "paths": {
       "@/*": ["./src/*"]
     }

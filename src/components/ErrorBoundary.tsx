@@ -19,7 +19,7 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return (
         <main className="min-h-dvh flex flex-col items-center justify-center px-6 text-center">
