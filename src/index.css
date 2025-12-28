@@ -4,44 +4,54 @@
 
 :root {
   color-scheme: light dark;
-
-  --font-sans: "Ubuntu", sans-serif;
-  --color-surface: light-dark(#fff, #0a0a0b);
-  --color-surface-elevated: light-dark(#f8f8f8, #141416);
-  --color-text: light-dark(#1a1a1a, #e8e6e3);
-  --color-text-secondary: light-dark(#666, #8a8a8a);
-  --color-text-muted: light-dark(#999, #5a5a5a);
-  --color-border: light-dark(#e5e5e5, #2a2a2c);
 }
 
 /* stylelint-disable at-rule-no-unknown */
 @theme {
-  --font-sans: var(--font-sans);
-  --color-surface: var(--color-surface);
-  --color-surface-elevated: var(--color-surface-elevated);
-  --color-text: var(--color-text);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-text-muted: var(--color-text-muted);
-  --color-border: var(--color-border);
+  --font-sans: "Ubuntu", sans-serif;
+
+  --color-background: light-dark(var(--color-stone-50), var(--color-stone-950));
+  --color-foreground: light-dark(var(--color-stone-950), var(--color-stone-50));
+
+  --color-card: light-dark(var(--color-stone-50), var(--color-stone-900));
+  --color-card-foreground: light-dark(
+    var(--color-stone-950),
+    var(--color-stone-50)
+  );
+
+  --color-primary: light-dark(var(--color-stone-900), var(--color-stone-200));
+  --color-primary-foreground: light-dark(
+    var(--color-stone-50),
+    var(--color-stone-900)
+  );
+
+  --color-secondary: light-dark(var(--color-stone-100), var(--color-stone-800));
+  --color-secondary-foreground: light-dark(
+    var(--color-stone-900),
+    var(--color-stone-50)
+  );
+
+  --color-muted: light-dark(var(--color-stone-100), var(--color-stone-800));
+  --color-muted-foreground: light-dark(
+    var(--color-stone-500),
+    var(--color-stone-400)
+  );
+
+  --color-destructive: light-dark(var(--color-red-600), var(--color-red-500));
+  --color-border: light-dark(var(--color-stone-200), --alpha(white / 10%));
 }
 /* stylelint-enable at-rule-no-unknown */
 
 html {
-  background-color: var(--color-surface);
-  color: var(--color-text);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans);
 }
 
 body {
-  margin: 0;
   min-height: 100dvh;
 }
 
 ::selection {
-  background-color: rgb(167 139 250 / 30%);
-}
-
-strong {
-  font-weight: 600;
-  color: var(--color-text);
+  background-color: --alpha(var(--color-violet-400) / 30%);
 }

@@ -13,7 +13,7 @@ export function WorkCategorySection({ category }: WorkCategorySectionProps) {
       animate={{ opacity: 1, y: 0 }}
       className="mb-12"
     >
-      <h2 className="text-2xl text-text mb-6">{category.name}</h2>
+      <h2 className="text-2xl text-foreground mb-6">{category.name}</h2>
       <div className="space-y-2">
         {category.works.map((work) => (
           <WorkItem key={work.title} work={work} />
@@ -34,7 +34,7 @@ export function MusicSection({ tracks }: MusicSectionProps) {
       animate={{ opacity: 1, y: 0 }}
       className="mb-12"
     >
-      <h2 className="text-2xl text-text mb-6">Music</h2>
+      <h2 className="text-2xl text-foreground mb-6">Music</h2>
       <div className="space-y-2">
         {tracks.map((track) => (
           <TrackItem key={track.title} track={track} />
@@ -55,8 +55,8 @@ export function WhySectionComponent({ section }: WhySectionComponentProps) {
       animate={{ opacity: 1, y: 0 }}
       className="mb-16"
     >
-      <h2 className="text-3xl text-text mb-4">{section.title}</h2>
-      <p className="text-text-secondary mb-8">{section.intro}</p>
+      <h2 className="text-3xl text-foreground mb-4">{section.title}</h2>
+      <p className="text-muted-foreground mb-8">{section.intro}</p>
 
       <div className="space-y-4">
         {section.concepts.map((concept) => (
@@ -64,7 +64,7 @@ export function WhySectionComponent({ section }: WhySectionComponentProps) {
         ))}
       </div>
 
-      <p className="text-text-secondary mt-8 italic">{section.outro}</p>
+      <p className="text-muted-foreground mt-8 italic">{section.outro}</p>
     </motion.section>
   );
 }

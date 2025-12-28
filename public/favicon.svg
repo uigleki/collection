@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <defs>
     <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#78c6ff"/>
-      <stop offset="50%" stop-color="#007cdf"/>
-      <stop offset="100%" stop-color="#0043b5"/>
+      <stop offset="0%" stop-color="oklch(82.8% 0.111 230.318)"/>
+      <stop offset="50%" stop-color="oklch(68.5% 0.169 237.323)"/>
+      <stop offset="100%" stop-color="oklch(50% 0.134 242.749)"/>
     </linearGradient>
     <radialGradient id="core" cx="30%" cy="30%" r="70%">
-      <stop offset="0%" stop-color="#e2bcff"/>
-      <stop offset="50%" stop-color="#864ad2"/>
-      <stop offset="100%" stop-color="#460d8b"/>
+      <stop offset="0%" stop-color="oklch(89.4% 0.057 293.283)"/>
+      <stop offset="50%" stop-color="oklch(60.6% 0.25 292.717)"/>
+      <stop offset="100%" stop-color="oklch(43.2% 0.232 292.759)"/>
     </radialGradient>
   </defs>
   <circle cx="16" cy="16" r="14" fill="none" stroke="url(#ring)" stroke-width="4"/>

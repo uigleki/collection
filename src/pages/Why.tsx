@@ -16,14 +16,14 @@ export function Why() {
     >
       <BackLink />
 
-      <p className="text-center text-text-muted italic my-12">
+      <p className="text-center text-muted-foreground italic my-12">
         {whyData.epigraph}
       </p>
 
       <section className="mb-16">
-        <h1 className="text-4xl text-text mb-8">The Fundamental Question</h1>
+        <h1 className="text-4xl text-foreground mb-8">The Fundamental Question</h1>
         {whyData.opening.map((para, i) => (
-          <p key={i} className="text-text-secondary mb-4">
+          <p key={i} className="text-muted-foreground mb-4">
             {parseEmphasis(para)}
           </p>
         ))}
@@ -38,9 +38,9 @@ export function Why() {
       <Divider symbol="end" />
 
       <section className="mb-16">
-        <h2 className="text-3xl text-text mb-8">The Final Recognition</h2>
+        <h2 className="text-3xl text-foreground mb-8">The Final Recognition</h2>
         {whyData.closing.map((para, i) => (
-          <p key={i} className="text-text-secondary mb-4">
+          <p key={i} className="text-muted-foreground mb-4">
             {parseEmphasis(para)}
           </p>
         ))}

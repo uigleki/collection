@@ -30,14 +30,14 @@ export function AnimatedQuote() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5 }}
-            className={`absolute text-2xl md:text-3xl transition-colors ${hovered ? "text-text" : "text-text-secondary"}`}
+            className={`absolute text-2xl md:text-3xl transition-colors ${hovered ? "text-foreground" : "text-muted-foreground"}`}
           >
             {quotes[index]}
           </motion.p>
         </AnimatePresence>
       </div>
       <HoverReveal show={hovered}>
-        <span className="block text-text-secondary">Why These →</span>
+        <span className="block text-muted-foreground">Why These →</span>
       </HoverReveal>
     </Link>
   );
