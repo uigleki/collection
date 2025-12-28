@@ -1,6 +1,6 @@
-import type { WhySection } from "./types";
+import type { WhyData } from "./types";
 
-export const whyData = {
+export const whyData: WhyData = {
   epigraph: "The finger pointing at the moon is not the moon.",
 
   opening: [
@@ -99,7 +99,7 @@ export const whyData = {
       outro:
         "Not what haunts you, but what heals you. Not what takes, but what gives.",
     },
-  ] as WhySection[],
+  ],
 
   closing: [
     "I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. **I needed to believe that somewhere, creators refused the easy path and chose the true one.**",

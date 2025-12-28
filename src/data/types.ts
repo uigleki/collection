@@ -35,3 +35,11 @@ export interface WhySection {
   concepts: Concept[];
   outro: string;
 }
+
+export interface WhyData {
+  epigraph: string;
+  opening: string[];
+  sections: WhySection[];
+  closing: string[];
+  footer: string;
+}
