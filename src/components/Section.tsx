@@ -1,12 +1,12 @@
-import type { Category, Section as SectionType } from "@/data/types";
+import type { Track, WhySection, WorkCategory } from "@/data/types";
 import { motion } from "framer-motion";
-import { Item } from "./Item";
+import { ConceptItem, TrackItem, WorkItem } from "./Item";
 
-interface CategorySectionProps {
-  category: Category;
+interface WorkCategorySectionProps {
+  category: WorkCategory;
 }
 
-export function CategorySection({ category }: CategorySectionProps) {
+export function WorkCategorySection({ category }: WorkCategorySectionProps) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -15,19 +15,40 @@ export function CategorySection({ category }: CategorySectionProps) {
     >
       <h2 className="text-2xl text-text mb-6">{category.name}</h2>
       <div className="space-y-2">
-        {category.items.map((item) => (
-          <Item key={item.title} item={item} />
+        {category.works.map((work) => (
+          <WorkItem key={work.title} work={work} />
         ))}
       </div>
     </motion.section>
   );
 }
 
-interface WhySectionProps {
-  section: SectionType;
+interface MusicSectionProps {
+  tracks: Track[];
 }
 
-export function WhySection({ section }: WhySectionProps) {
+export function MusicSection({ tracks }: MusicSectionProps) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-12"
+    >
+      <h2 className="text-2xl text-text mb-6">Music</h2>
+      <div className="space-y-2">
+        {tracks.map((track) => (
+          <TrackItem key={track.title} track={track} />
+        ))}
+      </div>
+    </motion.section>
+  );
+}
+
+interface WhySectionComponentProps {
+  section: WhySection;
+}
+
+export function WhySectionComponent({ section }: WhySectionComponentProps) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 20 }}
@@ -38,8 +59,8 @@ export function WhySection({ section }: WhySectionProps) {
       <p className="text-text-secondary mb-8">{section.intro}</p>
 
       <div className="space-y-4">
-        {section.items.map((item) => (
-          <Item key={item.title} item={item} />
+        {section.concepts.map((concept) => (
+          <ConceptItem key={concept.title} concept={concept} />
         ))}
       </div>
 

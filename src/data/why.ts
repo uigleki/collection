@@ -1,4 +1,4 @@
-import type { Section } from "./types";
+import type { WhySection } from "./types";
 
 export const whyData = {
   epigraph: "The finger pointing at the moon is not the moon.",
@@ -13,28 +13,28 @@ export const whyData = {
     {
       title: "The Three Faces of Truth",
       intro: "Every authentic work manifests three inseparable qualities:",
-      items: [
+      concepts: [
         {
           title: "Creative Love",
-          preview: "The creator loved the work itself",
+          subtitle: "The creator loved the work itself",
           color: "#e74c3c",
-          lines: [
+          explanation: [
             "The creator loved the work itself, not the response it would generate. Just as parents who truly love their children want them to be happy rather than bring glory to the family, creators who truly love their work cannot bear to inflict darkness without purpose, cannot tolerate arbitrariness, cannot accept incompleteness.",
           ],
         },
         {
           title: "Internal Coherence",
-          preview: "Nothing is random, everything connects",
+          subtitle: "Nothing is random, everything connects",
           color: "#3498db",
-          lines: [
+          explanation: [
             "Nothing is random. Everything connects. A single line advances plot, reveals character, echoes theme, and foreshadows resolution - all precisely, all intentionally. Remove any piece and the entire structure collapses. Each element strengthens all others in ways that reveal themselves through time.",
           ],
         },
         {
           title: "Authentic Beauty",
-          preview: "The creator chose to create beauty",
+          subtitle: "The creator chose to create beauty",
           color: "#2ecc71",
-          lines: [
+          explanation: [
             "The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift - the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.",
           ],
         },
@@ -46,12 +46,12 @@ export const whyData = {
       title: "The Shortcuts to False Impact",
       intro:
         "Most acclaimed works achieve their effect through psychological exploitation rather than genuine excellence.",
-      items: [
+      concepts: [
         {
           title: "Negativity Bias",
-          preview: "Life affirms itself through creation, not destruction",
+          subtitle: "Life affirms itself through creation, not destruction",
           color: "#e74c3c",
-          lines: [
+          explanation: [
             "Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.",
             {
               label: "The trick",
@@ -65,9 +65,9 @@ export const whyData = {
         },
         {
           title: "Mere Exposure Effect",
-          preview: "Familiarity masquerading as affection",
+          subtitle: "Familiarity masquerading as affection",
           color: "#9b59b6",
-          lines: [
+          explanation: [
             "Repetition breeds familiarity, and familiarity breeds preference - a psychological phenomenon where we favor what we've encountered before.",
             {
               label: "The trick",
@@ -81,9 +81,9 @@ export const whyData = {
         },
         {
           title: "Peak-End Rule",
-          preview: "True works respect your time from the first moment",
+          subtitle: "True works respect your time from the first moment",
           color: "#f39c12",
-          lines: [
+          explanation: [
             "Memory doesn't record experiences faithfully - it disproportionately weights emotional peaks and endings, forgetting the journey between.",
             {
               label: "The trick",
@@ -99,7 +99,7 @@ export const whyData = {
       outro:
         "Not what haunts you, but what heals you. Not what takes, but what gives.",
     },
-  ] as Section[],
+  ] as WhySection[],
 
   closing: [
     "I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. **I needed to believe that somewhere, creators refused the easy path and chose the true one.**",

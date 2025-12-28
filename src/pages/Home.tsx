@@ -1,8 +1,8 @@
 import { AnimatedQuote } from "@/components/AnimatedQuote";
 import { Divider } from "@/components/Divider";
 import { Footer } from "@/components/Footer";
-import { CategorySection } from "@/components/Section";
-import { categories } from "@/data/works";
+import { MusicSection, WorkCategorySection } from "@/components/Section";
+import { categories, music } from "@/data/works";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 
@@ -19,8 +19,10 @@ export function Home() {
       <Divider symbol="start" />
 
       {categories.map((category) => (
-        <CategorySection key={category.name} category={category} />
+        <WorkCategorySection key={category.name} category={category} />
       ))}
+
+      <MusicSection tracks={music} />
 
       <Divider symbol="end" />
 

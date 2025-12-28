@@ -1,7 +1,7 @@
 import { BackLink } from "@/components/BackLink";
 import { Divider } from "@/components/Divider";
 import { Footer } from "@/components/Footer";
-import { WhySection } from "@/components/Section";
+import { WhySectionComponent } from "@/components/Section";
 import { whyData } from "@/data/why";
 import { parseEmphasis } from "@/utils/parseEmphasis";
 import { motion } from "framer-motion";
@@ -32,7 +32,7 @@ export function Why() {
       <Divider symbol="start" />
 
       {whyData.sections.map((section) => (
-        <WhySection key={section.title} section={section} />
+        <WhySectionComponent key={section.title} section={section} />
       ))}
 
       <Divider symbol="end" />

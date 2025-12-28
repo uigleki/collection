@@ -1,21 +1,37 @@
-export type Line = string | { label: string; text: string };
+export interface ReviewPoint {
+  label: string;
+  text: string;
+}
 
-export interface Item {
+export interface Work {
   title: string;
-  preview: string;
+  subtitle: string;
   color: string;
-  lines?: Line[];
-  flaws?: Line[];
+  review: ReviewPoint[];
+  flaws?: ReviewPoint[];
 }
 
-export interface Category {
+export interface WorkCategory {
   name: string;
-  items: Item[];
+  works: Work[];
 }
 
-export interface Section {
+export interface Track {
+  title: string;
+  subtitle: string;
+  color: string;
+}
+
+export interface Concept {
+  title: string;
+  subtitle: string;
+  color: string;
+  explanation: (string | ReviewPoint)[];
+}
+
+export interface WhySection {
   title: string;
   intro: string;
-  items: Item[];
+  concepts: Concept[];
   outro: string;
 }

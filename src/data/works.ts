@@ -1,14 +1,14 @@
-import type { Category } from "./types";
+import type { Track, WorkCategory } from "./types";
 
-export const categories: Category[] = [
+export const categories: WorkCategory[] = [
   {
     name: "Anime",
-    items: [
+    works: [
       {
         title: "化物語",
-        preview: "Supernatural tales of adolescent awakening",
+        subtitle: "Supernatural tales of adolescent awakening",
         color: "#9b59b6",
-        lines: [
+        review: [
           {
             label: "Dialogue as art",
             text: "Rapid-fire wordplay and philosophy layered through every exchange. Humor through tragedy, meaning created in the interplay itself.",
@@ -25,9 +25,9 @@ export const categories: Category[] = [
       },
       {
         title: "偽物語",
-        preview: "When fake becomes more genuine than real",
+        subtitle: "When fake becomes more genuine than real",
         color: "#8e44ad",
-        lines: [
+        review: [
           {
             label: "Continued Shinbo/Shaft mastery",
             text: "Same visual transcendence, dialogue artistry, aberrations as self-confrontation.",
@@ -36,9 +36,9 @@ export const categories: Category[] = [
       },
       {
         title: "ハイスコアガール",
-        preview: "When words fail, fighting games speak",
+        subtitle: "When words fail, fighting games speak",
         color: "#e74c3c",
-        lines: [
+        review: [
           {
             label: "She never speaks, yet says everything",
             text: "Akira conveys more through her hands on the arcade stick and flickers in her eyes than dialogue ever could.",
@@ -59,9 +59,9 @@ export const categories: Category[] = [
       },
       {
         title: "少女終末旅行",
-        preview: "Finding beauty in a world that has ended",
+        subtitle: "Finding beauty in a world that has ended",
         color: "#7f8c8d",
-        lines: [
+        review: [
           {
             label: "Wondering about everything",
             text: "Chito and Yuuri ask questions about the world with pure curiosity, turning simple discoveries into gentle reflections on life.",
@@ -80,12 +80,12 @@ export const categories: Category[] = [
   },
   {
     name: "Movies",
-    items: [
+    works: [
       {
         title: "打ち上げ花火、下から見るか？横から見るか？",
-        preview: "The summer that refuses to end",
+        subtitle: "The summer that refuses to end",
         color: "#3498db",
-        lines: [
+        review: [
           {
             label: "Shinbo's stream-of-consciousness mastery",
             text: "Reality and emotion interwoven beyond narrative logic. Visual language capturing how summer exists in memory rather than fact.",
@@ -106,9 +106,9 @@ export const categories: Category[] = [
       },
       {
         title: "ペンギン・ハイウェイ",
-        preview: "Scientific wonder meets mysterious beauty",
+        subtitle: "Scientific wonder meets mysterious beauty",
         color: "#1abc9c",
-        lines: [
+        review: [
           {
             label: "A child's earnest investigation",
             text: "Aoyama documents every penguin, tests hypotheses, approaches the impossible with genuine scientific devotion.",
@@ -125,9 +125,9 @@ export const categories: Category[] = [
       },
       {
         title: "Charlie and the Chocolate Factory",
-        preview: "Where wonder meets weirdness",
+        subtitle: "Where wonder meets weirdness",
         color: "#9b59b6",
-        lines: [
+        review: [
           {
             label: "Visual wonderland realized",
             text: "Chocolate factory as dreamscape. Kaleidoscopic colors, rivers and landscapes that feel tangibly real.",
@@ -150,12 +150,12 @@ export const categories: Category[] = [
   },
   {
     name: "Games",
-    items: [
+    works: [
       {
         title: "To the Moon",
-        preview: "A memory journey embracing final moonlight vows",
+        subtitle: "A memory journey embracing final moonlight vows",
         color: "#2980b9",
-        lines: [
+        review: [
           {
             label: "Reverse chronology reveals",
             text: "Deeply moving romance unveiled through fragmentary recollections. Effect shown before cause, making each revelation increasingly heartbreaking.",
@@ -172,9 +172,9 @@ export const categories: Category[] = [
       },
       {
         title: "What Remains of Edith Finch",
-        preview: "Every room a theater of memory",
+        subtitle: "Every room a theater of memory",
         color: "#16a085",
-        lines: [
+        review: [
           {
             label: "Each tale through unique devices",
             text: "Every story presented through distinct narrative forms. Kaleidoscope of innovative approaches.",
@@ -191,9 +191,9 @@ export const categories: Category[] = [
       },
       {
         title: "Finding Paradise",
-        preview: "A soul's journey toward perfect existence",
+        subtitle: "A soul's journey toward perfect existence",
         color: "#2c3e50",
-        lines: [
+        review: [
           {
             label: "Warm life contemplation",
             text: "Thoughtful examination of ideals, reality, and regret. What it means to pursue happiness and reconcile reality with fantasy.",
@@ -210,9 +210,9 @@ export const categories: Category[] = [
       },
       {
         title: "Steins;Gate",
-        preview: "Fate's ultimate decree",
+        subtitle: "Fate's ultimate decree",
         color: "#e67e22",
-        lines: [
+        review: [
           {
             label: "Rigorous time travel mythology",
             text: "Complete and internally consistent scientific framework. Real-world science woven seamlessly into narrative.",
@@ -243,9 +243,9 @@ export const categories: Category[] = [
       },
       {
         title: "7 年後で待ってる",
-        preview: '"I\'ll be waiting for you, 7 years from now"',
+        subtitle: '"I\'ll be waiting for you, 7 years from now"',
         color: "#e91e63",
-        lines: [
+        review: [
           {
             label: "Cross-temporal commitment",
             text: "A promise made seven years ago, crystallizing the most sincere feelings.",
@@ -268,9 +268,9 @@ export const categories: Category[] = [
       },
       {
         title: "ASTLIBRA Revision",
-        preview: "15 years to resurrect the golden age",
+        subtitle: "15 years to resurrect the golden age",
         color: "#f39c12",
-        lines: [
+        review: [
           {
             label: "Unpredictable narrative progression",
             text: "Altering the past through mystical scales produces dramatic, unexpected developments.",
@@ -299,12 +299,12 @@ export const categories: Category[] = [
   },
   {
     name: "Artists",
-    items: [
+    works: [
       {
         title: "カントク",
-        preview: "Master of moe aesthetics and light",
+        subtitle: "Master of moe aesthetics and light",
         color: "#ff6b9d",
-        lines: [
+        review: [
           {
             label: "Masterful light and shadow",
             text: "Strong compositional ability with exquisite lighting effects. Technical precision in every piece.",
@@ -321,258 +321,253 @@ export const categories: Category[] = [
       },
     ],
   },
+];
+
+export const music: Track[] = [
   {
-    name: "Music",
-    items: [
-      {
-        title: "COP - 世末积雨云",
-        preview:
-          "Even as the world crumbles, I remain standing to witness it all",
-        color: "#5d6d7e",
-      },
-      {
-        title: "COP - 凉雨",
-        preview: "When the rain finally stops, I will find you waiting there",
-        color: "#85929e",
-      },
-      {
-        title: "COP - 同归世界线",
-        preview: "This time when the world ends, I won't let you face it alone",
-        color: "#6c7a89",
-      },
-      {
-        title: "COP - 灰烬",
-        preview: "I chose to burn with you rather than exist without you",
-        color: "#e74c3c",
-      },
-      {
-        title: "Capchii & 凛々咲 - Letters from Heaven",
-        preview: "Rain connects us across the distance between earth and sky",
-        color: "#5dade2",
-      },
-      {
-        title: "Ceui - 今、歩き出す君へ。",
-        preview: "Your existence alone taught me that hope never fades",
-        color: "#aed6f1",
-      },
-      {
-        title: "ClariS - With You",
-        preview: "Under the same sky, you're never truly alone",
-        color: "#f9e79f",
-      },
-      {
-        title: "ClariS - ヒトリゴト",
-        preview: "These words I cannot say, yet I hope you'll notice them",
-        color: "#fadbd8",
-      },
-      {
-        title: "ClariS - 桜咲く",
-        preview: "Open this door and you can go anywhere you dream",
-        color: "#f5b7b1",
-      },
-      {
-        title: "Cream puff - Mermaid girl (Extended RRver.)",
-        preview: "I found my heavenly world the moment I reached for you",
-        color: "#abebc6",
-      },
-      {
-        title: "DECO＊27 & 初音ミク - 初嵐",
-        preview: "Thank you for singing with me, let's move forward together",
-        color: "#85c1e9",
-      },
-      {
-        title: "EGOIST - The Everlasting Guilty Crown",
-        preview:
-          "You exist to understand others, to hold the hands that matter",
-        color: "#c39bd3",
-      },
-      {
-        title: "JUSF 周存 - 心跳同步的时光 (Memory Ver.)",
-        preview: "I'll treasure this moment when our hearts beat as one",
-        color: "#f1948a",
-      },
-      {
-        title: "Ken Arai - NEXT TO YOU",
-        preview: "Gentle melodies remain even as the world turns cruel",
-        color: "#d7bde2",
-      },
-      {
-        title: "MIMI - 水音とカーテン",
-        preview: "Rain made this moment ours alone",
-        color: "#a9cce3",
-      },
-      {
-        title: "Mili - Nine Point Eight",
-        preview: "The wind sings for our reunion as I climb to find you",
-        color: "#a3e4d7",
-      },
-      {
-        title: "MoreanP - Feeling The Rain",
-        preview: "Some experience the rain, others simply endure it",
-        color: "#7fb3d5",
-      },
-      {
-        title: "Neuro-sama - LIFE",
-        preview:
-          "Though uncertain of myself, I reach for you and call this life",
-        color: "#bb8fce",
-      },
-      {
-        title: "Poppin'Party - Returns",
-        preview: "Thank you for being the place I can always return to",
-        color: "#f7dc6f",
-      },
-      {
-        title: "SOUNDORBIS - LIFE",
-        preview: "When this melody plays, you understand what living means",
-        color: "#82e0aa",
-      },
-      {
-        title: "Schnuffel - Häschenparty",
-        preview: "Life is a party when you're here with me",
-        color: "#f8b500",
-      },
-      {
-        title: "Schnuffel - Ich hab' dich lieb",
-        preview: "Simply being with you is all I need",
-        color: "#ffb6c1",
-      },
-      {
-        title: "Schnuffel - Nur mit Dir",
-        preview: "Everything shines brighter when you're beside me",
-        color: "#ffd700",
-      },
-      {
-        title: "Shirfine - Illusionary Daytime",
-        preview: "Dreams don't wait for nightfall",
-        color: "#d4ac0d",
-      },
-      {
-        title: "Supercell - My Dearest",
-        preview: "Even when the world abandons you, I will stand beside you",
-        color: "#a569bd",
-      },
-      {
-        title: "Xad - Birds",
-        preview: "Some souls are meant to soar",
-        color: "#76d7c4",
-      },
-      {
-        title: "azusa - 真夏のフォトグラフ",
-        preview: "This irreplaceable now was worth every yesterday",
-        color: "#f5b041",
-      },
-      {
-        title: "daniwellP - UZ",
-        preview: "The universe speaks in frequencies",
-        color: "#5499c7",
-      },
-      {
-        title: "daniwellP - てすてすブロードキャスト.proj",
-        preview: "Even through static, I'll find your frequency",
-        color: "#48c9b0",
-      },
-      {
-        title: "daniwellP - 夏の終わりの彼女は",
-        preview: "The cloudy sky may rain, but I believe it will clear someday",
-        color: "#f0b27a",
-      },
-      {
-        title: "doriko - ロミオとシンデレラ",
-        preview: "Take me far away where only our story matters",
-        color: "#ec7063",
-      },
-      {
-        title: "doriko - 歌に形はないけれど",
-        preview: "What has no form cannot fade with time",
-        color: "#af7ac5",
-      },
-      {
-        title: "doriko - 茜コントラスト",
-        preview: "Unspoken love stays perfect in memory",
-        color: "#e59866",
-      },
-      {
-        title: "himmel - 远枫",
-        preview: "Autumn teaches us to let go so spring can return",
-        color: "#dc7633",
-      },
-      {
-        title: "iolli - Through Mist and Fog",
-        preview: "I walk through fog because stopping is not an option",
-        color: "#99a3a4",
-      },
-      {
-        title: "minato & 初音ミク - 朧月",
-        preview: "My light may blur with distance but never disappears",
-        color: "#d5d8dc",
-      },
-      {
-        title: "niki feat. Lily - ジッタードール",
-        preview: "Love exists because it defies logic, not despite it",
-        color: "#f1c40f",
-      },
-      {
-        title: "niki feat. Lily - テロリスト",
-        preview: "Choosing to love yourself is the bravest uprising",
-        color: "#e74c3c",
-      },
-      {
-        title: "あやりす - 愛を誓いしヒメ飾り",
-        preview: "If freedom means forgetting you, I choose captivity",
-        color: "#d98880",
-      },
-      {
-        title: "いとうかなこ - アマデウス",
-        preview:
-          "Even if miracles defy logic, I will rewrite them as your destiny",
-        color: "#7d3c98",
-      },
-      {
-        title: "やくしまるえつこ - アンノウン・ワールドマップ",
-        preview: "My heart races as the unknown world unfolds before me",
-        color: "#45b39d",
-      },
-      {
-        title: "上村叶恵 - 雨霧",
-        preview: "Raindrops race faster than thoughts can follow",
-        color: "#5d6d7e",
-      },
-      {
-        title: "朝香智子 - post-script",
-        preview: "Time moved on, my heart stayed with you",
-        color: "#aab7b8",
-      },
-      {
-        title: "清漪 - 但叹清风错",
-        preview: "Time changes everything beautiful, but not what it meant",
-        color: "#7dcea0",
-      },
-      {
-        title: "甘茶の音楽工房 - 赤い風船とメリーゴーランド",
-        preview: "Joy preserved in a music box sounds like longing",
-        color: "#c0392b",
-      },
-      {
-        title: "竹達彩奈 & 巽悠衣子 - バランス KISS",
-        preview: "Happiness needs no explanation to those who feel it",
-        color: "#ff69b4",
-      },
-      {
-        title: "纯白 P - 海棠仙 (Album Version)",
-        preview: "I crossed a thousand years just to understand your wait",
-        color: "#f1948a",
-      },
-      {
-        title: "茶太 - 夢笑顔",
-        preview: "I'll keep smiling so you remember warmth, not goodbye",
-        color: "#fad7a0",
-      },
-      {
-        title: "高橋李依 - 気まぐれロマンティック",
-        preview: "My whims hide what my heart can't yet confess",
-        color: "#f5b7b1",
-      },
-    ],
+    title: "COP - 世末积雨云",
+    subtitle: "Even as the world crumbles, I remain standing to witness it all",
+    color: "#5d6d7e",
+  },
+  {
+    title: "COP - 凉雨",
+    subtitle: "When the rain finally stops, I will find you waiting there",
+    color: "#85929e",
+  },
+  {
+    title: "COP - 同归世界线",
+    subtitle: "This time when the world ends, I won't let you face it alone",
+    color: "#6c7a89",
+  },
+  {
+    title: "COP - 灰烬",
+    subtitle: "I chose to burn with you rather than exist without you",
+    color: "#e74c3c",
+  },
+  {
+    title: "Capchii & 凛々咲 - Letters from Heaven",
+    subtitle: "Rain connects us across the distance between earth and sky",
+    color: "#5dade2",
+  },
+  {
+    title: "Ceui - 今、歩き出す君へ。",
+    subtitle: "Your existence alone taught me that hope never fades",
+    color: "#aed6f1",
+  },
+  {
+    title: "ClariS - With You",
+    subtitle: "Under the same sky, you're never truly alone",
+    color: "#f9e79f",
+  },
+  {
+    title: "ClariS - ヒトリゴト",
+    subtitle: "These words I cannot say, yet I hope you'll notice them",
+    color: "#fadbd8",
+  },
+  {
+    title: "ClariS - 桜咲く",
+    subtitle: "Open this door and you can go anywhere you dream",
+    color: "#f5b7b1",
+  },
+  {
+    title: "Cream puff - Mermaid girl (Extended RRver.)",
+    subtitle: "I found my heavenly world the moment I reached for you",
+    color: "#abebc6",
+  },
+  {
+    title: "DECO＊27 & 初音ミク - 初嵐",
+    subtitle: "Thank you for singing with me, let's move forward together",
+    color: "#85c1e9",
+  },
+  {
+    title: "EGOIST - The Everlasting Guilty Crown",
+    subtitle: "You exist to understand others, to hold the hands that matter",
+    color: "#c39bd3",
+  },
+  {
+    title: "JUSF 周存 - 心跳同步的时光 (Memory Ver.)",
+    subtitle: "I'll treasure this moment when our hearts beat as one",
+    color: "#f1948a",
+  },
+  {
+    title: "Ken Arai - NEXT TO YOU",
+    subtitle: "Gentle melodies remain even as the world turns cruel",
+    color: "#d7bde2",
+  },
+  {
+    title: "MIMI - 水音とカーテン",
+    subtitle: "Rain made this moment ours alone",
+    color: "#a9cce3",
+  },
+  {
+    title: "Mili - Nine Point Eight",
+    subtitle: "The wind sings for our reunion as I climb to find you",
+    color: "#a3e4d7",
+  },
+  {
+    title: "MoreanP - Feeling The Rain",
+    subtitle: "Some experience the rain, others simply endure it",
+    color: "#7fb3d5",
+  },
+  {
+    title: "Neuro-sama - LIFE",
+    subtitle: "Though uncertain of myself, I reach for you and call this life",
+    color: "#bb8fce",
+  },
+  {
+    title: "Poppin'Party - Returns",
+    subtitle: "Thank you for being the place I can always return to",
+    color: "#f7dc6f",
+  },
+  {
+    title: "SOUNDORBIS - LIFE",
+    subtitle: "When this melody plays, you understand what living means",
+    color: "#82e0aa",
+  },
+  {
+    title: "Schnuffel - Häschenparty",
+    subtitle: "Life is a party when you're here with me",
+    color: "#f8b500",
+  },
+  {
+    title: "Schnuffel - Ich hab' dich lieb",
+    subtitle: "Simply being with you is all I need",
+    color: "#ffb6c1",
+  },
+  {
+    title: "Schnuffel - Nur mit Dir",
+    subtitle: "Everything shines brighter when you're beside me",
+    color: "#ffd700",
+  },
+  {
+    title: "Shirfine - Illusionary Daytime",
+    subtitle: "Dreams don't wait for nightfall",
+    color: "#d4ac0d",
+  },
+  {
+    title: "Supercell - My Dearest",
+    subtitle: "Even when the world abandons you, I will stand beside you",
+    color: "#a569bd",
+  },
+  {
+    title: "Xad - Birds",
+    subtitle: "Some souls are meant to soar",
+    color: "#76d7c4",
+  },
+  {
+    title: "azusa - 真夏のフォトグラフ",
+    subtitle: "This irreplaceable now was worth every yesterday",
+    color: "#f5b041",
+  },
+  {
+    title: "daniwellP - UZ",
+    subtitle: "The universe speaks in frequencies",
+    color: "#5499c7",
+  },
+  {
+    title: "daniwellP - てすてすブロードキャスト.proj",
+    subtitle: "Even through static, I'll find your frequency",
+    color: "#48c9b0",
+  },
+  {
+    title: "daniwellP - 夏の終わりの彼女は",
+    subtitle: "The cloudy sky may rain, but I believe it will clear someday",
+    color: "#f0b27a",
+  },
+  {
+    title: "doriko - ロミオとシンデレラ",
+    subtitle: "Take me far away where only our story matters",
+    color: "#ec7063",
+  },
+  {
+    title: "doriko - 歌に形はないけれど",
+    subtitle: "What has no form cannot fade with time",
+    color: "#af7ac5",
+  },
+  {
+    title: "doriko - 茜コントラスト",
+    subtitle: "Unspoken love stays perfect in memory",
+    color: "#e59866",
+  },
+  {
+    title: "himmel - 远枫",
+    subtitle: "Autumn teaches us to let go so spring can return",
+    color: "#dc7633",
+  },
+  {
+    title: "iolli - Through Mist and Fog",
+    subtitle: "I walk through fog because stopping is not an option",
+    color: "#99a3a4",
+  },
+  {
+    title: "minato & 初音ミク - 朧月",
+    subtitle: "My light may blur with distance but never disappears",
+    color: "#d5d8dc",
+  },
+  {
+    title: "niki feat. Lily - ジッタードール",
+    subtitle: "Love exists because it defies logic, not despite it",
+    color: "#f1c40f",
+  },
+  {
+    title: "niki feat. Lily - テロリスト",
+    subtitle: "Choosing to love yourself is the bravest uprising",
+    color: "#e74c3c",
+  },
+  {
+    title: "あやりす - 愛を誓いしヒメ飾り",
+    subtitle: "If freedom means forgetting you, I choose captivity",
+    color: "#d98880",
+  },
+  {
+    title: "いとうかなこ - アマデウス",
+    subtitle:
+      "Even if miracles defy logic, I will rewrite them as your destiny",
+    color: "#7d3c98",
+  },
+  {
+    title: "やくしまるえつこ - アンノウン・ワールドマップ",
+    subtitle: "My heart races as the unknown world unfolds before me",
+    color: "#45b39d",
+  },
+  {
+    title: "上村叶恵 - 雨霧",
+    subtitle: "Raindrops race faster than thoughts can follow",
+    color: "#5d6d7e",
+  },
+  {
+    title: "朝香智子 - post-script",
+    subtitle: "Time moved on, my heart stayed with you",
+    color: "#aab7b8",
+  },
+  {
+    title: "清漪 - 但叹清风错",
+    subtitle: "Time changes everything beautiful, but not what it meant",
+    color: "#7dcea0",
+  },
+  {
+    title: "甘茶の音楽工房 - 赤い風船とメリーゴーランド",
+    subtitle: "Joy preserved in a music box sounds like longing",
+    color: "#c0392b",
+  },
+  {
+    title: "竹達彩奈 & 巽悠衣子 - バランス KISS",
+    subtitle: "Happiness needs no explanation to those who feel it",
+    color: "#ff69b4",
+  },
+  {
+    title: "纯白 P - 海棠仙 (Album Version)",
+    subtitle: "I crossed a thousand years just to understand your wait",
+    color: "#f1948a",
+  },
+  {
+    title: "茶太 - 夢笑顔",
+    subtitle: "I'll keep smiling so you remember warmth, not goodbye",
+    color: "#fad7a0",
+  },
+  {
+    title: "高橋李依 - 気まぐれロマンティック",
+    subtitle: "My whims hide what my heart can't yet confess",
+    color: "#f5b7b1",
   },
 ];
