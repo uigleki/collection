@@ -9,7 +9,7 @@ export function Footer() {
           href="https://github.com/uigleki/collection"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
+          className="hover:text-primary transition-colors"
         >
           GitHub
         </a>
@@ -18,7 +18,7 @@ export function Footer() {
           href="https://creativecommons.org/licenses/by-sa/4.0/"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-foreground transition-colors"
+          className="hover:text-primary transition-colors"
         >
           CC BY-SA 4.0
         </a>

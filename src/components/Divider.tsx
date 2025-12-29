@@ -39,7 +39,7 @@ export function Divider({ symbol = "start" }: DividerProps) {
         </div>
         <div className="relative px-6 bg-background">
           <span
-            className={`transition-colors ${hovered ? "text-foreground" : "text-muted-foreground"}`}
+            className={`transition-colors ${hovered ? "text-primary" : "text-muted-foreground"}`}
           >
             {icon}
           </span>

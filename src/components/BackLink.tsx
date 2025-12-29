@@ -10,7 +10,7 @@ export function BackLink() {
     >
       <Link
         to="/"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+        className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
       >
         <span>←</span>
         <span>Back</span>

@@ -30,7 +30,7 @@ export function AnimatedQuote() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5 }}
-            className={`absolute text-2xl md:text-3xl transition-colors ${hovered ? "text-foreground" : "text-muted-foreground"}`}
+            className={`absolute text-2xl md:text-3xl transition-colors ${hovered ? "text-primary" : "text-muted-foreground"}`}
           >
             {quotes[index]}
           </motion.p>

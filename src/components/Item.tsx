@@ -7,7 +7,7 @@ import { type KeyboardEvent, type ReactNode, useState } from "react";
 function ReviewContent({ point }: { point: ReviewPoint }) {
   return (
     <>
-      <span className="text-foreground font-medium">{point.label}:</span>{" "}
+      <span className="text-card-foreground font-medium">{point.label}:</span>{" "}
       <span className="text-muted-foreground">{parseEmphasis(point.text)}</span>
     </>
   );
@@ -67,7 +67,7 @@ function BaseItem({
       tabIndex={0}
       aria-expanded={isExpanded}
     >
-      <h3 className="text-xl text-foreground">{title}</h3>
+      <h3 className="text-xl text-card-foreground">{title}</h3>
 
       <AnimatePresence>
         {showSubtitle && (
@@ -118,7 +118,9 @@ export function WorkItem({ work }: { work: Work }) {
 
           {work.flaws && work.flaws.length > 0 && (
             <div className="mt-6 pt-4 border-t border-border">
-              <p className="text-muted-foreground text-sm mb-2">Shortcomings:</p>
+              <p className="text-muted-foreground text-sm mb-2">
+                Shortcomings:
+              </p>
               {work.flaws.map((flaw, i) => (
                 <motion.div
                   key={i}
@@ -166,7 +168,9 @@ export function ConceptItem({ concept }: { concept: Concept }) {
             transition={{ delay: i * 0.05 }}
           >
             {typeof item === "string" ? (
-              <span className="text-muted-foreground">{parseEmphasis(item)}</span>
+              <span className="text-muted-foreground">
+                {parseEmphasis(item)}
+              </span>
             ) : (
               <ReviewContent point={item} />
             )}

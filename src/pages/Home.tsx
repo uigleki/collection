@@ -29,7 +29,7 @@ export function Home() {
       <div className="text-center">
         <Link
           to="/why"
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-muted-foreground hover:text-primary transition-colors"
         >
           Why These →
         </Link>

@@ -13,7 +13,7 @@ export function NotFound() {
       <p className="text-muted-foreground mb-8">This page doesn't exist.</p>
       <Link
         to="/"
-        className="text-muted-foreground hover:text-foreground transition-colors"
+        className="text-muted-foreground hover:text-primary transition-colors"
       >
         ← Return home
       </Link>
