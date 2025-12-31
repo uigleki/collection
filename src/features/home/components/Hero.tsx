@@ -60,7 +60,7 @@ export function Hero() {
               x,
               y,
               willChange: "transform",
-              fontSize: "clamp(1rem, 3.5vw + 0.5rem, 2.5rem)",
+              fontSize: "clamp(1rem, 5vw, 2.5rem)",
               lineHeight: "1.5",
             }}
             whileHover={{

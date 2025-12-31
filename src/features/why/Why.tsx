@@ -1,7 +1,7 @@
 import { data, meta } from "@/data/why";
+import { parseEmphasis } from "@/shared/lib/markdown";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
-import { Markdown } from "@/shared/ui/Markdown";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 import { ConceptCard } from "./components/ConceptCard";
@@ -60,7 +60,7 @@ export function Why() {
               }}
               className="text-lg leading-relaxed"
             >
-              <Markdown>{paragraph}</Markdown>
+              {parseEmphasis(paragraph)}
             </motion.div>
           ))}
         </motion.div>
@@ -121,7 +121,7 @@ export function Why() {
               }}
               className="text-lg leading-relaxed"
             >
-              <Markdown>{paragraph}</Markdown>
+              {parseEmphasis(paragraph)}
             </motion.div>
           ))}
         </motion.div>
