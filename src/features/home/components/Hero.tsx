@@ -56,7 +56,13 @@ export function Hero() {
       >
         <Link to="/why">
           <motion.h1
-            style={{ x, y, willChange: "transform" }}
+            style={{
+              x,
+              y,
+              willChange: "transform",
+              fontSize: "clamp(1rem, 3.5vw + 0.5rem, 2.5rem)",
+              lineHeight: "1.5",
+            }}
             whileHover={{
               scale: 1.02,
             }}
@@ -64,7 +70,7 @@ export function Hero() {
               duration: 0.3,
               ease: [0.34, 1.56, 0.64, 1],
             }}
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 leading-relaxed transition-colors duration-500 ease-out hover:text-primary"
+            className="font-bold text-center mb-8 transition-colors duration-500 ease-out hover:text-primary"
           >
             If we're here to experience beauty,
             <br />
