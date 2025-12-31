@@ -8,28 +8,17 @@ interface FooterProps {
 
 export function Footer({ text, onHomeClick }: FooterProps) {
   const [showButton, setShowButton] = useState(false);
-  const [pageIsLong, setPageIsLong] = useState(false);
 
   useEffect(() => {
-    const checkPageHeight = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = document.documentElement.clientHeight;
-      setPageIsLong(scrollHeight > clientHeight * 1.5);
-    };
-
     const handleScroll = () => {
       setShowButton(window.scrollY > window.innerHeight);
     };
 
-    checkPageHeight();
     handleScroll();
-
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", checkPageHeight);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", checkPageHeight);
     };
   }, []);
 
@@ -108,38 +97,36 @@ export function Footer({ text, onHomeClick }: FooterProps) {
         </motion.div>
       </div>
 
-      {pageIsLong && (
-        <AnimatePresence>
-          {showButton && (
-            <motion.button
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              onClick={scrollToTop}
-              className="fixed bottom-8 right-8 p-3 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-shadow z-50"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-              style={{ willChange: "transform" }}
-              aria-label="Back to top"
+      <AnimatePresence>
+        {showButton && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-8 right-8 p-3 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-shadow z-50 cursor-pointer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            style={{ willChange: "transform" }}
+            aria-label="Back to top"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-              </svg>
-            </motion.button>
-          )}
-        </AnimatePresence>
-      )}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              />
+            </svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </footer>
   );
 }
