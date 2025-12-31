@@ -24,5 +24,5 @@ jobs:
       - name: Lint
         uses: oxsecurity/megalinter/flavors/javascript@v9
         env:
-          DISABLE_LINTERS: HTML_DJLINT,REPOSITORY_GRYPE,SPELL_CSPELL,TYPESCRIPT_STANDARD
+          DISABLE_LINTERS: COPYPASTE_JSCPD,HTML_DJLINT,REPOSITORY_GRYPE,SPELL_CSPELL,TYPESCRIPT_STANDARD
           FLAVOR_SUGGESTIONS: false

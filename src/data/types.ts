@@ -1,3 +1,9 @@
+export interface PageMeta {
+  title: string;
+  description: string;
+  footer?: string;
+}
+
 export interface ReviewPoint {
   label: string;
   text: string;
@@ -16,13 +22,13 @@ export interface WorkCategory {
   works: Work[];
 }
 
-export interface Track {
+export interface WorkTrack {
   title: string;
   subtitle: string;
   color: string;
 }
 
-export interface Concept {
+export interface WhyConcept {
   title: string;
   subtitle: string;
   color: string;
@@ -32,14 +38,12 @@ export interface Concept {
 export interface WhySection {
   title: string;
   intro: string;
-  concepts: Concept[];
+  concepts: WhyConcept[];
   outro: string;
 }
 
 export interface WhyData {
-  epigraph: string;
   opening: string[];
   sections: WhySection[];
   closing: string[];
-  footer: string;
 }

@@ -60,8 +60,3 @@ html {
 body {
   min-height: 100dvh;
 }
-
-::selection {
-  background-color: var(--color-primary);
-  color: var(--color-primary-foreground);
-}
