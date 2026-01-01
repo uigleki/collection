@@ -21,7 +21,7 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
         y: 0,
         rotateX: 0,
       }}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.5 }}
       transition={{
         duration: 0.7,
         delay: Math.min(index * 0.08, 0.4),
