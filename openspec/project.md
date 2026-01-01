@@ -50,5 +50,6 @@ Higher layers can depend on lower layers, not vice versa.
 
 ## Testing
 
-- No test framework configured
-- Build verification: `pnpm build`
+- **Vitest** – unit testing with jsdom environment
+- `pnpm test` – run tests once
+- `pnpm build` – type check + test + build
