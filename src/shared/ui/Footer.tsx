@@ -1,5 +1,5 @@
+import { useScrollVisibility } from "@/shared/hooks/useScrollVisibility";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
 
 interface FooterProps {
   text: string;
@@ -7,28 +7,7 @@ interface FooterProps {
 }
 
 export function Footer({ text, onHomeClick }: FooterProps) {
-  const [showButton, setShowButton] = useState(false);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setShowButton(window.scrollY > window.innerHeight);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const showButton = useScrollVisibility("scroll-sentinel");
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });

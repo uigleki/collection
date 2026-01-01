@@ -9,6 +9,10 @@ import { DevTools } from "./dev/DevTools";
 function Root() {
   return (
     <ErrorBoundary>
+      <div
+        id="scroll-sentinel"
+        className="absolute top-[50vh] h-px w-px opacity-0 pointer-events-none"
+      />
       <Outlet />
       <ScrollRestoration />
       <DevTools />
