@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { parseEmphasis } from "../markdown";
+import { renderEmphasis } from "../markdown";
 
-describe("parseEmphasis", () => {
+describe("renderEmphasis", () => {
   it("returns plain text unchanged", () => {
-    expect(parseEmphasis("Hello world")).toEqual(["Hello world"]);
+    expect(renderEmphasis("Hello world")).toEqual(["Hello world"]);
   });
 
   it("parses single bold text", () => {
-    expect(parseEmphasis("Hello **world**!")).toEqual([
+    expect(renderEmphasis("Hello **world**!")).toEqual([
       "Hello ",
       <strong key={1}>world</strong>,
       "!",
@@ -15,7 +15,7 @@ describe("parseEmphasis", () => {
   });
 
   it("parses multiple bold segments", () => {
-    expect(parseEmphasis("**First** and **second**")).toEqual([
+    expect(renderEmphasis("**First** and **second**")).toEqual([
       "",
       <strong key={1}>First</strong>,
       " and ",

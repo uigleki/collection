@@ -1,5 +1,5 @@
 import { data, meta } from "@/data/why";
-import { parseEmphasis } from "@/shared/lib/markdown";
+import { renderEmphasis } from "@/shared/lib/markdown";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
@@ -60,7 +60,7 @@ export function Why() {
               }}
               className="text-lg leading-relaxed"
             >
-              {parseEmphasis(paragraph)}
+              {renderEmphasis(paragraph)}
             </motion.div>
           ))}
         </motion.div>
@@ -121,7 +121,7 @@ export function Why() {
               }}
               className="text-lg leading-relaxed"
             >
-              {parseEmphasis(paragraph)}
+              {renderEmphasis(paragraph)}
             </motion.div>
           ))}
         </motion.div>

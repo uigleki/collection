@@ -1,5 +1,5 @@
 import type { ReviewPoint, WhyConcept } from "@/data/types";
-import { parseEmphasis } from "@/shared/lib/markdown";
+import { renderEmphasis } from "@/shared/lib/markdown";
 import { motion } from "framer-motion";
 
 interface ConceptCardProps {
@@ -70,7 +70,7 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
                 }}
                 className="text-foreground leading-relaxed"
               >
-                {parseEmphasis(item)}
+                {renderEmphasis(item)}
               </motion.div>
             );
           }
@@ -95,7 +95,7 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
                 {point.label}
               </p>
               <div className="text-muted-foreground leading-relaxed">
-                {parseEmphasis(point.text)}
+                {renderEmphasis(point.text)}
               </div>
             </motion.div>
           );

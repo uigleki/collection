@@ -10,12 +10,20 @@ export function Footer({ text, onHomeClick }: FooterProps) {
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setShowButton(window.scrollY > window.innerHeight);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setShowButton(window.scrollY > window.innerHeight);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
