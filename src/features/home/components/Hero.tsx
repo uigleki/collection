@@ -1,9 +1,16 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router";
 
 export function Hero() {
   const questionRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -11,11 +18,11 @@ export function Hero() {
   const smoothX = useSpring(mouseX, { stiffness: 150, damping: 20 });
   const smoothY = useSpring(mouseY, { stiffness: 150, damping: 20 });
 
-  const x = useTransform(smoothX, (v) => v * 0.1);
-  const y = useTransform(smoothY, (v) => v * 0.1);
+  const x = useTransform(smoothX, (v) => (shouldReduceMotion ? 0 : v * 0.1));
+  const y = useTransform(smoothY, (v) => (shouldReduceMotion ? 0 : v * 0.1));
 
   const handleQuestionMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!questionRef.current) return;
+    if (!questionRef.current || shouldReduceMotion) return;
     const rect = questionRef.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;

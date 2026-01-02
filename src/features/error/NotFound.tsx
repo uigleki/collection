@@ -1,4 +1,3 @@
-import { meta } from "@/data/why";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
@@ -6,6 +5,7 @@ import { motion } from "framer-motion";
 export function NotFound() {
   return (
     <div className="min-h-screen flex flex-col">
+      <title>Page Not Found</title>
       <div className="flex-1 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -44,7 +44,7 @@ export function NotFound() {
         </motion.div>
       </div>
 
-      <Footer text={meta.footer!} />
+      <Footer />
     </div>
   );
 }

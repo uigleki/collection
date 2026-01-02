@@ -1,47 +1,30 @@
+import { meta } from "@/data/why";
 import { useScrollVisibility } from "@/shared/hooks/useScrollVisibility";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-interface FooterProps {
-  text: string;
-  onHomeClick?: () => void;
-}
-
-export function Footer({ text, onHomeClick }: FooterProps) {
+export function Footer() {
   const showButton = useScrollVisibility("scroll-sentinel");
+  const shouldReduceMotion = useReducedMotion();
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: shouldReduceMotion ? "instant" : "smooth",
+    });
   };
-
-  const content = (
-    <motion.p
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.8 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="text-muted-foreground italic mb-6"
-    >
-      {text}
-    </motion.p>
-  );
 
   return (
     <footer className="py-12 relative">
       <div className="text-center">
-        {onHomeClick ? (
-          <motion.button
-            onClick={onHomeClick}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="hover:text-foreground transition-colors duration-300"
-            style={{ willChange: "transform" }}
-          >
-            {content}
-          </motion.button>
-        ) : (
-          content
-        )}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.8 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-muted-foreground italic mb-6"
+        >
+          {meta.footer}
+        </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

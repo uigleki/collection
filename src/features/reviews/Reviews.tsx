@@ -1,4 +1,3 @@
-import { meta as whyMeta } from "@/data/why";
 import { categories, meta, music } from "@/data/works";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
@@ -8,7 +7,8 @@ import { MusicSection } from "./components/MusicSection";
 
 export function Reviews() {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
+      <title>{meta.title}</title>
       <BackButton variant="top" />
 
       <div className="max-w-5xl mx-auto px-4 py-20">
@@ -31,7 +31,7 @@ export function Reviews() {
       </div>
 
       <BackButton variant="bottom" />
-      <Footer text={whyMeta.footer!} />
-    </div>
+      <Footer />
+    </main>
   );
 }

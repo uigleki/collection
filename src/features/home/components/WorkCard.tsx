@@ -10,7 +10,9 @@ interface WorkCardProps {
 
 export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
   return (
-    <motion.div
+    <motion.button
+      type="button"
+      aria-expanded={expanded}
       initial={{
         opacity: 0,
         y: 40,
@@ -32,7 +34,7 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
         transformStyle: "preserve-3d",
         borderLeft: `4px solid ${work.color}`,
       }}
-      className="cursor-pointer"
+      className="cursor-pointer text-left w-full"
       onClick={onToggle}
     >
       <motion.div
@@ -159,6 +161,6 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
           )}
         </AnimatePresence>
       </motion.div>
-    </motion.div>
+    </motion.button>
   );
 }

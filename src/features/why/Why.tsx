@@ -3,15 +3,13 @@ import { renderEmphasis } from "@/shared/lib/markdown";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router";
 import { ConceptCard } from "./components/ConceptCard";
 import { SectionTitle } from "./components/SectionTitle";
 
 export function Why() {
-  const navigate = useNavigate();
-
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
+      <title>{meta.title}</title>
       <BackButton variant="top" />
 
       <div className="max-w-4xl mx-auto px-4 py-20">
@@ -128,7 +126,7 @@ export function Why() {
       </div>
 
       <BackButton variant="bottom" />
-      <Footer text={meta.footer!} onHomeClick={() => navigate("/")} />
-    </div>
+      <Footer />
+    </main>
   );
 }

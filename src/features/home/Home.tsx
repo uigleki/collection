@@ -1,5 +1,4 @@
-import { meta } from "@/data/why";
-import { categories, music } from "@/data/works";
+import { categories, music, siteMeta } from "@/data/works";
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -11,7 +10,8 @@ export function Home() {
   const [expandedWork, setExpandedWork] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
+      <title>{siteMeta.title}</title>
       <Hero />
 
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-16">
@@ -73,7 +73,7 @@ export function Home() {
         </section>
       </div>
 
-      <Footer text={meta.footer!} />
-    </div>
+      <Footer />
+    </main>
   );
 }
