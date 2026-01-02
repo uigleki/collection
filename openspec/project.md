@@ -34,6 +34,7 @@ Higher layers can depend on lower layers, not vice versa.
 - Use CSS native `light-dark()` for theme switching
 - Animate only `transform` and `opacity` for GPU acceleration
 - Use `satisfies` over `as` for type assertions to preserve literal types
+- Use Framer Motion `variants` for parent-child hover propagation
 
 ## Conventions
 

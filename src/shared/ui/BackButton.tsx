@@ -14,21 +14,18 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="fixed top-8 left-8 z-50"
       >
-        <Link to="/">
+        <Link to="/" aria-label="Go back to home">
           <motion.div
-            className="flex items-center gap-2 text-muted-foreground"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             whileHover="hover"
             initial="rest"
           >
             <motion.span
               variants={{
                 rest: { x: 0 },
-                hover: { x: -8 },
+                hover: { x: -6 },
               }}
-              transition={{
-                duration: 0.3,
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
+              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               style={{ willChange: "transform" }}
             >
               ←
@@ -38,10 +35,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
                 rest: { x: 0 },
                 hover: { x: 4 },
               }}
-              transition={{
-                duration: 0.3,
-                ease: [0.34, 1.56, 0.64, 1],
-              }}
+              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               className="text-sm"
               style={{ willChange: "transform" }}
             >
@@ -57,7 +51,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
     <div className="py-8 text-center">
       <Link to="/">
         <motion.div
-          className="inline-flex items-center gap-2 text-muted-foreground"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           whileHover="hover"
           initial="rest"
         >

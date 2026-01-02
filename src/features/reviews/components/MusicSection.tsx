@@ -46,10 +46,13 @@ export function MusicSection({ tracks }: MusicSectionProps) {
               borderLeft: `4px solid ${track.color}`,
               willChange: "transform",
             }}
-            className="bg-card p-4 rounded-r-lg group relative overflow-hidden"
+            className="bg-card p-4 rounded-r-lg relative overflow-hidden"
+            whileHover="hover"
           >
             <motion.div
-              whileHover={{ x: 4 }}
+              variants={{
+                hover: { x: 4 },
+              }}
               transition={{ duration: 0.2 }}
               style={{ willChange: "transform" }}
             >
@@ -58,18 +61,6 @@ export function MusicSection({ tracks }: MusicSectionProps) {
                 {track.subtitle}
               </p>
             </motion.div>
-
-            {/* Hover shine */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
-              initial={{ x: "-100%", opacity: 0 }}
-              whileHover={{
-                x: "100%",
-                opacity: 1,
-              }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              style={{ willChange: "transform" }}
-            />
           </motion.div>
         ))}
       </div>

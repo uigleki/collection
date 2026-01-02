@@ -53,16 +53,21 @@ export function ErrorFallback({
             onClick={handleBackHome}
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             style={{ willChange: "transform" }}
+            whileHover="hover"
           >
             <motion.span
-              whileHover={{ x: -6 }}
+              variants={{
+                hover: { x: -6 },
+              }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               style={{ willChange: "transform" }}
             >
               ←
             </motion.span>
             <motion.span
-              whileHover={{ x: 4 }}
+              variants={{
+                hover: { x: 4 },
+              }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               style={{ willChange: "transform" }}
             >
