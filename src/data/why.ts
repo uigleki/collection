@@ -12,7 +12,6 @@ const truth: WhySection = {
   concepts: [
     {
       title: "Creative Love",
-      subtitle: "The creator loved the work itself",
       color: "#e74c3c",
       explanation: [
         "The creator loved the work itself, not the response it would generate. Just as parents who truly love their children want them to be happy rather than bring glory to the family, creators who truly love their work cannot bear to inflict darkness without purpose, cannot tolerate arbitrariness, cannot accept incompleteness.",
@@ -20,7 +19,6 @@ const truth: WhySection = {
     },
     {
       title: "Internal Coherence",
-      subtitle: "Nothing is random, everything connects",
       color: "#3498db",
       explanation: [
         "Nothing is random. Everything connects. A single line advances plot, reveals character, echoes theme, and foreshadows resolution - all precisely, all intentionally. Remove any piece and the entire structure collapses. Each element strengthens all others in ways that reveal themselves through time.",
@@ -28,7 +26,6 @@ const truth: WhySection = {
     },
     {
       title: "Authentic Beauty",
-      subtitle: "The creator chose to create beauty",
       color: "#2ecc71",
       explanation: [
         "The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift - the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.",
@@ -46,7 +43,6 @@ const shortcuts: WhySection = {
   concepts: [
     {
       title: "Negativity Bias",
-      subtitle: "Life affirms itself through creation, not destruction",
       color: "#e74c3c",
       explanation: [
         "Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.",
@@ -62,7 +58,6 @@ const shortcuts: WhySection = {
     },
     {
       title: "Mere Exposure Effect",
-      subtitle: "Familiarity masquerading as affection",
       color: "#9b59b6",
       explanation: [
         "Repetition breeds familiarity, and familiarity breeds preference - a psychological phenomenon where we favor what we've encountered before.",
@@ -78,7 +73,6 @@ const shortcuts: WhySection = {
     },
     {
       title: "Peak-End Rule",
-      subtitle: "True works respect your time from the first moment",
       color: "#f39c12",
       explanation: [
         "Memory doesn't record experiences faithfully - it disproportionately weights emotional peaks and endings, forgetting the journey between.",

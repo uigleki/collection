@@ -39,7 +39,6 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
       <h3 className="text-2xl font-bold mb-2" style={{ color: concept.color }}>
         {concept.title}
       </h3>
-      <p className="text-muted-foreground mb-6 italic">{concept.subtitle}</p>
 
       <motion.div
         initial="hidden"

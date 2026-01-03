@@ -30,7 +30,6 @@ export interface WorkTrack {
 
 export interface WhyConcept {
   title: string;
-  subtitle: string;
   color: string;
   explanation: (string | ReviewPoint)[];
 }
