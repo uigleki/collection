@@ -10,7 +10,7 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.8 }}
+      viewport={{ once: true }}
       variants={{
         visible: {
           transition: { staggerChildren: 0.15 },

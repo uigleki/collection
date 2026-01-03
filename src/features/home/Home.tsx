@@ -20,7 +20,7 @@ export function Home() {
             <motion.h2
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.8 }}
+              viewport={{ once: true }}
               transition={{
                 duration: 0.6,
                 ease: [0.16, 1, 0.3, 1],
@@ -53,7 +53,7 @@ export function Home() {
           <motion.h2
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.8 }}
+            viewport={{ once: true }}
             transition={{
               duration: 0.6,
               ease: [0.16, 1, 0.3, 1],

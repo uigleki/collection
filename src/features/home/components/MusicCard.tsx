@@ -19,7 +19,7 @@ export function MusicCard({ track, index }: MusicCardProps) {
         x: 0,
         scale: 1,
       }}
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true }}
       transition={{
         duration: 0.4,
         delay: Math.min(index * 0.04, 0.3),

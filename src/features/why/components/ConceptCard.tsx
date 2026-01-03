@@ -22,7 +22,7 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
         rotateY: 0,
         scale: 1,
       }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: true }}
       transition={{
         duration: 0.8,
         delay: index * 0.15,

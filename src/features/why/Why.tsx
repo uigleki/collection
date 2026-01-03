@@ -77,7 +77,7 @@ export function Why() {
             <motion.p
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
+              viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg text-muted-foreground italic mt-12 text-center"
             >
@@ -90,7 +90,7 @@ export function Why() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true }}
           variants={{
             visible: {
               transition: {

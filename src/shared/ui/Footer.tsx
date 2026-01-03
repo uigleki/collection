@@ -23,7 +23,7 @@ export function Footer({ text }: FooterProps) {
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.8 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-muted-foreground italic mb-6"
         >
@@ -33,7 +33,7 @@ export function Footer({ text }: FooterProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.8 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="flex items-center justify-center gap-6 text-sm"
         >
