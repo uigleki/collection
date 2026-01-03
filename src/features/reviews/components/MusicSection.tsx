@@ -1,5 +1,6 @@
 import type { WorkTrack } from "@/data/types";
 import { motion } from "framer-motion";
+import { Music } from "lucide-react";
 
 interface MusicSectionProps {
   readonly tracks: readonly WorkTrack[];
@@ -16,8 +17,9 @@ export function MusicSection({ tracks }: MusicSectionProps) {
           duration: 0.6,
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
-        className="text-4xl font-bold mb-8"
+        className="text-4xl font-bold mb-8 flex items-center gap-3"
       >
+        <Music className="w-10 h-10" />
         Music
       </motion.h2>
 

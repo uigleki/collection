@@ -9,11 +9,6 @@ const DevTools = lazy(() => import("./dev/DevTools"));
 function Root() {
   return (
     <ErrorBoundary>
-      {/* Scroll sentinel for "Back to Top" visibility */}
-      <div
-        id="scroll-sentinel"
-        className="absolute top-[50vh] h-px w-px opacity-0 pointer-events-none"
-      />
       <Outlet />
       <ScrollRestoration />
       <DevTools />

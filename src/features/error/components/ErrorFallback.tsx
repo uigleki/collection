@@ -1,5 +1,6 @@
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 
 interface ErrorFallbackProps {
@@ -60,7 +61,7 @@ export function ErrorFallback({
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              ←
+              <ChevronLeft className="w-5 h-5" />
             </motion.span>
             <motion.span
               variants={{

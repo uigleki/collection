@@ -1,12 +1,27 @@
 import type { WorkCategory } from "@/data/types";
 import { motion } from "framer-motion";
+import {
+  Clapperboard,
+  Gamepad2,
+  Palette,
+  Tv,
+  type LucideIcon,
+} from "lucide-react";
 import { WorkCard } from "./WorkCard";
+
+const categoryIcons: Record<string, LucideIcon> = {
+  Anime: Tv,
+  Movies: Clapperboard,
+  Games: Gamepad2,
+  Artists: Palette,
+};
 
 interface CategorySectionProps {
   readonly category: WorkCategory;
 }
 
 export function CategorySection({ category }: CategorySectionProps) {
+  const Icon = categoryIcons[category.name];
   return (
     <section className="mb-20">
       <motion.h2
@@ -17,8 +32,9 @@ export function CategorySection({ category }: CategorySectionProps) {
           duration: 0.6,
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
-        className="text-4xl font-bold mb-8"
+        className="text-4xl font-bold mb-8 flex items-center gap-3"
       >
+        {Icon && <Icon className="w-10 h-10" />}
         {category.name}
       </motion.h2>
 

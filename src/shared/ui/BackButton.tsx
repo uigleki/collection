@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 import { Link } from "react-router";
 
 interface BackButtonProps {
@@ -27,7 +28,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
             >
-              ←
+              <ChevronLeft className="w-5 h-5" />
             </motion.span>
             <motion.span
               variants={{
@@ -60,7 +61,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
             }}
             transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
           >
-            ←
+            <ChevronLeft className="w-5 h-5" />
           </motion.span>
           <motion.span
             variants={{
