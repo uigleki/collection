@@ -130,3 +130,5 @@ export function Why() {
     </main>
   );
 }
+
+export { Why as Component };

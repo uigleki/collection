@@ -75,3 +75,5 @@ export function Home() {
     </main>
   );
 }
+
+export { Home as Component };

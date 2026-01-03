@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export function DevTools() {
+export default function DevTools() {
   const [isCrashed, setIsCrashed] = useState(false);
 
   if (!import.meta.env.DEV) return null;

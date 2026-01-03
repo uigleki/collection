@@ -34,3 +34,5 @@ export function Reviews() {
     </main>
   );
 }
+
+export { Reviews as Component };
