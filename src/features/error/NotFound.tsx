@@ -11,14 +11,12 @@ export function NotFound() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{ willChange: "transform" }}
           className="text-center"
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ willChange: "transform" }}
             className="text-6xl font-bold mb-4"
           >
             404
@@ -37,7 +35,6 @@ export function NotFound() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            style={{ willChange: "transform" }}
           >
             <BackButton variant="bottom" />
           </motion.div>

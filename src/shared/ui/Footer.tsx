@@ -2,7 +2,11 @@ import { meta } from "@/data/why";
 import { useScrollVisibility } from "@/shared/hooks/useScrollVisibility";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-export function Footer() {
+interface FooterProps {
+  text?: string;
+}
+
+export function Footer({ text }: FooterProps) {
   const showButton = useScrollVisibility("scroll-sentinel");
   const shouldReduceMotion = useReducedMotion();
 
@@ -23,7 +27,7 @@ export function Footer() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-muted-foreground italic mb-6"
         >
-          {meta.footer}
+          {text ?? meta.footer}
         </motion.p>
 
         <motion.div
@@ -40,7 +44,6 @@ export function Footer() {
             className="text-muted-foreground hover:text-foreground transition-colors"
             whileHover={{ x: 4 }}
             transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            style={{ willChange: "transform" }}
           >
             GitHub
           </motion.a>
@@ -60,7 +63,6 @@ export function Footer() {
             className="text-muted-foreground hover:text-foreground transition-colors"
             whileHover={{ x: 4 }}
             transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            style={{ willChange: "transform" }}
           >
             CC BY-SA 4.0
           </motion.a>
@@ -78,7 +80,6 @@ export function Footer() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            style={{ willChange: "transform" }}
             aria-label="Back to top"
           >
             <svg

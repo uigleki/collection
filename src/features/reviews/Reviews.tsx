@@ -16,7 +16,6 @@ export function Reviews() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ willChange: "transform" }}
           className="mb-16"
         >
           <h1 className="text-5xl font-bold mb-4">{meta.title}</h1>

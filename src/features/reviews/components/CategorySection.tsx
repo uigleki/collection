@@ -17,7 +17,6 @@ export function CategorySection({ category }: CategorySectionProps) {
           duration: 0.6,
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
-        style={{ willChange: "transform" }}
         className="text-4xl font-bold mb-8"
       >
         {category.name}

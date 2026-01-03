@@ -29,7 +29,6 @@ export function WorkCard({ work, index }: WorkCardProps) {
         perspective: 1000,
         transformStyle: "preserve-3d",
         borderLeft: `4px solid ${work.color}`,
-        willChange: "transform",
       }}
       className="bg-card p-8 rounded-r-lg"
     >

@@ -25,7 +25,6 @@ export function Home() {
                 duration: 0.6,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              style={{ willChange: "transform" }}
               className="text-3xl font-bold mb-8"
             >
               {category.name}
@@ -59,7 +58,6 @@ export function Home() {
               duration: 0.6,
               ease: [0.16, 1, 0.3, 1],
             }}
-            style={{ willChange: "transform" }}
             className="text-3xl font-bold mb-8"
           >
             Music

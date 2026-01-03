@@ -24,14 +24,12 @@ export function ErrorFallback({
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          style={{ willChange: "transform" }}
           className="text-center max-w-md"
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            style={{ willChange: "transform" }}
             className="text-4xl font-bold mb-4"
           >
             Something went wrong
@@ -52,7 +50,6 @@ export function ErrorFallback({
             transition={{ duration: 0.5, delay: 0.6 }}
             onClick={handleBackHome}
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            style={{ willChange: "transform" }}
             whileHover="hover"
           >
             <motion.span
@@ -60,7 +57,6 @@ export function ErrorFallback({
                 hover: { x: -6 },
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ willChange: "transform" }}
             >
               ←
             </motion.span>
@@ -69,7 +65,6 @@ export function ErrorFallback({
                 hover: { x: 4 },
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ willChange: "transform" }}
             >
               Back to Home
             </motion.span>
@@ -92,7 +87,6 @@ export function ErrorFallback({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
-            style={{ willChange: "transform" }}
             className="flex items-center justify-center gap-6 text-sm"
           >
             <motion.a
@@ -102,7 +96,6 @@ export function ErrorFallback({
               className="text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ x: 4 }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ willChange: "transform" }}
             >
               GitHub
             </motion.a>
@@ -112,7 +105,6 @@ export function ErrorFallback({
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
               transition={{ duration: 0.4, delay: 1.2 }}
-              style={{ willChange: "transform" }}
             />
 
             <motion.a
@@ -122,7 +114,6 @@ export function ErrorFallback({
               className="text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ x: 4 }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ willChange: "transform" }}
             >
               CC BY-SA 4.0
             </motion.a>

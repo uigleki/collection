@@ -16,7 +16,6 @@ export function MusicSection({ tracks }: MusicSectionProps) {
           duration: 0.6,
           ease: [0.25, 0.46, 0.45, 0.94],
         }}
-        style={{ willChange: "transform" }}
         className="text-4xl font-bold mb-8"
       >
         Music
@@ -44,23 +43,13 @@ export function MusicSection({ tracks }: MusicSectionProps) {
             }}
             style={{
               borderLeft: `4px solid ${track.color}`,
-              willChange: "transform",
             }}
             className="bg-card p-4 rounded-r-lg relative overflow-hidden"
-            whileHover="hover"
           >
-            <motion.div
-              variants={{
-                hover: { x: 4 },
-              }}
-              transition={{ duration: 0.2 }}
-              style={{ willChange: "transform" }}
-            >
-              <h4 className="text-base font-normal mb-1">{track.title}</h4>
-              <p className="text-sm text-muted-foreground italic">
-                {track.subtitle}
-              </p>
-            </motion.div>
+            <h4 className="text-base font-normal mb-1">{track.title}</h4>
+            <p className="text-sm text-muted-foreground italic">
+              {track.subtitle}
+            </p>
           </motion.div>
         ))}
       </div>

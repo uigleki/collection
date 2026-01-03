@@ -26,7 +26,6 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
                 hover: { x: -6 },
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              style={{ willChange: "transform" }}
             >
               ←
             </motion.span>
@@ -37,7 +36,6 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
               className="text-sm"
-              style={{ willChange: "transform" }}
             >
               Back
             </motion.span>
@@ -61,7 +59,6 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               hover: { x: -6 },
             }}
             transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            style={{ willChange: "transform" }}
           >
             ←
           </motion.span>
@@ -71,7 +68,6 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               hover: { x: 4 },
             }}
             transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            style={{ willChange: "transform" }}
           >
             Back to Home
           </motion.span>

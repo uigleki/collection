@@ -32,7 +32,6 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
         perspective: 1000,
         transformStyle: "preserve-3d",
         borderTop: `4px solid ${concept.color}`,
-        willChange: "transform",
       }}
       className="bg-card p-8 rounded-lg"
     >

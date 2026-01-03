@@ -48,7 +48,6 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
           duration: 0.4,
           ease: [0.34, 1.56, 0.64, 1],
         }}
-        style={{ willChange: "transform" }}
       >
         <h3 className="text-xl font-bold mb-2">{work.title}</h3>
         <p className="text-muted-foreground">{work.subtitle}</p>
@@ -113,7 +112,6 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                       ease: "easeOut",
                     }}
                     className="mb-4"
-                    style={{ willChange: "transform, opacity" }}
                   >
                     <p className="font-medium text-primary mb-1">
                       {point.label}
@@ -141,7 +139,6 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                       delay: work.review.length * 0.06,
                     }}
                     className="pt-4 border-t border-border"
-                    style={{ willChange: "transform, opacity" }}
                   >
                     <p className="font-bold text-destructive mb-3">
                       Shortcomings

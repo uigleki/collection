@@ -56,7 +56,6 @@ export function Hero() {
           duration: 1.2,
           ease: [0.16, 1, 0.3, 1],
         }}
-        style={{ willChange: "transform, filter" }}
         className="max-w-4xl"
         onMouseMove={handleQuestionMouseMove}
         onMouseLeave={handleQuestionMouseLeave}
@@ -66,7 +65,6 @@ export function Hero() {
             style={{
               x,
               y,
-              willChange: "transform",
               fontSize: "clamp(1rem, 5vw, 2.5rem)",
               lineHeight: "1.5",
             }}
@@ -100,7 +98,7 @@ export function Hero() {
                 delay: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              style={{ originX: 0.5, willChange: "transform" }}
+              style={{ originX: 0.5 }}
             />
 
             {/* Energy pulse on load only */}
@@ -116,7 +114,6 @@ export function Hero() {
                 delay: 0.6,
                 ease: "easeOut",
               }}
-              style={{ willChange: "transform, opacity" }}
             />
           </div>
         </Link>

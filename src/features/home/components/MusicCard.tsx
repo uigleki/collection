@@ -29,26 +29,10 @@ export function MusicCard({ track, index }: MusicCardProps) {
         borderLeft: `4px solid ${track.color}`,
       }}
     >
-      <motion.div
-        className="bg-card p-4 rounded-r-lg relative overflow-hidden"
-        whileHover="hover"
-        whileTap={{ scale: 0.97 }}
-        transition={{ duration: 0.2 }}
-        style={{ willChange: "transform" }}
-      >
-        <motion.div
-          variants={{
-            hover: { x: 4 },
-          }}
-          transition={{ duration: 0.2 }}
-          style={{ willChange: "transform" }}
-        >
-          <h4 className="text-base font-normal mb-1">{track.title}</h4>
-          <p className="text-sm text-muted-foreground italic">
-            {track.subtitle}
-          </p>
-        </motion.div>
-      </motion.div>
+      <div className="bg-card p-4 rounded-r-lg relative overflow-hidden">
+        <h4 className="text-base font-normal mb-1">{track.title}</h4>
+        <p className="text-sm text-muted-foreground italic">{track.subtitle}</p>
+      </div>
     </motion.div>
   );
 }

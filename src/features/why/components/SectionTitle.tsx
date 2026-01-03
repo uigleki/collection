@@ -34,7 +34,6 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
             },
           },
         }}
-        style={{ willChange: "transform, filter" }}
         className="text-4xl font-bold mb-4"
       >
         {title}
@@ -55,7 +54,7 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
               },
             },
           }}
-          style={{ originX: 0, willChange: "transform" }}
+          style={{ originX: 0 }}
         />
 
         {/* Diffusion glow */}
@@ -72,7 +71,7 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
               },
             },
           }}
-          style={{ originX: 0, willChange: "transform" }}
+          style={{ originX: 0 }}
         />
       </motion.div>
 
@@ -91,7 +90,6 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
             },
           },
         }}
-        style={{ willChange: "transform" }}
         className="text-lg text-muted-foreground mb-12"
       >
         {intro}
