@@ -1,12 +1,12 @@
 import type { PageMeta, WhyData, WhySection } from "./types";
 
-export const meta: PageMeta = {
+export const meta = {
   title: "Why These Works",
   description: "The finger pointing at the moon is not the moon.",
   footer: "I honor the creators who refuse shortcuts.",
-};
+} satisfies PageMeta;
 
-const truth: WhySection = {
+const truth = {
   title: "The Three Faces of Truth",
   intro: "Every authentic work manifests three inseparable qualities:",
   concepts: [
@@ -34,9 +34,9 @@ const truth: WhySection = {
   ],
   outro:
     "These three are one truth viewed from different angles. Love manifests as coherence. Love chooses beauty. Though we cannot observe love directly, we recognize it through the completeness and luminosity it creates.",
-};
+} satisfies WhySection;
 
-const shortcuts: WhySection = {
+const shortcuts = {
   title: "The Shortcuts to False Impact",
   intro:
     "Most acclaimed works achieve their effect through psychological exploitation rather than genuine excellence.",
@@ -89,9 +89,9 @@ const shortcuts: WhySection = {
   ],
   outro:
     "Not what haunts you, but what heals you. Not what takes, but what gives.",
-};
+} satisfies WhySection;
 
-export const data: WhyData = {
+export const data = {
   opening: [
     "**If we're here to experience beauty, what beauty is worth our finite time?**",
     'Not what critics validate. Not what defines generations. Not what "everyone should know." Only what enriches rather than diminishes. Only what proves life has meaning rather than proves humans can be manipulated.',
@@ -107,4 +107,4 @@ export const data: WhyData = {
     "Most importantly, you can rest. You won't lie awake wondering what you've missed. You've experienced what matters. The search can end.",
     "The beauty you were born to experience? You've found it.",
   ],
-};
+} satisfies WhyData;

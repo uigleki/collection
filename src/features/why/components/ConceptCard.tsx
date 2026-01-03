@@ -1,4 +1,4 @@
-import type { ReviewPoint, WhyConcept } from "@/data/types";
+import type { WhyConcept } from "@/data/types";
 import { renderEmphasis } from "@/shared/lib/markdown";
 import { motion } from "framer-motion";
 
@@ -73,7 +73,6 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
             );
           }
 
-          const point = item as ReviewPoint;
           return (
             <motion.div
               key={i}
@@ -90,10 +89,10 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
               }}
             >
               <p className="font-medium mb-1" style={{ color: concept.color }}>
-                {point.label}
+                {item.label}
               </p>
               <div className="text-muted-foreground leading-relaxed">
-                {renderEmphasis(point.text)}
+                {renderEmphasis(item.text)}
               </div>
             </motion.div>
           );

@@ -60,7 +60,7 @@ export function Hero() {
         onMouseMove={handleQuestionMouseMove}
         onMouseLeave={handleQuestionMouseLeave}
       >
-        <Link to="/why">
+        <Link to="/why" aria-label="Learn why these works matter">
           <motion.h1
             style={{
               x,
@@ -86,7 +86,7 @@ export function Hero() {
 
       {/* Divider */}
       <div className="w-full max-w-4xl">
-        <Link to="/reviews">
+        <Link to="/reviews" aria-label="View detailed reviews">
           <div className="relative py-8 cursor-pointer overflow-hidden group">
             {/* Base line */}
             <motion.div

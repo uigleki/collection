@@ -1,6 +1,6 @@
 import type { Work } from "../types";
 
-export const games: Work[] = [
+export const games = [
   {
     title: "To the Moon",
     subtitle: "A memory journey embracing final moonlight vows",
@@ -145,4 +145,4 @@ export const games: Work[] = [
       },
     ],
   },
-];
+] satisfies Work[];

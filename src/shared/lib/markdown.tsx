@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
  * @example
  * renderEmphasis("Hello **world**!") // => ["Hello ", <strong>world</strong>, "!"]
  */
-export function renderEmphasis(text: string): ReactNode {
+export function renderEmphasis(text: string): ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
 
   return parts.map((part, i) =>

@@ -1,6 +1,6 @@
 import type { Work } from "../types";
 
-export const anime: Work[] = [
+export const anime = [
   {
     title: "化物語",
     subtitle: "Supernatural tales of adolescent awakening",
@@ -73,4 +73,4 @@ export const anime: Work[] = [
       },
     ],
   },
-];
+] satisfies Work[];

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col">
       <title>Page Not Found</title>
       <div className="flex-1 flex items-center justify-center px-4">
         <motion.div
@@ -42,6 +42,6 @@ export function NotFound() {
       </div>
 
       <Footer />
-    </div>
+    </main>
   );
 }

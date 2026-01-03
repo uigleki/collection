@@ -1,6 +1,6 @@
 import type { Work } from "../types";
 
-export const artists: Work[] = [
+export const artists = [
   {
     title: "カントク",
     subtitle: "Master of moe aesthetics and light",
@@ -20,4 +20,4 @@ export const artists: Work[] = [
       },
     ],
   },
-];
+] satisfies Work[];

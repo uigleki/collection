@@ -18,7 +18,7 @@ export function ErrorBoundary({ children }: ErrorBoundaryProps) {
         // Example: Sentry.captureException(error);
       }}
       onReset={() => {
-        // Reset any state that might have caused the error
+        // Only reset error state; navigation is handled by ErrorFallback
       }}
     >
       {children}

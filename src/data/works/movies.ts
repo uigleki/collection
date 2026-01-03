@@ -1,6 +1,6 @@
 import type { Work } from "../types";
 
-export const movies: Work[] = [
+export const movies = [
   {
     title: "打ち上げ花火、下から見るか？横から見るか？",
     subtitle: "The summer that refuses to end",
@@ -66,4 +66,4 @@ export const movies: Work[] = [
       },
     ],
   },
-];
+] satisfies Work[];

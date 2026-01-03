@@ -1,3 +1,4 @@
+import { Footer } from "@/shared/ui/Footer";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router";
 
@@ -18,7 +19,7 @@ export function ErrorFallback({
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <main className="min-h-screen flex flex-col">
       <div className="flex-1 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
@@ -45,6 +46,7 @@ export function ErrorFallback({
           </motion.p>
 
           <motion.button
+            type="button"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
@@ -72,54 +74,7 @@ export function ErrorFallback({
         </motion.div>
       </div>
 
-      <motion.footer
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.8 }}
-        className="py-12"
-      >
-        <div className="text-center">
-          <p className="text-muted-foreground italic mb-6">
-            I honor the creators who refuse shortcuts.
-          </p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1, ease: "easeOut" }}
-            className="flex items-center justify-center gap-6 text-sm"
-          >
-            <motion.a
-              href="https://github.com/uigleki/collection"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              whileHover={{ x: 4 }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              GitHub
-            </motion.a>
-
-            <motion.div
-              className="h-4 w-px bg-border"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              transition={{ duration: 0.4, delay: 1.2 }}
-            />
-
-            <motion.a
-              href="https://creativecommons.org/licenses/by-sa/4.0/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-              whileHover={{ x: 4 }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-            >
-              CC BY-SA 4.0
-            </motion.a>
-          </motion.div>
-        </div>
-      </motion.footer>
-    </div>
+      <Footer />
+    </main>
   );
 }

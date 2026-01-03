@@ -1,6 +1,6 @@
 import type { WorkTrack } from "../types";
 
-export const music: WorkTrack[] = [
+export const music = [
   {
     title: "COP - 世末积雨云",
     subtitle: "Even as the world crumbles, I remain standing to witness it all",
@@ -247,4 +247,4 @@ export const music: WorkTrack[] = [
     subtitle: "My whims hide what my heart can't yet confess",
     color: "#f5b7b1",
   },
-];
+] satisfies WorkTrack[];

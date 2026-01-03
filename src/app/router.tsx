@@ -1,10 +1,17 @@
 import { ErrorBoundary } from "@/features/error/ErrorBoundary";
 import { NotFound } from "@/features/error/NotFound";
 import { Home } from "@/features/home/Home";
-import { Reviews } from "@/features/reviews/Reviews";
-import { Why } from "@/features/why/Why";
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, Outlet, ScrollRestoration } from "react-router";
 import { DevTools } from "./dev/DevTools";
+
+// Lazy load non-home routes for better initial bundle size
+const Why = lazy(() =>
+  import("@/features/why/Why").then((m) => ({ default: m.Why })),
+);
+const Reviews = lazy(() =>
+  import("@/features/reviews/Reviews").then((m) => ({ default: m.Reviews })),
+);
 
 function Root() {
   return (
@@ -13,7 +20,9 @@ function Root() {
         id="scroll-sentinel"
         className="absolute top-[50vh] h-px w-px opacity-0 pointer-events-none"
       />
-      <Outlet />
+      <Suspense>
+        <Outlet />
+      </Suspense>
       <ScrollRestoration />
       <DevTools />
     </ErrorBoundary>
