@@ -2,7 +2,7 @@ import type { WorkTrack } from "@/data/types";
 import { motion } from "framer-motion";
 
 interface MusicCardProps {
-  track: WorkTrack;
+  readonly track: WorkTrack;
   index: number;
 }
 

@@ -66,4 +66,4 @@ export const movies = [
       },
     ],
   },
-] satisfies Work[];
+] as const satisfies readonly Work[];

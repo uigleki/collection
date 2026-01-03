@@ -247,4 +247,4 @@ export const music = [
     subtitle: "My whims hide what my heart can't yet confess",
     color: "#f5b7b1",
   },
-] satisfies WorkTrack[];
+] as const satisfies readonly WorkTrack[];

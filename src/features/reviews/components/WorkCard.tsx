@@ -2,7 +2,7 @@ import type { Work } from "@/data/types";
 import { motion } from "framer-motion";
 
 interface WorkCardProps {
-  work: Work;
+  readonly work: Work;
   index: number;
 }
 

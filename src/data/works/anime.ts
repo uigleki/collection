@@ -73,4 +73,4 @@ export const anime = [
       },
     ],
   },
-] satisfies Work[];
+] as const satisfies readonly Work[];

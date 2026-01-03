@@ -93,7 +93,7 @@ export const games = [
   },
   {
     title: "7 年後で待ってる",
-    subtitle: '"I\'ll be waiting for you, 7 years from now"',
+    subtitle: "I'll be waiting for you, 7 years from now",
     color: "#e91e63",
     review: [
       {
@@ -145,4 +145,4 @@ export const games = [
       },
     ],
   },
-] satisfies Work[];
+] as const satisfies readonly Work[];

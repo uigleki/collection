@@ -3,7 +3,7 @@ import { renderEmphasis } from "@/shared/lib/markdown";
 import { motion } from "framer-motion";
 
 interface ConceptCardProps {
-  concept: WhyConcept;
+  readonly concept: WhyConcept;
   index: number;
 }
 

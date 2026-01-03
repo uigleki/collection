@@ -2,7 +2,7 @@ import type { WorkTrack } from "@/data/types";
 import { motion } from "framer-motion";
 
 interface MusicSectionProps {
-  tracks: WorkTrack[];
+  readonly tracks: readonly WorkTrack[];
 }
 
 export function MusicSection({ tracks }: MusicSectionProps) {

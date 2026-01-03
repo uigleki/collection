@@ -20,4 +20,4 @@ export const artists = [
       },
     ],
   },
-] satisfies Work[];
+] as const satisfies readonly Work[];

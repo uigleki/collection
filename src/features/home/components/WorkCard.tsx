@@ -2,7 +2,7 @@ import type { Work } from "@/data/types";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface WorkCardProps {
-  work: Work;
+  readonly work: Work;
   expanded: boolean;
   onToggle: () => void;
   index: number;

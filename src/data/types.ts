@@ -13,13 +13,13 @@ export interface Work {
   title: string;
   subtitle: string;
   color: string;
-  review: ReviewPoint[];
-  flaws?: ReviewPoint[];
+  readonly review: readonly ReviewPoint[];
+  readonly flaws?: readonly ReviewPoint[];
 }
 
 export interface WorkCategory {
   name: string;
-  works: Work[];
+  readonly works: readonly Work[];
 }
 
 export interface WorkTrack {
@@ -31,18 +31,18 @@ export interface WorkTrack {
 export interface WhyConcept {
   title: string;
   color: string;
-  explanation: (string | ReviewPoint)[];
+  readonly explanation: readonly (string | ReviewPoint)[];
 }
 
 export interface WhySection {
   title: string;
   intro: string;
-  concepts: WhyConcept[];
+  readonly concepts: readonly WhyConcept[];
   outro: string;
 }
 
 export interface WhyData {
-  opening: string[];
-  sections: WhySection[];
-  closing: string[];
+  readonly opening: readonly string[];
+  readonly sections: readonly WhySection[];
+  readonly closing: readonly string[];
 }

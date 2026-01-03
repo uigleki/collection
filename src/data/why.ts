@@ -4,7 +4,7 @@ export const meta = {
   title: "Why These Works",
   description: "The finger pointing at the moon is not the moon.",
   footer: "I honor the creators who refuse shortcuts.",
-} satisfies PageMeta;
+} as const satisfies PageMeta;
 
 const truth = {
   title: "The Three Faces of Truth",
@@ -34,7 +34,7 @@ const truth = {
   ],
   outro:
     "These three are one truth viewed from different angles. Love manifests as coherence. Love chooses beauty. Though we cannot observe love directly, we recognize it through the completeness and luminosity it creates.",
-} satisfies WhySection;
+} as const satisfies WhySection;
 
 const shortcuts = {
   title: "The Shortcuts to False Impact",
@@ -89,7 +89,7 @@ const shortcuts = {
   ],
   outro:
     "Not what haunts you, but what heals you. Not what takes, but what gives.",
-} satisfies WhySection;
+} as const satisfies WhySection;
 
 export const data = {
   opening: [
@@ -107,4 +107,4 @@ export const data = {
     "Most importantly, you can rest. You won't lie awake wondering what you've missed. You've experienced what matters. The search can end.",
     "The beauty you were born to experience? You've found it.",
   ],
-} satisfies WhyData;
+} as const satisfies WhyData;

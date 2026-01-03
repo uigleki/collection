@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { WorkCard } from "./WorkCard";
 
 interface CategorySectionProps {
-  category: WorkCategory;
+  readonly category: WorkCategory;
 }
 
 export function CategorySection({ category }: CategorySectionProps) {
