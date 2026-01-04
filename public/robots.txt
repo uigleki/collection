@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://onlythese.pages.dev/sitemap.xml
+Sitemap: https://spotless.pages.dev/sitemap.xml
