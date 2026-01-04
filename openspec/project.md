@@ -32,7 +32,6 @@ Higher layers can depend on lower layers, not vice versa.
 
 - Use Tailwind CSS 4 `@theme` for semantic design tokens
 - Use CSS native `light-dark()` for theme switching
-- Animate only `transform` and `opacity` for GPU acceleration
 - Use `satisfies` over type annotation for static data to preserve literal types
 - Use Framer Motion `variants` for parent-child hover propagation
 - Add `type="button"` to all buttons not submitting forms
