@@ -1,5 +1,5 @@
 import type { Work } from "@/data/types";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion } from "motion/react";
 
 interface WorkCardProps {
   readonly work: Work;

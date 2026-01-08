@@ -1,5 +1,5 @@
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 

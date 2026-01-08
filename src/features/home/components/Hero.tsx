@@ -4,7 +4,7 @@ import {
   useReducedMotion,
   useSpring,
   useTransform,
-} from "framer-motion";
+} from "motion/react";
 import { useRef } from "react";
 import { Link } from "react-router";
 

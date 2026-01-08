@@ -1,5 +1,5 @@
 import type { WorkTrack } from "@/data/types";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface MusicCardProps {
   readonly track: WorkTrack;

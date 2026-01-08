@@ -1,6 +1,6 @@
 import type { WhyConcept } from "@/data/types";
 import { renderEmphasis } from "@/shared/lib/markdown";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface ConceptCardProps {
   readonly concept: WhyConcept;

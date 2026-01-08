@@ -2,7 +2,7 @@ import { data, meta } from "@/data/why";
 import { renderEmphasis } from "@/shared/lib/markdown";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { ConceptCard } from "./components/ConceptCard";
 import { SectionTitle } from "./components/SectionTitle";
 

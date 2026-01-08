@@ -1,6 +1,6 @@
 import { categories, music, siteMeta } from "@/data/works";
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import {
   Clapperboard,
   Gamepad2,
