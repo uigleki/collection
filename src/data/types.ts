@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface PageMeta {
   title: string;
   description: string;
@@ -19,6 +21,7 @@ export interface Work {
 
 export interface WorkCategory {
   name: string;
+  readonly icon: LucideIcon;
   readonly works: readonly Work[];
 }
 

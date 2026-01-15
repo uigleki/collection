@@ -1,25 +1,10 @@
-import { categories, music, siteMeta } from "@/data/works";
+import { categories, music, MusicIcon, siteMeta } from "@/data/works";
 import { Footer } from "@/shared/ui/Footer";
 import { motion } from "motion/react";
-import {
-  Clapperboard,
-  Gamepad2,
-  Music,
-  Palette,
-  Tv,
-  type LucideIcon,
-} from "lucide-react";
 import { useState } from "react";
 import { Hero } from "./components/Hero";
 import { MusicCard } from "./components/MusicCard";
 import { WorkCard } from "./components/WorkCard";
-
-const categoryIcons: Record<string, LucideIcon> = {
-  Anime: Tv,
-  Movies: Clapperboard,
-  Games: Gamepad2,
-  Artists: Palette,
-};
 
 export function Home() {
   const [expandedWork, setExpandedWork] = useState<string | null>(null);
@@ -31,7 +16,7 @@ export function Home() {
 
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-16">
         {categories.map((category) => {
-          const Icon = categoryIcons[category.name];
+          const Icon = category.icon;
           return (
             <section key={category.name}>
               <motion.h2
@@ -79,7 +64,7 @@ export function Home() {
             }}
             className="text-3xl font-bold mb-8 flex items-center gap-3"
           >
-            <Music className="w-8 h-8" />
+            <MusicIcon className="w-8 h-8" />
             Music
           </motion.h2>
 

@@ -1,27 +1,13 @@
 import type { WorkCategory } from "@/data/types";
 import { motion } from "motion/react";
-import {
-  Clapperboard,
-  Gamepad2,
-  Palette,
-  Tv,
-  type LucideIcon,
-} from "lucide-react";
 import { WorkCard } from "./WorkCard";
-
-const categoryIcons: Record<string, LucideIcon> = {
-  Anime: Tv,
-  Movies: Clapperboard,
-  Games: Gamepad2,
-  Artists: Palette,
-};
 
 interface CategorySectionProps {
   readonly category: WorkCategory;
 }
 
 export function CategorySection({ category }: CategorySectionProps) {
-  const Icon = categoryIcons[category.name];
+  const Icon = category.icon;
   return (
     <section className="mb-20">
       <motion.h2
