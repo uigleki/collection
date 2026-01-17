@@ -51,6 +51,12 @@ Higher layers can depend on lower layers, not vice versa.
 - Work titles use original names (Japanese, etc.)
 - Personal collection, not a general media database
 
+### Creative Philosophy
+
+- Pursue perfection until no improvement is possible
+- Invite reflection rather than dictate conclusions
+- Frame positively rather than negatively
+
 ## Testing
 
 - **Vitest** – unit testing with jsdom environment
