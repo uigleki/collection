@@ -1,6 +1,6 @@
 import type { WorkTrack } from "@/data/types";
-import { motion } from "motion/react";
 import { Music } from "lucide-react";
+import { motion } from "motion/react";
 
 interface MusicSectionProps {
   readonly tracks: readonly WorkTrack[];

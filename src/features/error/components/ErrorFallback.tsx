@@ -1,10 +1,10 @@
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "motion/react";
 import { ChevronLeft } from "lucide-react";
+import { motion } from "motion/react";
 import { useNavigate } from "react-router";
 
 interface ErrorFallbackProps {
-  error: Error;
+  error: unknown;
   resetErrorBoundary: () => void;
 }
 
@@ -13,6 +13,8 @@ export function ErrorFallback({
   resetErrorBoundary,
 }: ErrorFallbackProps) {
   const navigate = useNavigate();
+  const errorMessage =
+    error instanceof Error ? error.message : "An unexpected error occurred";
 
   const handleBackHome = () => {
     resetErrorBoundary();
@@ -43,7 +45,7 @@ export function ErrorFallback({
             transition={{ duration: 0.5, delay: 0.4 }}
             className="text-muted-foreground mb-8"
           >
-            {error.message || "An unexpected error occurred"}
+            {errorMessage}
           </motion.p>
 
           <motion.button
