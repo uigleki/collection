@@ -62,7 +62,9 @@ test.describe("Home page", () => {
     await expect(card).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("has correct page title", async ({ page }) => {
-    await expect(page).toHaveTitle("Perfect Collection");
+  test("React updates page title on sub-page navigation", async ({ page }) => {
+    // Why page sets title via React's <title> metadata
+    await page.goto("/why");
+    await expect(page).toHaveTitle("Why These Works");
   });
 });
