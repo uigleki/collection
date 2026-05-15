@@ -1,5 +1,5 @@
-import type { WorkTrack } from "@/data/types";
 import { motion } from "motion/react";
+import type { WorkTrack } from "@/data/types";
 
 interface MusicCardProps {
   readonly track: WorkTrack;

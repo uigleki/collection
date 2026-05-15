@@ -10,8 +10,9 @@ test("PWA manifest is served and contains correct app metadata", async ({
 
   const href = await manifestLink.getAttribute("href");
   expect(href).toBeTruthy();
+  if (!href) throw new Error("Manifest href is null");
 
-  const response = await page.request.get(href!);
+  const response = await page.request.get(href);
   expect(response.ok()).toBe(true);
 
   const manifest = await response.json();

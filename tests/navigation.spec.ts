@@ -24,9 +24,7 @@ test.describe("Route navigation", () => {
   }) => {
     await page.goto("/");
 
-    await page
-      .getByRole("link", { name: /view detailed reviews/i })
-      .click();
+    await page.getByRole("link", { name: /view detailed reviews/i }).click();
 
     await expect(page).toHaveURL("/reviews");
     await expect(
@@ -39,9 +37,7 @@ test.describe("Route navigation", () => {
     ).toBeVisible();
 
     // Categories rendered on reviews page too
-    await expect(
-      page.getByRole("heading", { name: "Anime" }),
-    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Anime" })).toBeVisible();
   });
 
   test("back button returns to home from sub-pages", async ({ page }) => {
@@ -49,8 +45,8 @@ test.describe("Route navigation", () => {
     await page.getByRole("link", { name: "Go back to home" }).click();
 
     await expect(page).toHaveURL("/");
-    await expect(
-      page.getByRole("heading", { level: 1 }),
-    ).toContainText("what beauty is worth our finite time");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "what beauty is worth our finite time",
+    );
   });
 });

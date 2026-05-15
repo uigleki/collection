@@ -1,6 +1,6 @@
+import { motion } from "motion/react";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "motion/react";
 
 export function NotFound() {
   return (

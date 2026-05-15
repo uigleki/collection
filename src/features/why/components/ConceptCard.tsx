@@ -1,6 +1,6 @@
+import { motion } from "motion/react";
 import type { WhyConcept } from "@/data/types";
 import { renderEmphasis } from "@/shared/lib/markdown";
-import { motion } from "motion/react";
 
 interface ConceptCardProps {
   readonly concept: WhyConcept;
@@ -50,11 +50,11 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
         }}
         className="space-y-4"
       >
-        {concept.explanation.map((item, i) => {
+        {concept.explanation.map((item) => {
           if (typeof item === "string") {
             return (
               <motion.div
-                key={i}
+                key={item}
                 variants={{
                   hidden: { opacity: 0, y: 10 },
                   visible: {
@@ -75,7 +75,7 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
 
           return (
             <motion.div
-              key={i}
+              key={item.label}
               variants={{
                 hidden: { opacity: 0, y: 10 },
                 visible: {

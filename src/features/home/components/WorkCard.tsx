@@ -1,5 +1,5 @@
-import type { Work } from "@/data/types";
 import { AnimatePresence, motion } from "motion/react";
+import type { Work } from "@/data/types";
 
 interface WorkCardProps {
   readonly work: Work;
@@ -92,9 +92,9 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                   },
                 }}
               >
-                {work.review.map((point, i) => (
+                {work.review.map((point) => (
                   <motion.div
-                    key={i}
+                    key={point.label}
                     variants={{
                       collapsed: {
                         opacity: 0,
@@ -143,8 +143,8 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                     <p className="font-bold text-destructive mb-3">
                       Shortcomings
                     </p>
-                    {work.flaws.map((flaw, i) => (
-                      <div key={i} className="mb-3">
+                    {work.flaws.map((flaw) => (
+                      <div key={flaw.label} className="mb-3">
                         <p className="font-medium text-sm">{flaw.label}</p>
                         <p className="text-sm text-muted-foreground mt-1">
                           {flaw.text}

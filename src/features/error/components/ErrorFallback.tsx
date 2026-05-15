@@ -1,7 +1,7 @@
-import { Footer } from "@/shared/ui/Footer";
 import { ChevronLeft } from "lucide-react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router";
+import { Footer } from "@/shared/ui/Footer";
 
 interface ErrorFallbackProps {
   error: unknown;

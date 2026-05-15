@@ -9,7 +9,7 @@ describe("renderEmphasis", () => {
   it("parses single bold text", () => {
     expect(renderEmphasis("Hello **world**!")).toEqual([
       "Hello ",
-      <strong key={1}>world</strong>,
+      <strong key="**world**">world</strong>,
       "!",
     ]);
   });
@@ -17,9 +17,9 @@ describe("renderEmphasis", () => {
   it("parses multiple bold segments", () => {
     expect(renderEmphasis("**First** and **second**")).toEqual([
       "",
-      <strong key={1}>First</strong>,
+      <strong key="**First**">First</strong>,
       " and ",
-      <strong key={3}>second</strong>,
+      <strong key="**second**">second</strong>,
       "",
     ]);
   });

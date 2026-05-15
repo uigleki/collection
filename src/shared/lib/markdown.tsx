@@ -13,9 +13,9 @@ import type { ReactNode } from "react";
 export function renderEmphasis(text: string): ReactNode[] {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
 
-  return parts.map((part, i) =>
+  return parts.map((part) =>
     part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i}>{part.slice(2, -2)}</strong>
+      <strong key={part}>{part.slice(2, -2)}</strong>
     ) : (
       part
     ),

@@ -3,60 +3,66 @@
 /* stylelint-enable import-notation */
 
 :root {
-  color-scheme: light dark;
+    color-scheme: light dark;
 }
 
 /* stylelint-disable at-rule-no-unknown */
 @theme {
-  --font-sans: "Ubuntu", sans-serif;
-  --color-background: light-dark(var(--color-stone-50), var(--color-black));
-  --color-foreground: light-dark(
-    var(--color-neutral-950),
-    var(--color-neutral-50)
-  );
-  --color-card: light-dark(var(--color-white), var(--color-neutral-900));
-  --color-card-foreground: light-dark(
-    var(--color-neutral-950),
-    var(--color-neutral-50)
-  );
-  --color-primary: light-dark(var(--color-violet-600), var(--color-violet-500));
-  --color-primary-foreground: var(--color-violet-50);
-  --color-secondary: light-dark(
-    var(--color-neutral-100),
-    var(--color-neutral-800)
-  );
-  --color-secondary-foreground: light-dark(
-    var(--color-neutral-900),
-    var(--color-neutral-50)
-  );
-  --color-muted: light-dark(var(--color-neutral-100), var(--color-neutral-800));
-  --color-muted-foreground: light-dark(
-    var(--color-neutral-500),
-    var(--color-neutral-400)
-  );
-  --color-accent: light-dark(
-    var(--color-neutral-100),
-    var(--color-neutral-800)
-  );
-  --color-accent-foreground: light-dark(
-    var(--color-neutral-900),
-    var(--color-neutral-50)
-  );
-  --color-destructive: light-dark(var(--color-red-600), var(--color-red-400));
-  --color-border: light-dark(
-    var(--color-neutral-200),
-    --alpha(var(--color-white) / 10%)
-  );
-  --color-ring: light-dark(var(--color-violet-400), var(--color-violet-900));
+    --font-sans: "Ubuntu", sans-serif;
+    --color-background: light-dark(var(--color-stone-50), var(--color-black));
+    --color-foreground: light-dark(
+        var(--color-neutral-950),
+        var(--color-neutral-50)
+    );
+    --color-card: light-dark(var(--color-white), var(--color-neutral-900));
+    --color-card-foreground: light-dark(
+        var(--color-neutral-950),
+        var(--color-neutral-50)
+    );
+    --color-primary: light-dark(
+        var(--color-violet-600),
+        var(--color-violet-500)
+    );
+    --color-primary-foreground: var(--color-violet-50);
+    --color-secondary: light-dark(
+        var(--color-neutral-100),
+        var(--color-neutral-800)
+    );
+    --color-secondary-foreground: light-dark(
+        var(--color-neutral-900),
+        var(--color-neutral-50)
+    );
+    --color-muted: light-dark(
+        var(--color-neutral-100),
+        var(--color-neutral-800)
+    );
+    --color-muted-foreground: light-dark(
+        var(--color-neutral-500),
+        var(--color-neutral-400)
+    );
+    --color-accent: light-dark(
+        var(--color-neutral-100),
+        var(--color-neutral-800)
+    );
+    --color-accent-foreground: light-dark(
+        var(--color-neutral-900),
+        var(--color-neutral-50)
+    );
+    --color-destructive: light-dark(var(--color-red-600), var(--color-red-400));
+    --color-border: light-dark(
+        var(--color-neutral-200),
+        --alpha(var(--color-white) / 10%)
+    );
+    --color-ring: light-dark(var(--color-violet-400), var(--color-violet-900));
 }
 /* stylelint-enable at-rule-no-unknown */
 
 html {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
 }
 
 body {
-  min-height: 100dvh;
+    min-height: 100dvh;
 }

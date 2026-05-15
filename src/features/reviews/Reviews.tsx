@@ -1,7 +1,7 @@
+import { motion } from "motion/react";
 import { categories, meta, music } from "@/data/works";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "motion/react";
 import { CategorySection } from "./components/CategorySection";
 import { MusicSection } from "./components/MusicSection";
 

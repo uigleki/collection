@@ -1,8 +1,8 @@
+import { motion } from "motion/react";
 import { data, meta } from "@/data/why";
 import { renderEmphasis } from "@/shared/lib/markdown";
 import { BackButton } from "@/shared/ui/BackButton";
 import { Footer } from "@/shared/ui/Footer";
-import { motion } from "motion/react";
 import { ConceptCard } from "./components/ConceptCard";
 import { SectionTitle } from "./components/SectionTitle";
 
@@ -39,9 +39,9 @@ export function Why() {
           }}
           className="space-y-8 mb-16"
         >
-          {data.opening.map((paragraph, i) => (
+          {data.opening.map((paragraph) => (
             <motion.div
-              key={i}
+              key={paragraph}
               variants={{
                 hidden: {
                   opacity: 0,
@@ -100,9 +100,9 @@ export function Why() {
           }}
           className="space-y-6 mt-20"
         >
-          {data.closing.map((paragraph, i) => (
+          {data.closing.map((paragraph) => (
             <motion.div
-              key={i}
+              key={paragraph}
               variants={{
                 hidden: {
                   opacity: 0,

@@ -1,5 +1,5 @@
-import type { WorkCategory } from "@/data/types";
 import { motion } from "motion/react";
+import type { WorkCategory } from "@/data/types";
 import { WorkCard } from "./WorkCard";
 
 interface CategorySectionProps {

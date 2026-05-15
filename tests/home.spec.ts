@@ -26,13 +26,13 @@ test.describe("Home page", () => {
   }) => {
     // All categories render
     for (const category of ["Anime", "Movies", "Games", "Music"]) {
-      await expect(
-        page.getByRole("heading", { name: category }),
-      ).toBeVisible();
+      await expect(page.getByRole("heading", { name: category })).toBeVisible();
     }
 
     // Works within categories actually have content (not empty sections)
-    await expect(page.getByRole("heading", { name: /打ち上げ花火/ })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /打ち上げ花火/ }),
+    ).toBeVisible();
   });
 
   test("work card expands on click to show review content", async ({
@@ -47,7 +47,9 @@ test.describe("Home page", () => {
     await expect(card).toHaveAttribute("aria-expanded", "true");
 
     // Review content becomes visible (point labels from the review data)
-    await expect(card.getByText("Shinbo's stream-of-consciousness mastery")).toBeVisible();
+    await expect(
+      card.getByText("Shinbo's stream-of-consciousness mastery"),
+    ).toBeVisible();
   });
 
   test("work card collapses when clicked again", async ({ page }) => {

@@ -1,7 +1,7 @@
-import { categories, music, MusicIcon, siteMeta } from "@/data/works";
-import { Footer } from "@/shared/ui/Footer";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { categories, MusicIcon, music, siteMeta } from "@/data/works";
+import { Footer } from "@/shared/ui/Footer";
 import { Hero } from "./components/Hero";
 import { MusicCard } from "./components/MusicCard";
 import { WorkCard } from "./components/WorkCard";

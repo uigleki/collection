@@ -1,5 +1,5 @@
-import type { Work } from "@/data/types";
 import { motion } from "motion/react";
+import type { Work } from "@/data/types";
 
 interface WorkCardProps {
   readonly work: Work;
@@ -46,9 +46,9 @@ export function WorkCard({ work, index }: WorkCardProps) {
         }}
         className="space-y-4"
       >
-        {work.review.map((point, i) => (
+        {work.review.map((point) => (
           <motion.div
-            key={i}
+            key={point.label}
             variants={{
               hidden: { opacity: 0 },
               visible: {
@@ -81,8 +81,8 @@ export function WorkCard({ work, index }: WorkCardProps) {
         >
           <p className="font-bold text-destructive mb-4">Shortcomings</p>
           <div className="space-y-3">
-            {work.flaws.map((flaw, i) => (
-              <div key={i}>
+            {work.flaws.map((flaw) => (
+              <div key={flaw.label}>
                 <p className="font-medium text-sm mb-1">{flaw.label}</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {flaw.text}

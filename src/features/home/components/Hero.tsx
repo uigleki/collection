@@ -103,7 +103,7 @@ export function Hero() {
 
             {/* Energy pulse on load only */}
             <motion.div
-              className="absolute top-1/2 left-1/2 w-40 h-px bg-gradient-to-r from-transparent via-primary to-transparent -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-1/2 left-1/2 w-40 h-px bg-linear-to-r from-transparent via-primary to-transparent -translate-x-1/2 -translate-y-1/2"
               initial={{ scaleX: 0, opacity: 1 }}
               animate={{
                 scaleX: 6,

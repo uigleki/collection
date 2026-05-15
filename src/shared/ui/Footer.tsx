@@ -1,7 +1,7 @@
-import { meta } from "@/data/why";
 import { ArrowUpToLine, Code } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useInView } from "react-intersection-observer";
+import { meta } from "@/data/why";
 
 interface FooterProps {
   text?: string;

@@ -27,6 +27,7 @@
             inputsFrom = [ config.pre-commit.devShell ];
 
             packages = with pkgs; [
+              nixd
               nodejs
               playwright-driver.browsers
               pnpm
@@ -39,7 +40,10 @@
           };
 
           pre-commit.settings = {
-            hooks.convco.enable = true;
+            hooks = {
+              convco.enable = true;
+              nil.enable = true;
+            };
             package = pkgs.prek;
           };
         };
