@@ -27,10 +27,9 @@
             inputsFrom = [ config.pre-commit.devShell ];
 
             packages = with pkgs; [
+              bun
               nixd
-              nodejs
               playwright-driver.browsers
-              pnpm
             ];
 
             shellHook = ''
