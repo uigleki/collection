@@ -24,9 +24,10 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
       }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.8,
+        type: "spring",
+        stiffness: 120,
+        damping: 15,
         delay: index * 0.15,
-        ease: [0.16, 1, 0.3, 1],
       }}
       style={{
         perspective: 1000,
@@ -61,8 +62,9 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
                     opacity: 1,
                     y: 0,
                     transition: {
-                      duration: 0.4,
-                      ease: "easeOut",
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 20,
                     },
                   },
                 }}
@@ -82,8 +84,9 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
                   opacity: 1,
                   y: 0,
                   transition: {
-                    duration: 0.4,
-                    ease: "easeOut",
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
                   },
                 },
               }}

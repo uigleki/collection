@@ -53,8 +53,9 @@ export function Hero() {
           filter: "blur(0px)",
         }}
         transition={{
-          duration: 1.2,
-          ease: [0.16, 1, 0.3, 1],
+          type: "spring",
+          stiffness: 120,
+          damping: 15,
         }}
         className="max-w-4xl"
         onMouseMove={handleQuestionMouseMove}
@@ -72,8 +73,9 @@ export function Hero() {
               scale: 1.02,
             }}
             transition={{
-              duration: 0.3,
-              ease: [0.34, 1.56, 0.64, 1],
+              type: "spring",
+              stiffness: 300,
+              damping: 10,
             }}
             className="font-bold text-center mb-8 transition-colors duration-500 ease-out hover:text-primary"
           >
@@ -94,9 +96,10 @@ export function Hero() {
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{
-                duration: 1.4,
+                type: "spring",
+                stiffness: 60,
+                damping: 20,
                 delay: 0.6,
-                ease: [0.22, 1, 0.36, 1],
               }}
               style={{ originX: 0.5 }}
             />
@@ -110,9 +113,10 @@ export function Hero() {
                 opacity: 0,
               }}
               transition={{
-                duration: 1.2,
+                type: "spring",
+                stiffness: 200,
+                damping: 30,
                 delay: 0.6,
-                ease: "easeOut",
               }}
             />
           </div>

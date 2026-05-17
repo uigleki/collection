@@ -33,7 +33,7 @@ export function Footer({ text }: FooterProps) {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="text-muted-foreground italic mb-6"
           >
             {text ?? meta.footer}
@@ -43,7 +43,7 @@ export function Footer({ text }: FooterProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
             className="flex items-center justify-center gap-6 text-sm"
           >
             <motion.a
@@ -52,7 +52,7 @@ export function Footer({ text }: FooterProps) {
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
               whileHover={{ x: 4 }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
               aria-label="View source on GitHub"
             >
               <Code className="w-4 h-4" />
@@ -64,7 +64,7 @@ export function Footer({ text }: FooterProps) {
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.4 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
             />
 
             <motion.a
@@ -73,7 +73,7 @@ export function Footer({ text }: FooterProps) {
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ x: 4 }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               CC BY-SA 4.0
             </motion.a>
@@ -92,7 +92,7 @@ export function Footer({ text }: FooterProps) {
               className="fixed bottom-8 right-8 p-3 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-shadow z-50 cursor-pointer"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              transition={{ duration: 0.2 }}
+              transition={{ type: "spring", stiffness: 200, damping: 15 }}
               aria-label="Back to top"
             >
               <ArrowUpToLine className="w-6 h-6" />

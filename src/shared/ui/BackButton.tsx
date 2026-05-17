@@ -12,7 +12,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ type: "spring", stiffness: 120, damping: 15 }}
         className="fixed top-8 left-8 z-50"
       >
         <Link to="/" aria-label="Go back to home">
@@ -26,7 +26,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
                 rest: { x: 0 },
                 hover: { x: -6 },
               }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               <ChevronLeft className="w-5 h-5" />
             </motion.span>
@@ -35,7 +35,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
                 rest: { x: 0 },
                 hover: { x: 4 },
               }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
               className="text-sm"
             >
               Back
@@ -59,7 +59,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               rest: { x: 0 },
               hover: { x: -6 },
             }}
-            transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             <ChevronLeft className="w-5 h-5" />
           </motion.span>
@@ -68,7 +68,7 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
               rest: { x: 0 },
               hover: { x: 4 },
             }}
-            transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             Back to Home
           </motion.span>

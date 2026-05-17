@@ -17,7 +17,7 @@ export function Why() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
           className="text-center mb-16"
         >
           <p className="text-xl text-muted-foreground italic">
@@ -51,8 +51,9 @@ export function Why() {
                   opacity: 1,
                   y: 0,
                   transition: {
-                    duration: 0.5,
-                    ease: "easeOut",
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
                   },
                 },
               }}
@@ -78,7 +79,12 @@ export function Why() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{
+                type: "spring",
+                stiffness: 100,
+                damping: 20,
+                delay: 0.2,
+              }}
               className="text-lg text-muted-foreground italic mt-12 text-center"
             >
               {section.outro}
@@ -112,8 +118,9 @@ export function Why() {
                   opacity: 1,
                   y: 0,
                   transition: {
-                    duration: 0.5,
-                    ease: "easeOut",
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
                   },
                 },
               }}

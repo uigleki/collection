@@ -21,9 +21,10 @@ export function WorkCard({ work, index }: WorkCardProps) {
       }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.6,
+        type: "spring",
+        stiffness: 80,
+        damping: 20,
         delay: Math.min(index * 0.08, 0.4),
-        ease: [0.25, 0.46, 0.45, 0.94],
       }}
       style={{
         perspective: 1000,
@@ -54,8 +55,9 @@ export function WorkCard({ work, index }: WorkCardProps) {
               visible: {
                 opacity: 1,
                 transition: {
-                  duration: 0.3,
-                  ease: "easeOut",
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
                 },
               },
             }}
@@ -74,8 +76,10 @@ export function WorkCard({ work, index }: WorkCardProps) {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 20,
             delay: work.review.length * 0.05,
-            duration: 0.4,
           }}
           className="mt-6 pt-6 border-t border-border"
         >

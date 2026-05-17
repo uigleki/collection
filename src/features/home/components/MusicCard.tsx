@@ -21,9 +21,10 @@ export function MusicCard({ track, index }: MusicCardProps) {
       }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.4,
+        type: "spring",
+        stiffness: 100,
+        damping: 20,
         delay: Math.min(index * 0.04, 0.3),
-        ease: "easeOut",
       }}
       style={{
         borderLeft: `4px solid ${track.color}`,

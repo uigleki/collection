@@ -15,7 +15,7 @@ export function Reviews() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
           className="mb-16"
         >
           <h1 className="text-5xl font-bold mb-4">{meta.title}</h1>

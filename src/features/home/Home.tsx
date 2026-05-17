@@ -24,8 +24,9 @@ export function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.6,
-                  ease: [0.16, 1, 0.3, 1],
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 15,
                 }}
                 className="text-3xl font-bold mb-8 flex items-center gap-3"
               >
@@ -59,8 +60,9 @@ export function Home() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{
-              duration: 0.6,
-              ease: [0.16, 1, 0.3, 1],
+              type: "spring",
+              stiffness: 120,
+              damping: 15,
             }}
             className="text-3xl font-bold mb-8 flex items-center gap-3"
           >

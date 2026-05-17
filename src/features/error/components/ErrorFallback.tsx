@@ -27,13 +27,13 @@ export function ErrorFallback({
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ type: "spring", stiffness: 120, damping: 15 }}
           className="text-center max-w-md"
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
             className="text-4xl font-bold mb-4"
           >
             Something went wrong
@@ -42,7 +42,7 @@ export function ErrorFallback({
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
             className="text-muted-foreground mb-8"
           >
             {errorMessage}
@@ -52,7 +52,7 @@ export function ErrorFallback({
             type="button"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.6 }}
             onClick={handleBackHome}
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             whileHover="hover"
@@ -61,7 +61,7 @@ export function ErrorFallback({
               variants={{
                 hover: { x: -6 },
               }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               <ChevronLeft className="w-5 h-5" />
             </motion.span>
@@ -69,7 +69,7 @@ export function ErrorFallback({
               variants={{
                 hover: { x: 4 },
               }}
-              transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+              transition={{ type: "spring", stiffness: 300, damping: 10 }}
             >
               Back to Home
             </motion.span>

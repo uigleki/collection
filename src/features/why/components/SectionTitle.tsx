@@ -29,8 +29,9 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
             filter: "blur(0px)",
             y: 0,
             transition: {
-              duration: 0.8,
-              ease: [0.16, 1, 0.3, 1],
+              type: "spring",
+              stiffness: 120,
+              damping: 15,
             },
           },
         }}
@@ -49,8 +50,9 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
               scaleX: 1,
               opacity: 1,
               transition: {
-                duration: 1,
-                ease: [0.22, 1, 0.36, 1],
+                type: "spring",
+                stiffness: 60,
+                damping: 20,
               },
             },
           }}
@@ -66,8 +68,9 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
               scaleX: 2,
               opacity: 0,
               transition: {
-                duration: 1.2,
-                ease: "easeOut",
+                type: "spring",
+                stiffness: 80,
+                damping: 30,
               },
             },
           }}
@@ -85,8 +88,9 @@ export function SectionTitle({ title, intro }: SectionTitleProps) {
             opacity: 1,
             y: 0,
             transition: {
-              duration: 0.6,
-              ease: "easeOut",
+              type: "spring",
+              stiffness: 100,
+              damping: 20,
             },
           },
         }}

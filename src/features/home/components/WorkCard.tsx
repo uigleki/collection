@@ -25,9 +25,10 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
       }}
       viewport={{ once: true }}
       transition={{
-        duration: 0.7,
+        type: "spring",
+        stiffness: 80,
+        damping: 20,
         delay: Math.min(index * 0.08, 0.4),
-        ease: [0.25, 0.46, 0.45, 0.94],
       }}
       style={{
         perspective: 1000,
@@ -45,8 +46,9 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
         }}
         transition={{
-          duration: 0.4,
-          ease: [0.34, 1.56, 0.64, 1],
+          type: "spring",
+          stiffness: 300,
+          damping: 10,
         }}
       >
         <h3 className="text-xl font-bold mb-2">{work.title}</h3>
@@ -72,11 +74,14 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
               }}
               transition={{
                 height: {
-                  duration: 0.5,
-                  ease: [0.25, 0.46, 0.45, 0.94],
+                  type: "spring",
+                  stiffness: 140,
+                  damping: 24,
                 },
                 opacity: {
-                  duration: 0.3,
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
                   delay: expanded ? 0.15 : 0,
                 },
               }}
@@ -108,8 +113,9 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                       },
                     }}
                     transition={{
-                      duration: 0.4,
-                      ease: "easeOut",
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 20,
                     }}
                     className="mb-4"
                   >
@@ -135,7 +141,9 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                       },
                     }}
                     transition={{
-                      duration: 0.4,
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 20,
                       delay: work.review.length * 0.06,
                     }}
                     className="pt-4 border-t border-border"
