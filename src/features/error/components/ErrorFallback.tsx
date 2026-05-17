@@ -32,8 +32,12 @@ export function ErrorFallback({
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { inherit: true, delay: 0.2 },
+            }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="text-4xl font-bold mb-4"
           >
             Something went wrong
@@ -41,8 +45,11 @@ export function ErrorFallback({
 
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
+            animate={{
+              opacity: 1,
+              transition: { inherit: true, delay: 0.4 },
+            }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="text-muted-foreground mb-8"
           >
             {errorMessage}
@@ -51,11 +58,16 @@ export function ErrorFallback({
           <motion.button
             type="button"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.6 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { inherit: true, delay: 0.6 },
+            }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleBackHome}
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             whileHover="hover"
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
           >
             <motion.span
               variants={{

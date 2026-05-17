@@ -19,7 +19,9 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
           <motion.div
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
             whileHover="hover"
+            whileTap={{ scale: 0.95 }}
             initial="rest"
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
           >
             <motion.span
               variants={{
@@ -52,7 +54,9 @@ export function BackButton({ variant = "top" }: BackButtonProps) {
         <motion.div
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
           whileHover="hover"
+          whileTap={{ scale: 0.95 }}
           initial="rest"
+          transition={{ type: "spring", stiffness: 300, damping: 10 }}
         >
           <motion.span
             variants={{

@@ -15,8 +15,12 @@ export function NotFound() {
         >
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { inherit: true, delay: 0.2 },
+            }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="text-6xl font-bold mb-4"
           >
             404
@@ -24,8 +28,11 @@ export function NotFound() {
 
           <motion.p
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
+            animate={{
+              opacity: 1,
+              transition: { inherit: true, delay: 0.4 },
+            }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="text-xl text-muted-foreground mb-8"
           >
             Page not found
@@ -33,8 +40,12 @@ export function NotFound() {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.6 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: { inherit: true, delay: 0.6 },
+            }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
           >
             <BackButton variant="bottom" />
           </motion.div>

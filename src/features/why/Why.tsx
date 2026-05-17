@@ -77,14 +77,12 @@ export function Why() {
 
             <motion.p
               initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{
-                type: "spring",
-                stiffness: 100,
-                damping: 20,
-                delay: 0.2,
+              whileInView={{
+                opacity: 1,
+                transition: { inherit: true, delay: 0.2 },
               }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
               className="text-lg text-muted-foreground italic mt-12 text-center"
             >
               {section.outro}

@@ -37,14 +37,10 @@ export function MusicSection({ tracks }: MusicSectionProps) {
               opacity: 1,
               x: 0,
               y: 0,
+              transition: { inherit: true, delay: Math.min(index * 0.05, 0.4) },
             }}
             viewport={{ once: true }}
-            transition={{
-              type: "spring",
-              stiffness: 80,
-              damping: 20,
-              delay: Math.min(index * 0.02, 0.4),
-            }}
+            transition={{ type: "spring", stiffness: 80, damping: 20 }}
             style={{
               borderLeft: `4px solid ${track.color}`,
             }}

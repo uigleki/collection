@@ -41,9 +41,13 @@ export function Footer({ text }: FooterProps) {
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              transition: { inherit: true, delay: 0.2 },
+            }}
             viewport={{ once: true }}
-            transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
+            transition={{ type: "spring", stiffness: 100, damping: 20 }}
             className="flex items-center justify-center gap-6 text-sm"
           >
             <motion.a
@@ -62,9 +66,12 @@ export function Footer({ text }: FooterProps) {
             <motion.div
               className="h-4 w-px bg-border"
               initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
+              whileInView={{
+                scaleY: 1,
+                transition: { inherit: true, delay: 0.4 },
+              }}
               viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
             />
 
             <motion.a

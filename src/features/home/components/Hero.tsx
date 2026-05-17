@@ -69,14 +69,9 @@ export function Hero() {
               fontSize: "clamp(1rem, 5vw, 2.5rem)",
               lineHeight: "1.5",
             }}
-            whileHover={{
-              scale: 1.02,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 10,
-            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
             className="font-bold text-center mb-8 transition-colors duration-500 ease-out hover:text-primary"
           >
             If we're here to experience beauty,
@@ -94,13 +89,11 @@ export function Hero() {
             <motion.div
               className="h-px bg-border transition-colors duration-500 ease-out group-hover:bg-primary"
               initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 60,
-                damping: 20,
-                delay: 0.6,
+              animate={{
+                scaleX: 1,
+                transition: { inherit: true, delay: 0.6 },
               }}
+              transition={{ type: "spring", stiffness: 60, damping: 20 }}
               style={{ originX: 0.5 }}
             />
 
@@ -111,13 +104,9 @@ export function Hero() {
               animate={{
                 scaleX: 6,
                 opacity: 0,
+                transition: { inherit: true, delay: 0.6 },
               }}
-              transition={{
-                type: "spring",
-                stiffness: 200,
-                damping: 30,
-                delay: 0.6,
-              }}
+              transition={{ type: "spring", stiffness: 200, damping: 30 }}
             />
           </div>
         </Link>

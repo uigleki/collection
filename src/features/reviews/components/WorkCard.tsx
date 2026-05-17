@@ -18,14 +18,10 @@ export function WorkCard({ work, index }: WorkCardProps) {
         opacity: 1,
         y: 0,
         rotateX: 0,
+        transition: { inherit: true, delay: Math.min(index * 0.08, 0.4) },
       }}
       viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        stiffness: 80,
-        damping: 20,
-        delay: Math.min(index * 0.08, 0.4),
-      }}
+      transition={{ type: "spring", stiffness: 80, damping: 20 }}
       style={{
         perspective: 1000,
         transformStyle: "preserve-3d",
@@ -73,14 +69,12 @@ export function WorkCard({ work, index }: WorkCardProps) {
       {work.flaws && (
         <motion.div
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            type: "spring",
-            stiffness: 100,
-            damping: 20,
-            delay: work.review.length * 0.05,
+          whileInView={{
+            opacity: 1,
+            transition: { inherit: true, delay: Math.min(work.review.length * 0.05, 0.4) },
           }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
           className="mt-6 pt-6 border-t border-border"
         >
           <p className="font-bold text-destructive mb-4">Shortcomings</p>

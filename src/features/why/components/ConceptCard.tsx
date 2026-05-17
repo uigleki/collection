@@ -21,14 +21,10 @@ export function ConceptCard({ concept, index }: ConceptCardProps) {
         y: 0,
         rotateY: 0,
         scale: 1,
+        transition: { inherit: true, delay: Math.min(index * 0.15, 0.6) },
       }}
       viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        stiffness: 120,
-        damping: 15,
-        delay: index * 0.15,
-      }}
+      transition={{ type: "spring", stiffness: 120, damping: 15 }}
       style={{
         perspective: 1000,
         transformStyle: "preserve-3d",

@@ -22,14 +22,11 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
         opacity: 1,
         y: 0,
         rotateX: 0,
+        transition: { inherit: true, delay: Math.min(index * 0.08, 0.4) },
       }}
+      whileTap={{ scale: 0.98 }}
       viewport={{ once: true }}
-      transition={{
-        type: "spring",
-        stiffness: 80,
-        damping: 20,
-        delay: Math.min(index * 0.08, 0.4),
-      }}
+      transition={{ type: "spring", stiffness: 80, damping: 20 }}
       style={{
         perspective: 1000,
         transformStyle: "preserve-3d",
@@ -45,11 +42,8 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
           scale: 1.02,
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
         }}
-        transition={{
-          type: "spring",
-          stiffness: 300,
-          damping: 10,
-        }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 300, damping: 10 }}
       >
         <h3 className="text-xl font-bold mb-2">{work.title}</h3>
         <p className="text-muted-foreground">{work.subtitle}</p>
@@ -144,7 +138,7 @@ export function WorkCard({ work, expanded, onToggle, index }: WorkCardProps) {
                       type: "spring",
                       stiffness: 100,
                       damping: 20,
-                      delay: work.review.length * 0.06,
+                      delay: Math.min(work.review.length * 0.06, 0.4),
                     }}
                     className="pt-4 border-t border-border"
                   >
