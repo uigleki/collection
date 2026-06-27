@@ -45,6 +45,11 @@
               nil.enable = true;
               ripsecrets.enable = true;
               typos.enable = true;
+
+              biome = {
+                enable = true;
+                args = [ "--indent-style=space" ];
+              };
             };
           };
         };

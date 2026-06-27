@@ -71,7 +71,10 @@ export function WorkCard({ work, index }: WorkCardProps) {
           initial={{ opacity: 0 }}
           whileInView={{
             opacity: 1,
-            transition: { inherit: true, delay: Math.min(work.review.length * 0.05, 0.4) },
+            transition: {
+              inherit: true,
+              delay: Math.min(work.review.length * 0.05, 0.4),
+            },
           }}
           viewport={{ once: true }}
           transition={{ type: "spring", stiffness: 100, damping: 20 }}
