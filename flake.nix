@@ -41,6 +41,7 @@
           pre-commit.settings = {
             package = pkgs.prek;
             hooks = {
+              actionlint.enable = true;
               convco.enable = true;
               nil.enable = true;
               ripsecrets.enable = true;
