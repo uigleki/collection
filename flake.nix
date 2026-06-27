@@ -39,11 +39,13 @@
           };
 
           pre-commit.settings = {
+            package = pkgs.prek;
             hooks = {
               convco.enable = true;
               nil.enable = true;
+              ripsecrets.enable = true;
+              typos.enable = true;
             };
-            package = pkgs.prek;
           };
         };
     };
