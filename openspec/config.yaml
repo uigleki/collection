@@ -1,6 +1,0 @@
-schema: spec-driven
-
-context: |
-  Tech stack: TypeScript strict, React, Tailwind CSS, Framer Motion
-  Work titles use original names (Japanese etc.)
-  We use conventional commits
