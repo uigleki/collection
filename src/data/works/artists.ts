@@ -4,7 +4,6 @@ export const artists = [
   {
     title: "カントク",
     subtitle: "Master of moe aesthetics and light",
-    color: "#ff6b9d",
     review: [
       {
         label: "Masterful light and shadow",

@@ -25,11 +25,11 @@
         {
           devShells.default = pkgs.mkShell {
             inputsFrom = [ config.pre-commit.devShell ];
-
             packages = with pkgs; [
               bun
               nixd
               playwright-driver.browsers
+              typescript-language-server
             ];
 
             shellHook = ''
@@ -45,7 +45,6 @@
               convco.enable = true;
               nil.enable = true;
               ripsecrets.enable = true;
-              typos.enable = true;
 
               biome = {
                 enable = true;

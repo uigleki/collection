@@ -10,34 +10,43 @@
     "typecheck": "tsc",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "test:a11y": "playwright test a11y",
+    "test:visual": "playwright test visual",
+    "lighthouse": "vite build && lhci autorun",
+    "fonts:cjk": "bun scripts/subset-cjk.ts"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "lucide-react": "^1.21.0",
-    "motion": "^12.42.0",
+    "@fontsource/ubuntu": "^5.2.8",
+    "@fontsource/ubuntu-mono": "^5.2.8",
+    "@use-gesture/react": "^10.3.1",
+    "lenis": "^1.3.25",
+    "motion": "^12.42.2",
+    "ogl": "^1.0.11",
+    "playwright-core": "^1.61.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-error-boundary": "^6.1.2",
-    "react-intersection-observer": "^10.0.3",
-    "react-router": "^8.0.1",
-    "tailwind-merge": "^3.6.0"
+    "react-router": "^8.2.0"
   },
   "devDependencies": {
-    "@playwright/test": "~1.60.0",
-    "@tailwindcss/vite": "^4.3.1",
-    "@testing-library/dom": "^10.4.1",
+    "@axe-core/playwright": "^4.12.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.61.1",
+    "@tailwindcss/vite": "^4.3.2",
     "@testing-library/react": "^16.3.2",
-    "@types/jsdom": "^28.0.3",
-    "@types/node": "^26.0.1",
+    "@types/node": "^26.1.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "axe-core": "^4.12.1",
     "jsdom": "^29.1.1",
-    "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3",
-    "vite": "^8.1.0",
-    "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^4.1.9"
-  }
+    "sharp": "^0.35.3",
+    "subset-font": "^2.5.0",
+    "tailwindcss": "^4.3.2",
+    "thumbhash": "^0.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
+  },
+  "license": "AGPL-3.0-only"
 }

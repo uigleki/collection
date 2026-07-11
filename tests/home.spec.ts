@@ -1,72 +1,63 @@
 import { expect, test } from "@playwright/test";
 
-test.describe("Home page", () => {
-  test.beforeEach(async ({ page }) => {
+test.describe("the collection", () => {
+  test("opens on the thesis with no loader", async ({ page }) => {
     await page.goto("/");
-  });
-
-  test("renders hero with the collection question and navigation links", async ({
-    page,
-  }) => {
-    // The core proposition is visible
-    const heading = page.getByRole("heading", { level: 1 });
-    await expect(heading).toContainText("what beauty is worth our finite time");
-
-    // Both main navigation paths are accessible
     await expect(
-      page.getByRole("link", { name: /learn why these works matter/i }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole("link", { name: /view detailed reviews/i }),
+      page.getByRole("heading", { level: 1, name: /Perfect\s*Collection/ }),
     ).toBeVisible();
   });
 
-  test("displays all content categories with works listed", async ({
-    page,
-  }) => {
-    // All categories render
-    for (const category of ["Anime", "Movies", "Games", "Music"]) {
-      await expect(page.getByRole("heading", { name: category })).toBeVisible();
+  test("holds all fourteen works across the four media", async ({ page }) => {
+    await page.goto("/");
+    for (const name of ["Anime", "Movies", "Games", "Artists"]) {
+      await expect(
+        page.getByRole("heading", { level: 2, name }),
+      ).toBeAttached();
     }
+    await expect(page.locator('a[aria-label$="— open"]')).toHaveCount(14);
+    await expect(page.getByText("カントク").first()).toBeAttached();
+  });
 
-    // Works within categories actually have content (not empty sections)
+  test("says the koan and points to why", async ({ page }) => {
+    await page.goto("/");
     await expect(
-      page.getByRole("heading", { name: /打ち上げ花火/ }),
+      page.getByText("The finger pointing at the moon is not the moon."),
+    ).toBeAttached();
+    await page.getByRole("link", { name: "Why these works" }).click();
+    await expect(page).toHaveURL(/\/why$/);
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Why These Works" }),
     ).toBeVisible();
   });
 
-  test("work card expands on click to show review content", async ({
+  test("carries all 49 songs on the water", async ({ page }) => {
+    await page.goto("/");
+    const rows = page.locator('section[aria-label="Music"] li');
+    await expect(rows).toHaveCount(49);
+    const row = rows.filter({ hasText: "朧月" });
+    await expect(row).toHaveCount(1);
+    await expect(row.getByText("minato & 初音ミク")).toBeAttached();
+  });
+
+  test("ends on the essay's own final beat", async ({ page }) => {
+    await page.goto("/");
+    await expect(
+      page.getByRole("heading", { level: 2, name: /found it/ }),
+    ).toBeAttached();
+    await expect(
+      page.getByText("The beauty you were born to experience?"),
+    ).toBeAttached();
+    await expect(page.getByRole("link", { name: "Colophon" })).toBeAttached();
+  });
+
+  test("titles carry their language for correct letterforms", async ({
     page,
   }) => {
-    // Find a work card button and verify it starts collapsed
-    const card = page.getByRole("button", { name: /打ち上げ花火/ });
-    await expect(card).toHaveAttribute("aria-expanded", "false");
-
-    // Click to expand
-    await card.click();
-    await expect(card).toHaveAttribute("aria-expanded", "true");
-
-    // Review content becomes visible (point labels from the review data)
-    await expect(
-      card.getByText("Shinbo's stream-of-consciousness mastery"),
-    ).toBeVisible();
-  });
-
-  test("work card collapses when clicked again", async ({ page }) => {
-    const card = page.getByRole("button", { name: /打ち上げ花火/ });
-
-    // Expand
-    await card.click();
-    await expect(card).toHaveAttribute("aria-expanded", "true");
-
-    // Collapse
-    await card.click();
-    await expect(card).toHaveAttribute("aria-expanded", "false");
-  });
-
-  test("React updates page title on sub-page navigation", async ({ page }) => {
-    // Why page sets title via React's <title> metadata
-    await page.goto("/why");
-    await expect(page).toHaveTitle("Why These Works");
+    await page.goto("/");
+    const bakemono = page.locator('h3[lang="ja"]', { hasText: "化物語" });
+    await expect(bakemono).toBeAttached();
+    const zh = page.locator('[lang="zh-Hans"]', { hasText: "海棠仙" });
+    await expect(zh).toBeAttached();
   });
 });

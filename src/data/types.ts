@@ -1,5 +1,3 @@
-import type { LucideIcon } from "lucide-react";
-
 export interface PageMeta {
   title: string;
   description: string;
@@ -14,26 +12,24 @@ export interface ReviewPoint {
 export interface Work {
   title: string;
   subtitle: string;
-  color: string;
   readonly review: readonly ReviewPoint[];
   readonly flaws?: readonly ReviewPoint[];
 }
 
 export interface WorkCategory {
   name: string;
-  readonly icon: LucideIcon;
   readonly works: readonly Work[];
 }
 
 export interface WorkTrack {
   title: string;
   subtitle: string;
-  color: string;
+  /** BCP-47 language of the title where it isn't Latin (ja / zh-Hans) */
+  lang?: "ja" | "zh-Hans";
 }
 
 export interface WhyConcept {
   title: string;
-  color: string;
   readonly explanation: readonly (string | ReviewPoint)[];
 }
 

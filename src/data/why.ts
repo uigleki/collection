@@ -12,21 +12,18 @@ const truth = {
   concepts: [
     {
       title: "Creative Love",
-      color: "#e74c3c",
       explanation: [
         "The creator loved the work itself, not the response it would generate. Just as parents who truly love their children want them to be happy rather than bring glory to the family, creators who truly love their work cannot bear to inflict darkness without purpose, cannot tolerate arbitrariness, cannot accept incompleteness.",
       ],
     },
     {
       title: "Internal Coherence",
-      color: "#3498db",
       explanation: [
         "Nothing is random. Everything connects. A single line advances plot, reveals character, echoes theme, and foreshadows resolution - all precisely, all intentionally. Remove any piece and the entire structure collapses. Each element strengthens all others in ways that reveal themselves through time.",
       ],
     },
     {
       title: "Authentic Beauty",
-      color: "#2ecc71",
       explanation: [
         "The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift - the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.",
       ],
@@ -43,7 +40,6 @@ const shortcuts = {
   concepts: [
     {
       title: "Negativity Bias",
-      color: "#e74c3c",
       explanation: [
         "Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.",
         {
@@ -58,7 +54,6 @@ const shortcuts = {
     },
     {
       title: "Mere Exposure Effect",
-      color: "#9b59b6",
       explanation: [
         "Repetition breeds familiarity, and familiarity breeds preference - a psychological phenomenon where we favor what we've encountered before.",
         {
@@ -73,7 +68,6 @@ const shortcuts = {
     },
     {
       title: "Peak-End Rule",
-      color: "#f39c12",
       explanation: [
         "Memory doesn't record experiences faithfully - it disproportionately weights emotional peaks and endings, forgetting the journey between.",
         {

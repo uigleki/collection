@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://spotless.pages.dev</loc>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://spotless.pages.dev/why</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://spotless.pages.dev/reviews</loc>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://spotless.pages.dev</loc><priority>1.0</priority></url>
+  <url><loc>https://spotless.pages.dev/why</loc><priority>0.8</priority></url>
+  <url><loc>https://spotless.pages.dev/credits</loc><priority>0.3</priority></url>
+  <url><loc>https://spotless.pages.dev/works/bakemonogatari</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/nisemonogatari</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/hi-score-girl</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/girls-last-tour</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/fireworks</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/penguin-highway</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/charlie-chocolate-factory</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/to-the-moon</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/edith-finch</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/finding-paradise</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/steins-gate</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/7-years-from-now</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/astlibra</loc><priority>0.6</priority></url>
+  <url><loc>https://spotless.pages.dev/works/kantoku</loc><priority>0.6</priority></url>
 </urlset>

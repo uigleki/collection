@@ -4,7 +4,6 @@ export const games = [
   {
     title: "To the Moon",
     subtitle: "A memory journey embracing final moonlight vows",
-    color: "#2980b9",
     review: [
       {
         label: "Reverse chronology reveals",
@@ -23,7 +22,6 @@ export const games = [
   {
     title: "What Remains of Edith Finch",
     subtitle: "Every room a theater of memory",
-    color: "#16a085",
     review: [
       {
         label: "Each tale through unique devices",
@@ -42,7 +40,6 @@ export const games = [
   {
     title: "Finding Paradise",
     subtitle: "A soul's journey toward perfect existence",
-    color: "#2c3e50",
     review: [
       {
         label: "Warm life contemplation",
@@ -61,7 +58,6 @@ export const games = [
   {
     title: "Steins;Gate",
     subtitle: "Fate's ultimate decree",
-    color: "#e67e22",
     review: [
       {
         label: "Rigorous time travel mythology",
@@ -94,7 +90,6 @@ export const games = [
   {
     title: "7 年後で待ってる",
     subtitle: "I'll be waiting for you, 7 years from now",
-    color: "#e91e63",
     review: [
       {
         label: "Cross-temporal commitment",
@@ -119,7 +114,6 @@ export const games = [
   {
     title: "ASTLIBRA Revision",
     subtitle: "15 years to resurrect the golden age",
-    color: "#f39c12",
     review: [
       {
         label: "Unpredictable narrative progression",

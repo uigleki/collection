@@ -4,7 +4,6 @@ export const anime = [
   {
     title: "化物語",
     subtitle: "Supernatural tales of adolescent awakening",
-    color: "#9b59b6",
     review: [
       {
         label: "Dialogue as art",
@@ -23,7 +22,6 @@ export const anime = [
   {
     title: "偽物語",
     subtitle: "When fake becomes more genuine than real",
-    color: "#8e44ad",
     review: [
       {
         label: "Continued Shinbo/Shaft mastery",
@@ -34,7 +32,6 @@ export const anime = [
   {
     title: "ハイスコアガール",
     subtitle: "When words fail, fighting games speak",
-    color: "#e74c3c",
     review: [
       {
         label: "She never speaks, yet says everything",
@@ -57,7 +54,6 @@ export const anime = [
   {
     title: "少女終末旅行",
     subtitle: "Finding beauty in a world that has ended",
-    color: "#7f8c8d",
     review: [
       {
         label: "Wondering about everything",

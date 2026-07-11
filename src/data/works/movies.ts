@@ -4,7 +4,6 @@ export const movies = [
   {
     title: "打ち上げ花火、下から見るか？横から見るか？",
     subtitle: "The summer that refuses to end",
-    color: "#3498db",
     review: [
       {
         label: "Shinbo's stream-of-consciousness mastery",
@@ -27,7 +26,6 @@ export const movies = [
   {
     title: "ペンギン・ハイウェイ",
     subtitle: "Scientific wonder meets mysterious beauty",
-    color: "#1abc9c",
     review: [
       {
         label: "A child's earnest investigation",
@@ -46,7 +44,6 @@ export const movies = [
   {
     title: "Charlie and the Chocolate Factory",
     subtitle: "Where wonder meets weirdness",
-    color: "#9b59b6",
     review: [
       {
         label: "Visual wonderland realized",

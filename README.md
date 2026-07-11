@@ -87,4 +87,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 
 ## License
 
-[CC BY-SA 4.0](LICENSE)
+- Text and curation: [CC BY-SA 4.0](LICENSE)
+- Code: [AGPL-3.0-only](LICENSE-CODE)
+
+Cover art belongs to its creators and is excluded from both licenses.

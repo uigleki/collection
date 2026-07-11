@@ -1,39 +1,59 @@
-import { lazy } from "react";
-import { createBrowserRouter, Outlet, ScrollRestoration } from "react-router";
-import { ErrorBoundary } from "@/features/error/ErrorBoundary";
-import { NotFound } from "@/features/error/NotFound";
-import { Home } from "@/features/home/Home";
-
-const DevTools = lazy(() => import("./dev/DevTools"));
+import { useEffect } from "react";
+import { createBrowserRouter, Outlet } from "react-router";
+import { useScroll, useScrollMemory } from "@/lib/scroll";
+import { initTheme } from "@/lib/theme";
+import { MoonSky } from "@/scene/MoonSky";
+import { BackToTop } from "@/ui/BackToTop";
+import { ThemeToggle } from "@/ui/ThemeToggle";
 
 function Root() {
+  useScroll();
+  useScrollMemory();
+
+  useEffect(() => initTheme(), []);
+
   return (
-    <ErrorBoundary>
+    <>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
+      {/* The night exists before (and without) WebGL. */}
+      <div aria-hidden="true" className="poster fixed inset-0 -z-20" />
+      <MoonSky />
+      <ThemeToggle />
+      <BackToTop />
       <Outlet />
-      <ScrollRestoration />
-      <DevTools />
-    </ErrorBoundary>
+    </>
+  );
+}
+
+function BrokenNight() {
+  return (
+    <main className="relative flex min-h-dvh flex-col items-center justify-center px-5 text-center">
+      <h1 className="text-title font-light tracking-tight">
+        Clouds crossed the moon.
+      </h1>
+      <p className="mt-4 text-body text-hoshi">
+        Something failed while rendering this page.
+      </p>
+      <a href="/" className="pill mt-10 text-body hover:text-tsukikage">
+        Return to the collection
+      </a>
+    </main>
   );
 }
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Root />,
+    Component: Root,
+    ErrorBoundary: BrokenNight,
     children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: "why",
-        lazy: () => import("@/features/why/Why"),
-      },
-      {
-        path: "reviews",
-        lazy: () => import("@/features/reviews/Reviews"),
-      },
-      { path: "*", element: <NotFound /> },
+      { index: true, lazy: () => import("@/pages/home/Home") },
+      { path: "works/:slug", lazy: () => import("@/pages/work/WorkRoom") },
+      { path: "why", lazy: () => import("@/pages/why/Why") },
+      { path: "credits", lazy: () => import("@/pages/credits/Credits") },
+      { path: "*", lazy: () => import("@/pages/NotFound") },
     ],
   },
 ]);
