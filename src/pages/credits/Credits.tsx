@@ -100,7 +100,15 @@ export function Credits() {
               rel="license noopener"
               className="link-draw hover:text-tsuki"
             >
-              AGPL-3.0
+              AGPL-3.0-only
+            </a>
+            , with{" "}
+            <a
+              href="https://github.com/uigleki/collection"
+              rel="noopener"
+              className="link-draw hover:text-tsuki"
+            >
+              source on GitHub ↗
             </a>
             . Cover art remains the property of its creators, shown reduced with
             credit — any rights holder&rsquo;s removal request will be honored
