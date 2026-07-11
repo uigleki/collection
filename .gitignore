@@ -1,4 +1,4 @@
-# Direnv
+# Nix
 .direnv
 /.pre-commit-config.yaml
 
@@ -148,3 +148,4 @@ vite.config.ts.timestamp-*
 playwright-report/
 test-results/
 blob-report/
+.lighthouseci/
