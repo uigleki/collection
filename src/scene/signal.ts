@@ -21,6 +21,9 @@ export const sky = {
   /** theme: 0 night, 1 dusk — eased in the loop */
   day: 0,
   targetDay: 0,
+  /** view transition in flight: the canvas is hidden behind snapshots, so
+   * the loop skips rendering instead of fighting the morph for the GPU */
+  hold: false,
 };
 
 if (import.meta.env.DEV) {

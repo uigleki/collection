@@ -307,6 +307,11 @@ export function MoonSky() {
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
 
+      // A view transition is animating over the page: the canvas is fully
+      // covered by its snapshots, so skip the draw and give the morph the
+      // whole frame budget. The clock above keeps ticking — no dt jump.
+      if (sky.hold) return;
+
       // reduced motion: the ambient time stands still and states cut cleanly,
       // but the moon still shows the truthful phase for where the reader is.
       const still = reduced.matches;

@@ -63,6 +63,9 @@ export function scrollToTop(): void {
 // would be saved as if the reader had been there. Scroll events dispatch
 // asynchronously, after the departing route's listener is already gone, so
 // the clamp can never be attributed to the wrong path.
+// The initial mount restores scroll but plays no view transition.
+let firstArrival = true;
+
 const positions = new Map<string, number>(
   (() => {
     try {
@@ -104,6 +107,12 @@ export function useScrollMemory(): void {
 
   useLayoutEffect(() => {
     const y = positions.get(pathname) ?? 0;
+    // While the morph plays the live canvas sits unseen behind the
+    // transition's snapshots — rendering it only steals frames from the
+    // animation (Firefox's young view-transition engine visibly stutters
+    // when the shader competes). First mount has no transition to protect.
+    if (!firstArrival) sky.hold = true;
+    firstArrival = false;
     if (lenis) {
       // the incoming page's DOM just committed — remeasure first, or Lenis
       // clamps the target to the DEPARTED page's cached height
@@ -113,13 +122,17 @@ export function useScrollMemory(): void {
       // targets were measured at snapshot time, and scrolling mid-flight
       // would land the cover on a place that no longer exists.
       lenis.stop();
-      const release = setTimeout(() => lenis?.start(), 700);
-      return () => {
-        clearTimeout(release);
-        lenis?.start();
-      };
+    } else {
+      window.scrollTo(0, y);
     }
-    window.scrollTo(0, y);
-    return undefined;
+    const release = setTimeout(() => {
+      sky.hold = false;
+      lenis?.start();
+    }, 700);
+    return () => {
+      clearTimeout(release);
+      sky.hold = false;
+      lenis?.start();
+    };
   }, [pathname]);
 }
