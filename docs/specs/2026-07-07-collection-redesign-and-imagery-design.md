@@ -187,7 +187,7 @@ Garden Eight *The Shift*（克制的节奏赢 SOTM）· mount *Yamauchi No.10*�
 
 **新增运行时**：`lenis`、`gsap`、`@gsap/react`、`three` + `@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing`（和/或 `ogl`）。`motion` 已装。
 **新增构建/资产**：`vite-imagetools`、`thumbhash`、`sharp`（或 `node-vibrant`）、`subset-font`（或 `fonttools pyftsubset`）。
-**QA**：`@axe-core/playwright`、Playwright 视觉快照、Lighthouse CI 预算。保留 Context7 MCP；开发环境加 Chrome DevTools MCP + Playwright MCP。
+**QA**：`@axe-core/playwright`、Playwright 视觉快照、Lighthouse CI 预算。开发环境加 Chrome DevTools MCP + Playwright MCP。
 **跳过**：`@squoosh/cli`(归档)、`@unpic`(需CDN)、`unplugin-imagemin`(停滞)、shadcn/Figma MCP、pa11y(与 axe 重复)。`@paper-design/shaders`(0.x) 仅作装饰、锁版本。
 
 ---

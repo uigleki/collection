@@ -35,9 +35,8 @@
     monospace;
   /* Japanese: Latin stays Ubuntu; Han/kana take Japanese letterforms. */
   --font-ja:
-    "Ubuntu", "CollectionCJK-JP", "Hiragino Sans",
-    "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui,
-    sans-serif;
+    "Ubuntu", "CollectionCJK-JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
 
   /* Fluid role-based type scale (min at 320px → max at ~1440px).
      Components ask for a role, never a raw rem. */
@@ -159,7 +158,6 @@ body {
   }
 }
 
-
 /* Every text link rests on a faint underline (links must read as links
    without hover — touch has none) and draws it solid on hover/focus. */
 .link-draw {
@@ -229,7 +227,8 @@ body {
 }
 .group:hover .cover-lift,
 .group:focus-visible .cover-lift {
-  box-shadow: 0 24px 60px -18px color-mix(in oklab, var(--glow) 45%, transparent);
+  box-shadow: 0 24px 60px -18px
+    color-mix(in oklab, var(--glow) 45%, transparent);
 }
 
 .skip-link {
@@ -326,6 +325,7 @@ body {
   ::view-transition-group(*),
   ::view-transition-old(*),
   ::view-transition-new(*) {
+    /* biome-ignore lint/complexity/noImportantStyles: a reduced-motion opt-out has to outrank every animation rule */
     animation: none !important;
   }
 }

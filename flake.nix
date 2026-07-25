@@ -42,14 +42,10 @@
             package = pkgs.prek;
             hooks = {
               actionlint.enable = true;
+              biome.enable = true;
               convco.enable = true;
               nil.enable = true;
               ripsecrets.enable = true;
-
-              biome = {
-                enable = true;
-                args = [ "--indent-style=space" ];
-              };
             };
           };
         };
