@@ -46,8 +46,16 @@ const vec3 GOLD      = vec3(0.980, 0.760, 0.400);
 const vec3 DAWN      = vec3(0.485, 0.398, 0.373);  // dawn, kept quiet
 
 // ---- noise ------------------------------------------------------------------
+// Hash without sine (Hoskins). The classic fract(sin(dot(p, k)) * 43758.5)
+// hands sin() arguments in the thousands, and GLSL ES promises precision
+// only across [-PI, PI] — outside it drivers are free to return anything,
+// which on some mobile GPUs collapses the field into repeating bands. The
+// dither at the end of main() draws from this same hash to KILL banding.
+// Pure float ops instead: ~9% more fragment time for one sky everywhere.
 float hash(vec2 p) {
-  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+  vec3 q = fract(p.xyx * 0.1031);
+  q += dot(q, q.yzx + 33.33);
+  return fract((q.x + q.y) * q.z);
 }
 float noise(vec2 p) {
   vec2 i = floor(p), f = fract(p);
@@ -193,9 +201,12 @@ void main() {
     vec3 water = mix(base, skyRef, fres * 0.9);
     water += base * hC * 0.35; // crests catch a breath of light
 
-    // The moonglade (Cox-Munk): a path of discrete wave-facet glints —
-    // narrow as the moon itself at the horizon, flaring wider and breaking
-    // into separate soft flashes near the shore. Never one uniform streak.
+    // The moonglade: a path of discrete glints, one per wave facet tilted
+    // to throw the moon back at the eye — narrow as the moon itself at the
+    // horizon, flaring wider and breaking into separate soft flashes near
+    // the shore. Never one uniform streak. Cox-Munk measured how those
+    // slopes are really distributed (a wind-driven gaussian); this is a
+    // power lobe standing in for it, shaped by eye rather than by wind.
     float illum = (1.0 - uPhase) * 0.5;
     float pathW = MOON_R * mix(0.9, 4.5, depth) * (1.0 + uGlade * 0.6);
     float dx = (uv.x - uMoon.x) * aspect / pathW;
@@ -235,6 +246,11 @@ export function MoonSky() {
         dpr: Math.min(window.devicePixelRatio, 1.75),
         alpha: false,
         antialias: false,
+        // One triangle, no depth test: a depth buffer would be tens of MB
+        // of VRAM cleared every frame for nothing. The COLOR clear stays —
+        // on tiled mobile GPUs it is what lets the driver skip loading the
+        // previous frame back into tile memory.
+        depth: false,
       });
     } catch {
       return; // no WebGL — the CSS poster carries the night
