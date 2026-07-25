@@ -1,50 +1,22 @@
 import Lenis from "lenis";
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router";
-import { FULL_NIGHT } from "@/lib/moon";
 import { sky } from "@/scene/signal";
 
 let lenis: Lenis | null = null;
 
 /**
- * Smooth scroll (Lenis — the standard on contemporary award sites), skipped
- * entirely under prefers-reduced-motion where native scroll is the honest
- * choice. A separate rAF sampler derives velocity and document progress for
- * the sky from wherever the scroll actually is, so it works identically
- * with or without Lenis.
+ * Smooth scroll (Lenis), skipped entirely under prefers-reduced-motion where
+ * native scroll is the honest choice. Nothing samples the scroll here: the
+ * only reader of velocity and progress is the sky, and its own frame loop
+ * takes them straight from `window.scrollY` (see scene/MoonSky).
  */
 export function useScroll(): void {
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (!reduced.matches) {
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       lenis = new Lenis({ autoRaf: true, lerp: 0.12, anchors: true });
     }
-
-    let last = window.scrollY;
-    let raf = 0;
-    const tick = () => {
-      const y = window.scrollY;
-      sky.velocity += (y - last - sky.velocity) * 0.25;
-      last = y;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      sky.progress = max > 0 ? y / max : 0;
-      // An instant jump (deep link, keyboard End) can skip every night's
-      // observer band on the HOME page; past the works the moon must
-      // already stand full. Nowhere else — a room's own scroll must never
-      // touch the month (it did, and read as the moon moving at random).
-      if (
-        window.location.pathname === "/" &&
-        sky.progress > 0.6 &&
-        sky.targetNight < FULL_NIGHT
-      ) {
-        sky.targetNight = FULL_NIGHT;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
     return () => {
-      cancelAnimationFrame(raf);
       lenis?.destroy();
       lenis = null;
     };

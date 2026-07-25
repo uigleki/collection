@@ -60,6 +60,46 @@ test.describe("rooms", () => {
     ).toBeInViewport();
   });
 
+  test("a touch swipe walks the shelf, a vertical drag never does", async ({
+    page,
+  }) => {
+    await page.goto("/works/nisemonogatari");
+    // Playwright's touchscreen only taps, so the gesture is dispatched
+    // directly — this is exactly what a finger sends.
+    const swipe = (dx: number, dy: number) =>
+      page.locator("main").evaluate(
+        (main, { x, y }) => {
+          const opts = { bubbles: true, pointerType: "touch", pointerId: 1 };
+          main.dispatchEvent(
+            new PointerEvent("pointerdown", {
+              ...opts,
+              clientX: 200,
+              clientY: 300,
+            }),
+          );
+          main.dispatchEvent(
+            new PointerEvent("pointerup", {
+              ...opts,
+              clientX: 200 + x,
+              clientY: 300 + y,
+            }),
+          );
+        },
+        { x: dx, y: dy },
+      );
+    const room = (name: string) =>
+      expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
+
+    await swipe(-160, 10); // left → the next work
+    await room("ハイスコアガール");
+    await swipe(160, 10); // right → back
+    await room("偽物語");
+
+    await swipe(-160, 400); // mostly vertical: reading, not a swipe
+    await swipe(-30, 0); // too short to be decisive
+    await expect(page).toHaveURL(/nisemonogatari$/);
+  });
+
   test("works without cover art still have complete rooms", async ({
     page,
   }) => {

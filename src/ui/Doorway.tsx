@@ -1,6 +1,5 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { chip } from "./chip";
 
 /**
  * The page's fixtures: no bar, no gradient — the same glass chips as the
@@ -15,11 +14,12 @@ export function Doorway({ children }: { children?: ReactNode }) {
   // Decide on the history *index*, not location.key: a replace navigation
   // mints a fresh key but keeps idx 0 when the page was deep-linked, and
   // navigate(-1) from idx 0 would eject the visitor off-site.
-  const goBack = () => {
+  // Stable identity so the Escape listener below binds once, not per render.
+  const goBack = useCallback(() => {
     const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
     if (idx > 0) navigate(-1);
     else navigate("/");
-  };
+  }, [navigate]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -27,7 +27,7 @@ export function Doorway({ children }: { children?: ReactNode }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, [goBack]);
 
   return (
     <>
@@ -48,7 +48,7 @@ export function Doorway({ children }: { children?: ReactNode }) {
         onClick={goBack}
         aria-label="Back to the collection"
         title="Back to the collection"
-        className={`${chip} fixed top-5 left-5 z-50`}
+        className="chip fixed top-5 left-5 z-50"
       >
         <svg
           aria-hidden="true"
@@ -92,7 +92,7 @@ export function EdgeChip({
         type="button"
         onClick={onClick}
         aria-label={`${side === "prev" ? "Previous" : "Next"}: ${title}`}
-        className={chip}
+        className="chip"
       >
         <svg
           aria-hidden="true"

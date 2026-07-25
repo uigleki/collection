@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FULL_NIGHT, illumination, terminator } from "./moon";
+import { FULL_NIGHT, terminator } from "./moon";
 
 describe("terminator", () => {
   it("is +1 on night 1 (new moon — nothing lit)", () => {
@@ -24,13 +24,5 @@ describe("terminator", () => {
     const t = terminator(4.5);
     expect(t).toBeLessThan(terminator(4));
     expect(t).toBeGreaterThan(terminator(5));
-  });
-});
-
-describe("illumination", () => {
-  it("maps terminator to a 0..1 lit fraction", () => {
-    expect(illumination(1)).toBeCloseTo(0, 10);
-    expect(illumination((1 + FULL_NIGHT) / 2)).toBeCloseTo(0.5, 10);
-    expect(illumination(FULL_NIGHT)).toBeCloseTo(1, 10);
   });
 });

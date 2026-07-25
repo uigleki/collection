@@ -298,6 +298,7 @@ export function MoonSky() {
 
     let raf = 0;
     let last = performance.now();
+    let lastY = window.scrollY;
     let time = 0;
     let flow = 0;
     let glade = 0;
@@ -306,6 +307,27 @@ export function MoonSky() {
       raf = requestAnimationFrame(frame);
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
+
+      // Where the reader is. Sampled here rather than in its own rAF: the
+      // sky is the only thing that reads these, and this loop already runs
+      // every frame. Taken from window.scrollY, so it is identical with or
+      // without Lenis.
+      const y = window.scrollY;
+      sky.velocity += (y - lastY - sky.velocity) * 0.25;
+      lastY = y;
+      const span = document.documentElement.scrollHeight - window.innerHeight;
+      sky.progress = span > 0 ? y / span : 0;
+      // An instant jump (deep link, keyboard End) can skip every night's
+      // observer band on the HOME page; past the works the moon must
+      // already stand full. Nowhere else — a room's own scroll must never
+      // touch the month (it did, and read as the moon moving at random).
+      if (
+        location.pathname === "/" &&
+        sky.progress > 0.6 &&
+        sky.targetNight < FULL_NIGHT
+      ) {
+        sky.targetNight = FULL_NIGHT;
+      }
 
       // A view transition is animating over the page: the canvas is fully
       // covered by its snapshots, so skip the draw and give the morph the
@@ -351,6 +373,7 @@ export function MoonSky() {
       cancelAnimationFrame(raf);
       if (!document.hidden) {
         last = performance.now();
+        lastY = window.scrollY; // no phantom velocity from a scroll while away
         raf = requestAnimationFrame(frame);
       }
     };

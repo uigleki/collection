@@ -1,6 +1,5 @@
-import { useDrag } from "@use-gesture/react";
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import { neighbors, siteMeta, workBySlug } from "@/data/works";
 import { accentFor } from "@/lib/covers";
@@ -56,16 +55,28 @@ function Room({
     navigate(`/works/${to}`, { viewTransition: true, replace: true });
   };
 
-  // Touch walks the shelf too: a decisive horizontal swipe moves to the
-  // neighbouring work (use-gesture's swipe detector — velocity + distance
-  // thresholds, axis-locked so vertical reading is never hijacked).
-  const bindSwipe = useDrag(
-    ({ swipe: [sx] }) => {
-      if (sx === -1 && next) goNeighbor("next", next.slug);
-      if (sx === 1 && prev) goNeighbor("prev", prev.slug);
-    },
-    { axis: "x", pointer: { touch: true }, swipe: { distance: 60 } },
-  );
+  // Touch walks the shelf too. Pointer Events carry the whole gesture: the
+  // start is remembered on down, judged on up. Axis-locked (|dx| must beat
+  // |dy|) so vertical reading is never hijacked, and time-bounded so a slow
+  // drag across the page is not a swipe.
+  const start = useRef<{ x: number; y: number; t: number } | null>(null);
+  const onPointerDown = (e: React.PointerEvent) => {
+    start.current =
+      e.pointerType === "touch"
+        ? { x: e.clientX, y: e.clientY, t: e.timeStamp }
+        : null;
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    const from = start.current;
+    start.current = null;
+    if (!from) return;
+    const dx = e.clientX - from.x;
+    const dy = e.clientY - from.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
+    if (e.timeStamp - from.t > 700) return;
+    if (dx < 0 && next) goNeighbor("next", next.slug);
+    if (dx > 0 && prev) goNeighbor("prev", prev.slug);
+  };
 
   // The whole article enters as one choreography from mount. whileInView is
   // deliberately NOT used here: during a view transition the observer fires
@@ -88,7 +99,8 @@ function Room({
   return (
     <main
       id="main"
-      {...bindSwipe()}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
       className="relative mx-auto max-w-6xl touch-pan-y px-5 md:px-12"
     >
       <Doorway>

@@ -39,7 +39,7 @@ function slugFor(title: string): string {
 // Every non-Latin title in the four work media is Japanese (the Chinese in
 // this collection lives only in the music). Kana detection is NOT enough:
 // 化物語 and 少女終末旅行 are kanji-only yet must take Japanese glyph forms.
-const CJK = /[぀-ヿ㐀-鿿]/;
+export const CJK = /[぀-ヿ㐀-鿿]/;
 
 export interface WorkEntry {
   readonly work: Work;
@@ -65,7 +65,6 @@ export const allWorks: readonly WorkEntry[] = categories
       slug: slugFor(work.title),
       category: category.name,
       ordinal: i + 1,
-      night: 0, // assigned globally below
       ...(CJK.test(work.title) ? { lang: "ja" as const } : {}),
     })),
   )

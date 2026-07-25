@@ -1,6 +1,4 @@
-import { useCallback } from "react";
 import { chooseTheme, type Theme, useTheme } from "@/lib/theme";
-import { chip } from "./chip";
 
 /**
  * Shows where you're going: a sun by night, a moon by day. Switching runs
@@ -11,23 +9,20 @@ export function ThemeToggle() {
   const theme = useTheme();
   const next: Theme = theme === "dark" ? "light" : "dark";
 
-  const onClick = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const reduced = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      if (!document.startViewTransition || reduced) {
-        chooseTheme(next);
-        return;
-      }
-      const r = e.currentTarget.getBoundingClientRect();
-      const root = document.documentElement;
-      root.style.setProperty("--vt-x", `${r.left + r.width / 2}px`);
-      root.style.setProperty("--vt-y", `${r.top + r.height / 2}px`);
-      document.startViewTransition(() => chooseTheme(next));
-    },
-    [next],
-  );
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (!document.startViewTransition || reduced) {
+      chooseTheme(next);
+      return;
+    }
+    const r = e.currentTarget.getBoundingClientRect();
+    const root = document.documentElement;
+    root.style.setProperty("--vt-x", `${r.left + r.width / 2}px`);
+    root.style.setProperty("--vt-y", `${r.top + r.height / 2}px`);
+    document.startViewTransition(() => chooseTheme(next));
+  };
 
   const label = next === "light" ? "Switch to day" : "Switch to night";
 
@@ -37,7 +32,7 @@ export function ThemeToggle() {
       onClick={onClick}
       aria-label={label}
       title={label}
-      className={`${chip} fixed top-5 right-5 z-50`}
+      className="chip fixed top-5 right-5 z-50"
     >
       {next === "light" ? (
         <svg

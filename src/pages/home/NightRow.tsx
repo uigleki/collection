@@ -2,7 +2,7 @@ import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
 import type { WorkEntry } from "@/data/works";
 import { accentFor } from "@/lib/covers";
-import { hasRevealed, markRevealed } from "@/lib/reveal";
+import { revealed } from "@/lib/reveal";
 import { useNight } from "@/lib/useNight";
 import { Cover } from "@/ui/Cover";
 
@@ -13,7 +13,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
   const ref = useNight<HTMLElement>(entry.night);
   const { work, slug, category, ordinal, lang } = entry;
   const accent = accentFor(slug, work.title);
-  const settled = reduced || hasRevealed(slug);
+  const settled = reduced || revealed.has(slug);
 
   // Lift and tilt live on the SAME springs so the cover rises and turns
   // toward the cursor as one movement, not two queued effects. Skipped for
@@ -43,7 +43,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
       ref={ref}
       initial={settled ? false : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      onViewportEnter={() => markRevealed(slug)}
+      onViewportEnter={() => revealed.add(slug)}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
       transition={{ type: "spring", stiffness: 70, damping: 20 }}
       className="py-16 first:pt-0 md:py-20"

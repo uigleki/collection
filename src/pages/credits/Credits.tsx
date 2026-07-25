@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { covers } from "@/data/generated/covers";
+import { CJK } from "@/data/works";
 import { usePage } from "@/lib/usePage";
 import { sky } from "@/scene/signal";
 import { Doorway } from "@/ui/Doorway";
@@ -44,7 +45,7 @@ export function Credits() {
                 className="grid gap-1 py-3 md:grid-cols-[1fr_auto] md:gap-6"
               >
                 <span
-                  lang={/[぀-ヿ㐀-鿿]/.test(cover.title) ? "ja" : undefined}
+                  lang={CJK.test(cover.title) ? "ja" : undefined}
                   className="text-body"
                 >
                   {cover.title}

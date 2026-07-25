@@ -20,8 +20,3 @@ export const FULL_NIGHT = allWorks.length + 1;
 export function terminator(night: number): number {
   return Math.cos((Math.PI * (night - 1)) / (FULL_NIGHT - 1));
 }
-
-/** Lit fraction of the disc, 0 (new) → 1 (full). */
-export function illumination(night: number): number {
-  return (1 - terminator(night)) / 2;
-}

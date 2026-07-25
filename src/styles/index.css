@@ -64,9 +64,7 @@
   /* semantic aliases so components read as intent */
   --color-background: var(--color-yoru);
   --color-foreground: var(--color-tsuki);
-  --color-muted: var(--color-hoshi);
   --color-border: var(--color-kasumi);
-  --color-accent: var(--color-tsukikage);
   --color-ring: #c7d3e0;
 }
 /* stylelint-enable at-rule-no-unknown */
@@ -105,7 +103,7 @@ html {
 
 /* CJK display floors: kanji carry ink edge-to-edge, so display leading may
    never drop below ~1.15 the way Latin display can (DESIGN.md). */
-:is(:lang(ja), :lang(zh-Hans)):is(h1, h2, h3, .display) {
+:is(:lang(ja), :lang(zh-Hans)):is(h1, h2, h3) {
   line-height: 1.2;
   font-feature-settings: "palt" 1;
 }
@@ -183,8 +181,33 @@ body {
     100% 1px;
 }
 
-/* Standalone calls-to-action wear the glass-pill language of the fixtures —
-   unmistakably tappable on any device. */
+/* The one glass language every fixture speaks — theme toggle, back,
+   neighbours, back-to-top. Slightly larger than finger-minimum and with
+   press physics, so they feel like instruments, not icons. */
+.chip {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in oklab, var(--color-kasumi) 70%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--color-mizu) 60%, transparent);
+  color: var(--color-hoshi);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s;
+}
+.chip:hover,
+.chip:focus-visible {
+  border-color: var(--color-kasumi);
+  color: var(--color-tsuki);
+  transform: scale(1.1);
+}
+.chip:active {
+  transform: scale(0.95);
+}
+
+/* Standalone calls-to-action wear the same glass, drawn out into a pill. */
 .pill {
   display: inline-flex;
   align-items: center;

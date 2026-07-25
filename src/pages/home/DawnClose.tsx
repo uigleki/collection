@@ -1,11 +1,11 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
-import { hasRevealed, markRevealed } from "@/lib/reveal";
+import { revealed } from "@/lib/reveal";
 
 /** The closing beat: rest, not climax, under a lightening sky. */
 export function DawnClose() {
   const reduced = useReducedMotion();
-  const settled = reduced || hasRevealed("dawn-close");
+  const settled = reduced || revealed.has("dawn-close");
 
   // Masked lines can't observe themselves: clipped by the overflow-hidden
   // parent their visible area is zero and the viewport trigger never fires.
@@ -26,7 +26,7 @@ export function DawnClose() {
   return (
     <footer className="relative flex min-h-dvh flex-col justify-center">
       <motion.div
-        onViewportEnter={() => markRevealed("dawn-close")}
+        onViewportEnter={() => revealed.add("dawn-close")}
         initial={settled ? false : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.3 }}
