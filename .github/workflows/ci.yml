@@ -17,7 +17,7 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -27,6 +27,9 @@ jobs:
 
       - name: Install dependencies
         run: bun ci
+
+      - name: Lint
+        run: bun run lint
 
       - name: Type check
         run: bun run typecheck
@@ -58,7 +61,6 @@ jobs:
 
   build:
     name: Build
-    needs: test
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -82,7 +84,9 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: build
+    # build takes nothing from test, so the two run side by side; the gate is
+    # unchanged because nothing deploys until both have passed.
+    needs: [test, build]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 10

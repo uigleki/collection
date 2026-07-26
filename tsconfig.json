@@ -5,6 +5,8 @@
     "module": "preserve",
     "moduleDetection": "force",
     "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "erasableSyntaxOnly": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
 
@@ -24,5 +26,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["playwright.config.ts", "src", "tests", "vite.config.ts"]
+  "include": [
+    "playwright.config.ts",
+    "scripts",
+    "src",
+    "tests",
+    "vite.config.ts"
+  ]
 }
