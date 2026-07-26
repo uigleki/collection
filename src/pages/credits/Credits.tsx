@@ -49,10 +49,16 @@ export function Credits() {
               <span lang={work.lang} className="text-body">
                 {work.title}
               </span>
+              {/* A grid item is blockified and stretched to its track, and
+                  link-draw underlines the box it is given — left to stretch,
+                  the rule runs the width of the row and offers a reader a
+                  target that is not there. Start-aligned, the box is the
+                  words again. The wide track only exists below md; the fix
+                  is written once because the bug is one bug. */}
               <a
                 href={cover.sourceUrl}
                 rel="noopener"
-                className="link-draw text-caption text-hoshi hover:text-tsuki"
+                className="link-draw justify-self-start text-caption text-hoshi hover:text-tsuki"
               >
                 {cover.credit} ↗
               </a>
