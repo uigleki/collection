@@ -1,10 +1,13 @@
 import { motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import { neighbors, siteMeta, workBySlug } from "@/data/works";
+import { siteMeta } from "@/data/site";
+import { neighbors, type WorkEntry, workBySlug } from "@/data/works";
 import { accentFor } from "@/lib/covers";
+import { ENTER, RISE } from "@/lib/motion";
+import { walkShelf } from "@/lib/scroll";
+import { useSky } from "@/lib/sky";
 import { usePage } from "@/lib/usePage";
-import { sky } from "@/scene/signal";
 import { Cover } from "@/ui/Cover";
 import { Doorway, EdgeChip } from "@/ui/Doorway";
 import { NotFound } from "../NotFound";
@@ -16,42 +19,22 @@ export function WorkRoom() {
   const entry = workBySlug.get(slug);
 
   if (!entry) return <NotFound />;
-  return <Room key={slug} slug={slug} entry={entry} />;
+  return <Room key={slug} entry={entry} />;
 }
 
-function Room({
-  slug,
-  entry,
-}: {
-  slug: string;
-  entry: NonNullable<ReturnType<typeof workBySlug.get>>;
-}) {
+function Room({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const navigate = useNavigate();
-  const { work, night, category, ordinal, lang } = entry;
-  const h1 = usePage(`${work.title} — ${siteMeta.title}`);
-  const accent = accentFor(slug, work.title);
+  const { work, night, category, ordinal } = entry;
+  const { title, slug, lang } = work;
+  const h1 = usePage(`${title} — ${siteMeta.title}`);
+  const accent = accentFor(slug);
   const { prev, next } = neighbors(slug);
 
-  useEffect(() => {
-    sky.targetNight = night;
-    sky.dim = 1;
-    return () => {
-      sky.dim = 0;
-    };
-  }, [night]);
-
-  // Directional shelf slide for prev/next lives on <html> only during the
-  // transition (see index.css).
-  useEffect(() => {
-    const t = setTimeout(() => {
-      delete document.documentElement.dataset.dir;
-    }, 700);
-    return () => clearTimeout(t);
-  }, []);
+  useSky({ dim: 1, night });
 
   const goNeighbor = (dir: "prev" | "next", to: string) => {
-    document.documentElement.dataset.dir = dir;
+    walkShelf(dir);
     navigate(`/works/${to}`, { viewTransition: true, replace: true });
   };
 
@@ -74,8 +57,8 @@ function Room({
     const dy = e.clientY - from.y;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
     if (e.timeStamp - from.t > 700) return;
-    if (dx < 0 && next) goNeighbor("next", next.slug);
-    if (dx > 0 && prev) goNeighbor("prev", prev.slug);
+    if (dx < 0 && next) goNeighbor("next", next.work.slug);
+    if (dx > 0 && prev) goNeighbor("prev", prev.work.slug);
   };
 
   // The whole article enters as one choreography from mount. whileInView is
@@ -88,12 +71,7 @@ function Room({
       : ({
           initial: { opacity: 0, y: 22 },
           animate: { opacity: 1, y: 0 },
-          transition: {
-            type: "spring" as const,
-            stiffness: 65,
-            damping: 19,
-            delay,
-          },
+          transition: { ...ENTER, delay },
         } as const);
 
   return (
@@ -107,17 +85,15 @@ function Room({
         {prev ? (
           <EdgeChip
             side="prev"
-            title={prev.work.title}
-            lang={prev.lang}
-            onClick={() => goNeighbor("prev", prev.slug)}
+            work={prev.work}
+            onClick={() => goNeighbor("prev", prev.work.slug)}
           />
         ) : null}
         {next ? (
           <EdgeChip
             side="next"
-            title={next.work.title}
-            lang={next.lang}
-            onClick={() => goNeighbor("next", next.slug)}
+            work={next.work}
+            onClick={() => goNeighbor("next", next.work.slug)}
           />
         ) : null}
       </Doorway>
@@ -125,9 +101,7 @@ function Room({
       <div className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16">
         <div className="md:sticky md:top-20 md:self-start">
           <Cover
-            title={work.title}
-            slug={slug}
-            lang={lang}
+            work={work}
             morph
             priority
             className="mx-auto max-w-sm md:mx-0"
@@ -146,7 +120,7 @@ function Room({
             ref={h1}
             tabIndex={-1}
             lang={lang}
-            className="text-display font-normal tracking-tight outline-none"
+            className="text-display font-normal tracking-tight"
           >
             <span className="block overflow-hidden">
               <motion.span
@@ -156,14 +130,10 @@ function Room({
                   : {
                       initial: { opacity: 0, y: "0.55em" },
                       animate: { opacity: 1, y: 0 },
-                      transition: {
-                        type: "spring" as const,
-                        stiffness: 60,
-                        damping: 18,
-                      },
+                      transition: RISE,
                     })}
               >
-                {work.title}
+                {title}
               </motion.span>
             </span>
           </h1>

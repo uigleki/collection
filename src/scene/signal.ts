@@ -6,14 +6,15 @@
  * React and React cannot stall the shader — the two worlds only share this.
  */
 export const sky = {
-  /** eased, what the shader currently shows (continuous night 1..15) */
-  night: 1,
   /** where the page wants the moon (home: reading progress; room: its night) */
   targetNight: 1,
-  /** smoothed scroll velocity, px/frame — stirs the water */
-  velocity: 0,
-  /** whole-document progress 0..1 — eases the sky toward dawn at the end */
-  progress: 0,
+  /**
+   * this page is long enough to read as a month: once past its works the
+   * moon must already stand full, even for a reader who jumped there. Only
+   * a page that says so gets it — a room's own scroll must never touch the
+   * month (it did once, and read as the moon moving at random).
+   */
+  waxWithProgress: false,
   /** how deep into the music section we are, 0..1 — brightens the glade */
   glade: 0,
   /** room mode: how much the sky steps back behind reading, 0..1 */
@@ -25,11 +26,6 @@ export const sky = {
    * the loop skips rendering instead of fighting the morph for the GPU */
   hold: false,
 };
-
-if (import.meta.env.DEV) {
-  // debugging hatch: page.evaluate(() => __sky) from Playwright
-  (window as unknown as Record<string, unknown>).__sky = sky;
-}
 
 /** Frame-rate independent exponential approach. */
 export function ease(

@@ -2,27 +2,30 @@ import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
 import type { WorkEntry } from "@/data/works";
 import { accentFor } from "@/lib/covers";
+import { ENTER, FOLLOW } from "@/lib/motion";
 import { revealed } from "@/lib/reveal";
-import { useNight } from "@/lib/useNight";
+import { useNight } from "@/lib/sky";
 import { Cover } from "@/ui/Cover";
+
+const rows = revealed("work");
 
 /** One work; the whole row is one door. Holding the viewport makes its
  * night the sky's target — scrolling is what waxes the moon. */
 export function NightRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const ref = useNight<HTMLElement>(entry.night);
-  const { work, slug, category, ordinal, lang } = entry;
-  const accent = accentFor(slug, work.title);
-  const settled = reduced || revealed.has(slug);
+  const { work, category, ordinal } = entry;
+  const { title, slug, lang } = work;
+  const accent = accentFor(slug);
+  const settled = reduced || rows.has(slug);
 
-  // Lift and tilt live on the SAME springs so the cover rises and turns
+  // Lift and tilt live on the SAME spring so the cover rises and turns
   // toward the cursor as one movement, not two queued effects. Skipped for
   // reduced-motion and touch (no cursor to face).
-  const spring = { stiffness: 160, damping: 20 } as const;
-  const tiltX = useSpring(0, spring);
-  const tiltY = useSpring(0, spring);
-  const lift = useSpring(0, spring);
-  const zoom = useSpring(1, spring);
+  const tiltX = useSpring(0, FOLLOW);
+  const tiltY = useSpring(0, FOLLOW);
+  const lift = useSpring(0, FOLLOW);
+  const zoom = useSpring(1, FOLLOW);
   const onMove = (e: React.PointerEvent<HTMLAnchorElement>) => {
     if (reduced || e.pointerType !== "mouse") return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -43,15 +46,15 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
       ref={ref}
       initial={settled ? false : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
-      onViewportEnter={() => revealed.add(slug)}
+      onViewportEnter={() => rows.add(slug)}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ type: "spring", stiffness: 70, damping: 20 }}
+      transition={ENTER}
       className="py-16 first:pt-0 md:py-20"
     >
       <Link
         to={`/works/${slug}`}
         viewTransition
-        aria-label={`${work.title} — open`}
+        aria-label={`${title} — open`}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
         style={{ "--glow": accent } as React.CSSProperties}
@@ -67,13 +70,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
           }}
           className="w-40 md:w-auto"
         >
-          <Cover
-            title={work.title}
-            slug={slug}
-            lang={lang}
-            morph
-            className="cover-lift"
-          />
+          <Cover work={work} morph className="cover-lift" />
         </motion.div>
 
         <div className="max-w-xl self-center">
@@ -88,15 +85,8 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
               className="block"
               variants={{
                 hidden: { y: "1.05em" },
-                visible: {
-                  y: 0,
-                  transition: {
-                    type: "spring",
-                    stiffness: 70,
-                    damping: 20,
-                    delay: 0.08,
-                  },
-                },
+                // the row's own spring, so title and row arrive as one
+                visible: { y: 0, transition: { ...ENTER, delay: 0.08 } },
               }}
             >
               <span
@@ -105,7 +95,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
                   backgroundImage: `linear-gradient(color-mix(in oklab, ${accent} 70%, var(--color-tsuki)), color-mix(in oklab, ${accent} 70%, var(--color-tsuki)))`,
                 }}
               >
-                {work.title}
+                {title}
               </span>
             </motion.span>
           </motion.h3>

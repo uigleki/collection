@@ -3,6 +3,8 @@ import type { Work } from "../types";
 export const movies = [
   {
     title: "打ち上げ花火、下から見るか？横から見るか？",
+    slug: "fireworks",
+    lang: "ja",
     subtitle: "The summer that refuses to end",
     review: [
       {
@@ -25,6 +27,8 @@ export const movies = [
   },
   {
     title: "ペンギン・ハイウェイ",
+    slug: "penguin-highway",
+    lang: "ja",
     subtitle: "Scientific wonder meets mysterious beauty",
     review: [
       {
@@ -43,6 +47,7 @@ export const movies = [
   },
   {
     title: "Charlie and the Chocolate Factory",
+    slug: "charlie-chocolate-factory",
     subtitle: "Where wonder meets weirdness",
     review: [
       {

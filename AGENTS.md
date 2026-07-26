@@ -7,6 +7,8 @@ Perfect Collection — works that enrich rather than diminish.
 - `README.md` — the collection itself: works grouped by medium.
 - `docs/why.md` — essays on why each work matters.
 - `docs/reviews.md` — brief, spoiler-free impressions per work.
+- `DESIGN.md` — the design constitution the code defers to; anything that
+  contradicts it is a bug.
 
 ## Commands
 

@@ -3,6 +3,8 @@ import type { Work } from "../types";
 export const anime = [
   {
     title: "化物語",
+    slug: "bakemonogatari",
+    lang: "ja",
     subtitle: "Supernatural tales of adolescent awakening",
     review: [
       {
@@ -21,6 +23,8 @@ export const anime = [
   },
   {
     title: "偽物語",
+    slug: "nisemonogatari",
+    lang: "ja",
     subtitle: "When fake becomes more genuine than real",
     review: [
       {
@@ -31,6 +35,8 @@ export const anime = [
   },
   {
     title: "ハイスコアガール",
+    slug: "hi-score-girl",
+    lang: "ja",
     subtitle: "When words fail, fighting games speak",
     review: [
       {
@@ -53,6 +59,8 @@ export const anime = [
   },
   {
     title: "少女終末旅行",
+    slug: "girls-last-tour",
+    lang: "ja",
     subtitle: "Finding beauty in a world that has ended",
     review: [
       {

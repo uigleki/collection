@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
 import { meta } from "@/data/why";
 import { FULL_NIGHT } from "@/lib/moon";
-import { useNight } from "@/lib/useNight";
+import { useNight } from "@/lib/sky";
 
 /** Under the full moon the shrine points past itself (docs/why.md). */
 export function Koan() {

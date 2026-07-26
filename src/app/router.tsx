@@ -4,6 +4,7 @@ import { useScroll, useScrollMemory } from "@/lib/scroll";
 import { initTheme } from "@/lib/theme";
 import { MoonSky } from "@/scene/MoonSky";
 import { BackToTop } from "@/ui/BackToTop";
+import { Standstill } from "@/ui/Standstill";
 import { ThemeToggle } from "@/ui/ThemeToggle";
 
 function Root() {
@@ -29,17 +30,16 @@ function Root() {
 
 function BrokenNight() {
   return (
-    <main className="relative flex min-h-dvh flex-col items-center justify-center px-5 text-center">
-      <h1 className="text-title font-light tracking-tight">
-        Clouds crossed the moon.
-      </h1>
-      <p className="mt-4 text-body text-hoshi">
-        Something failed while rendering this page.
-      </p>
+    <Standstill
+      title="Clouds crossed the moon."
+      message="Something failed while rendering this page."
+    >
+      {/* a full reload, not a client navigation: the router that would have
+          carried it is the thing that just failed */}
       <a href="/" className="pill mt-10 text-body hover:text-tsukikage">
         Return to the collection
       </a>
-    </main>
+    </Standstill>
   );
 }
 

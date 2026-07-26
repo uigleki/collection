@@ -3,6 +3,7 @@ import type { Work } from "../types";
 export const games = [
   {
     title: "To the Moon",
+    slug: "to-the-moon",
     subtitle: "A memory journey embracing final moonlight vows",
     review: [
       {
@@ -21,6 +22,7 @@ export const games = [
   },
   {
     title: "What Remains of Edith Finch",
+    slug: "edith-finch",
     subtitle: "Every room a theater of memory",
     review: [
       {
@@ -39,6 +41,7 @@ export const games = [
   },
   {
     title: "Finding Paradise",
+    slug: "finding-paradise",
     subtitle: "A soul's journey toward perfect existence",
     review: [
       {
@@ -57,6 +60,7 @@ export const games = [
   },
   {
     title: "Steins;Gate",
+    slug: "steins-gate",
     subtitle: "Fate's ultimate decree",
     review: [
       {
@@ -89,6 +93,8 @@ export const games = [
   },
   {
     title: "7 年後で待ってる",
+    slug: "7-years-from-now",
+    lang: "ja",
     subtitle: "I'll be waiting for you, 7 years from now",
     review: [
       {
@@ -113,6 +119,7 @@ export const games = [
   },
   {
     title: "ASTLIBRA Revision",
+    slug: "astlibra",
     subtitle: "15 years to resurrect the golden age",
     review: [
       {

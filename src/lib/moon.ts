@@ -1,14 +1,19 @@
-import { allWorks } from "@/data/works";
-
 /**
  * The collection's lunar month: each work is one night, and the last always
  * stands under a full moon. One terminator value drives both the WebGL moon
  * and the reading progress, so the two can never disagree.
  */
 
-/** The night the moon is seen whole — the last work's night, however many
- * works the collection holds. */
-export const FULL_NIGHT = allWorks.length + 1;
+/**
+ * The night the moon is seen whole — the last work's night.
+ *
+ * Written out rather than derived from `allWorks.length`: the sky imports
+ * this on every route, and that one read would drag the whole collection —
+ * every work's prose — into the eagerly loaded graph. moon.test.ts asserts
+ * the two agree, so the collection cannot grow past its month without CI
+ * saying so.
+ */
+export const FULL_NIGHT = 15;
 
 /**
  * Terminator position across the disc, +1 (new) → -1 (full).

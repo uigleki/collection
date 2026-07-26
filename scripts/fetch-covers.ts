@@ -4,9 +4,10 @@
  *
  *   AniList (anime + anime films) · Steam CDN (games)
  *
- * For each work it writes:
+ * The collection itself is the work list — this script only knows WHERE each
+ * work's art comes from. For each work it writes:
  *   src/assets/works/<slug>.webp        — optimised cover (≤640w)
- *   src/data/generated/covers.ts        — { thumbhash, accent, w, h, source }
+ *   src/data/generated/covers.ts        — { placeholder, w, h, source }
  *
  * Run:  LD_LIBRARY_PATH=<gcc-lib> bun scripts/fetch-covers.ts
  * (libvips/sharp needs libstdc++ on PATH; the nix dev shell provides it.)
@@ -15,110 +16,31 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import sharp from "sharp";
 import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
+import { allWorks } from "../src/data/works";
+import { SOURCES } from "./cover-sources";
 
-const ROOT = resolve(import.meta.dir, "..");
+const ROOT = resolve(import.meta.dirname, "..");
 const ASSETS = resolve(ROOT, "src/assets/works");
 const GEN = resolve(ROOT, "src/data/generated");
 
-interface AnimeRef {
-  kind: "anilist";
-  title: string;
-  slug: string;
-  search: string;
-}
-interface SteamRef {
-  kind: "steam";
-  title: string;
-  slug: string;
-  appid: number;
-}
-type Ref = AnimeRef | SteamRef;
-
-const REFS: Ref[] = [
-  // anime
-  {
-    kind: "anilist",
-    title: "化物語",
-    slug: "bakemonogatari",
-    search: "Bakemonogatari",
-  },
-  {
-    kind: "anilist",
-    title: "偽物語",
-    slug: "nisemonogatari",
-    search: "Nisemonogatari",
-  },
-  {
-    kind: "anilist",
-    title: "ハイスコアガール",
-    slug: "hi-score-girl",
-    search: "Hi Score Girl",
-  },
-  {
-    kind: "anilist",
-    title: "少女終末旅行",
-    slug: "girls-last-tour",
-    search: "Shoujo Shuumatsu Ryokou",
-  },
-  // anime films
-  {
-    kind: "anilist",
-    title: "打ち上げ花火、下から見るか？横から見るか？",
-    slug: "fireworks",
-    search: "Uchiage Hanabi",
-  },
-  {
-    kind: "anilist",
-    title: "ペンギン・ハイウェイ",
-    slug: "penguin-highway",
-    search: "Penguin Highway",
-  },
-  // games (Steam appid)
-  { kind: "steam", title: "To the Moon", slug: "to-the-moon", appid: 206440 },
-  {
-    kind: "steam",
-    title: "What Remains of Edith Finch",
-    slug: "edith-finch",
-    appid: 501300,
-  },
-  {
-    kind: "steam",
-    title: "Finding Paradise",
-    slug: "finding-paradise",
-    appid: 337340,
-  },
-  { kind: "steam", title: "Steins;Gate", slug: "steins-gate", appid: 412830 },
-  {
-    kind: "steam",
-    title: "7 年後で待ってる",
-    slug: "7-years-from-now",
-    appid: 1562920,
-  },
-  {
-    kind: "steam",
-    title: "ASTLIBRA Revision",
-    slug: "astlibra",
-    appid: 1718570,
-  },
-];
-
 interface CoverMeta {
-  title: string;
   slug: string;
   width: number;
   height: number;
-  thumbhash: string;
   placeholder: string;
-  accent: string;
   credit: string;
   sourceUrl: string;
 }
 
-const hex = (r: number, g: number, b: number) =>
-  `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")}`;
+/** What a source hands back before the image is processed. */
+interface Fetched {
+  url: string;
+  credit: string;
+  sourceUrl: string;
+}
 
-async function anilist(search: string) {
-  const query = `query($s:String){Media(search:$s,type:ANIME){coverImage{extraLarge color} siteUrl}}`;
+async function anilist(search: string): Promise<Fetched> {
+  const query = `query($s:String){Media(search:$s,type:ANIME){coverImage{extraLarge} siteUrl}}`;
   const res = await fetch("https://graphql.anilist.co", {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -128,7 +50,7 @@ async function anilist(search: string) {
   const json = (await res.json()) as {
     data?: {
       Media?: {
-        coverImage?: { extraLarge?: string; color?: string };
+        coverImage?: { extraLarge?: string };
         siteUrl?: string;
       };
     };
@@ -137,16 +59,14 @@ async function anilist(search: string) {
   if (!m?.coverImage?.extraLarge) throw new Error("no cover");
   return {
     url: m.coverImage.extraLarge,
-    fallbackAccent: m.coverImage.color,
     credit: "AniList",
     sourceUrl: m.siteUrl ?? "https://anilist.co",
   };
 }
 
-function steam(appid: number) {
+function steam(appid: number): Fetched {
   return {
     url: `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/library_600x900_2x.jpg`,
-    fallbackAccent: undefined as string | undefined,
     credit: "Steam",
     sourceUrl: `https://store.steampowered.com/app/${appid}/`,
   };
@@ -162,17 +82,9 @@ async function download(url: string) {
   return Buffer.from(await res.arrayBuffer());
 }
 
-async function process(
-  ref: Ref,
-  meta: {
-    url: string;
-    fallbackAccent?: string;
-    credit: string;
-    sourceUrl: string;
-  },
-): Promise<CoverMeta> {
+async function process(slug: string, meta: Fetched): Promise<CoverMeta> {
   const raw = await download(meta.url);
-  const dest = resolve(ASSETS, `${ref.slug}.webp`);
+  const dest = resolve(ASSETS, `${slug}.webp`);
   const out = sharp(raw).resize({ width: 640, withoutEnlargement: true });
   const { width = 0, height = 0 } = await out
     .clone()
@@ -180,39 +92,44 @@ async function process(
     .toFile(dest)
     .then(() => out.metadata());
 
-  // thumbhash from a downscaled RGBA
+  // The blurred stand-in, baked as a data URL rather than as thumbhash bytes:
+  // the page paints it directly, so the decoder never has to ship to a reader.
   const small = await sharp(raw)
     .resize(90, 90, { fit: "inside" })
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
-  const hashBytes = rgbaToThumbHash(
-    small.info.width,
-    small.info.height,
-    small.data,
+  const placeholder = thumbHashToDataURL(
+    rgbaToThumbHash(small.info.width, small.info.height, small.data),
   );
-  const thumbhash = Buffer.from(hashBytes).toString("base64");
-  const placeholder = thumbHashToDataURL(hashBytes);
-
-  // accent: dominant colour (fallback to source-provided accent)
-  let accent = meta.fallbackAccent ?? "#6e8ca0";
-  try {
-    const d = (await sharp(raw).stats()).dominant;
-    accent = hex(d.r, d.g, d.b);
-  } catch {}
 
   const m = await sharp(dest).metadata();
   return {
-    title: ref.title,
-    slug: ref.slug,
+    slug,
     width: m.width ?? width,
     height: m.height ?? height,
-    thumbhash,
     placeholder,
-    accent,
     credit: meta.credit,
     sourceUrl: meta.sourceUrl,
   };
+}
+
+/** The generated module: cover data only. Anything derived from it — the
+ *  by-slug index, the asset URLs — is built in src/lib/covers.ts. */
+function emit(covers: readonly CoverMeta[]): Promise<void> {
+  const body = `// GENERATED by scripts/fetch-covers.ts — do not edit by hand.
+export interface CoverMeta {
+  slug: string;
+  width: number;
+  height: number;
+  placeholder: string;
+  credit: string;
+  sourceUrl: string;
+}
+
+export const covers = ${JSON.stringify(covers, null, 2)} as const satisfies readonly CoverMeta[];
+`;
+  return writeFile(resolve(GEN, "covers.ts"), body);
 }
 
 async function main() {
@@ -220,43 +137,34 @@ async function main() {
   await mkdir(GEN, { recursive: true });
 
   const covers: CoverMeta[] = [];
-  for (const ref of REFS) {
+  let sourced = 0;
+  for (const { work } of allWorks) {
+    const source = SOURCES[work.slug];
+    if (!source) {
+      console.log(`· ${work.slug}  no licensed source — typographic panel`);
+      continue;
+    }
+    sourced++;
     try {
       const meta =
-        ref.kind === "anilist" ? await anilist(ref.search) : steam(ref.appid);
-      const cover = await process(ref, meta);
+        source.kind === "anilist"
+          ? await anilist(source.search)
+          : steam(source.appid);
+      const cover = await process(work.slug, meta);
       covers.push(cover);
       console.log(
-        `✓ ${ref.slug}  ${cover.width}x${cover.height}  ${cover.accent}  (${cover.credit})`,
+        `✓ ${work.slug}  ${cover.width}x${cover.height}  (${cover.credit})`,
       );
-      if (ref.kind === "anilist") await new Promise((r) => setTimeout(r, 800)); // rate-limit
+      if (source.kind === "anilist")
+        await new Promise((r) => setTimeout(r, 800)); // rate-limit
     } catch (e) {
-      console.warn(`✗ ${ref.slug}: ${(e as Error).message}`);
+      console.warn(`✗ ${work.slug}: ${(e as Error).message}`);
     }
   }
 
-  const body = `// GENERATED by scripts/fetch-covers.ts — do not edit by hand.
-export interface CoverMeta {
-  title: string;
-  slug: string;
-  width: number;
-  height: number;
-  thumbhash: string;
-  placeholder: string;
-  accent: string;
-  credit: string;
-  sourceUrl: string;
-}
-
-export const covers = ${JSON.stringify(covers, null, 2)} as const satisfies readonly CoverMeta[];
-
-export const coverByTitle: Record<string, CoverMeta> = Object.fromEntries(
-  covers.map((c) => [c.title, c]),
-);
-`;
-  await writeFile(resolve(GEN, "covers.ts"), body);
+  await emit(covers);
   console.log(
-    `\nWrote ${covers.length}/${REFS.length} covers → src/data/generated/covers.ts`,
+    `\nWrote ${covers.length}/${sourced} covers → src/data/generated/covers.ts`,
   );
 }
 

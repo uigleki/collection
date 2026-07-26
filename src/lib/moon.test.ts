@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { allWorks } from "@/data/works";
 import { FULL_NIGHT, terminator } from "./moon";
+
+// moon.ts writes FULL_NIGHT out so the sky never imports the works data.
+// This is the seam that keeps the constant honest.
+it("gives the last work the full moon", () => {
+  expect(FULL_NIGHT).toBe(allWorks.length + 1);
+});
 
 describe("terminator", () => {
   it("is +1 on night 1 (new moon — nothing lit)", () => {

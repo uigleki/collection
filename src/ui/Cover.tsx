@@ -1,10 +1,9 @@
 import { useState } from "react";
+import type { Work } from "@/data/types";
 import { accentFor, coverFor } from "@/lib/covers";
 
 interface CoverProps {
-  title: string;
-  slug: string;
-  lang?: "ja" | undefined;
+  work: Work;
   /** participate in the moon-phase shared-element morph (one per navigation) */
   morph?: boolean;
   /** eager-load + high fetch priority (the room's own cover is its LCP) */
@@ -20,14 +19,13 @@ interface CoverProps {
  * typographic panel instead.
  */
 export function Cover({
-  title,
-  slug,
-  lang,
+  work,
   morph = false,
   priority = false,
   className = "",
 }: CoverProps) {
-  const cover = coverFor(title);
+  const { title, slug, lang } = work;
+  const cover = coverFor(slug);
   const [loaded, setLoaded] = useState(false);
 
   const morphStyle = morph
@@ -84,7 +82,7 @@ export function Cover({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-sm"
         style={{
-          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accentFor(slug, title)} 45%, transparent)`,
+          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accentFor(slug)} 45%, transparent)`,
         }}
       />
     </div>

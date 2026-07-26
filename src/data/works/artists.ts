@@ -3,6 +3,8 @@ import type { Work } from "../types";
 export const artists = [
   {
     title: "カントク",
+    slug: "kantoku",
+    lang: "ja",
     subtitle: "Master of moe aesthetics and light",
     review: [
       {

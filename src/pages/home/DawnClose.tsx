@@ -1,43 +1,38 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
+import { couplets, meta } from "@/data/why";
+import { RISE } from "@/lib/motion";
 import { revealed } from "@/lib/reveal";
+
+// The essay's own final beat, verbatim: the hero's question is answered in
+// its own words — beauty for beauty, question for question.
+const [question, answer] = couplets.closing;
+
+const beats = revealed("beat");
 
 /** The closing beat: rest, not climax, under a lightening sky. */
 export function DawnClose() {
   const reduced = useReducedMotion();
-  const settled = reduced || revealed.has("dawn-close");
+  const settled = reduced || beats.has("dawn-close");
 
   // Masked lines can't observe themselves: clipped by the overflow-hidden
   // parent their visible area is zero and the viewport trigger never fires.
   // The (unclipped) heading observes; variants carry the reveal down.
   const line = (delay: number) => ({
     hidden: { y: "1.05em" },
-    visible: {
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        stiffness: 60,
-        damping: 19,
-        delay,
-      },
-    },
+    visible: { y: 0, transition: { ...RISE, delay } },
   });
 
   return (
     <footer className="relative flex min-h-dvh flex-col justify-center">
       <motion.div
-        onViewportEnter={() => revealed.add("dawn-close")}
+        onViewportEnter={() => beats.add("dawn-close")}
         initial={settled ? false : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 1.2 }}
       >
-        {/* the essay's own final beat, verbatim: the hero's question is
-            answered in its own words — beauty for beauty, question for
-            question */}
-        <p className="max-w-xl text-lead text-hoshi italic">
-          The beauty you were born to experience?
-        </p>
+        <p className="max-w-xl text-lead text-hoshi italic">{question}</p>
         <motion.h2
           initial={settled ? false : "hidden"}
           whileInView="visible"
@@ -46,7 +41,7 @@ export function DawnClose() {
         >
           <span className="block overflow-hidden">
             <motion.span variants={line(0.15)} className="block">
-              You&rsquo;ve found it.
+              {answer}
             </motion.span>
           </span>
         </motion.h2>
@@ -67,7 +62,7 @@ export function DawnClose() {
             CC BY-SA 4.0
           </a>
         </p>
-        <p className="italic">I honor the creators who refuse shortcuts.</p>
+        <p className="italic">{meta.footer}</p>
       </div>
     </footer>
   );

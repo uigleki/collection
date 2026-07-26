@@ -1,6 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
-import { music } from "@/data/works";
-import { useGlade } from "@/lib/useNight";
+import { music, trackName } from "@/data/works";
+import { LIST } from "@/lib/motion";
+import { useGlade } from "@/lib/sky";
+import { Interlude } from "./Interlude";
 
 /** The songs live on the water; in view, the moonglade burns brighter. */
 export function MusicWater() {
@@ -9,46 +11,41 @@ export function MusicWater() {
 
   return (
     <section ref={ref} aria-label="Music" className="relative py-20 md:py-28">
-      <header className="mb-14 flex min-h-[24vh] items-end">
-        <div className="flex items-baseline gap-4">
-          <h2 className="text-title font-light tracking-tight">Music</h2>
-          <span className="font-mono text-caption text-hoshi tabular-nums">
-            {String(music.length).padStart(2, "0")}
-          </span>
-        </div>
-      </header>
+      <Interlude
+        name="Music"
+        count={music.length}
+        className="mb-14 min-h-[24vh]"
+      />
 
       <ul className="divide-y divide-border/60">
-        {music.map((track) => {
-          const cut = track.title.indexOf(" - ");
-          const artist = cut > 0 ? track.title.slice(0, cut) : null;
-          const song = cut > 0 ? track.title.slice(cut + 3) : track.title;
-          return (
-            <motion.li
-              key={track.title}
-              initial={reduced ? false : { opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "0px 0px -6% 0px" }}
-              transition={{ type: "spring", stiffness: 90, damping: 22 }}
-              className="grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
-            >
-              <span lang={track.lang} className="text-body">
-                {artist ? (
-                  <span className="font-mono text-caption text-hoshi">
-                    {artist}
-                    <span aria-hidden="true" className="mx-2">
-                      ·
-                    </span>
-                  </span>
-                ) : null}
-                <span className="font-medium">{song}</span>
+        {music.map((track) => (
+          <motion.li
+            key={trackName(track)}
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "0px 0px -6% 0px" }}
+            transition={LIST}
+            className="grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
+          >
+            <span className="text-body">
+              <span
+                lang={track.artistLang}
+                className="font-mono text-caption text-hoshi"
+              >
+                {track.artist}
+                <span aria-hidden="true" className="mx-2">
+                  ·
+                </span>
               </span>
-              <span className="text-caption text-hoshi italic md:text-body">
-                {track.subtitle}
+              <span lang={track.lang} className="font-medium">
+                {track.title}
               </span>
-            </motion.li>
-          );
-        })}
+            </span>
+            <span className="text-caption text-hoshi italic md:text-body">
+              {track.subtitle}
+            </span>
+          </motion.li>
+        ))}
       </ul>
     </section>
   );

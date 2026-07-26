@@ -14,18 +14,20 @@ sky (nothing has been seen yet); each of the fourteen works is one night and
 where the collection says its one honest line — "The finger pointing at the
 moon is not the moon" — and points at /why. The forty-nine songs live after
 it on the water, where the sky's moon yields to its reflection. The page
-ends in rest, not climax: a full-bleed "The search can end."
+ends in rest, not climax: the essay's own last line, the hero's question
+answered in its own words — "The beauty you were born to experience? /
+You've found it."
 
 The reader is never told any of this. The mechanic is ambient; labels were
 tried and removed. The page opens on the collection's fundamental question
 ("If we're here to experience beauty…") and closes on its answer — and
-every narrative line on the site is VERBATIM from docs/why.md: the owner's
-prose is polished word by word, and inventing sentences next to it is a
-defect. UI utility copy (buttons, 404) is the only exception.
+every narrative line on the site is VERBATIM from docs/why.md: that prose is
+polished word by word, and inventing sentences next to it is a defect. UI
+utility copy (buttons, 404) is the only exception.
 
 **The signature (the one bold thing):** scroll waxes the moon. One
 persistent WebGL sky (phase-accurate terminator from `src/lib/moon.ts`,
-ridge-wave water with a Cox-Munk moonglade, star field). Everything else is
+ridge-wave water, a moonglade of discrete glints, star field). Everything else is
 quiet: no cursor gimmicks, no sound, no second ambient effect.
 
 Why this passes the three-fold test:
@@ -55,17 +57,20 @@ Night (default) — named traditional colors:
 - **tsukikage (#cdb489)** 香色 — the moon's warmth; the only chrome accent.
 
 Dusk (light theme) — a BRIGHT golden hour, so ink reads anywhere: pastel
-periwinkle over pale gold in the shader, warm dusk paper (`dusk-yoru`) for
-the ground, deep ink (`dusk-tsuki`) for text, sunset gold
-(`dusk-tsukikage`) as the lone accent. The saturation budget is spent on
-exactly one thing — the golden ball.
+periwinkle over pale gold in the shader, warm dusk paper for the ground,
+deep ink for text, sunset gold as the lone accent. There is no second set
+of token names: `:root[data-theme="light"]` rebinds the same six, so every
+component keeps asking for `tsuki` and gets whichever sky it is under. The
+saturation budget is spent on exactly one thing — the golden ball.
 
-Work accents (`accent-*`) are each work's canonical color — the color the
+Work accents are each work's canonical color — the color the
 work is actually known by (Senjougahara's purple, the Ocean's blue,
 Kurisu's auburn), researched from the web, calibrated by hand against the
 night ground; 少女終末旅行 is deliberately muted because the work itself
-is. They appear only inside that work's row and room (title underline,
-cover hairline and glow, review labels via color-mix toward tsuki).
+is. They live in `src/data/accents.ts` rather than as CSS tokens — chrome
+must never be able to reach for one. They appear only inside that work's
+row and room (title underline, cover hairline and glow, review labels via
+color-mix toward tsuki).
 Cover art is always true color — never filtered, never tinted.
 
 Contrast floor: WCAG AA (4.5:1 body, 3:1 large) in BOTH themes, verified by
@@ -136,7 +141,10 @@ Do:
   a machine without a GPU should not be handed a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05,
   axe zero violations in both themes, keyboard-complete (skip link, h1
-  focus per route change, visible rings).
+  focus per route change, visible rings). Axe and the keyboard paths run in
+  CI; the Lighthouse numbers are asserted by `bun run lighthouse`, which is
+  run by hand — a change that touches the shader or the entry graph is not
+  finished until it has passed.
 
 Don't:
 

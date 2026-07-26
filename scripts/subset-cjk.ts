@@ -21,7 +21,7 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import subsetFont from "subset-font";
 
-const ROOT = resolve(import.meta.dir, "..");
+const ROOT = resolve(import.meta.dirname, "..");
 const SRC = resolve(ROOT, "src");
 const OUT_DIR = resolve(ROOT, "src/assets/fonts");
 
@@ -92,7 +92,9 @@ async function main() {
   const glyphs = await collectGlyphs();
   console.log(`Collecting glyphs → ${[...glyphs].length} unique codepoints`);
   await mkdir(OUT_DIR, { recursive: true });
-  for (const face of FACES) await build(glyphs, face);
+  // Both faces are a ~16 MB download apiece and share nothing but the glyph
+  // set above, so they overlap instead of queueing.
+  await Promise.all(FACES.map((face) => build(glyphs, face)));
 }
 
 await main();

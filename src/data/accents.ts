@@ -2,8 +2,9 @@
  * Each work's canonical color — the color the work itself is known by
  * (heroine, key visual, studio branding), researched from the web and
  * calibrated by hand to read against the night ground. This is art
- * direction, not extraction: the cover-derived accent remains only as a
- * fallback for anything unlisted.
+ * direction, not extraction — nothing here is sampled from the cover art.
+ * A work not listed falls back to the moon's own warmth, and works.test.ts
+ * keeps that fallback unreachable.
  *
  * Sources (per research, confidence varies — see git history for the
  * full sourced table):

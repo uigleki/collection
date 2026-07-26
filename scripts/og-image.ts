@@ -8,7 +8,7 @@
 import { resolve } from "node:path";
 import { chromium } from "@playwright/test";
 
-const OUT = resolve(import.meta.dir, "../public/og.png");
+const OUT = resolve(import.meta.dirname, "../public/og.png");
 
 const browser = await chromium.launch();
 const page = await browser.newPage({

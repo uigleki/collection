@@ -1,5 +1,7 @@
 import { type ReactNode, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
+import type { Work } from "@/data/types";
+import { Icon } from "./Icon";
 
 /**
  * The page's fixtures: no bar, no gradient — the same glass chips as the
@@ -50,19 +52,9 @@ export function Doorway({ children }: { children?: ReactNode }) {
         title="Back to the collection"
         className="chip fixed top-5 left-5 z-50"
       >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
+        <Icon>
           <path d="M19 12H5M11 18l-6-6 6-6" />
-        </svg>
+        </Icon>
       </button>
       {children}
     </>
@@ -72,15 +64,14 @@ export function Doorway({ children }: { children?: ReactNode }) {
 /** A neighbouring work, standing at the room's edge. */
 export function EdgeChip({
   side,
-  title,
-  lang,
+  work,
   onClick,
 }: {
   side: "prev" | "next";
-  title: string;
-  lang?: "ja" | undefined;
+  work: Work;
   onClick: () => void;
 }) {
+  const { title, lang } = work;
   const edge = side === "prev" ? "left-5 flex-row" : "right-5 flex-row-reverse";
   // Hidden on touch-sized screens: there the shelf is walked by swiping,
   // and a mid-height chip would sit on top of the reading column.
@@ -94,23 +85,13 @@ export function EdgeChip({
         aria-label={`${side === "prev" ? "Previous" : "Next"}: ${title}`}
         className="chip"
       >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          width="16"
-          height="16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
+        <Icon>
           {side === "prev" ? (
             <path d="M15 18l-6-6 6-6" />
           ) : (
             <path d="M9 6l6 6-6 6" />
           )}
-        </svg>
+        </Icon>
       </button>
       <span
         lang={lang}

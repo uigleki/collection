@@ -1,16 +1,9 @@
-import { coverByTitle } from "./generated/covers";
-import type { PageMeta, Work, WorkCategory } from "./types";
+import type { Track, Work, WorkCategory } from "./types";
 import { anime } from "./works/anime";
 import { artists } from "./works/artists";
 import { games } from "./works/games";
 import { movies } from "./works/movies";
 import { music } from "./works/music";
-
-export const siteMeta = {
-  title: "Perfect Collection",
-  description:
-    "Works that enrich rather than diminish - created from love, not manipulation.",
-} as const satisfies PageMeta;
 
 export const categories = [
   { name: "Anime", works: anime },
@@ -21,29 +14,16 @@ export const categories = [
 
 export { music };
 
-// A slug is the stable identity of a work — its room URL and its cover asset
-// share it. Twelve slugs come straight from the generated cover metadata; the
-// two works with no licensed image source are named explicitly here so every
-// work resolves without touching the content files.
-const SLUG_OVERRIDES: Record<string, string> = {
-  "Charlie and the Chocolate Factory": "charlie-chocolate-factory",
-  カントク: "kantoku",
-};
+/**
+ * A song's full name. The title alone is not one — two different artists
+ * each have a song called LIFE — so performer and song together identify a
+ * track, both on the water and in the test that proves no two collide.
+ */
+export const trackName = (track: Track) => `${track.artist} · ${track.title}`;
 
-function slugFor(title: string): string {
-  const slug = coverByTitle[title]?.slug ?? SLUG_OVERRIDES[title];
-  if (!slug) throw new Error(`No slug resolved for work: ${title}`);
-  return slug;
-}
-
-// Every non-Latin title in the four work media is Japanese (the Chinese in
-// this collection lives only in the music). Kana detection is NOT enough:
-// 化物語 and 少女終末旅行 are kanji-only yet must take Japanese glyph forms.
-export const CJK = /[぀-ヿ㐀-鿿]/;
-
+/** A work placed in the collection: what it is, and where it stands. */
 export interface WorkEntry {
   readonly work: Work;
-  readonly slug: string;
   readonly category: string;
   /** 1-based position within the work's own medium (Anime 01…04) */
   readonly ordinal: number;
@@ -52,31 +32,35 @@ export interface WorkEntry {
    * the first work is night 2 and the last stands under the full moon (15).
    */
   readonly night: number;
-  /** language of the title where it isn't Latin */
-  readonly lang?: "ja";
 }
 
-// Flatten the curation into addressable rooms. Order is the reading order of
-// the collection itself, so each work's night is simply its place in line.
-export const allWorks: readonly WorkEntry[] = categories
-  .flatMap((category) =>
-    category.works.map((work: Work, i) => ({
-      work,
-      slug: slugFor(work.title),
-      category: category.name,
-      ordinal: i + 1,
-      ...(CJK.test(work.title) ? { lang: "ja" as const } : {}),
-    })),
-  )
-  .map((entry, i) => ({ ...entry, night: i + 2 }));
+export interface Section {
+  readonly name: string;
+  readonly entries: readonly WorkEntry[];
+}
 
-export const workBySlug: ReadonlyMap<string, WorkEntry> = new Map(
-  allWorks.map((entry) => [entry.slug, entry]),
+// Turn the curation into addressable rooms, keeping the grouping the home
+// page reads rather than flattening and re-joining it by category NAME —
+// a display string is no way to find a work again. Nights are handed out as
+// the pass walks, so a work's night is simply its place in reading order.
+let night = 2;
+export const sections: readonly Section[] = categories.map((category) => ({
+  name: category.name,
+  entries: category.works.map((work: Work, i) => ({
+    work,
+    category: category.name,
+    ordinal: i + 1,
+    night: night++,
+  })),
+}));
+
+export const allWorks: readonly WorkEntry[] = sections.flatMap(
+  (section) => section.entries,
 );
 
-export function entriesFor(category: string): readonly WorkEntry[] {
-  return allWorks.filter((entry) => entry.category === category);
-}
+export const workBySlug: ReadonlyMap<string, WorkEntry> = new Map(
+  allWorks.map((entry) => [entry.work.slug, entry]),
+);
 
 /**
  * Previous / next room across the WHOLE collection, in reading order —
@@ -87,7 +71,7 @@ export function neighbors(slug: string): {
   prev: WorkEntry | null;
   next: WorkEntry | null;
 } {
-  const i = allWorks.findIndex((e) => e.slug === slug);
+  const i = allWorks.findIndex((e) => e.work.slug === slug);
   if (i < 0) return { prev: null, next: null };
   return {
     prev: allWorks[i - 1] ?? null,

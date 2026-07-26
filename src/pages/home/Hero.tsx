@@ -1,13 +1,11 @@
 import { motion, useReducedMotion } from "motion/react";
 import type { RefObject } from "react";
-import { data as whyData } from "@/data/why";
-import { useNight } from "@/lib/useNight";
+import { couplets } from "@/data/why";
+import { RISE } from "@/lib/motion";
+import { useNight } from "@/lib/sky";
 
 // The opening question, verbatim from docs/why.md — the page is its answer.
-// House rule: narrative copy is never invented, only quoted.
-const question = (whyData.opening[0] ?? "").replaceAll("**", "");
-const cut = question.indexOf(", ") + 2;
-const [questionA, questionB] = [question.slice(0, cut), question.slice(cut)];
+const [questionA, questionB] = couplets.opening;
 
 /** The opening sky: no loader, nothing to wait for. */
 export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
@@ -20,12 +18,7 @@ export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
       : ({
           initial: { opacity: 0, y: "0.6em" },
           animate: { opacity: 1, y: 0 },
-          transition: {
-            type: "spring" as const,
-            stiffness: 60,
-            damping: 18,
-            delay,
-          },
+          transition: { ...RISE, delay },
         } as const);
 
   return (
@@ -37,7 +30,7 @@ export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
         <h1
           ref={h1}
           tabIndex={-1}
-          className="text-display font-light tracking-tight outline-none"
+          className="text-display font-light tracking-tight"
         >
           <span className="block overflow-hidden">
             <motion.span className="block" {...rise(0.05)}>

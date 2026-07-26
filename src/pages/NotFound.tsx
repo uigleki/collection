@@ -1,35 +1,21 @@
-import { useEffect } from "react";
 import { Link } from "react-router";
+import { siteMeta } from "@/data/site";
+import { useSky } from "@/lib/sky";
 import { usePage } from "@/lib/usePage";
-import { sky } from "@/scene/signal";
+import { Standstill } from "@/ui/Standstill";
 
 /** A page that isn't in the collection. */
 export function NotFound() {
-  const h1 = usePage("Not found — Perfect Collection");
+  const h1 = usePage(`Not found — ${siteMeta.title}`);
 
-  useEffect(() => {
-    sky.targetNight = 1;
-    sky.dim = 0.4;
-    return () => {
-      sky.dim = 0;
-    };
-  }, []);
+  useSky({ dim: 0.4, night: 1 });
 
   return (
-    <main
-      id="main"
-      className="relative flex min-h-dvh flex-col items-center justify-center px-5 text-center"
+    <Standstill
+      h1={h1}
+      title="Nothing stands here."
+      message="Whatever stood here has set below the horizon."
     >
-      <h1
-        ref={h1}
-        tabIndex={-1}
-        className="text-title font-light tracking-tight outline-none"
-      >
-        Nothing stands here.
-      </h1>
-      <p className="mt-4 text-body text-hoshi">
-        Whatever stood here has set below the horizon.
-      </p>
       <Link
         to="/"
         viewTransition
@@ -37,7 +23,7 @@ export function NotFound() {
       >
         Return to the collection
       </Link>
-    </main>
+    </Standstill>
   );
 }
 

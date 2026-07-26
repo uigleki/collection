@@ -128,7 +128,7 @@ vec3 moonLayer(vec3 base, vec2 uv, float aspect) {
     // maria — the faint seas, so the full moon has a face, not a lamp
     float seas = fbm(q * 2.6 + 19.7) * 0.10 + fbm(q * 6.0 + 4.2) * 0.045;
     vec3 face = MOON_C * (1.0 - seas);
-    face = mix(face, face * vec3(1.02, 1.0, 0.95), 0.25); // breath of warmth
+    face = mix(face, face * vec3(1.02, 1.0, 0.95), 0.25);
     // earthshine keeps the dark limb barely present
     vec3 dark = mix(base, MOON_C, 0.07);
     vec3 moon = mix(dark, face, lit);
@@ -199,7 +199,7 @@ void main() {
     vec3 base = mix(vec3(0.012, 0.020, 0.042), vec3(0.760, 0.690, 0.575), uDay);
     float fres = 0.05 + 0.95 * pow(1.0 - depth, 3.0);
     vec3 water = mix(base, skyRef, fres * 0.9);
-    water += base * hC * 0.35; // crests catch a breath of light
+    water += base * hC * 0.35;
 
     // The moonglade: a path of discrete glints, one per wave facet tilted
     // to throw the moon back at the eye — narrow as the moon itself at the
@@ -284,21 +284,30 @@ export function MoonSky() {
       uGlade: { value: 0 },
       uDim: { value: 0 },
     };
-    if (import.meta.env.DEV) {
-      (window as unknown as Record<string, unknown>).__uni = uniforms;
-    }
     const program = new Program(gl, { vertex: VERT, fragment: FRAG, uniforms });
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
 
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    // Both of these are layout reads, and both only change when something
+    // resizes — measured here rather than in the frame loop, where they cost
+    // a forced style-and-layout flush sixty times a second.
+    let aspect = 1;
+    let span = 0;
+    const measure = () => {
+      aspect = el.clientWidth / Math.max(el.clientHeight, 1);
+      span = document.documentElement.scrollHeight - window.innerHeight;
+    };
     const resize = () => {
       renderer.setSize(el.clientWidth, el.clientHeight);
       uniforms.uRes.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
+      measure();
     };
     resize();
 
     // The entry beat: the living sky rises out of the still poster once,
     // when the visit begins — an arrival, not a loader.
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!reduced.matches) {
       el.style.opacity = "0";
       el.style.transition = "opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1)";
       requestAnimationFrame(() => {
@@ -309,8 +318,10 @@ export function MoonSky() {
     }
     const ro = new ResizeObserver(resize);
     ro.observe(el);
-
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // The document grows and shrinks without the canvas ever changing size —
+    // covers decoding, entrances settling, a route swapping the whole page.
+    const docRo = new ResizeObserver(measure);
+    docRo.observe(document.body);
 
     let raf = 0;
     let last = performance.now();
@@ -319,65 +330,74 @@ export function MoonSky() {
     let flow = 0;
     let glade = 0;
     let dim = 0;
+    let held = false;
+    // Eased and sampled entirely inside this loop — nothing outside the sky
+    // ever reads them, so they are locals, not part of the page's channel.
+    let night = 1;
+    let velocity = 0;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const dt = Math.min((now - last) / 1000, 0.1);
       last = now;
+      // reduced motion: the ambient time stands still and states cut cleanly,
+      // but the moon still shows the truthful phase for where the reader is.
+      const still = reduced.matches;
+
+      // A view transition is animating over the page: the canvas is fully
+      // covered by its snapshots, so skip the draw — and the scroll sampling
+      // below with it, since that is where the frame's layout reads live and
+      // the morph needs them least. The clock keeps ticking: no dt jump.
+      if (sky.hold) {
+        held = true;
+        return;
+      }
+      if (held) {
+        // scroll restoration moved the page while nothing was watching
+        held = false;
+        lastY = window.scrollY;
+      }
 
       // Where the reader is. Sampled here rather than in its own rAF: the
       // sky is the only thing that reads these, and this loop already runs
       // every frame. Taken from window.scrollY, so it is identical with or
       // without Lenis.
       const y = window.scrollY;
-      sky.velocity += (y - lastY - sky.velocity) * 0.25;
+      velocity += (y - lastY - velocity) * 0.25;
       lastY = y;
-      const span = document.documentElement.scrollHeight - window.innerHeight;
-      sky.progress = span > 0 ? y / span : 0;
+      const progress = span > 0 ? y / span : 0;
       // An instant jump (deep link, keyboard End) can skip every night's
-      // observer band on the HOME page; past the works the moon must
-      // already stand full. Nowhere else — a room's own scroll must never
-      // touch the month (it did, and read as the moon moving at random).
+      // observer band. Which pages that matters on is the page's business,
+      // not the shader's — it arrives on the channel like everything else.
       if (
-        location.pathname === "/" &&
-        sky.progress > 0.6 &&
+        sky.waxWithProgress &&
+        progress > 0.6 &&
         sky.targetNight < FULL_NIGHT
       ) {
         sky.targetNight = FULL_NIGHT;
       }
 
-      // A view transition is animating over the page: the canvas is fully
-      // covered by its snapshots, so skip the draw and give the morph the
-      // whole frame budget. The clock above keeps ticking — no dt jump.
-      if (sky.hold) return;
-
-      // reduced motion: the ambient time stands still and states cut cleanly,
-      // but the moon still shows the truthful phase for where the reader is.
-      const still = reduced.matches;
       if (!still) {
         time += dt;
         // integrate the water's phase: faster while the reader scrolls,
         // continuous always
-        const v = Math.min(Math.abs(sky.velocity) / 40, 1);
+        const v = Math.min(Math.abs(velocity) / 40, 1);
         flow += (0.28 + v * 1.1) * dt;
       }
 
-      sky.night = still
-        ? sky.targetNight
-        : ease(sky.night, sky.targetNight, 3.0, dt);
+      night = still ? sky.targetNight : ease(night, sky.targetNight, 3.0, dt);
       sky.day = still ? sky.targetDay : ease(sky.day, sky.targetDay, 4.0, dt);
       glade = still ? sky.glade : ease(glade, sky.glade, 2.2, dt);
       dim = still ? sky.dim : ease(dim, sky.dim, 4.0, dt);
 
-      const aspect = el.clientWidth / Math.max(el.clientHeight, 1);
-      const alt = (sky.night - 1) / (FULL_NIGHT - 1);
-      uniforms.uPhase.value = terminator(sky.night);
-      uniforms.uMoon.value = [aspect > 1.05 ? 0.66 : 0.5, 0.52 + 0.32 * alt];
+      const alt = (night - 1) / (FULL_NIGHT - 1);
+      uniforms.uPhase.value = terminator(night);
+      uniforms.uMoon.value[0] = aspect > 1.05 ? 0.66 : 0.5;
+      uniforms.uMoon.value[1] = 0.52 + 0.32 * alt;
       uniforms.uTime.value = time;
       uniforms.uFlow.value = flow;
-      uniforms.uVel.value = still ? 0 : sky.velocity;
+      uniforms.uVel.value = still ? 0 : velocity;
       uniforms.uDay.value = sky.day;
-      uniforms.uDawn.value =
-        sky.progress > 0.84 ? (sky.progress - 0.84) / 0.16 : 0;
+      uniforms.uDawn.value = progress > 0.84 ? (progress - 0.84) / 0.16 : 0;
       uniforms.uGlade.value = glade;
       uniforms.uDim.value = dim;
 
@@ -399,6 +419,7 @@ export function MoonSky() {
       cancelAnimationFrame(raf);
       document.removeEventListener("visibilitychange", onVisibility);
       ro.disconnect();
+      docRo.disconnect();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
       gl.canvas.remove();
     };

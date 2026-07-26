@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { categories, entriesFor, siteMeta } from "@/data/works";
+import { siteMeta } from "@/data/site";
+import { sections } from "@/data/works";
+import { useSky } from "@/lib/sky";
 import { usePage } from "@/lib/usePage";
-import { sky } from "@/scene/signal";
 import { DawnClose } from "./DawnClose";
 import { Hero } from "./Hero";
 import { Interlude } from "./Interlude";
@@ -13,9 +13,8 @@ import { NightRow } from "./NightRow";
 export function Home() {
   const h1 = usePage(siteMeta.title);
 
-  useEffect(() => {
-    sky.dim = 0;
-  }, []);
+  // The one page that is a whole month: scrolling it waxes the moon.
+  useSky({ waxWithProgress: true });
 
   return (
     <main id="main" className="relative">
@@ -24,11 +23,11 @@ export function Home() {
       <div className="scrim">
         <div className="mx-auto max-w-6xl px-5 md:px-12">
           <div className="md:max-w-[58%]">
-            {categories.map((category) => (
-              <section key={category.name} aria-label={category.name}>
-                <Interlude name={category.name} count={category.works.length} />
-                {entriesFor(category.name).map((entry) => (
-                  <NightRow key={entry.slug} entry={entry} />
+            {sections.map((section) => (
+              <section key={section.name} aria-label={section.name}>
+                <Interlude name={section.name} count={section.entries.length} />
+                {section.entries.map((entry) => (
+                  <NightRow key={entry.work.slug} entry={entry} />
                 ))}
               </section>
             ))}
