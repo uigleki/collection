@@ -14,7 +14,11 @@ export default defineConfig({
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? "github" : "html",
+  // Two reporters in CI, not one: `github` writes the failure onto the diff
+  // where it is read, and the HTML report is what survives the run as an
+  // artifact. `github` alone produced no playwright-report/ at all, so the
+  // upload step in the workflow had nothing to find, every time.
+  reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "html",
 
   // Longer than Playwright's five seconds: every route change here plays a
   // view transition, and three engines sharing one machine do not always
