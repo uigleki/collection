@@ -1,4 +1,5 @@
 import { expect, type Locator, type Page, test } from "@playwright/test";
+import { HOME, heading, NOT_FOUND, restingScrollY, row } from "./helpers";
 
 /** Enter a room from the spine, come back, and expect the reading position. */
 async function roundTrip(
@@ -10,17 +11,13 @@ async function roundTrip(
   await row.click();
   await expect(page).toHaveURL(/girls-last-tour/);
   // rooms open at the top (once the transition settles)
-  await expect
-    .poll(() => page.evaluate(() => window.scrollY), { timeout: 4000 })
-    .toBeLessThan(50);
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
 
   await page.getByRole("button", { name: "Back to the collection" }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect
-    .poll(
-      async () =>
-        Math.abs((await page.evaluate(() => window.scrollY)) - before),
-      { timeout: 4000 },
+    .poll(async () =>
+      Math.abs((await page.evaluate(() => window.scrollY)) - before),
     )
     .toBeLessThan(tolerance);
 }
@@ -28,25 +25,21 @@ async function roundTrip(
 test.describe("rooms", () => {
   test("a work opens into its room", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("link", { name: "化物語 — open" }).click();
+    await row(page, "化物語").click();
     await expect(page).toHaveURL(/\/works\/bakemonogatari$/);
-    await expect(
-      page.getByRole("heading", { level: 1, name: "化物語" }),
-    ).toBeVisible();
+    await expect(heading(page, "化物語")).toBeVisible();
     await expect(page.getByText("Anime 01")).toBeVisible();
     await expect(page).toHaveTitle(/化物語/);
   });
 
-  test("prev/next stay within the medium and never scroll away", async ({
+  test("prev/next walk the whole shelf and never scroll away", async ({
     page,
   }) => {
     await page.goto("/works/bakemonogatari");
     await page.getByRole("button", { name: "Next: 偽物語" }).click();
     await expect(page).toHaveURL(/\/works\/nisemonogatari$/);
-    await expect(
-      page.getByRole("heading", { level: 1, name: "偽物語" }),
-    ).toBeVisible();
-    // first of its medium has no previous
+    await expect(heading(page, "偽物語")).toBeVisible();
+    // 化物語 is first on the whole shelf, so it has no previous
     await page.getByRole("button", { name: "Previous: 化物語" }).click();
     await expect(page).toHaveURL(/\/works\/bakemonogatari$/);
     await expect(page.getByRole("button", { name: /^Previous:/ })).toHaveCount(
@@ -87,8 +80,7 @@ test.describe("rooms", () => {
         },
         { x: dx, y: dy },
       );
-    const room = (name: string) =>
-      expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
+    const room = (name: string) => expect(heading(page, name)).toBeVisible();
 
     await swipe(-160, 10); // left → the next work
     await room("ハイスコアガール");
@@ -104,9 +96,7 @@ test.describe("rooms", () => {
     page,
   }) => {
     await page.goto("/works/kantoku");
-    await expect(
-      page.getByRole("heading", { level: 1, name: "カントク" }),
-    ).toBeVisible();
+    await expect(heading(page, "カントク")).toBeVisible();
     await expect(page.getByText("Artists 01")).toBeVisible();
   });
 
@@ -122,48 +112,54 @@ test.describe("rooms", () => {
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
-    const row = page.getByRole("link", { name: "少女終末旅行 — open" });
-    await row.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(300);
-    const before = await page.evaluate(() => window.scrollY);
+    const link = row(page, "少女終末旅行");
+    await link.scrollIntoViewIfNeeded();
+    const before = await restingScrollY(page);
     expect(before).toBeGreaterThan(500);
 
-    await roundTrip(page, row, before, 200);
+    await roundTrip(page, link, before, 200);
   });
 
   test("smooth scrolling restores the position exactly", async ({ page }) => {
     await page.goto("/");
-    const row = page.getByRole("link", { name: "少女終末旅行 — open" });
-    // real reading: wheel down until the row sits in the viewport
+    const link = row(page, "少女終末旅行");
+    // Real reading: wheel down until the row sits in the viewport. Each look
+    // waits for the glide to land first — a fixed pause measures a page still
+    // in flight, and on a loaded machine the row never seems to arrive, so
+    // the loop wheels its full thirty and the test ends up asserting about
+    // the bottom of the page instead of the row it meant to open.
     for (let i = 0; i < 30; i++) {
-      const box = await row.boundingBox().catch(() => null);
+      const box = await link.boundingBox().catch(() => null);
       if (box && box.y > 80 && box.y < 480) break;
       await page.mouse.wheel(0, 400);
-      await page.waitForTimeout(100);
+      await restingScrollY(page);
     }
-    await page.waitForTimeout(700); // lenis settles
-    const before = await page.evaluate(() => window.scrollY);
+    // Playwright scrolls a target into view before clicking it, and that
+    // nudge would move the page after the position was sampled — so it
+    // happens first, and the position measured is the position clicked from.
+    await link.scrollIntoViewIfNeeded();
+    const before = await restingScrollY(page);
     expect(before).toBeGreaterThan(500);
-    await roundTrip(page, row, before, 50);
+    await roundTrip(page, link, before, 50);
   });
 
   test("a missing page says so", async ({ page }) => {
     const res = await page.goto("/works/does-not-exist");
     expect(res).not.toBeNull();
-    await expect(page.getByText("Nothing stands here.")).toBeVisible();
+    await expect(heading(page, NOT_FOUND)).toBeVisible();
     await page.getByRole("link", { name: "Return to the collection" }).click();
-    await expect(
-      page.getByRole("heading", { level: 1, name: /Perfect\s*Collection/ }),
-    ).toBeVisible();
+    await expect(heading(page, HOME)).toBeVisible();
   });
 
   test("the theme toggle flips the sky and persists", async ({ page }) => {
+    const theme = (value: string) =>
+      expect(page.locator("html")).toHaveAttribute("data-theme", value);
     await page.goto("/");
     await page.getByRole("button", { name: "Switch to day" }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await theme("light");
     await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await theme("light");
     await page.getByRole("button", { name: "Switch to night" }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await theme("dark");
   });
 });

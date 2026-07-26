@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { HOME, heading } from "./helpers";
 
 test.describe("the collection", () => {
   test("opens on the thesis with no loader", async ({ page }) => {
     await page.goto("/");
-    await expect(
-      page.getByRole("heading", { level: 1, name: /Perfect\s*Collection/ }),
-    ).toBeVisible();
+    await expect(heading(page, HOME)).toBeVisible();
   });
 
   test("holds all fourteen works across the four media", async ({ page }) => {
@@ -26,9 +25,7 @@ test.describe("the collection", () => {
     ).toBeAttached();
     await page.getByRole("link", { name: "Why these works" }).click();
     await expect(page).toHaveURL(/\/why$/);
-    await expect(
-      page.getByRole("heading", { level: 1, name: "Why These Works" }),
-    ).toBeVisible();
+    await expect(heading(page, "Why These Works")).toBeVisible();
   });
 
   test("carries all 49 songs on the water", async ({ page }) => {
@@ -59,5 +56,20 @@ test.describe("the collection", () => {
     await expect(bakemono).toBeAttached();
     const zh = page.locator('[lang="zh-Hans"]', { hasText: "海棠仙" });
     await expect(zh).toBeAttached();
+  });
+
+  test("a performer's language never spills onto the song's", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    // 凛々咲 sings "Letters from Heaven": the name takes Japanese
+    // letterforms, the Latin title must be left alone.
+    const row = page.locator('section[aria-label="Music"] li', {
+      hasText: "Letters from Heaven",
+    });
+    const japanese = row.locator('[lang="ja"]');
+    await expect(japanese).toHaveCount(1);
+    await expect(japanese).toContainText("Capchii & 凛々咲");
+    await expect(japanese).not.toContainText("Letters from Heaven");
   });
 });
