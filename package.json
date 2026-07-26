@@ -29,8 +29,10 @@
     "react-router": "^8.3.0"
   },
   "//": "@playwright/test is held to its minor: the browsers come from nixpkgs (flake.nix pins playwright-driver.browsers, chromium build 1228) and a minor bump expects a build nix does not have, which fails every e2e run at launch. Move it when nixpkgs moves.",
+  "//biome": "@biomejs/biome is held to an exact version, the one nixpkgs gives the pre-commit hook. Two installers reach for this linter — nix before a commit, bun in CI — and a linter that disagrees with itself between them would reformat on every commit and fail the gate it just passed. Move it when nixpkgs moves.",
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
+    "@biomejs/biome": "2.5.0",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "~1.61.1",
     "@tailwindcss/vite": "^4.3.3",
