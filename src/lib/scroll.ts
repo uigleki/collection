@@ -98,7 +98,22 @@ export function useScrollMemory(): void {
   }, []);
 
   useEffect(() => {
-    const save = () => positions().set(pathname, window.scrollY);
+    const save = () => {
+      const remembered = positions().get(pathname);
+      const reachable =
+        document.documentElement.scrollHeight - window.innerHeight;
+      // The other half of the same clamp. Opening a room swaps a page
+      // thousands of pixels tall for one that is not, and the browser drags
+      // the reader to the top and reports it as a scroll — which WebKit
+      // dispatches while the departing page's listener is still attached,
+      // where Chromium does not. Saved as-is, the collection forgets where
+      // the reader was every time they open anything. No reader can reach a
+      // position the page is no longer tall enough to hold, so a scroll into
+      // a document that has just lost that height is the layout speaking,
+      // not the reader — it is not a reading position and is not kept.
+      if (remembered !== undefined && reachable < remembered) return;
+      positions().set(pathname, window.scrollY);
+    };
     window.addEventListener("scroll", save, { passive: true });
     return () => window.removeEventListener("scroll", save);
   }, [pathname]);
