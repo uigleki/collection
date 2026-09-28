@@ -11,6 +11,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 
 ## 🎬 Movies
 
+<!-- markdownlint-disable-next-line MD013 -->
 1. 打ち上げ花火、下から見るか？横から見るか？
 2. ペンギン・ハイウェイ
 3. Charlie and the Chocolate Factory
@@ -30,6 +31,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 
 ## 🎵 Music
 
+<!-- markdownlint-disable MD013 -->
 - COP - 世末积雨云
 - COP - 凉雨
 - COP - 同归世界线
@@ -79,6 +81,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 - 纯白 P - 海棠仙 (Album Version)
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
+<!-- markdownlint-enable MD013 -->
 
 ## Documentation
 

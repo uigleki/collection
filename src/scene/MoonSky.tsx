@@ -22,7 +22,7 @@ uniform vec2  uRes;
 uniform float uTime;
 uniform float uFlow;    // integrated water phase — NEVER rate × total time
 uniform float uPhase;   // terminator: +1 new moon … -1 full moon
-uniform vec2  uMoon;    // moon centre, uv space
+uniform vec2  uMoon;    // moon center, uv space
 uniform float uVel;     // smoothed scroll velocity
 uniform float uDay;     // 0 night … 1 day theme
 uniform float uDawn;    // 0 … 1 dawn warmth at the end of the page

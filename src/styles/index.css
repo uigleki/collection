@@ -175,7 +175,7 @@ body {
 }
 
 /* The one glass language every fixture speaks — theme toggle, back,
-   neighbours, back-to-top, and the standalone calls-to-action that are the
+   neighbors, back-to-top, and the standalone calls-to-action that are the
    same glass drawn out into a pill. Press physics on both, so they feel
    like instruments, not icons. */
 .chip,
@@ -287,7 +287,7 @@ body {
     }
   }
 
-  /* Moon-phase morph: a tapped cover is one continuous object travelling
+  /* Moon-phase morph: a tapped cover is one continuous object traveling
      into its room and back. The class rule morphs any cover; the unique
      name (cover-<slug>) pairs only the matching pair. */
   ::view-transition-group(.cover) {
@@ -300,7 +300,7 @@ body {
     object-fit: cover;
   }
 
-  /* Moving between neighbouring rooms slides along the shelf. */
+  /* Moving between neighboring rooms slides along the shelf. */
   html[data-dir="next"]::view-transition-old(root) {
     animation: shelf-out-left 0.4s cubic-bezier(0.4, 0, 1, 1) both;
   }

@@ -93,7 +93,7 @@ async function main() {
   console.log(`Collecting glyphs → ${[...glyphs].length} unique codepoints`);
   await mkdir(OUT_DIR, { recursive: true });
   // Both faces are a ~16 MB download apiece and share nothing but the glyph
-  // set above, so they overlap instead of queueing.
+  // set above, so they overlap instead of queuing.
   await Promise.all(FACES.map((face) => build(glyphs, face)));
 }
 

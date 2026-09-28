@@ -1,0 +1,10 @@
+[default]
+locale = "en-us"
+extend-ignore-re = ["Ubuntu Font Licence"]
+
+[default.extend-identifiers]
+Poppin = "Poppin"
+
+[default.extend-words]
+axe = "axe"
+yoru = "yoru"

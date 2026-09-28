@@ -1,12 +1,12 @@
 /**
- * Fetches true-colour cover art from official, no-key sources and pre-bakes
- * optimised assets so the Vite build stays free of native deps.
+ * Fetches true-color cover art from official, no-key sources and pre-bakes
+ * optimized assets so the Vite build stays free of native deps.
  *
  *   AniList (anime + anime films) · Steam CDN (games)
  *
  * The collection itself is the work list — this script only knows WHERE each
  * work's art comes from. For each work it writes:
- *   src/assets/works/<slug>.webp        — optimised cover (≤640w)
+ *   src/assets/works/<slug>.webp        — optimized cover (≤640w)
  *   src/data/generated/covers.ts        — { placeholder, w, h, source }
  *
  * Run:  LD_LIBRARY_PATH=<gcc-lib> bun scripts/fetch-covers.ts

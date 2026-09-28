@@ -34,7 +34,7 @@ export function useScroll(): void {
 /**
  * Which way the shelf is being walked, for the duration of one navigation.
  * `html[data-dir]` picks the directional slide in index.css. Set this
- * immediately before navigating to a neighbouring room; clearing it is the
+ * immediately before navigating to a neighboring room; clearing it is the
  * transition's job, not the departing room's — see useScrollMemory below.
  */
 export function walkShelf(dir: "prev" | "next"): void {

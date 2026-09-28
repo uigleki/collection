@@ -35,7 +35,7 @@ export default defineConfig({
 
   // The sky, the morph and the scroll behave differently per engine — the
   // shader's own comments record a Firefox view-transition quirk — so the
-  // behavioural specs run on all three. The visual snapshots stay on one
+  // behavioral specs run on all three. The visual snapshots stay on one
   // engine: they pin the site's look, not the renderers' disagreements about
   // antialiasing.
   projects: [

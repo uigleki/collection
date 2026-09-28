@@ -2,7 +2,7 @@ import type { ReactNode, RefObject } from "react";
 
 /**
  * A page with nothing on it — no work here, or the night broke while it was
- * being drawn. One centred line, one explanation, one way back.
+ * being drawn. One centered line, one explanation, one way back.
  */
 export function Standstill({
   h1,

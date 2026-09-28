@@ -5,7 +5,7 @@ import { Icon } from "./Icon";
 
 /**
  * The page's fixtures: no bar, no gradient — the same glass chips as the
- * theme toggle, mirrored. Back stands top-left; a room's neighbours stand
+ * theme toggle, mirrored. Back stands top-left; a room's neighbors stand
  * at mid-height on either edge, the way gallery pagers do, and say who
  * they are on hover. Escape leaves, and so does a click on the empty
  * margins — a room is an expanded cover, and lightboxes close outward.
@@ -61,7 +61,7 @@ export function Doorway({ children }: { children?: ReactNode }) {
   );
 }
 
-/** A neighbouring work, standing at the room's edge. */
+/** A neighboring work, standing at the room's edge. */
 export function EdgeChip({
   side,
   work,

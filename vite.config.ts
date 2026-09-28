@@ -13,10 +13,10 @@ const STYLES = resolve(__dirname, "src/styles/index.css");
 /**
  * The ground each theme stands on, read out of the tokens themselves.
  * DESIGN.md puts the palette in src/styles/index.css and nowhere else, so
- * the browser-chrome colours — which have to be literal values in the
+ * the browser-chrome colors — which have to be literal values in the
  * document head, before any stylesheet applies — are lifted from there at
  * build time rather than copied by hand. A renamed token fails the build
- * instead of quietly leaving the address bar the wrong colour.
+ * instead of quietly leaving the address bar the wrong color.
  */
 function grounds(): { night: string; dusk: string } {
   const css = readFileSync(STYLES, "utf8");
@@ -149,7 +149,7 @@ function headers(html: string): string {
 }
 
 /**
- * The site is named once in src/data/site.ts, coloured once in
+ * The site is named once in src/data/site.ts, colored once in
  * src/styles/index.css, and curated once in src/data/works/. This carries
  * all three out to the files the app cannot reach at runtime — the document
  * head a crawler reads before any JavaScript runs, the manifest, the
