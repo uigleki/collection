@@ -1,9 +1,6 @@
 [default]
 locale = "en-us"
-extend-ignore-re = ["Ubuntu Font Licence"]
-
-[default.extend-identifiers]
-Poppin = "Poppin"
+extend-ignore-re = ["Poppin'Party", "Ubuntu Font Licence"]
 
 [default.extend-words]
 axe = "axe"
