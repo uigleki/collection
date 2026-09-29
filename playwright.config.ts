@@ -20,9 +20,9 @@ export default defineConfig({
   // upload step in the workflow had nothing to find, every time.
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "html",
 
-  // Longer than Playwright's five seconds: every route change here plays a
-  // view transition, and three engines sharing one machine do not always
-  // spare the frames one needs promptly. Nothing about what is asserted
+  // Longer than Playwright's five seconds: every route change here plays out
+  // on springs, and three engines sharing one machine do not always spare
+  // the frames one needs promptly. Nothing about what is asserted
   // changes — only the patience, so a loaded run reports what the site did
   // rather than how busy the box was.
   expect: { timeout: 8000 },
@@ -33,31 +33,45 @@ export default defineConfig({
     colorScheme: "dark", // the night is the default sky
   },
 
-  // The sky, the morph and the scroll behave differently per engine — the
-  // shader's own comments record a Firefox view-transition quirk — so the
-  // behavioral specs run on all three. The visual snapshots stay on one
+  // The sky, the cover's flight and the scroll behave differently per
+  // engine, so the behavioral specs run on all three. The visual snapshots stay on one
   // engine: they pin the site's look, not the renderers' disagreements about
   // antialiasing.
   projects: [
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
+      testIgnore: /dev\.spec\.ts/,
     },
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
-      testIgnore: /visual\.spec\.ts/,
+      testIgnore: /(visual|dev)\.spec\.ts/,
     },
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
-      testIgnore: /visual\.spec\.ts/,
+      testIgnore: /(visual|dev)\.spec\.ts/,
+    },
+    // The development build, where React's StrictMode tears down and rebuilds
+    // what it mounts: the site is worked on there, so it has to hold up there.
+    {
+      name: "dev",
+      use: { ...devices["Desktop Chrome"], baseURL: "http://localhost:5173" },
+      testMatch: /dev\.spec\.ts/,
     },
   ],
 
-  webServer: {
-    command: "bun run build && bun run preview",
-    url: "http://localhost:4173",
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: [
+    {
+      command: "bun run build && bun run preview",
+      url: "http://localhost:4173",
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: "bun run dev --port 5173 --strictPort",
+      url: "http://localhost:5173",
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });

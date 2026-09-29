@@ -155,18 +155,21 @@ verified by axe in CI.
 ## Components
 
 - **Cover** — thumbhash placeholder at exact aspect
-  (no CLS),
-  hairline in the work's accent,
-  `view-transition-name: cover-<slug>` for the 月相 morph.
+  (no CLS), hairline in the work's accent.
+  The row's cover and the room's are one object:
+  it flies between them on a spring (`src/lib/flight.ts`),
+  and a reader who turns back halfway sees it curve around, not restart.
+  In flight it rides the top layer, fully opaque above both pages,
+  so the fade of the page it lands on never touches it.
   Works without licensed art get a typographic panel.
 - **NightRow** — the whole row is one door.
   Hover: lift + cursor-facing tilt on the SAME springs
   (one movement), accent underline grows, accent glow under the cover.
   Entrances remember themselves per visit — nothing replays on return.
 - **Room** — sky eases to the work's night and dims behind reading;
-  one mounted choreography
-  (whileInView is banned here:
-  observers fire under view transitions before anything is visible).
+  one mounted choreography — a room opens at its top,
+  so everything in it is in view the moment it arrives.
+  Walking the shelf slides the room along it.
   Flaws are stated plainly.
 - **Chips** — 44px glass circles, labels on hover.
   Hover and press ride springs even in plain CSS:
@@ -189,6 +192,11 @@ Do:
   multiply a changing rate by total time.
 - Reduced motion is a parallel design: end states render instantly, the
   moon still shows the truthful phase, cuts are honest.
+- Pages change on a live stage, never a view transition:
+  those freeze the page into pictures until they finish.
+  The departing page fades where it stood, inert;
+  the arriving one can be scrolled, pressed, or left at once,
+  and a change mid-way picks everything up from where it is.
 - Hover exists only where a pointer can hover (`@media (hover: hover)`):
   a touch screen keeps :hover on whatever it touched last,
   so an unguarded hover style leaves a tapped control stuck in it.

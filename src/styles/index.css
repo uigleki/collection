@@ -335,57 +335,6 @@ body {
       clip-path: circle(150% at var(--vt-x, 100%) var(--vt-y, 0%));
     }
   }
-
-  /* Moon-phase morph: a tapped cover is one continuous object traveling
-     into its room and back. The class rule morphs any cover; the unique
-     name (cover-<slug>) pairs only the matching pair. */
-  ::view-transition-group(.cover) {
-    animation-duration: 560ms;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  ::view-transition-old(.cover),
-  ::view-transition-new(.cover) {
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Moving between neighboring rooms slides along the shelf. */
-  html[data-dir="next"]::view-transition-old(root) {
-    animation: shelf-out-left 0.4s cubic-bezier(0.4, 0, 1, 1) both;
-  }
-  html[data-dir="next"]::view-transition-new(root) {
-    animation: shelf-in-right 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  html[data-dir="prev"]::view-transition-old(root) {
-    animation: shelf-out-right 0.4s cubic-bezier(0.4, 0, 1, 1) both;
-  }
-  html[data-dir="prev"]::view-transition-new(root) {
-    animation: shelf-in-left 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-  @keyframes shelf-out-left {
-    to {
-      transform: translateX(-4%);
-      opacity: 0;
-    }
-  }
-  @keyframes shelf-in-right {
-    from {
-      transform: translateX(4%);
-      opacity: 0;
-    }
-  }
-  @keyframes shelf-out-right {
-    to {
-      transform: translateX(4%);
-      opacity: 0;
-    }
-  }
-  @keyframes shelf-in-left {
-    from {
-      transform: translateX(-4%);
-      opacity: 0;
-    }
-  }
 }
 
 /* Reduced motion: honest, instant cuts. */

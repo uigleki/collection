@@ -1,3 +1,4 @@
+import { useIsPresent } from "motion/react";
 import { type ReactNode, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
 import type { Work } from "@/data/types.ts";
@@ -12,6 +13,8 @@ import { Icon } from "./Icon.tsx";
  */
 export function Doorway({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
+  // A room on its way out still hears the keyboard; it must not answer.
+  const present = useIsPresent();
 
   // Decide on the history *index*, not location.key: a replace navigation
   // mints a fresh key but keeps idx 0 when the page was deep-linked, and
@@ -24,12 +27,13 @@ export function Doorway({ children }: { children?: ReactNode }) {
   }, [navigate]);
 
   useEffect(() => {
+    if (!present) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") goBack();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [goBack]);
+  }, [goBack, present]);
 
   return (
     <>

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Work } from "@/data/types.ts";
 import { coverFor } from "@/lib/covers.ts";
+import { aboard } from "@/lib/flight.ts";
 
 interface CoverProps {
   work: Work;
-  /** participate in the moon-phase shared-element morph (one per navigation) */
+  /** fly between pages: the row's cover and the room's are one object */
   morph?: boolean;
   /** eager-load + high fetch priority (the room's own cover is its LCP) */
   priority?: boolean;
@@ -18,6 +19,8 @@ interface CoverProps {
  * restoration drift). Works without licensed art stand behind a quiet
  * typographic panel instead.
  */
+const shown = new Set<string>();
+
 export function Cover({
   work,
   morph = false,
@@ -26,65 +29,69 @@ export function Cover({
 }: CoverProps) {
   const { title, slug, lang } = work;
   const cover = coverFor(slug);
-  const [loaded, setLoaded] = useState(false);
-
-  const morphStyle = morph
-    ? ({
-        viewTransitionName: `cover-${slug}`,
-        viewTransitionClass: "cover",
-      } as React.CSSProperties)
-    : undefined;
+  // Art this visit has already shown is in memory: it paints at once and
+  // needs no fade — a cover flying into a room must arrive sharp.
+  const [loaded, setLoaded] = useState(() => !!cover && shown.has(cover.url));
+  const flies = useMemo(
+    () => (morph ? aboard(slug) : undefined),
+    [morph, slug],
+  );
 
   if (!cover) {
     return (
-      <div
-        style={{ aspectRatio: "3 / 4", ...morphStyle }}
-        className={`relative flex items-center justify-center overflow-hidden rounded-sm border border-border/70 bg-mizu ${className}`}
-      >
-        <span
-          lang={lang}
-          aria-hidden="true"
-          className="select-none text-6xl font-light text-hoshi/50"
+      <div style={{ aspectRatio: "3 / 4" }} className={`relative ${className}`}>
+        <div
+          ref={flies}
+          className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-sm border border-border/70 bg-mizu"
         >
-          {[...title][0]}
-        </span>
+          <span
+            lang={lang}
+            aria-hidden="true"
+            className="select-none text-6xl font-light text-hoshi/50"
+          >
+            {[...title][0]}
+          </span>
+        </div>
       </div>
     );
   }
 
   return (
     <div
-      style={{
-        aspectRatio: `${cover.width} / ${cover.height}`,
-        ...morphStyle,
-      }}
-      className={`relative overflow-hidden rounded-sm ${className}`}
+      style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
+      className={`relative ${className}`}
     >
-      <img
-        src={cover.placeholder}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <img
-        src={cover.url}
-        alt={`Cover art of ${title}`}
-        width={cover.width}
-        height={cover.height}
-        loading={priority ? "eager" : "lazy"}
-        fetchPriority={priority ? "high" : "auto"}
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={`relative h-full w-full object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
-      />
-      {/* hairline lit by the work's own canonical color */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 rounded-sm"
-        style={{
-          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${work.accent} 45%, transparent)`,
-        }}
-      />
+      {/* the cover itself; the box above is where it rests (flight.ts) */}
+      <div ref={flies} className="absolute inset-0 overflow-hidden rounded-sm">
+        <img
+          src={cover.placeholder}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <img
+          src={cover.url}
+          alt={`Cover art of ${title}`}
+          width={cover.width}
+          height={cover.height}
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          decoding={loaded ? "sync" : "async"}
+          onLoad={() => {
+            shown.add(cover.url);
+            setLoaded(true);
+          }}
+          className={`relative h-full w-full object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
+        />
+        {/* hairline lit by the work's own canonical color */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-sm"
+          style={{
+            boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${work.accent} 45%, transparent)`,
+          }}
+        />
+      </div>
     </div>
   );
 }

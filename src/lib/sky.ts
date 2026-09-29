@@ -1,3 +1,4 @@
+import { useIsPresent } from "motion/react";
 import { useEffect, useRef } from "react";
 import { sky } from "@/scene/signal.ts";
 
@@ -30,12 +31,18 @@ function band(rootMargin: string) {
   return existing;
 }
 
-/** Mark an element; `onCross` fires as it enters and leaves the band. */
+/**
+ * Mark an element; `onCross` fires as it enters and leaves the band — only
+ * while its page is the one being read. A page on its way out still has
+ * elements crossing the viewport as it fades, and they no longer speak for
+ * the sky.
+ */
 function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
   const ref = useRef<T>(null);
+  const present = useIsPresent();
   const latest = useRef(onCross);
   useEffect(() => {
-    latest.current = onCross;
+    latest.current = present ? onCross : () => {};
   });
   useEffect(() => {
     const el = ref.current;
@@ -69,27 +76,43 @@ export function useGlade<T extends HTMLElement>() {
   });
 }
 
-/**
- * How far a route stands the sky back behind its reading, and which night it
- * opens on. Every route that dims returns the sky on the way out, so the one
- * route that wants it undimmed — home — needs to say nothing.
- */
-export function useSky({
-  dim = 0,
-  night,
-  waxWithProgress = false,
-}: {
-  dim?: number;
-  night?: number;
-  waxWithProgress?: boolean;
-}) {
-  useEffect(() => {
-    if (night !== undefined) sky.targetNight = night;
-    sky.dim = dim;
-    sky.waxWithProgress = waxWithProgress;
-    return () => {
-      sky.dim = 0;
-      sky.waxWithProgress = false;
-    };
-  }, [dim, night, waxWithProgress]);
+export interface SkyClaim {
+  /** how far the sky stands back behind the reading, 0..1 */
+  dim?: number | undefined;
+  /** the night the page opens on */
+  night?: number | undefined;
+  /** whether reading progress waxes the moon (see signal.ts) */
+  waxWithProgress?: boolean | undefined;
+}
+
+// Every page that wants something of the sky, oldest first. Pages overlap
+// while one leaves and the next arrives, and the departing one lets go
+// last — so the sky belongs to the newest claim, not to whoever spoke last.
+const claims: SkyClaim[] = [];
+
+function settle() {
+  const { dim = 0, night, waxWithProgress = false } = claims.at(-1) ?? {};
+  sky.dim = dim;
+  sky.waxWithProgress = waxWithProgress;
+  if (night !== undefined) sky.targetNight = night;
+}
+
+/** Ask the sky for something; the returned function lets go. */
+export function claimSky(claim: SkyClaim): () => void {
+  const own = { ...claim };
+  claims.push(own);
+  settle();
+  return () => {
+    claims.splice(claims.indexOf(own), 1);
+    settle();
+  };
+}
+
+/** A route's claim on the sky, for as long as it is the page being read. */
+export function useSky({ dim, night, waxWithProgress }: SkyClaim) {
+  const present = useIsPresent();
+  useEffect(
+    () => (present ? claimSky({ dim, night, waxWithProgress }) : undefined),
+    [present, dim, night, waxWithProgress],
+  );
 }

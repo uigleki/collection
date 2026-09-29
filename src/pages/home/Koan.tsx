@@ -33,7 +33,6 @@ export function Koan() {
       >
         <Link
           to="/why"
-          viewTransition
           className="pill text-body text-tsuki hover:text-tsukikage"
         >
           Why these works

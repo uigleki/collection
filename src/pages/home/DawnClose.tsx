@@ -49,7 +49,7 @@ export function DawnClose() {
 
       <div className="absolute right-0 bottom-0 left-0 flex flex-wrap items-baseline justify-between gap-6 border-t border-border/60 pt-6 pb-10 text-caption text-hoshi">
         <p>
-          <Link to="/credits" viewTransition className="link-draw">
+          <Link to="/credits" className="link-draw">
             Colophon
           </Link>
         </p>

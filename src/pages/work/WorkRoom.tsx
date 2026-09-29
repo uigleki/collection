@@ -1,10 +1,15 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useRef } from "react";
-import { useNavigate, useParams } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useNavigationType,
+  useParams,
+} from "react-router";
 import { siteMeta } from "@/data/site.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
-import { ENTER, RISE } from "@/lib/motion.ts";
-import { walkShelf } from "@/lib/scroll.ts";
+import { ENTER, FLIGHT, RISE } from "@/lib/motion.ts";
+import { type Step, stepOf } from "@/lib/shelf.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Cover } from "@/ui/Cover.tsx";
@@ -31,10 +36,9 @@ function Room({ entry }: { entry: WorkEntry }) {
 
   useSky({ dim: 1, night });
 
-  const goNeighbor = (dir: "prev" | "next", to: string) => {
-    walkShelf(dir);
-    navigate(`/works/${to}`, { viewTransition: true, replace: true });
-  };
+  const arrivedBy = stepOf(useLocation(), useNavigationType());
+  const goNeighbor = (step: Step, to: string) =>
+    navigate(`/works/${to}`, { replace: true, state: { step } });
 
   // Touch walks the shelf too. Pointer Events carry the whole gesture: the
   // start is remembered on down, judged on up. Axis-locked (|dx| must beat
@@ -55,14 +59,12 @@ function Room({ entry }: { entry: WorkEntry }) {
     const dy = e.clientY - from.y;
     if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
     if (e.timeStamp - from.t > 700) return;
-    if (dx < 0 && next) goNeighbor("next", next.work.slug);
-    if (dx > 0 && prev) goNeighbor("prev", prev.work.slug);
+    if (dx < 0 && next) goNeighbor(1, next.work.slug);
+    if (dx > 0 && prev) goNeighbor(-1, prev.work.slug);
   };
 
-  // The whole article enters as one choreography from mount. whileInView is
-  // deliberately NOT used here: during a view transition the observer fires
-  // while the page is still covered, and anything without a delay finishes
-  // animating before it is ever visible.
+  // The whole article enters as one choreography from mount: a room opens
+  // at its top, so everything in it is in view the moment it arrives.
   const reveal = (delay: number) =>
     reduced
       ? {}
@@ -84,19 +86,29 @@ function Room({ entry }: { entry: WorkEntry }) {
           <EdgeChip
             side="prev"
             work={prev.work}
-            onClick={() => goNeighbor("prev", prev.work.slug)}
+            onClick={() => goNeighbor(-1, prev.work.slug)}
           />
         ) : null}
         {next ? (
           <EdgeChip
             side="next"
             work={next.work}
-            onClick={() => goNeighbor("next", next.work.slug)}
+            onClick={() => goNeighbor(1, next.work.slug)}
           />
         ) : null}
       </Doorway>
 
-      <div className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16">
+      {/* Walking the shelf slides the room along it: in from the side the
+          reader walked toward, out the way they came. */}
+      <motion.div
+        custom={arrivedBy}
+        variants={SHELF}
+        initial={reduced || arrivedBy === 0 ? false : "aside"}
+        animate="here"
+        exit={reduced ? "here" : "gone"}
+        transition={FLIGHT}
+        className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16"
+      >
         <div className="md:sticky md:top-20 md:self-start">
           <Cover
             work={work}
@@ -200,9 +212,15 @@ function Room({ entry }: { entry: WorkEntry }) {
             </motion.aside>
           ) : null}
         </article>
-      </div>
+      </motion.div>
     </main>
   );
 }
+
+const SHELF = {
+  aside: (step: Step) => ({ x: `${step * 6}vw` }),
+  here: { x: "0vw" },
+  gone: (step: Step) => ({ x: `${step * -6}vw` }),
+};
 
 export { WorkRoom as Component };

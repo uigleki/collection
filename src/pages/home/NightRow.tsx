@@ -51,7 +51,6 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
     >
       <Link
         to={`/works/${slug}`}
-        viewTransition
         aria-label={`${title} — open`}
         onPointerMove={onMove}
         onPointerLeave={onLeave}

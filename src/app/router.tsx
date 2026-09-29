@@ -1,11 +1,12 @@
 import { useEffect } from "react";
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter } from "react-router";
 import { useScrollMemory } from "@/lib/scroll.ts";
 import { initTheme } from "@/lib/theme.ts";
 import { MoonSky } from "@/scene/MoonSky.tsx";
 import { BackToTop } from "@/ui/BackToTop.tsx";
 import { Standstill } from "@/ui/Standstill.tsx";
 import { ThemeToggle } from "@/ui/ThemeToggle.tsx";
+import { Stage } from "./Stage.tsx";
 
 function Root() {
   useScrollMemory();
@@ -22,7 +23,7 @@ function Root() {
       <MoonSky />
       <ThemeToggle />
       <BackToTop />
-      <Outlet />
+      <Stage />
     </>
   );
 }

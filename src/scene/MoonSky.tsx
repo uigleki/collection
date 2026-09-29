@@ -331,7 +331,6 @@ export function MoonSky() {
     let flow = 0;
     let glade = 0;
     let dim = 0;
-    let held = false;
     // Eased and sampled entirely inside this loop — nothing outside the sky
     // ever reads them, so they are locals, not part of the page's channel.
     let night = 1;
@@ -344,25 +343,14 @@ export function MoonSky() {
       // but the moon still shows the truthful phase for where the reader is.
       const still = reduced.matches;
 
-      // A view transition is animating over the page: the canvas is fully
-      // covered by its snapshots, so skip the draw — and the scroll sampling
-      // below with it, since that is where the frame's layout reads live and
-      // the morph needs them least. The clock keeps ticking: no dt jump.
-      if (sky.hold) {
-        held = true;
-        return;
-      }
-      if (held) {
-        // scroll restoration moved the page while nothing was watching
-        held = false;
-        lastY = window.scrollY;
-      }
-
       // Where the reader is. Sampled here rather than in its own rAF: the
       // sky is the only thing that reads these, and this loop already runs
       // every frame.
       const y = window.scrollY;
-      velocity += (y - lastY - velocity) * 0.25;
+      // A page change puts the reader somewhere else in one frame: that is
+      // a teleport, not a scroll, and must not whip the water.
+      const moved = Math.abs(y - lastY) > window.innerHeight ? 0 : y - lastY;
+      velocity += (moved - velocity) * 0.25;
       lastY = y;
       const progress = span > 0 ? y / span : 0;
       // An instant jump (deep link, keyboard End) can skip every night's

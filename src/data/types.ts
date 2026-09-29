@@ -27,8 +27,8 @@ export interface Titled {
 export interface Work extends Titled {
   /**
    * The work's stable identity, authored here beside the title. Its room's
-   * URL, its cover asset, its accent, and its cover morph's
-   * `view-transition-name` are all this one string.
+   * URL, its cover asset, its accent, and its cover's flight between
+   * pages are all this one string.
    */
   slug: string;
   /**

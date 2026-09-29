@@ -16,11 +16,7 @@ export function NotFound() {
       title="Nothing stands here."
       message="Whatever stood here has set below the horizon."
     >
-      <Link
-        to="/"
-        viewTransition
-        className="pill mt-10 text-body hover:text-tsukikage"
-      >
+      <Link to="/" className="pill mt-10 text-body hover:text-tsukikage">
         Return to the collection
       </Link>
     </Standstill>

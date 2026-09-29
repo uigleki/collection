@@ -28,7 +28,8 @@ test.describe("rooms", () => {
     await row(page, "化物語").click();
     await expect(page).toHaveURL(/\/works\/bakemonogatari$/);
     await expect(heading(page, "化物語")).toBeVisible();
-    await expect(page.getByText("Anime 01")).toBeVisible();
+    // the collection may still be fading out; the room is what is read
+    await expect(page.getByRole("main").getByText("Anime 01")).toBeVisible();
     await expect(page).toHaveTitle(/化物語/);
   });
 
@@ -60,7 +61,7 @@ test.describe("rooms", () => {
     // Playwright's touchscreen only taps, so the gesture is dispatched
     // directly — this is exactly what a finger sends.
     const swipe = (dx: number, dy: number) =>
-      page.locator("main").evaluate(
+      page.getByRole("main").evaluate(
         (main, { x, y }) => {
           const opts = { bubbles: true, pointerType: "touch", pointerId: 1 };
           main.dispatchEvent(
@@ -198,5 +199,114 @@ test.describe("rooms", () => {
     release();
     await expect(heading(page, HOME)).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  });
+});
+
+test.describe("the cover's flight", () => {
+  // Runs in the page. The live copy of a work's cover on the page headed
+  // `page` (a departing page is inert), waiting up to half a second of
+  // frames for that page to exist.
+  const script = `
+    window.__cover = async (title, page) => {
+      for (let i = 0; i < 30; i++) {
+        const img = [...document.querySelectorAll(
+          'img[alt="Cover art of ' + title + '"]',
+        )].find((img) => !img.closest("[inert]") &&
+          img.closest("main")?.querySelector("h1")?.textContent
+            ?.replace(/\\s+/g, "") === page.replace(/\\s+/g, ""));
+        if (img) return img.getBoundingClientRect();
+        await new Promise(requestAnimationFrame);
+      }
+      throw new Error("no cover of " + title + " on " + page);
+    };`;
+  type Seen = (title: string, page: string) => Promise<DOMRect>;
+  const HOME_H1 = "Perfect Collection";
+
+  test.beforeEach(async ({ page }) => {
+    await page.addInitScript(script);
+    await page.goto("/");
+    const link = row(page, "化物語");
+    await link.scrollIntoViewIfNeeded();
+    await restingScrollY(page);
+  });
+
+  test("a cover flies from its row into its room", async ({ page }) => {
+    const { from, early, landed } = await page.evaluate(async (home) => {
+      const cover = (window as unknown as { __cover: Seen }).__cover;
+      const from = await cover("化物語", home);
+      document
+        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
+        ?.click();
+      const early = await cover("化物語", "化物語");
+      await new Promise((r) => setTimeout(r, 1500));
+      return { from, early, landed: await cover("化物語", "化物語") };
+    }, HOME_H1);
+    // It leaves from where the reader saw it…
+    expect(Math.abs(early.left - from.left)).toBeLessThan(60);
+    expect(Math.abs(early.top - from.top)).toBeLessThan(60);
+    // …and lands somewhere else entirely: its place in the room.
+    expect(Math.abs(landed.width - from.width)).toBeGreaterThan(40);
+  });
+
+  test("the cover is seen the whole way, not only once it has landed", async ({
+    page,
+  }) => {
+    const frames = await page.evaluate(async () => {
+      document
+        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
+        ?.click();
+      const seen: { opacity: number; visible: boolean }[] = [];
+      for (let i = 0; i < 12; i++) {
+        await new Promise(requestAnimationFrame);
+        const img = [
+          ...document.querySelectorAll<HTMLElement>(
+            'img[alt="Cover art of 化物語"]',
+          ),
+        ].find(
+          (img) =>
+            !img.closest("[inert]") &&
+            img.closest("main")?.querySelector("h1")?.textContent === "化物語",
+        );
+        // not yet in the room
+        if (!img) continue;
+        // what actually reaches the screen: every ancestor's opacity, up to
+        // the top layer, which none of them reach into
+        let opacity = 1;
+        for (let el: Element | null = img; el; el = el.parentElement) {
+          opacity *= Number(getComputedStyle(el).opacity);
+          if (el.matches(":popover-open")) break;
+        }
+        seen.push({
+          opacity,
+          visible: getComputedStyle(img).visibility === "visible",
+        });
+      }
+      return seen;
+    });
+    expect(frames.length).toBeGreaterThan(4);
+    for (const frame of frames) {
+      expect(frame.visible).toBe(true);
+      expect(frame.opacity).toBeGreaterThan(0.95);
+    }
+  });
+
+  test("going back mid-flight turns the cover around where it is", async ({
+    page,
+  }) => {
+    const { before, after } = await page.evaluate(async (home) => {
+      const cover = (window as unknown as { __cover: Seen }).__cover;
+      document
+        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
+        ?.click();
+      await cover("化物語", "化物語");
+      await new Promise((r) => setTimeout(r, 160));
+      const before = await cover("化物語", "化物語");
+      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+      return { before, after: await cover("化物語", home) };
+    }, HOME_H1);
+    // one continuous object: no jump back to the row, no jump to the room
+    expect(Math.abs(after.left - before.left)).toBeLessThan(60);
+    expect(Math.abs(after.top - before.top)).toBeLessThan(60);
+    expect(Math.abs(after.width - before.width)).toBeLessThan(60);
   });
 });
