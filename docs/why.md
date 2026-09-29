@@ -32,17 +32,17 @@ incompleteness.
 Nothing is random.
 Everything connects.
 A single line advances plot, reveals character, echoes theme,
-and foreshadows resolution - all precisely, all intentionally.
+and foreshadows resolution — all precisely, all intentionally.
 Remove any piece and the entire structure collapses.
 Each element strengthens all others in ways that reveal themselves through time.
 
 ### Authentic Beauty
 
 The creator chose to create beauty, not exploit emotion.
-This is not a byproduct of coherence
-but an intentional gift - the desire to leave audiences with more than they
-brought, to prove through the work's existence that life affirms itself through
-creation, not destruction.
+This is not a byproduct of coherence but an intentional gift —
+the desire to leave audiences with more than they brought,
+to prove through the work's existence that life affirms itself through creation,
+not destruction.
 
 These three are one truth viewed from different angles.
 Love manifests as coherence.
@@ -57,14 +57,14 @@ rather than genuine excellence.
 
 ### Negativity Bias
 
-Humans evolved to remember threats more vividly than pleasures - in ancient
-times, forgetting danger meant death.
+Humans evolved to remember threats more vividly than pleasures —
+in ancient times, forgetting danger meant death.
 
 **The trick**: Kill the beloved character.
 Deploy terminal illness.
 Torture every childhood.
 Anyone can make audiences cry through suffering.
-It requires no skill, no vision, no love - just cruelty.
+It requires no skill, no vision, no love — just cruelty.
 These works leave you diminished.
 They prove only that humans can be manipulated, not that life has meaning.
 
@@ -75,9 +75,8 @@ rather than trauma.
 
 ### Mere Exposure Effect
 
-Repetition breeds familiarity,
-and familiarity breeds preference - a psychological phenomenon
-where we favor what we've encountered before.
+Repetition breeds familiarity, and familiarity breeds preference —
+a psychological phenomenon where we favor what we've encountered before.
 
 **The trick**: The chorus that loops until embedded.
 The formula repeated across a catalog.
@@ -91,8 +90,9 @@ Time strengthens their impact rather than exposing their emptiness.
 
 ### Peak-End Rule
 
-Memory doesn't record experiences faithfully - it disproportionately weights
-emotional peaks and endings, forgetting the journey between.
+Memory doesn't record experiences faithfully —
+it disproportionately weights emotional peaks and endings,
+forgetting the journey between.
 
 **The trick**: Coast on emptiness, deploy one manipulative climax.
 "It gets good after episode X." Memory rewrites the experience,
@@ -119,7 +119,7 @@ After experiencing these works, you'll know what I know:
 that humans at their best can create beauty
 that enriches rather than diminishes, elevates rather than exploits,
 lasts rather than fades.
-You'll have touched the genuine pinnacle - not the marketed one,
+You'll have touched the genuine pinnacle — not the marketed one,
 not the academic one, but the real one.
 
 Most importantly, you can rest.

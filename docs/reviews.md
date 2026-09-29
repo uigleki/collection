@@ -173,7 +173,7 @@ Fate's ultimate decree
   Key decision points designed with excessive subtlety,
   nearly demanding outside guidance.
 
-### 7 年後で待ってる
+### 7年後で待ってる
 
 "I'll be waiting for you, 7 years from now"
 
@@ -277,7 +277,7 @@ Thank you for singing with me, let's move forward together
 
 You exist to understand others, to hold the hands that matter
 
-### JUSF 周存 - 心跳同步的时光 (Memory Ver.)
+### JUSF周存 - 心跳同步的时光 (Memory Ver.)
 
 I'll treasure this moment when our hearts beat as one
 
@@ -324,10 +324,6 @@ Everything shines brighter when you're beside me
 ### Shirfine - Illusionary Daytime
 
 Dreams don't wait for nightfall
-
-### Supercell - My Dearest
-
-Even when the world abandons you, I will stand beside you
 
 ### Xad - Birds
 
@@ -381,6 +377,10 @@ Love exists because it defies logic, not despite it
 
 Choosing to love yourself is the bravest uprising
 
+### supercell - My Dearest
+
+Even when the world abandons you, I will stand beside you
+
 ### あやりす - 愛を誓いしヒメ飾り
 
 If freedom means forgetting you, I choose captivity
@@ -409,11 +409,11 @@ Time changes everything beautiful, but not what it meant
 
 Joy preserved in a music box sounds like longing
 
-### 竹達彩奈 & 巽悠衣子 - バランス KISS
+### 竹達彩奈 & 巽悠衣子 - バランスKISS
 
 Happiness needs no explanation to those who feel it
 
-### 纯白 P - 海棠仙 (Album Version)
+### 纯白P - 海棠仙 (Album Version)
 
 I crossed a thousand years just to understand your wait
 

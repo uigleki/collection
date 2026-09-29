@@ -1,6 +1,8 @@
 # Perfect Collection
 
-Works that enrich rather than diminish - created from love, not manipulation.
+Works that enrich rather than diminish — created from love, not manipulation.
+
+<!-- markdownlint-disable MD013 -->
 
 ## 📺 Anime
 
@@ -11,7 +13,6 @@ Works that enrich rather than diminish - created from love, not manipulation.
 
 ## 🎬 Movies
 
-<!-- markdownlint-disable-next-line MD013 -->
 1. 打ち上げ花火、下から見るか？横から見るか？
 2. ペンギン・ハイウェイ
 3. Charlie and the Chocolate Factory
@@ -22,7 +23,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 2. What Remains of Edith Finch
 3. Finding Paradise
 4. Steins;Gate
-5. 7 年後で待ってる
+5. 7年後で待ってる
 6. ASTLIBRA Revision
 
 ## 🎨 Artists
@@ -31,7 +32,6 @@ Works that enrich rather than diminish - created from love, not manipulation.
 
 ## 🎵 Music
 
-<!-- markdownlint-disable MD013 -->
 - COP - 世末积雨云
 - COP - 凉雨
 - COP - 同归世界线
@@ -44,7 +44,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 - Cream puff - Mermaid girl (Extended RRver.)
 - DECO＊27 & 初音ミク - 初嵐
 - EGOIST - The Everlasting Guilty Crown
-- JUSF 周存 - 心跳同步的时光 (Memory Ver.)
+- JUSF周存 - 心跳同步的时光 (Memory Ver.)
 - Ken Arai - NEXT TO YOU
 - MIMI - 水音とカーテン
 - Mili - Nine Point Eight
@@ -56,7 +56,6 @@ Works that enrich rather than diminish - created from love, not manipulation.
 - Schnuffel - Ich hab' dich lieb
 - Schnuffel - Nur mit Dir
 - Shirfine - Illusionary Daytime
-- Supercell - My Dearest
 - Xad - Birds
 - azusa - 真夏のフォトグラフ
 - daniwellP - UZ
@@ -70,6 +69,7 @@ Works that enrich rather than diminish - created from love, not manipulation.
 - minato & 初音ミク - 朧月
 - niki feat. Lily - ジッタードール
 - niki feat. Lily - テロリスト
+- supercell - My Dearest
 - あやりす - 愛を誓いしヒメ飾り
 - いとうかなこ - アマデウス
 - やくしまるえつこ - アンノウン・ワールドマップ
@@ -77,10 +77,11 @@ Works that enrich rather than diminish - created from love, not manipulation.
 - 朝香智子 - post-script
 - 清漪 - 但叹清风错
 - 甘茶の音楽工房 - 赤い風船とメリーゴーランド
-- 竹達彩奈 & 巽悠衣子 - バランス KISS
-- 纯白 P - 海棠仙 (Album Version)
+- 竹達彩奈 & 巽悠衣子 - バランスKISS
+- 纯白P - 海棠仙 (Album Version)
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
+
 <!-- markdownlint-enable MD013 -->
 
 ## Documentation

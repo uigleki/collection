@@ -92,7 +92,7 @@ export const games = [
     ],
   },
   {
-    title: "7 年後で待ってる",
+    title: "7年後で待ってる",
     slug: "7-years-from-now",
     lang: "ja",
     subtitle: "I'll be waiting for you, 7 years from now",

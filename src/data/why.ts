@@ -19,13 +19,13 @@ const truth = {
     {
       title: "Internal Coherence",
       explanation: [
-        "Nothing is random. Everything connects. A single line advances plot, reveals character, echoes theme, and foreshadows resolution - all precisely, all intentionally. Remove any piece and the entire structure collapses. Each element strengthens all others in ways that reveal themselves through time.",
+        "Nothing is random. Everything connects. A single line advances plot, reveals character, echoes theme, and foreshadows resolution — all precisely, all intentionally. Remove any piece and the entire structure collapses. Each element strengthens all others in ways that reveal themselves through time.",
       ],
     },
     {
       title: "Authentic Beauty",
       explanation: [
-        "The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift - the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.",
+        "The creator chose to create beauty, not exploit emotion. This is not a byproduct of coherence but an intentional gift — the desire to leave audiences with more than they brought, to prove through the work's existence that life affirms itself through creation, not destruction.",
       ],
     },
   ],
@@ -41,10 +41,10 @@ const shortcuts = {
     {
       title: "Negativity Bias",
       explanation: [
-        "Humans evolved to remember threats more vividly than pleasures - in ancient times, forgetting danger meant death.",
+        "Humans evolved to remember threats more vividly than pleasures — in ancient times, forgetting danger meant death.",
         {
           label: "The trick",
-          text: "Kill the beloved character. Deploy terminal illness. Torture every childhood. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love - just cruelty. These works leave you diminished. They prove only that humans can be manipulated, not that life has meaning.",
+          text: "Kill the beloved character. Deploy terminal illness. Torture every childhood. Anyone can make audiences cry through suffering. It requires no skill, no vision, no love — just cruelty. These works leave you diminished. They prove only that humans can be manipulated, not that life has meaning.",
         },
         {
           label: "The truth",
@@ -55,7 +55,7 @@ const shortcuts = {
     {
       title: "Mere Exposure Effect",
       explanation: [
-        "Repetition breeds familiarity, and familiarity breeds preference - a psychological phenomenon where we favor what we've encountered before.",
+        "Repetition breeds familiarity, and familiarity breeds preference — a psychological phenomenon where we favor what we've encountered before.",
         {
           label: "The trick",
           text: "The chorus that loops until embedded. The formula repeated across a catalog. Familiarity masquerading as affection. These works obsess then exhaust, revealing their hollowness once the chemical trick fades.",
@@ -69,7 +69,7 @@ const shortcuts = {
     {
       title: "Peak-End Rule",
       explanation: [
-        "Memory doesn't record experiences faithfully - it disproportionately weights emotional peaks and endings, forgetting the journey between.",
+        "Memory doesn't record experiences faithfully — it disproportionately weights emotional peaks and endings, forgetting the journey between.",
         {
           label: "The trick",
           text: 'Coast on emptiness, deploy one manipulative climax. "It gets good after episode X." Memory rewrites the experience, making you forget how much nothing you endured.',
@@ -97,7 +97,7 @@ export const data = {
   closing: [
     "I created this because I needed to know these works existed. I needed proof that creative love could triumph over calculated exploitation. **I needed to believe that somewhere, creators refused the easy path and chose the true one.**",
     "They did. They're here.",
-    "After experiencing these works, you'll know what I know: that humans at their best can create beauty that enriches rather than diminishes, elevates rather than exploits, lasts rather than fades. You'll have touched the genuine pinnacle - not the marketed one, not the academic one, but the real one.",
+    "After experiencing these works, you'll know what I know: that humans at their best can create beauty that enriches rather than diminishes, elevates rather than exploits, lasts rather than fades. You'll have touched the genuine pinnacle — not the marketed one, not the academic one, but the real one.",
     "Most importantly, you can rest. You won't lie awake wondering what you've missed. You've experienced what matters. The search can end.",
     "The beauty you were born to experience? You've found it.",
   ],

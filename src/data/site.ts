@@ -6,7 +6,7 @@ import type { PageMeta } from "./types.ts";
 export const siteMeta = {
   title: "Perfect Collection",
   description:
-    "Works that enrich rather than diminish - created from love, not manipulation.",
+    "Works that enrich rather than diminish — created from love, not manipulation.",
 } as const satisfies PageMeta;
 
 /**

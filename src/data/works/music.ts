@@ -72,7 +72,7 @@ export const music: readonly Track[] = [
     subtitle: "You exist to understand others, to hold the hands that matter",
   },
   {
-    artist: "JUSF 周存",
+    artist: "JUSF周存",
     artistLang: "zh-Hans",
     title: "心跳同步的时光 (Memory Ver.)",
     lang: "zh-Hans",
@@ -133,11 +133,6 @@ export const music: readonly Track[] = [
     artist: "Shirfine",
     title: "Illusionary Daytime",
     subtitle: "Dreams don't wait for nightfall",
-  },
-  {
-    artist: "Supercell",
-    title: "My Dearest",
-    subtitle: "Even when the world abandons you, I will stand beside you",
   },
   {
     artist: "Xad",
@@ -216,6 +211,11 @@ export const music: readonly Track[] = [
     subtitle: "Choosing to love yourself is the bravest uprising",
   },
   {
+    artist: "supercell",
+    title: "My Dearest",
+    subtitle: "Even when the world abandons you, I will stand beside you",
+  },
+  {
     artist: "あやりす",
     artistLang: "ja",
     title: "愛を誓いしヒメ飾り",
@@ -267,12 +267,12 @@ export const music: readonly Track[] = [
   {
     artist: "竹達彩奈 & 巽悠衣子",
     artistLang: "ja",
-    title: "バランス KISS",
+    title: "バランスKISS",
     lang: "ja",
     subtitle: "Happiness needs no explanation to those who feel it",
   },
   {
-    artist: "纯白 P",
+    artist: "纯白P",
     artistLang: "zh-Hans",
     title: "海棠仙 (Album Version)",
     lang: "zh-Hans",
