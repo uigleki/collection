@@ -214,6 +214,11 @@ Do:
   the reader's position is the timeline, no observer or script is awake,
   and scrolling back reverses it.
   Where the browser cannot, the page simply stands.
+- The sky's resolution follows the frames (`src/scene/governor.ts`):
+  late frames trade pixels for time, and on-time frames slowly win them back.
+- Every page's code is fetched while the reader reads the first,
+  so no change of page waits on the network —
+  unless the reader has asked to save data.
 - Software rasterizers (SwiftShader/llvmpipe) get the static poster —
   a machine without a GPU should not be handed a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05,

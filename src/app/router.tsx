@@ -43,17 +43,47 @@ function BrokenNight() {
   );
 }
 
+// Each page's code, fetched when first needed — and, once the first page
+// stands and the browser has nothing better to do, fetched ahead (below).
+const pages = [
+  () => import("@/pages/home/Home.tsx"),
+  () => import("@/pages/work/WorkRoom.tsx"),
+  () => import("@/pages/why/Why.tsx"),
+  () => import("@/pages/credits/Credits.tsx"),
+  () => import("@/pages/NotFound.tsx"),
+] as const;
+const [home, room, why, credits, missing] = pages;
+
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: Root,
     ErrorBoundary: BrokenNight,
     children: [
-      { index: true, lazy: () => import("@/pages/home/Home.tsx") },
-      { path: "works/:slug", lazy: () => import("@/pages/work/WorkRoom.tsx") },
-      { path: "why", lazy: () => import("@/pages/why/Why.tsx") },
-      { path: "credits", lazy: () => import("@/pages/credits/Credits.tsx") },
-      { path: "*", lazy: () => import("@/pages/NotFound.tsx") },
+      { index: true, lazy: home },
+      { path: "works/:slug", lazy: room },
+      { path: "why", lazy: why },
+      { path: "credits", lazy: credits },
+      { path: "*", lazy: missing },
     ],
   },
 ]);
+
+/**
+ * Fetch every page's code while the reader reads the first. It is all small
+ * (the rooms share one chunk), and a change of page that waits on the
+ * network is a change of page that stutters — unless the reader has asked
+ * to save data, in which case nothing is fetched until it is asked for.
+ */
+export function prefetchPages(): void {
+  const connection = (navigator as { connection?: { saveData?: boolean } })
+    .connection;
+  if (connection?.saveData) return;
+  const idle = (run: () => void) =>
+    "requestIdleCallback" in window
+      ? requestIdleCallback(run, { timeout: 3000 })
+      : setTimeout(run, 1000);
+  const start = () => idle(() => pages.forEach((page) => void page()));
+  if (document.readyState === "complete") start();
+  else window.addEventListener("load", start, { once: true });
+}

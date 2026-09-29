@@ -1,6 +1,7 @@
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 import { FULL_NIGHT, terminator } from "@/lib/moon.ts";
+import { governor } from "./governor.ts";
 import { ease, sky } from "./signal.ts";
 
 /**
@@ -240,10 +241,11 @@ export function MoonSky() {
     const el = host.current;
     if (!el) return;
 
+    const sharpest = Math.min(window.devicePixelRatio, 1.75);
     let renderer: Renderer;
     try {
       renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 1.75),
+        dpr: sharpest,
         alpha: false,
         antialias: false,
         // One triangle, no depth test: a depth buffer would be tens of MB
@@ -298,14 +300,19 @@ export function MoonSky() {
       aspect = el.clientWidth / Math.max(el.clientHeight, 1);
       span = document.documentElement.scrollHeight - window.innerHeight;
     };
-    const resize = () => {
+    const size = () => {
       renderer.setSize(el.clientWidth, el.clientHeight);
       uniforms.uRes.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
+    };
+    const resize = () => {
+      size();
       measure();
       // Sizing a canvas clears it, and observers run after this frame's
       // draw: without a draw of its own, the frame would show black.
       renderer.render({ scene: mesh });
     };
+    // Resolution follows what this machine can draw in time (governor.ts).
+    const pace = governor({ max: sharpest, min: Math.min(sharpest, 0.6) });
     resize();
 
     // The entry beat: the living sky rises out of the still poster once,
@@ -337,8 +344,13 @@ export function MoonSky() {
     let velocity = 0;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
-      const dt = Math.min((now - last) / 1000, 0.1);
+      const ms = now - last;
+      const dt = Math.min(ms / 1000, 0.1);
       last = now;
+      if (pace.frame(ms)) {
+        renderer.dpr = pace.scale;
+        size(); // drawn below, in this same frame
+      }
       // reduced motion: the ambient time stands still and states cut cleanly,
       // but the moon still shows the truthful phase for where the reader is.
       const still = reduced.matches;
