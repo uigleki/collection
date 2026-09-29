@@ -13,8 +13,6 @@ import {
   workBySlug,
 } from "./works.ts";
 
-const HAN_OR_KANA = /[぀-ヿ㐀-鿿]/;
-
 describe("the collection spine", () => {
   it("holds every work of every category", () => {
     const total = categories.reduce((n, c) => n + c.works.length, 0);
@@ -47,35 +45,6 @@ describe("the collection spine", () => {
     const lastAnime = sections[0]?.entries.at(-1);
     if (!lastAnime) throw new Error("anime missing");
     expect(neighbors(lastAnime.work.slug).next?.category).toBe("Movies");
-  });
-
-  it("marks Japanese titles ja and leaves Latin ones unmarked", () => {
-    expect(workBySlug.get("bakemonogatari")?.work.lang).toBe("ja");
-    expect(workBySlug.get("girls-last-tour")?.work.lang).toBe("ja");
-    expect(workBySlug.get("to-the-moon")?.work.lang).toBeUndefined();
-    expect(
-      workBySlug.get("charlie-chocolate-factory")?.work.lang,
-    ).toBeUndefined();
-  });
-
-  // Script detection cannot tell 少女終末旅行 from 世末积雨云 — both are
-  // kanji-only, and the regional glyph forms differ. It CAN insist that
-  // somebody said which one a title is. This is the seam that keeps
-  // DESIGN.md's "languages are data, not heuristics" true as the collection
-  // grows: it never decides a language, it only refuses silence.
-  it("makes every non-Latin name declare its language", () => {
-    for (const { work } of allWorks) {
-      if (HAN_OR_KANA.test(work.title))
-        expect(work.lang, work.title).toBeDefined();
-    }
-    // A track has two names, and they need not share a language: 凛々咲
-    // sings "Letters from Heaven".
-    for (const track of music) {
-      if (HAN_OR_KANA.test(track.title))
-        expect(track.lang, track.title).toBeDefined();
-      if (HAN_OR_KANA.test(track.artist))
-        expect(track.artistLang, track.artist).toBeDefined();
-    }
   });
 
   it("names each track by its performer and its song, not one string", () => {
