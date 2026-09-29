@@ -65,6 +65,57 @@
   color-scheme: dark;
 }
 
+/* Night turning to dusk: the palette is registered as colors so the
+   browser can interpolate it, and one transition on the root carries the
+   whole page — every text, border, and wash follows at once. It is a
+   transition, not a picture of the page: the reader keeps scrolling while
+   it turns, and a second press turns it back from wherever it stands. The
+   sky eases on the same beat in its own loop (signal.ts). */
+@property --color-yoru {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0b0e17;
+}
+@property --color-mizu {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #12161f;
+}
+@property --color-kasumi {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2a3140;
+}
+@property --color-tsuki {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #eaf1f8;
+}
+@property --color-hoshi {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #98a2b3;
+}
+@property --color-tsukikage {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #cdb489;
+}
+@property --color-ring {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #c7d3e0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    transition-property:
+      --color-yoru, --color-mizu, --color-kasumi, --color-tsuki, --color-hoshi,
+      --color-tsukikage, --color-ring;
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
 /* The light theme is dusk: warm twilight paper under a golden ball. */
 :root[data-theme="light"] {
   color-scheme: light;
@@ -226,6 +277,23 @@ body {
   transform: scale(0.92);
 }
 
+/* The theme toggle's two glyphs share one spot; the one not shown is
+   turned a quarter away and faded. A spring on transform, so a press
+   mid-turn turns it back from where it is. */
+.glyph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 0.3s,
+    transform var(--spring-hover-ms, 0.3s) var(--spring-hover, ease);
+}
+.glyph[data-shown="false"] {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.5);
+}
+
 .pill {
   display: inline-flex;
   gap: 0.5rem;
@@ -316,33 +384,4 @@ body {
 }
 .skip-link:focus-visible {
   transform: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  /* Theme toggle: the new sky reveals as an expanding eclipse from the
-     toggle. One clip animation, nothing cross-fades. */
-  ::view-transition-old(root) {
-    animation: none;
-  }
-  ::view-transition-new(root) {
-    animation: eclipse-wipe 0.62s cubic-bezier(0.7, 0, 0.3, 1);
-  }
-  @keyframes eclipse-wipe {
-    from {
-      clip-path: circle(0% at var(--vt-x, 100%) var(--vt-y, 0%));
-    }
-    to {
-      clip-path: circle(150% at var(--vt-x, 100%) var(--vt-y, 0%));
-    }
-  }
-}
-
-/* Reduced motion: honest, instant cuts. */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    /* biome-ignore lint/complexity/noImportantStyles: a reduced-motion opt-out has to outrank every animation rule */
-    animation: none !important;
-  }
 }

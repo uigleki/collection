@@ -180,6 +180,56 @@ test.describe("rooms", () => {
     await theme("dark");
   });
 
+  test("the theme turns live, and can be turned back mid-way", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const toggle = page.getByRole("button", { name: /^Switch to/ });
+    await expect(toggle).toBeVisible();
+    const seen = await page.evaluate(async () => {
+      const ground = () =>
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--color-yoru")
+          .trim();
+      const night = ground();
+      let frozen = false;
+      const vt = document.startViewTransition?.bind(document);
+      if (vt)
+        document.startViewTransition = (...args) => {
+          frozen = true;
+          return vt(...args);
+        };
+      const button = document.querySelector<HTMLElement>(
+        'button[aria-label^="Switch to"]',
+      );
+      button?.click();
+      // the first frame in which the ground has begun to turn
+      let between = night;
+      for (let i = 0; i < 60 && between === night; i++) {
+        await new Promise(requestAnimationFrame);
+        between = ground();
+      }
+      // turned back before dusk arrives
+      button?.click();
+      return { night, between, frozen };
+    });
+    // no picture of the page stands in for it while the colors turn
+    expect(seen.frozen).toBe(false);
+    expect(seen.between).not.toBe(seen.night);
+    // …and was caught mid-turn, not already at dusk
+    expect(seen.between).not.toBe("rgb(242, 236, 224)");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expect
+      .poll(() =>
+        page.evaluate(() =>
+          getComputedStyle(document.documentElement)
+            .getPropertyValue("--color-yoru")
+            .trim(),
+        ),
+      )
+      .toBe(seen.night);
+  });
+
   test("a system switch before the app starts is still followed", async ({
     page,
   }) => {

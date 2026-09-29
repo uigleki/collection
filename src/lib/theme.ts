@@ -20,13 +20,22 @@ function apply(theme: Theme) {
   for (const l of listeners) l();
 }
 
-export function chooseTheme(theme: Theme) {
+function chooseTheme(theme: Theme) {
   try {
     localStorage.setItem("theme", theme);
   } catch {
     /* private mode — the choice simply doesn't persist */
   }
   apply(theme);
+}
+
+/**
+ * Turn to the other theme — whichever is showing *now*, not whichever was
+ * showing when the control last rendered: two presses inside one frame
+ * must turn the page there and back.
+ */
+export function flipTheme() {
+  chooseTheme(current() === "dark" ? "light" : "dark");
 }
 
 /** Sync the sky on load and follow the OS until the visitor chooses. */

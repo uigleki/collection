@@ -97,6 +97,9 @@ deep ink for text, sunset gold as the lone accent.
 There is no second set of token names:
 `:root[data-theme="light"]` rebinds the same six,
 so every component keeps asking for `tsuki` and gets whichever sky it is under.
+The six are registered as colors (`@property`),
+so a theme change is one transition on the root.
+The page turns with the sky, live, and a second press turns it back mid-way.
 The saturation budget is spent on exactly one thing — the golden ball.
 
 Work accents are each work's canonical color —
