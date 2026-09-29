@@ -360,8 +360,7 @@ export function MoonSky() {
 
       // Where the reader is. Sampled here rather than in its own rAF: the
       // sky is the only thing that reads these, and this loop already runs
-      // every frame. Taken from window.scrollY, so it is identical with or
-      // without Lenis.
+      // every frame.
       const y = window.scrollY;
       velocity += (y - lastY - velocity) * 0.25;
       lastY = y;

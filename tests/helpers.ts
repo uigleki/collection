@@ -15,10 +15,10 @@ export const row = (page: Page, title: string) =>
 export const NOT_FOUND = "Nothing stands here.";
 
 /**
- * Where the reader actually came to rest. Lenis glides on after the last
- * wheel event for as long as its lerp takes, so any fixed wait samples a
- * position still in flight — while the position the page remembers is the one
- * it stopped at. Waiting for stillness is waiting for the real thing.
+ * Where the reader actually came to rest. The browser's smooth wheel scroll
+ * glides on after the last wheel event, so any fixed wait samples a position
+ * still in flight — while the position the page remembers is the one it
+ * stopped at. Waiting for stillness is waiting for the real thing.
  */
 export async function restingScrollY(page: Page): Promise<number> {
   let last = Number.NaN;

@@ -179,11 +179,12 @@ verified by axe in CI.
 
 Do:
 
-- Lenis smooth scroll, disabled under prefers-reduced-motion;
-  restoration is ours (save continuously from scroll events;
-  restore via `lenis.resize()` + `scrollTo(immediate)` inside a layout effect,
-  within the view transition's update callback).
-  Scroll HOLDS while a morph flies.
+- Native scroll, never a scroll library:
+  the browser scrolls off the main thread, at the display's own rate,
+  with the platform's own inertia — nothing a script can match.
+  The reader's scroll is never held, not even while something animates.
+  Restoration is ours (save continuously from scroll events;
+  restore with an instant `scrollTo` inside a layout effect).
 - Integrate all shader phases on the CPU (`phase += rate·dt`) — never
   multiply a changing rate by total time.
 - Reduced motion is a parallel design: end states render instantly, the

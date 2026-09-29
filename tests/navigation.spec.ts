@@ -92,6 +92,22 @@ test.describe("rooms", () => {
     await expect(page).toHaveURL(/nisemonogatari$/);
   });
 
+  test("a room scrolls the moment it opens", async ({ page }) => {
+    await page.goto("/");
+    const link = row(page, "化物語");
+    await link.scrollIntoViewIfNeeded();
+    await link.click();
+    await expect(heading(page, "化物語")).toBeAttached();
+    // No animation owns the page: the reader's wheel is obeyed at once,
+    // whatever is still settling.
+    const before = await page.evaluate(() => window.scrollY);
+    await page.mouse.move(640, 400);
+    await page.mouse.wheel(0, 400);
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY), { timeout: 400 })
+      .toBeGreaterThan(before + 100);
+  });
+
   test("works without cover art still have complete rooms", async ({
     page,
   }) => {
@@ -120,7 +136,7 @@ test.describe("rooms", () => {
     await roundTrip(page, link, before, 200);
   });
 
-  test("smooth scrolling restores the position exactly", async ({ page }) => {
+  test("wheel reading restores the position exactly", async ({ page }) => {
     await page.goto("/");
     const link = row(page, "少女終末旅行");
     // Real reading: wheel down until the row sits in the viewport. Each look

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createBrowserRouter, Outlet } from "react-router";
-import { useScroll, useScrollMemory } from "@/lib/scroll.ts";
+import { useScrollMemory } from "@/lib/scroll.ts";
 import { initTheme } from "@/lib/theme.ts";
 import { MoonSky } from "@/scene/MoonSky.tsx";
 import { BackToTop } from "@/ui/BackToTop.tsx";
@@ -8,7 +8,6 @@ import { Standstill } from "@/ui/Standstill.tsx";
 import { ThemeToggle } from "@/ui/ThemeToggle.tsx";
 
 function Root() {
-  useScroll();
   useScrollMemory();
 
   useEffect(() => initTheme(), []);

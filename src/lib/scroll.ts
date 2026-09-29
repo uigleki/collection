@@ -1,9 +1,6 @@
-import Lenis from "lenis";
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router";
 import { sky } from "@/scene/signal.ts";
-
-let lenis: Lenis | null = null;
 
 /**
  * How long to wait out a view transition. Long enough to outlast the
@@ -12,24 +9,6 @@ let lenis: Lenis | null = null;
  * this, so the waits cannot drift apart.
  */
 const TRANSITION_MS = 700;
-
-/**
- * Smooth scroll (Lenis), skipped entirely under prefers-reduced-motion where
- * native scroll is the honest choice. Nothing samples the scroll here: the
- * only reader of velocity and progress is the sky, and its own frame loop
- * takes them straight from `window.scrollY` (see scene/MoonSky).
- */
-export function useScroll(): void {
-  useEffect(() => {
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      lenis = new Lenis({ autoRaf: true, lerp: 0.12, anchors: true });
-    }
-    return () => {
-      lenis?.destroy();
-      lenis = null;
-    };
-  }, []);
-}
 
 /**
  * Which way the shelf is being walked, for the duration of one navigation.
@@ -41,10 +20,13 @@ export function walkShelf(dir: "prev" | "next"): void {
   document.documentElement.dataset.dir = dir;
 }
 
-/** Ride back to the surface — smooth through Lenis, instant without. */
+/**
+ * Ride back to the surface. The browser's own smooth scroll: it runs off the
+ * main thread, and the reader's wheel or finger interrupts it at once.
+ */
 export function scrollToTop(): void {
-  if (lenis) lenis.scrollTo(0, { duration: 1.1 });
-  else window.scrollTo(0, 0);
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
 }
 
 // Positions the reader left each path at. Saved continuously from scroll
@@ -72,8 +54,7 @@ function positions(): Map<string, number> {
 }
 
 /**
- * Scroll restoration that Lenis cannot fight: the arrival position is
- * applied through Lenis itself (scrollTo immediate) inside a layout effect
+ * Scroll restoration: the arrival position is applied inside a layout effect
  * — which runs within the view transition's update callback, so the
  * incoming snapshot is taken at the right offset and nothing jumps after
  * the morph settles.
@@ -127,25 +108,14 @@ export function useScrollMemory(): void {
     if (!firstArrival) sky.hold = true;
     firstArrival = false;
 
-    // Put the reader back where they were. Remeasure first, or Lenis clamps
-    // the target to the DEPARTED page's cached height.
-    if (lenis) {
-      lenis.resize();
-      lenis.scrollTo(y, { immediate: true, force: true });
-    } else {
-      window.scrollTo(0, y);
-    }
+    // Put the reader back where they were.
+    window.scrollTo({ top: y, behavior: "instant" });
 
-    // Hold the scroll while the view transition plays: the morph's targets
-    // were measured at snapshot time, and scrolling mid-flight would land
-    // the cover on a place that no longer exists.
-    lenis?.stop();
     // Everything a transition suspends is resumed here, together: the sky
-    // starts drawing, the scroll starts moving, and the shelf's direction
-    // stops applying. One clock, so they cannot fall out of step.
+    // starts drawing and the shelf's direction stops applying. One clock,
+    // so they cannot fall out of step. The scroll is never suspended.
     const release = () => {
       sky.hold = false;
-      lenis?.start();
       delete document.documentElement.dataset.dir;
     };
     const settle = setTimeout(release, TRANSITION_MS);
