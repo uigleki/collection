@@ -66,9 +66,9 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
             scale: zoom,
             transformPerspective: 700,
           }}
-          className="w-40 md:w-auto"
+          className="cover-glow w-40 md:w-auto"
         >
-          <Cover work={work} morph className="cover-lift" />
+          <Cover work={work} morph />
         </motion.div>
 
         <div className="max-w-xl self-center">

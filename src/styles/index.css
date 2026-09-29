@@ -167,17 +167,25 @@ body {
     100% 1px;
   transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.link-draw:hover,
 .link-draw:focus-visible {
   background-size:
     100% 1px,
     100% 1px;
 }
+@media (hover: hover) {
+  .link-draw:hover {
+    background-size:
+      100% 1px,
+      100% 1px;
+  }
+}
 
 /* The one glass language every fixture speaks — theme toggle, back,
    neighbors, back-to-top, and the standalone calls-to-action that are the
    same glass drawn out into a pill. Press physics on both, so they feel
-   like instruments, not icons. */
+   like instruments, not icons: scale rides a spring (src/lib/motion.ts
+   publishes it as --spring-*), so a press let go halfway springs back from
+   where it was instead of finishing a canned curve. */
 .chip,
 .pill {
   align-items: center;
@@ -190,11 +198,14 @@ body {
     border-color 0.3s,
     color 0.3s,
     opacity 0.3s,
-    transform 0.3s;
+    transform var(--spring-hover-ms, 0.3s) var(--spring-hover, ease);
 }
-.chip:hover,
+.chip:active,
+.pill:active {
+  transition-duration: 0.3s, 0.3s, 0.3s, var(--spring-press-ms, 0.1s);
+  transition-timing-function: ease, ease, ease, var(--spring-press, ease);
+}
 .chip:focus-visible,
-.pill:hover,
 .pill:focus-visible {
   border-color: var(--color-kasumi);
 }
@@ -207,13 +218,12 @@ body {
   color: var(--color-hoshi);
   backdrop-filter: blur(8px);
 }
-.chip:hover,
 .chip:focus-visible {
   color: var(--color-tsuki);
   transform: scale(1.1);
 }
 .chip:active {
-  transform: scale(0.95);
+  transform: scale(0.92);
 }
 
 .pill {
@@ -222,12 +232,32 @@ body {
   padding: 0.6rem 1.4rem;
   backdrop-filter: blur(4px);
 }
-.pill:hover,
 .pill:focus-visible {
   transform: scale(1.04);
 }
 .pill:active {
   transform: scale(0.97);
+}
+
+@media (hover: hover) {
+  .chip:hover,
+  .pill:hover {
+    border-color: var(--color-kasumi);
+  }
+  .chip:hover {
+    color: var(--color-tsuki);
+    transform: scale(1.1);
+  }
+  .pill:hover {
+    transform: scale(1.04);
+  }
+  /* :active after :hover, or the hover lift would win the press */
+  .chip:hover:active {
+    transform: scale(0.92);
+  }
+  .pill:hover:active {
+    transform: scale(0.97);
+  }
 }
 
 /* Row hover: the title underlines itself in the work's own accent, the
@@ -238,19 +268,38 @@ body {
   background-size: 0% 2px;
   transition: background-size 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.group:hover .underline-grow,
 .group:focus-visible .underline-grow {
   background-size: 100% 2px;
 }
-/* Motion springs own the cover's transform (lift + tilt together);
-   CSS carries only the accent glow. */
-.cover-lift {
-  transition: box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+/* Motion springs own the cover's transform (lift + tilt together); CSS
+   carries only the accent glow. The glow is drawn once, behind the cover,
+   and only its opacity moves — a shadow that grows repaints its whole blur
+   every frame, a layer that fades is composited. */
+.cover-glow {
+  position: relative;
+  isolation: isolate;
 }
-.group:hover .cover-lift,
-.group:focus-visible .cover-lift {
+.cover-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 0.125rem;
   box-shadow: 0 24px 60px -18px
     color-mix(in oklab, var(--glow) 45%, transparent);
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.group:focus-visible .cover-glow::after {
+  opacity: 1;
+}
+@media (hover: hover) {
+  .group:hover .underline-grow {
+    background-size: 100% 2px;
+  }
+  .group:hover .cover-glow::after {
+    opacity: 1;
+  }
 }
 
 .skip-link {

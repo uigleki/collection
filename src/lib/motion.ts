@@ -1,9 +1,12 @@
+import { cssSpring, type Spring } from "./spring.ts";
+
 /**
  * The site's motion vocabulary.
  *
- * Four springs, because four different things move: a display line lifting
- * behind its mask, a block of reading arriving, a row in a long list, and a
- * cover following the cursor. Anything that moves for one of those reasons
+ * One spring per reason something moves: a display line lifting behind its
+ * mask, a block of reading arriving, a row in a long list, a cover following
+ * the cursor, a control under a hovering pointer, a control being pressed.
+ * Anything that moves for one of those reasons
  * uses that spring — the same gesture spelled 60/18 in one file and 65/19 in
  * the next is drift, not art direction, and DESIGN.md asks this site to be
  * internally coherent before it asks anything else.
@@ -36,3 +39,25 @@ export const LIST = {
 
 /** Live cursor tracking: stiff enough to feel attached to the pointer. */
 export const FOLLOW = { stiffness: 160, damping: 20 } as const;
+
+/** A pointer settling onto a control: a little give, then rest. */
+export const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;
+
+/** A press: crisp going in, so the control answers the finger at once. */
+export const PRESS = { stiffness: 900, damping: 50 } as const satisfies Spring;
+
+/**
+ * Publish the CSS-side springs as custom properties (index.css reads
+ * --spring-hover / --spring-press and their -ms durations), so a hover in
+ * CSS and a spring in motion are the same physics, written once.
+ */
+export function publishSprings(root: HTMLElement): void {
+  for (const [name, spring] of [
+    ["hover", HOVER],
+    ["press", PRESS],
+  ] as const) {
+    const { easing, duration } = cssSpring(spring);
+    root.style.setProperty(`--spring-${name}`, easing);
+    root.style.setProperty(`--spring-${name}-ms`, `${duration}ms`);
+  }
+}

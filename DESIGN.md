@@ -168,7 +168,10 @@ verified by axe in CI.
   (whileInView is banned here:
   observers fire under view transitions before anything is visible).
   Flaws are stated plainly.
-- **Chips** — 44px glass circles, press physics, labels on hover.
+- **Chips** — 44px glass circles, labels on hover.
+  Hover and press ride springs even in plain CSS:
+  `src/lib/motion.ts` publishes them as `linear()` curves,
+  so a press let go halfway springs back from where it is.
 - **Link** — every text link draws its underline left-to-right; one
   gesture site-wide.
 
@@ -185,6 +188,11 @@ Do:
   multiply a changing rate by total time.
 - Reduced motion is a parallel design: end states render instantly, the
   moon still shows the truthful phase, cuts are honest.
+- Hover exists only where a pointer can hover (`@media (hover: hover)`):
+  a touch screen keeps :hover on whatever it touched last,
+  so an unguarded hover style leaves a tapped control stuck in it.
+- Animate only what the compositor can carry — transform and opacity.
+  A glow is drawn once and faded, never a shadow that grows.
 - Software rasterizers (SwiftShader/llvmpipe) get the static poster —
   a machine without a GPU should not be handed a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05,
