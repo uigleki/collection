@@ -1,4 +1,4 @@
-import type { Track } from "../types";
+import type { Track } from "../types.ts";
 
 export const music: readonly Track[] = [
   {

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { sky } from "@/scene/signal";
+import { sky } from "@/scene/signal.ts";
 
 type Cross = (visible: boolean) => void;
 

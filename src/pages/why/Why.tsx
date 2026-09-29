@@ -1,13 +1,13 @@
 import { motion, useReducedMotion } from "motion/react";
-import { siteMeta } from "@/data/site";
-import type { ReviewPoint } from "@/data/types";
-import { data, meta } from "@/data/why";
-import { renderEmphasis } from "@/lib/emphasis";
-import { FULL_NIGHT } from "@/lib/moon";
-import { ENTER } from "@/lib/motion";
-import { useSky } from "@/lib/sky";
-import { usePage } from "@/lib/usePage";
-import { Reading } from "@/ui/Reading";
+import { siteMeta } from "@/data/site.ts";
+import type { ReviewPoint } from "@/data/types.ts";
+import { data, meta } from "@/data/why.ts";
+import { renderEmphasis } from "@/lib/emphasis.tsx";
+import { FULL_NIGHT } from "@/lib/moon.ts";
+import { ENTER } from "@/lib/motion.ts";
+import { useSky } from "@/lib/sky.ts";
+import { usePage } from "@/lib/usePage.ts";
+import { Reading } from "@/ui/Reading.tsx";
 
 /**
  * The essay, read under a full moon — the page the koan points to.

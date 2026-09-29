@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Doorway } from "./Doorway";
+import { Doorway } from "./Doorway.tsx";
 
 /**
  * The shape of a page that is only prose: one narrow column, and the

@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { pages } from "../src/data/site";
-import { HOME, heading, row } from "./helpers";
+import { pages } from "../src/data/site.ts";
+import { HOME, heading, row } from "./helpers.ts";
 
 // The standing pages come from the site itself, so a page added there is
 // audited the day it is added — a route that gets a sitemap entry and no axe

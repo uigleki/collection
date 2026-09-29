@@ -1,7 +1,7 @@
 import Lenis from "lenis";
 import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router";
-import { sky } from "@/scene/signal";
+import { sky } from "@/scene/signal.ts";
 
 let lenis: Lenis | null = null;
 

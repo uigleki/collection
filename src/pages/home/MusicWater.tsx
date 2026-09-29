@@ -1,8 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
-import { music, trackName } from "@/data/works";
-import { LIST } from "@/lib/motion";
-import { useGlade } from "@/lib/sky";
-import { Interlude } from "./Interlude";
+import { music, trackName } from "@/data/works.ts";
+import { LIST } from "@/lib/motion.ts";
+import { useGlade } from "@/lib/sky.ts";
+import { Interlude } from "./Interlude.tsx";
 
 /** The songs live on the water; in view, the moonglade burns brighter. */
 export function MusicWater() {

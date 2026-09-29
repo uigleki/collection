@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { FULL_NIGHT } from "@/lib/moon";
-import { SOURCES } from "../../scripts/cover-sources";
-import { CANON_ACCENT } from "./accents";
-import { covers } from "./generated/covers";
+import { FULL_NIGHT } from "@/lib/moon.ts";
+import { SOURCES } from "../../scripts/cover-sources.ts";
+import { CANON_ACCENT } from "./accents.ts";
+import { covers } from "./generated/covers.ts";
 import {
   allWorks,
   categories,
@@ -11,7 +11,7 @@ import {
   sections,
   trackName,
   workBySlug,
-} from "./works";
+} from "./works.ts";
 
 const HAN_OR_KANA = /[぀-ヿ㐀-鿿]/;
 

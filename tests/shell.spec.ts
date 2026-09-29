@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
-import { origin } from "../src/data/site";
-import { HOME, heading, NOT_FOUND } from "./helpers";
+import { origin } from "../src/data/site.ts";
+import { HOME, heading, NOT_FOUND } from "./helpers.ts";
 
 // dist/ is what the preview server is already serving (see playwright.config).
 const dist = (file: string) =>

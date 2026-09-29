@@ -1,7 +1,7 @@
 import { type ReactNode, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
-import type { Work } from "@/data/types";
-import { Icon } from "./Icon";
+import type { Work } from "@/data/types.ts";
+import { Icon } from "./Icon.tsx";
 
 /**
  * The page's fixtures: no bar, no gradient — the same glass chips as the

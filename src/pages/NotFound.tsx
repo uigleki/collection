@@ -1,8 +1,8 @@
 import { Link } from "react-router";
-import { siteMeta } from "@/data/site";
-import { useSky } from "@/lib/sky";
-import { usePage } from "@/lib/usePage";
-import { Standstill } from "@/ui/Standstill";
+import { siteMeta } from "@/data/site.ts";
+import { useSky } from "@/lib/sky.ts";
+import { usePage } from "@/lib/usePage.ts";
+import { Standstill } from "@/ui/Standstill.tsx";
 
 /** A page that isn't in the collection. */
 export function NotFound() {

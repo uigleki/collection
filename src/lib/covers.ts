@@ -1,5 +1,5 @@
-import { CANON_ACCENT } from "@/data/accents";
-import { type CoverMeta, covers } from "@/data/generated/covers";
+import { CANON_ACCENT } from "@/data/accents.ts";
+import { type CoverMeta, covers } from "@/data/generated/covers.ts";
 
 // Vite resolves every cover to its hashed asset URL at build time.
 const urls = import.meta.glob<string>("../assets/works/*.webp", {

@@ -1,16 +1,16 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import { siteMeta } from "@/data/site";
-import { neighbors, type WorkEntry, workBySlug } from "@/data/works";
-import { accentFor } from "@/lib/covers";
-import { ENTER, RISE } from "@/lib/motion";
-import { walkShelf } from "@/lib/scroll";
-import { useSky } from "@/lib/sky";
-import { usePage } from "@/lib/usePage";
-import { Cover } from "@/ui/Cover";
-import { Doorway, EdgeChip } from "@/ui/Doorway";
-import { NotFound } from "../NotFound";
+import { siteMeta } from "@/data/site.ts";
+import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
+import { accentFor } from "@/lib/covers.ts";
+import { ENTER, RISE } from "@/lib/motion.ts";
+import { walkShelf } from "@/lib/scroll.ts";
+import { useSky } from "@/lib/sky.ts";
+import { usePage } from "@/lib/usePage.ts";
+import { Cover } from "@/ui/Cover.tsx";
+import { Doorway, EdgeChip } from "@/ui/Doorway.tsx";
+import { NotFound } from "../NotFound.tsx";
 
 /** A work's room: the sky eases to its night and dims; the room is lit
  * by the work's canonical color. Flaws are stated plainly. */

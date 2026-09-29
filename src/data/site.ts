@@ -1,4 +1,4 @@
-import type { PageMeta } from "./types";
+import type { PageMeta } from "./types.ts";
 
 // Its own module rather than a field of works.ts: every route titles itself
 // from this, and routes like /why and /404 have no other reason to pull in

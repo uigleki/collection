@@ -1,11 +1,11 @@
 import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
-import type { WorkEntry } from "@/data/works";
-import { accentFor } from "@/lib/covers";
-import { ENTER, FOLLOW } from "@/lib/motion";
-import { revealed } from "@/lib/reveal";
-import { useNight } from "@/lib/sky";
-import { Cover } from "@/ui/Cover";
+import type { WorkEntry } from "@/data/works.ts";
+import { accentFor } from "@/lib/covers.ts";
+import { ENTER, FOLLOW } from "@/lib/motion.ts";
+import { revealed } from "@/lib/reveal.ts";
+import { useNight } from "@/lib/sky.ts";
+import { Cover } from "@/ui/Cover.tsx";
 
 const rows = revealed("work");
 

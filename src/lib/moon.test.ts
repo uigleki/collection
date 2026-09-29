@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { allWorks } from "@/data/works";
-import { FULL_NIGHT, terminator } from "./moon";
+import { allWorks } from "@/data/works.ts";
+import { FULL_NIGHT, terminator } from "./moon.ts";
 
 // moon.ts writes FULL_NIGHT out so the sky never imports the works data.
 // This is the seam that keeps the constant honest.

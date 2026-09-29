@@ -1,6 +1,6 @@
 import { type RefObject, useEffect, useRef } from "react";
 import { useLocation } from "react-router";
-import { origin } from "@/data/site";
+import { origin } from "@/data/site.ts";
 
 // The key of the last page the visitor stood on. Lets the hook tell a real
 // route CHANGE (focus moves to the new h1 — including Back to Home) from the

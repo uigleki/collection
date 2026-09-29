@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { scrollToTop } from "@/lib/scroll";
-import { Icon } from "./Icon";
+import { scrollToTop } from "@/lib/scroll.ts";
+import { Icon } from "./Icon.tsx";
 
 /**
  * Bottom-right, same glass language as every other fixture. Appears only

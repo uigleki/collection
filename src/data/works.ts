@@ -1,9 +1,9 @@
-import type { Track, Work, WorkCategory } from "./types";
-import { anime } from "./works/anime";
-import { artists } from "./works/artists";
-import { games } from "./works/games";
-import { movies } from "./works/movies";
-import { music } from "./works/music";
+import type { Track, Work, WorkCategory } from "./types.ts";
+import { anime } from "./works/anime.ts";
+import { artists } from "./works/artists.ts";
+import { games } from "./works/games.ts";
+import { movies } from "./works/movies.ts";
+import { music } from "./works/music.ts";
 
 export const categories = [
   { name: "Anime", works: anime },

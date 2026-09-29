@@ -1,8 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
-import { couplets, meta } from "@/data/why";
-import { RISE } from "@/lib/motion";
-import { revealed } from "@/lib/reveal";
+import { couplets, meta } from "@/data/why.ts";
+import { RISE } from "@/lib/motion.ts";
+import { revealed } from "@/lib/reveal.ts";
 
 // The essay's own final beat, verbatim: the hero's question is answered in
 // its own words — beauty for beauty, question for question.

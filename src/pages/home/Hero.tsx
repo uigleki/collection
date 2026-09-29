@@ -1,8 +1,8 @@
 import { motion, useReducedMotion } from "motion/react";
 import type { RefObject } from "react";
-import { couplets } from "@/data/why";
-import { RISE } from "@/lib/motion";
-import { useNight } from "@/lib/sky";
+import { couplets } from "@/data/why.ts";
+import { RISE } from "@/lib/motion.ts";
+import { useNight } from "@/lib/sky.ts";
 
 // The opening question, verbatim from docs/why.md — the page is its answer.
 const [questionA, questionB] = couplets.opening;

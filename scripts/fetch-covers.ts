@@ -16,8 +16,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import sharp from "sharp";
 import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
-import { allWorks } from "../src/data/works";
-import { SOURCES } from "./cover-sources";
+import { allWorks } from "../src/data/works.ts";
+import { SOURCES } from "./cover-sources.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ASSETS = resolve(ROOT, "src/assets/works");

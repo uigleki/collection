@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { createBrowserRouter, Outlet } from "react-router";
-import { useScroll, useScrollMemory } from "@/lib/scroll";
-import { initTheme } from "@/lib/theme";
-import { MoonSky } from "@/scene/MoonSky";
-import { BackToTop } from "@/ui/BackToTop";
-import { Standstill } from "@/ui/Standstill";
-import { ThemeToggle } from "@/ui/ThemeToggle";
+import { useScroll, useScrollMemory } from "@/lib/scroll.ts";
+import { initTheme } from "@/lib/theme.ts";
+import { MoonSky } from "@/scene/MoonSky.tsx";
+import { BackToTop } from "@/ui/BackToTop.tsx";
+import { Standstill } from "@/ui/Standstill.tsx";
+import { ThemeToggle } from "@/ui/ThemeToggle.tsx";
 
 function Root() {
   useScroll();
@@ -49,11 +49,11 @@ export const router = createBrowserRouter([
     Component: Root,
     ErrorBoundary: BrokenNight,
     children: [
-      { index: true, lazy: () => import("@/pages/home/Home") },
-      { path: "works/:slug", lazy: () => import("@/pages/work/WorkRoom") },
-      { path: "why", lazy: () => import("@/pages/why/Why") },
-      { path: "credits", lazy: () => import("@/pages/credits/Credits") },
-      { path: "*", lazy: () => import("@/pages/NotFound") },
+      { index: true, lazy: () => import("@/pages/home/Home.tsx") },
+      { path: "works/:slug", lazy: () => import("@/pages/work/WorkRoom.tsx") },
+      { path: "why", lazy: () => import("@/pages/why/Why.tsx") },
+      { path: "credits", lazy: () => import("@/pages/credits/Credits.tsx") },
+      { path: "*", lazy: () => import("@/pages/NotFound.tsx") },
     ],
   },
 ]);

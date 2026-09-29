@@ -1,7 +1,7 @@
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
-import { FULL_NIGHT, terminator } from "@/lib/moon";
-import { ease, sky } from "./signal";
+import { FULL_NIGHT, terminator } from "@/lib/moon.ts";
+import { ease, sky } from "./signal.ts";
 
 /**
  * The sky: one fixed WebGL canvas alive for the whole visit — a

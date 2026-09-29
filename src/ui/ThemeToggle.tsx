@@ -1,5 +1,5 @@
-import { chooseTheme, type Theme, useTheme } from "@/lib/theme";
-import { Icon } from "./Icon";
+import { chooseTheme, type Theme, useTheme } from "@/lib/theme.ts";
+import { Icon } from "./Icon.tsx";
 
 /**
  * Shows where you're going: a sun by night, a moon by day. Switching runs

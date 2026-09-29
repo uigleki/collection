@@ -1,6 +1,6 @@
 import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
-import { renderEmphasis } from "./emphasis";
+import { renderEmphasis } from "./emphasis.tsx";
 
 /** The marked segments, in order — what the function actually decides. */
 function marks(nodes: ReturnType<typeof renderEmphasis>): string[] {

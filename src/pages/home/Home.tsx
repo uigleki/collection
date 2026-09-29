@@ -1,13 +1,13 @@
-import { siteMeta } from "@/data/site";
-import { sections } from "@/data/works";
-import { useSky } from "@/lib/sky";
-import { usePage } from "@/lib/usePage";
-import { DawnClose } from "./DawnClose";
-import { Hero } from "./Hero";
-import { Interlude } from "./Interlude";
-import { Koan } from "./Koan";
-import { MusicWater } from "./MusicWater";
-import { NightRow } from "./NightRow";
+import { siteMeta } from "@/data/site.ts";
+import { sections } from "@/data/works.ts";
+import { useSky } from "@/lib/sky.ts";
+import { usePage } from "@/lib/usePage.ts";
+import { DawnClose } from "./DawnClose.tsx";
+import { Hero } from "./Hero.tsx";
+import { Interlude } from "./Interlude.tsx";
+import { Koan } from "./Koan.tsx";
+import { MusicWater } from "./MusicWater.tsx";
+import { NightRow } from "./NightRow.tsx";
 
 /** The whole night: fourteen works → the koan → the music → dawn. */
 export function Home() {

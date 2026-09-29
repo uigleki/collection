@@ -1,4 +1,4 @@
-import type { PageMeta, WhyData, WhySection } from "./types";
+import type { PageMeta, WhyData, WhySection } from "./types.ts";
 
 export const meta = {
   title: "Why These Works",

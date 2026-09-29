@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { Work } from "@/data/types";
-import { accentFor, coverFor } from "@/lib/covers";
+import type { Work } from "@/data/types.ts";
+import { accentFor, coverFor } from "@/lib/covers.ts";
 
 interface CoverProps {
   work: Work;

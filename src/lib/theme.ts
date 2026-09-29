@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { sky } from "@/scene/signal";
+import { sky } from "@/scene/signal.ts";
 
 export type Theme = "dark" | "light";
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { couplets, data } from "./why";
+import { couplets, data } from "./why.ts";
 
 // Every narrative line on the site is verbatim from docs/why.md (DESIGN.md).
 // The home page's two display couplets are the only copy that is re-typed

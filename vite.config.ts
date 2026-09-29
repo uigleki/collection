@@ -5,10 +5,10 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
-import { origin, pages, siteMeta } from "./src/data/site";
-import { allWorks } from "./src/data/works";
+import { origin, pages, siteMeta } from "./src/data/site.ts";
+import { allWorks } from "./src/data/works.ts";
 
-const STYLES = resolve(__dirname, "src/styles/index.css");
+const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
 
 /**
  * The ground each theme stands on, read out of the tokens themselves.
@@ -221,7 +221,7 @@ export default defineConfig({
   plugins: [siteMetadata(), react(), tailwindcss()],
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      "@": resolve(import.meta.dirname, "src"),
     },
   },
   test: {

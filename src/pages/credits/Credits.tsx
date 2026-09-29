@@ -1,9 +1,9 @@
-import { siteMeta } from "@/data/site";
-import { allWorks } from "@/data/works";
-import { coverFor } from "@/lib/covers";
-import { useSky } from "@/lib/sky";
-import { usePage } from "@/lib/usePage";
-import { Reading } from "@/ui/Reading";
+import { siteMeta } from "@/data/site.ts";
+import { allWorks } from "@/data/works.ts";
+import { coverFor } from "@/lib/covers.ts";
+import { useSky } from "@/lib/sky.ts";
+import { usePage } from "@/lib/usePage.ts";
+import { Reading } from "@/ui/Reading.tsx";
 
 // Walked in the collection's own order, asking each work for its art — not
 // read off the generated file. A cover the fetch script failed to bring back

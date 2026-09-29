@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { HOME, heading } from "./helpers";
+import { HOME, heading } from "./helpers.ts";
 
 test.describe("the collection", () => {
   test("opens on the thesis with no loader", async ({ page }) => {
