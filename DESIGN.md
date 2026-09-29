@@ -152,7 +152,7 @@ verified by axe in CI.
   style), back-to-top (bottom-right, appears a viewport deep).
 - Rooms behave like lightboxes: Escape leaves; on wide screens the empty
   margins are clickable exits; prev/next walk the WHOLE shelf in reading
-  order.
+  order — by chip, by arrow key, or by carrying the room with a finger.
 - Wide content never scrolls the body horizontally.
 
 ## Components
@@ -173,6 +173,9 @@ verified by axe in CI.
   one mounted choreography — a room opens at its top,
   so everything in it is in view the moment it arrives.
   Walking the shelf slides the room along it.
+  A finger carries it 1:1, meets resistance past either end of the shelf,
+  and can catch it again mid-spring.
+  A change the browser already animated (an edge swipe back) is a cut.
   Flaws are stated plainly.
 - **Chips** — 44px glass circles, labels on hover.
   Hover and press ride springs even in plain CSS:

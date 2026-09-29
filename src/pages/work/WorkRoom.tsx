@@ -1,5 +1,11 @@
-import { motion, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import {
+  motion,
+  type PanInfo,
+  useDragControls,
+  useIsPresent,
+  useReducedMotion,
+} from "motion/react";
+import { useEffect, useEffectEvent } from "react";
 import {
   useLocation,
   useNavigate,
@@ -37,30 +43,44 @@ function Room({ entry }: { entry: WorkEntry }) {
   useSky({ dim: 1, night });
 
   const arrivedBy = stepOf(useLocation(), useNavigationType());
-  const goNeighbor = (step: Step, to: string) =>
-    navigate(`/works/${to}`, { replace: true, state: { step } });
-
-  // Touch walks the shelf too. Pointer Events carry the whole gesture: the
-  // start is remembered on down, judged on up. Axis-locked (|dx| must beat
-  // |dy|) so vertical reading is never hijacked, and time-bounded so a slow
-  // drag across the page is not a swipe.
-  const start = useRef<{ x: number; y: number; t: number } | null>(null);
-  const onPointerDown = (e: React.PointerEvent) => {
-    start.current =
-      e.pointerType === "touch"
-        ? { x: e.clientX, y: e.clientY, t: e.timeStamp }
-        : null;
+  const walk = (step: Step) => {
+    const to = step === 1 ? next : prev;
+    if (to)
+      navigate(`/works/${to.work.slug}`, { replace: true, state: { step } });
   };
-  const onPointerUp = (e: React.PointerEvent) => {
-    const from = start.current;
-    start.current = null;
-    if (!from) return;
-    const dx = e.clientX - from.x;
-    const dy = e.clientY - from.y;
-    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy)) return;
-    if (e.timeStamp - from.t > 700) return;
-    if (dx < 0 && next) goNeighbor(1, next.work.slug);
-    if (dx > 0 && prev) goNeighbor(-1, prev.work.slug);
+
+  // The arrow keys walk the shelf — only for the room being read; one on
+  // its way out still hears them.
+  const present = useIsPresent();
+  const onKey = useEffectEvent((e: KeyboardEvent) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "ArrowRight") walk(1);
+    if (e.key === "ArrowLeft") walk(-1);
+  });
+  useEffect(() => {
+    if (!present) return;
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [present]);
+
+  // A finger walks it by carrying the room: the room follows 1:1 and
+  // gives only grudgingly past either end of the shelf. Let go past the
+  // threshold — or flick — and the room keeps its speed on the way out;
+  // otherwise it springs home, and it can be caught again mid-spring.
+  // Touch only: a mouse selects text. Vertical drags stay the browser's
+  // (touch-pan-y), so reading is never hijacked.
+  const drag = useDragControls();
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (e.pointerType === "touch") drag.start(e);
+  };
+  const onDragEnd = (_: unknown, { offset, velocity }: PanInfo) => {
+    // a drag that was mostly vertical was reading, however far it went
+    if (Math.abs(offset.x) < Math.abs(offset.y)) return;
+    const far = Math.min(100, window.innerWidth * 0.25);
+    const flick = Math.abs(velocity.x) > 500 && Math.abs(offset.x) > 40;
+    if (Math.abs(offset.x) < far && !flick) return;
+    if (Math.sign(velocity.x || offset.x) !== Math.sign(offset.x)) return;
+    walk(offset.x < 0 ? 1 : -1);
   };
 
   // The whole article enters as one choreography from mount: a room opens
@@ -78,23 +98,14 @@ function Room({ entry }: { entry: WorkEntry }) {
     <main
       id="main"
       onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
       className="relative mx-auto max-w-6xl touch-pan-y px-5 md:px-12"
     >
       <Doorway>
         {prev ? (
-          <EdgeChip
-            side="prev"
-            work={prev.work}
-            onClick={() => goNeighbor(-1, prev.work.slug)}
-          />
+          <EdgeChip side="prev" work={prev.work} onClick={() => walk(-1)} />
         ) : null}
         {next ? (
-          <EdgeChip
-            side="next"
-            work={next.work}
-            onClick={() => goNeighbor(1, next.work.slug)}
-          />
+          <EdgeChip side="next" work={next.work} onClick={() => walk(1)} />
         ) : null}
       </Doorway>
 
@@ -107,6 +118,17 @@ function Room({ entry }: { entry: WorkEntry }) {
         animate="here"
         exit={reduced ? "here" : "gone"}
         transition={FLIGHT}
+        drag="x"
+        dragListener={false}
+        dragControls={drag}
+        dragDirectionLock
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={{ left: next ? 1 : 0.12, right: prev ? 1 : 0.12 }}
+        dragTransition={{
+          bounceStiffness: FLIGHT.stiffness,
+          bounceDamping: FLIGHT.damping,
+        }}
+        onDragEnd={onDragEnd}
         className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16"
       >
         <div className="md:sticky md:top-20 md:self-start">
@@ -217,10 +239,13 @@ function Room({ entry }: { entry: WorkEntry }) {
   );
 }
 
+// How far along the shelf the neighbors stand: far enough that a room
+// carried off by a finger keeps going the way it was thrown.
+const reach = () => window.innerWidth * 0.3;
 const SHELF = {
-  aside: (step: Step) => ({ x: `${step * 6}vw` }),
-  here: { x: "0vw" },
-  gone: (step: Step) => ({ x: `${step * -6}vw` }),
+  aside: (step: Step) => ({ x: step * reach() }),
+  here: { x: 0 },
+  gone: (step: Step) => ({ x: -step * reach() }),
 };
 
 export { WorkRoom as Component };

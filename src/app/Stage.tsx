@@ -31,16 +31,45 @@ export function Stage() {
   const type = useNavigationType();
   const outlet = useOutlet();
 
+  // A change the browser has already drawn is a cut: the pages leaving are
+  // dropped at once (a fresh presence keeps none of them), and nothing
+  // arrives or flies.
+  const drawn = drawnByBrowser.has(location.key);
+  const [cut, setCut] = useState("");
+  if (drawn && cut !== location.key) setCut(location.key);
+
   return (
-    <Handover pathname={location.pathname}>
-      <AnimatePresence custom={stepOf(location, type)}>
-        <Scene key={location.pathname} location={location} type={type}>
+    <Handover pathname={location.pathname} still={drawn}>
+      <AnimatePresence key={cut} custom={stepOf(location, type)}>
+        <Scene
+          key={location.pathname}
+          location={location}
+          type={type}
+          still={drawn}
+        >
           {outlet}
         </Scene>
       </AnimatePresence>
     </Handover>
   );
 }
+
+// A phone's edge swipe back (or forward) animates the change itself, and
+// says so on the popstate. Playing ours after it would show the reader the
+// same change twice. Remembered by the history entry's key, which is the
+// location the router is about to render; listened for in the capture
+// phase so it is known before the router hears the same event.
+const drawnByBrowser = new Set<string>();
+window.addEventListener(
+  "popstate",
+  (e) => {
+    // the entry the visit began on has no key of its own; the router
+    // calls it "default"
+    const key = (e.state as { key?: string } | null)?.key ?? "default";
+    if (e.hasUAVisualTransition) drawnByBrowser.add(key);
+  },
+  { capture: true },
+);
 
 // The first page is simply there; every later one arrives.
 let arrived = false;
@@ -54,10 +83,13 @@ let arrived = false;
 function Scene({
   location,
   type,
+  still,
   children,
 }: {
   location: Location;
   type: NavigationType;
+  /** the browser drew this change: arrive without a fade */
+  still: boolean;
   children: ReactNode;
 }) {
   const present = useIsPresent();
@@ -80,7 +112,7 @@ function Scene({
         data-scene=""
         inert={!present}
         aria-hidden={!present || undefined}
-        initial={first ? false : { opacity: 0 }}
+        initial={first || still ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={reduced ? { duration: 0 } : SCENE}
@@ -102,7 +134,11 @@ interface Moment {
  * then — with the arriving page in place — pin the departing one where
  * it stood, put the reader back where they were, and launch the covers.
  */
-class Handover extends Component<{ pathname: string; children: ReactNode }> {
+class Handover extends Component<{
+  pathname: string;
+  still: boolean;
+  children: ReactNode;
+}> {
   override getSnapshotBeforeUpdate(prev: { pathname: string }): Moment | null {
     if (prev.pathname === this.props.pathname) return null;
     return { launches: takeOff(), y: window.scrollY };
@@ -136,7 +172,8 @@ class Handover extends Component<{ pathname: string; children: ReactNode }> {
     });
     land(
       moment.launches,
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      this.props.still ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     );
   }
 

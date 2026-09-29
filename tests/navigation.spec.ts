@@ -22,6 +22,52 @@ async function roundTrip(
     .toBeLessThan(tolerance);
 }
 
+// Playwright's touchscreen only taps, so a gesture is dispatched directly —
+// exactly what a finger sends: down, a run of moves, up.
+async function swipe(
+  page: Page,
+  dx: number,
+  dy: number,
+  { release: lift = true } = {},
+) {
+  await page.getByRole("main").evaluate(
+    (main, { dx, dy, lift }) => {
+      const at = (type: string, x: number, y: number) =>
+        new PointerEvent(type, {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 1,
+          isPrimary: true,
+          clientX: 200 + x,
+          clientY: 300 + y,
+        });
+      main.dispatchEvent(at("pointerdown", 0, 0));
+      for (let i = 1; i <= 8; i++)
+        main.dispatchEvent(at("pointermove", (dx * i) / 8, (dy * i) / 8));
+      if (lift) main.dispatchEvent(at("pointerup", dx, dy));
+    },
+    { dx, dy, lift },
+  );
+}
+
+/** Lift the finger a held swipe left at (dx, dy). */
+async function release(page: Page, dx: number, dy: number) {
+  await page.evaluate(
+    ({ dx, dy }) =>
+      window.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 1,
+          isPrimary: true,
+          clientX: 200 + dx,
+          clientY: 300 + dy,
+        }),
+      ),
+    { dx, dy },
+  );
+}
+
 test.describe("rooms", () => {
   test("a work opens into its room", async ({ page }) => {
     await page.goto("/");
@@ -58,39 +104,55 @@ test.describe("rooms", () => {
     page,
   }) => {
     await page.goto("/works/nisemonogatari");
-    // Playwright's touchscreen only taps, so the gesture is dispatched
-    // directly — this is exactly what a finger sends.
-    const swipe = (dx: number, dy: number) =>
-      page.getByRole("main").evaluate(
-        (main, { x, y }) => {
-          const opts = { bubbles: true, pointerType: "touch", pointerId: 1 };
-          main.dispatchEvent(
-            new PointerEvent("pointerdown", {
-              ...opts,
-              clientX: 200,
-              clientY: 300,
-            }),
-          );
-          main.dispatchEvent(
-            new PointerEvent("pointerup", {
-              ...opts,
-              clientX: 200 + x,
-              clientY: 300 + y,
-            }),
-          );
-        },
-        { x: dx, y: dy },
-      );
     const room = (name: string) => expect(heading(page, name)).toBeVisible();
 
-    await swipe(-160, 10); // left → the next work
+    await swipe(page, -160, 10); // left → the next work
     await room("ハイスコアガール");
-    await swipe(160, 10); // right → back
+    await swipe(page, 160, 10); // right → back
     await room("偽物語");
 
-    await swipe(-160, 400); // mostly vertical: reading, not a swipe
-    await swipe(-30, 0); // too short to be decisive
+    await swipe(page, -160, 400); // mostly vertical: reading, not a swipe
+    await swipe(page, -30, 0); // too short to be decisive, however quick
     await expect(page).toHaveURL(/nisemonogatari$/);
+  });
+
+  test("the room follows the finger, and resists past the shelf's end", async ({
+    page,
+  }) => {
+    await page.goto("/works/bakemonogatari");
+    const title = heading(page, "化物語");
+    await expect(title).toBeVisible();
+    const at = async () => (await title.boundingBox())?.x ?? 0;
+    const rest = await at();
+
+    // held, not released: the page is wherever the finger is
+    await swipe(page, -120, 0, { release: false });
+    await expect.poll(async () => (await at()) - rest).toBeLessThan(-100);
+    await release(page, -120, 0);
+    await expect(page).toHaveURL(/nisemonogatari$/);
+
+    // 化物語 is the first work: nothing stands before it, so a pull toward
+    // the previous one gives a little and springs back
+    await page.goto("/works/bakemonogatari");
+    await expect(title).toBeVisible();
+    await swipe(page, 200, 0, { release: false });
+    await expect.poll(async () => (await at()) - rest).toBeGreaterThan(5);
+    expect((await at()) - rest).toBeLessThan(100);
+    await release(page, 200, 0);
+    await expect
+      .poll(async () => Math.abs((await at()) - rest))
+      .toBeLessThan(2);
+    await expect(page).toHaveURL(/bakemonogatari$/);
+  });
+
+  test("the arrow keys walk the shelf", async ({ page }) => {
+    // The title is set in the same breath the room starts listening.
+    await page.goto("/works/nisemonogatari");
+    await expect(page).toHaveTitle(/^偽物語/);
+    await page.keyboard.press("ArrowRight");
+    await expect(page).toHaveTitle(/^ハイスコアガール/);
+    await page.keyboard.press("ArrowLeft");
+    await expect(heading(page, "偽物語")).toBeVisible();
   });
 
   test("a room scrolls the moment it opens", async ({ page }) => {
@@ -107,6 +169,36 @@ test.describe("rooms", () => {
     await expect
       .poll(() => page.evaluate(() => window.scrollY), { timeout: 400 })
       .toBeGreaterThan(before + 100);
+  });
+
+  test("a back swipe the browser already animated is not animated again", async ({
+    page,
+  }) => {
+    // What a phone's edge swipe reports: the browser has drawn the change.
+    await page.addInitScript(() =>
+      window.addEventListener(
+        "popstate",
+        (e) =>
+          Object.defineProperty(e, "hasUAVisualTransition", { value: true }),
+        { capture: true },
+      ),
+    );
+    await page.goto("/");
+    await row(page, "化物語").click();
+    await expect(page).toHaveTitle(/^化物語/);
+    await expect(page.locator("[data-scene]")).toHaveCount(1);
+    const scenes = await page.evaluate(async () => {
+      history.back();
+      await new Promise((r) => addEventListener("popstate", r, { once: true }));
+      const counts: number[] = [];
+      for (let i = 0; i < 6; i++) {
+        await new Promise(requestAnimationFrame);
+        counts.push(document.querySelectorAll("[data-scene]").length);
+      }
+      return counts;
+    });
+    // the room is simply gone: no second page fading out behind the first
+    expect(Math.max(...scenes)).toBe(1);
   });
 
   test("works without cover art still have complete rooms", async ({
