@@ -40,7 +40,7 @@ export interface Collection {
   music: Track[];
 }
 
-const HAN_OR_KANA = /[぀-ヿ㐀-鿿]/;
+const HAN_OR_KANA = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
 
 function take<T>(source: Map<string, T>, name: string, what: string): T {
   const found = source.get(name);

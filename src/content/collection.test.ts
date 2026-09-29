@@ -105,4 +105,29 @@ describe("assemble", () => {
     const silent = { ...catalog(), songs: {} };
     expect(() => assemble(readme, reviews(), silent)).toThrow(/凉雨/);
   });
+
+  // Every form a Han or kana name can take, not only the common blocks:
+  // half-width katakana, a katakana extension, a compatibility ideograph
+  // (normalization folds it into its unified twin, so a literal could not
+  // be trusted to stay one) and one beyond the Basic Multilingual Plane.
+  // All escaped: the font subsetter reads this file, and none of these
+  // glyphs belongs in the shipped fonts.
+  it.each([
+    ["half-width katakana", "\uFF76\uFF9D\uFF84\uFF78"],
+    ["a katakana extension", "\u31F0"],
+    ["a compatibility ideograph", "\uFA10"],
+    ["an ideograph beyond the BMP", "\u{20B9F}"],
+  ])("refuses a title in %s when its language is unstated", (_form, title) => {
+    const shelf: Readme = {
+      ...readme,
+      shelves: [{ medium: "Anime", titles: [title] }],
+    };
+    const reviewed = reviews();
+    const entry = reviewed.get("化物語");
+    reviewed.delete("化物語");
+    if (entry) reviewed.set(title, entry);
+    const silent = catalog();
+    silent.works = { [title]: { slug: "unstated", accent: "#9b59d0" } };
+    expect(() => assemble(shelf, reviewed, silent)).toThrow(title);
+  });
 });
