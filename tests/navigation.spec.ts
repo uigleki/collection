@@ -162,4 +162,25 @@ test.describe("rooms", () => {
     await page.getByRole("button", { name: "Switch to night" }).click();
     await theme("dark");
   });
+
+  test("a system switch before the app starts is still followed", async ({
+    page,
+  }) => {
+    // Hold the app's script back: the pre-paint theme has run, the listener
+    // that follows the system has not, and the system changes in between.
+    let release = () => {};
+    const held = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(/\/assets\/index-.*\.js$/, async (route) => {
+      await held;
+      await route.continue();
+    });
+    await page.goto("/", { waitUntil: "commit" });
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.emulateMedia({ colorScheme: "light" });
+    release();
+    await expect(heading(page, HOME)).toBeVisible();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  });
 });

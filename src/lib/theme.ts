@@ -34,16 +34,20 @@ export function initTheme(): () => void {
   sky.targetDay = sky.day = current() === "light" ? 1 : 0;
 
   const media = window.matchMedia("(prefers-color-scheme: light)");
-  const follow = (e: MediaQueryListEvent) => {
+  const follow = () => {
     let chosen: string | null = null;
     try {
       chosen = localStorage.getItem("theme");
     } catch {
       /* private mode */
     }
-    if (!chosen) apply(e.matches ? "light" : "dark");
+    const theme = media.matches ? "light" : "dark";
+    if (!chosen && theme !== current()) apply(theme);
   };
   media.addEventListener("change", follow);
+  // The system may have switched after the pre-paint script ran but before
+  // this listener existed; that change fired into nothing, so catch up.
+  follow();
   return () => media.removeEventListener("change", follow);
 }
 
