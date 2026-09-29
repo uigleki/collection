@@ -9,7 +9,6 @@ export function renderEmphasis(text: string): ReactNode[] {
     const m = /^\*\*([^*]+)\*\*$/.exec(part);
     if (m) {
       return (
-        // biome-ignore lint/suspicious/noArrayIndexKey: static text, stable order
         <strong key={i} className="font-medium text-tsuki">
           {m[1]}
         </strong>
