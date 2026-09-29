@@ -8,6 +8,18 @@ The site must pass the collection's own three-fold test (docs/why.md):
 creative love, internal coherence, authentic beauty —
 a shrine to unmanipulative art must itself be unmanipulative art.
 
+## The Four Rules
+
+These come from the collection's author and outrank everything below.
+
+1. **Latin text is set in Ubuntu.**
+2. **Every title stands in its original language.** 化物語 is 化物語.
+3. **Every narrative line is verbatim from docs/why.md.**
+   UI utility copy (buttons, navigation, the 404) is the only exception.
+4. **Light and dark both exist.**
+   The site follows the system until the visitor chooses,
+   and remembers the choice.
+
 ## Overview
 
 The home page is one lunar month, told silently.
