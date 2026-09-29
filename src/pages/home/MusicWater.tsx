@@ -1,12 +1,9 @@
-import { motion, useReducedMotion } from "motion/react";
 import { music, trackName } from "@/data/works.ts";
-import { LIST } from "@/lib/motion.ts";
 import { useGlade } from "@/lib/sky.ts";
 import { Interlude } from "./Interlude.tsx";
 
 /** The songs live on the water; in view, the moonglade burns brighter. */
 export function MusicWater() {
-  const reduced = useReducedMotion();
   const ref = useGlade<HTMLElement>();
 
   return (
@@ -19,13 +16,10 @@ export function MusicWater() {
 
       <ul className="divide-y divide-border/60">
         {music.map((track) => (
-          <motion.li
+          <li
             key={trackName(track)}
-            initial={reduced ? false : { opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "0px 0px -6% 0px" }}
-            transition={LIST}
-            className="grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
+            style={{ "--from": "14px" } as React.CSSProperties}
+            className="arrive grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
           >
             <span className="text-body">
               <span
@@ -44,7 +38,7 @@ export function MusicWater() {
             <span className="text-caption text-hoshi italic md:text-body">
               {track.subtitle}
             </span>
-          </motion.li>
+          </li>
         ))}
       </ul>
     </section>

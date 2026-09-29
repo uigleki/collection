@@ -370,6 +370,66 @@ body {
   }
 }
 
+/* Entrances.
+   Mounted ones (.rise for a display line behind its mask, .enter for a
+   block of reading) play once as the page arrives, on the site's springs
+   (motion.ts publishes them as linear() curves); --at staggers them.
+   Scrolled ones (.arrive, .arrive-fade, and .line inside a .mask) are
+   drawn by the scroll itself: where the reader stands decides how far
+   each has arrived, so a jump finds everything already there, scrolling
+   back reverses them, and the browser's compositor draws them with no
+   script awake. Where scroll-driven animation is missing, the page simply
+   stands. */
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise var(--spring-rise-ms, 1s) var(--spring-rise, ease-out)
+      var(--at, 0ms) both;
+  }
+  .enter {
+    animation: enter var(--spring-enter-ms, 0.8s) var(--spring-enter, ease-out)
+      var(--at, 0ms) both;
+  }
+  @supports (animation-timeline: view()) {
+    .arrive,
+    .arrive-fade {
+      animation: enter cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 35%;
+    }
+    .arrive-fade {
+      animation-name: fade;
+    }
+    .mask {
+      view-timeline-name: --mask;
+    }
+    .mask > .line {
+      animation: rise cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-timeline: --mask;
+      animation-range: entry 20% cover 45%;
+    }
+  }
+}
+/* A line rises from behind its mask; it never fades. Part of it stands in
+   the mask from the first frame, so the page's largest text is painted at
+   once — an opacity starting at zero is never painted by the browser as
+   content (no LCP), since the compositor alone brings it up. */
+@keyframes rise {
+  from {
+    transform: translateY(0.6em);
+  }
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--from, 22px));
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
 .skip-link {
   position: fixed;
   top: 0.75rem;

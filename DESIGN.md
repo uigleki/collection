@@ -168,10 +168,11 @@ verified by axe in CI.
 - **NightRow** — the whole row is one door.
   Hover: lift + cursor-facing tilt on the SAME springs
   (one movement), accent underline grows, accent glow under the cover.
-  Entrances remember themselves per visit — nothing replays on return.
+  Rows arrive with the scroll, not a clock:
+  a return to a remembered position finds them already standing.
 - **Room** — sky eases to the work's night and dims behind reading;
-  one mounted choreography — a room opens at its top,
-  so everything in it is in view the moment it arrives.
+  one short mounted choreography on the site's springs —
+  a room opens at its top, so everything in it is in view the moment it arrives.
   Walking the shelf slides the room along it.
   A finger carries it 1:1, meets resistance past either end of the shelf,
   and can catch it again mid-spring.
@@ -208,6 +209,11 @@ Do:
   so an unguarded hover style leaves a tapped control stuck in it.
 - Animate only what the compositor can carry — transform and opacity.
   A glow is drawn once and faded, never a shadow that grows.
+- What the scroll reveals, the scroll draws
+  (`animation-timeline: view()`):
+  the reader's position is the timeline, no observer or script is awake,
+  and scrolling back reverses it.
+  Where the browser cannot, the page simply stands.
 - Software rasterizers (SwiftShader/llvmpipe) get the static poster —
   a machine without a GPU should not be handed a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05,

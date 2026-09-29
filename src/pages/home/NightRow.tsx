@@ -1,12 +1,9 @@
 import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
 import type { WorkEntry } from "@/data/works.ts";
-import { ENTER, FOLLOW } from "@/lib/motion.ts";
-import { revealed } from "@/lib/reveal.ts";
+import { FOLLOW } from "@/lib/motion.ts";
 import { useNight } from "@/lib/sky.ts";
 import { Cover } from "@/ui/Cover.tsx";
-
-const rows = revealed("work");
 
 /** One work; the whole row is one door. Holding the viewport makes its
  * night the sky's target — scrolling is what waxes the moon. */
@@ -15,7 +12,6 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
   const ref = useNight<HTMLElement>(entry.night);
   const { work, category, ordinal } = entry;
   const { title, slug, lang, accent } = work;
-  const settled = reduced || rows.has(slug);
 
   // Lift and tilt live on the SAME spring so the cover rises and turns
   // toward the cursor as one movement, not two queued effects. Skipped for
@@ -40,14 +36,10 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
   };
 
   return (
-    <motion.article
+    <article
       ref={ref}
-      initial={settled ? false : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      onViewportEnter={() => rows.add(slug)}
-      viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={ENTER}
-      className="py-16 first:pt-0 md:py-20"
+      style={{ "--from": "28px" } as React.CSSProperties}
+      className="arrive py-16 first:pt-0 md:py-20"
     >
       <Link
         to={`/works/${slug}`}
@@ -71,21 +63,11 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
         </motion.div>
 
         <div className="max-w-xl self-center">
-          <motion.h3
+          <h3
             lang={lang}
-            initial={settled ? false : "hidden"}
-            whileInView="visible"
-            viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-            className="overflow-hidden text-title font-normal tracking-tight"
+            className="mask overflow-hidden text-title font-normal tracking-tight"
           >
-            <motion.span
-              className="block"
-              variants={{
-                hidden: { y: "1.05em" },
-                // the row's own spring, so title and row arrive as one
-                visible: { y: 0, transition: { ...ENTER, delay: 0.08 } },
-              }}
-            >
+            <span className="line block">
               <span
                 className="underline-grow"
                 style={{
@@ -94,8 +76,8 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
               >
                 {title}
               </span>
-            </motion.span>
-          </motion.h3>
+            </span>
+          </h3>
           <p className="mt-3 text-lead text-hoshi italic transition-colors duration-500 group-hover:text-tsuki">
             {work.subtitle}
           </p>
@@ -104,6 +86,6 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
           </p>
         </div>
       </Link>
-    </motion.article>
+    </article>
   );
 }

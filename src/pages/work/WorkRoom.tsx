@@ -14,7 +14,7 @@ import {
 } from "react-router";
 import { siteMeta } from "@/data/site.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
-import { ENTER, FLIGHT, RISE } from "@/lib/motion.ts";
+import { FLIGHT } from "@/lib/motion.ts";
 import { type Step, stepOf } from "@/lib/shelf.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
@@ -83,16 +83,10 @@ function Room({ entry }: { entry: WorkEntry }) {
     walk(offset.x < 0 ? 1 : -1);
   };
 
-  // The whole article enters as one choreography from mount: a room opens
-  // at its top, so everything in it is in view the moment it arrives.
-  const reveal = (delay: number) =>
-    reduced
-      ? {}
-      : ({
-          initial: { opacity: 0, y: 22 },
-          animate: { opacity: 1, y: 0 },
-          transition: { ...ENTER, delay },
-        } as const);
+  // The whole article enters as one quick choreography from mount: a room
+  // opens at its top, so everything in it is in view the moment it arrives.
+  // Each beat is one step behind the last (index.css: .enter, .rise).
+  const at = (ms: number) => ({ "--at": `${ms}ms` }) as React.CSSProperties;
 
   return (
     <main
@@ -141,12 +135,12 @@ function Room({ entry }: { entry: WorkEntry }) {
         </div>
 
         <article className="max-w-2xl pb-10">
-          <motion.p
-            className="mb-6 font-mono text-caption text-hoshi tabular-nums"
-            {...reveal(0.08)}
+          <p
+            className="enter mb-6 font-mono text-caption text-hoshi tabular-nums"
+            style={at(40)}
           >
             {category} {String(ordinal).padStart(2, "0")}
-          </motion.p>
+          </p>
 
           <h1
             ref={h1}
@@ -155,40 +149,26 @@ function Room({ entry }: { entry: WorkEntry }) {
             className="text-display font-normal tracking-tight"
           >
             <span className="block overflow-hidden">
-              <motion.span
-                className="block"
-                {...(reduced
-                  ? {}
-                  : {
-                      initial: { opacity: 0, y: "0.55em" },
-                      animate: { opacity: 1, y: 0 },
-                      transition: RISE,
-                    })}
-              >
-                {title}
-              </motion.span>
+              <span className="rise block">{title}</span>
             </span>
           </h1>
 
-          <motion.p
-            className="mt-5 text-lead text-hoshi italic"
-            {...reveal(0.16)}
-          >
+          <p className="enter mt-5 text-lead text-hoshi italic" style={at(80)}>
             {work.subtitle}
-          </motion.p>
+          </p>
 
-          <motion.hr
+          <div
             aria-hidden="true"
-            className="my-10 h-px border-0"
+            className="enter my-10 h-px"
             style={{
+              ...at(120),
               background: `linear-gradient(90deg, color-mix(in oklab, ${accent} 60%, transparent), transparent)`,
             }}
-            {...reveal(0.22)}
           />
 
           <dl className="space-y-9">
             {work.review.map((point, i) => (
-              <motion.div key={point.label} {...reveal(0.3 + i * 0.09)}>
+              <div key={point.label} className="enter" style={at(160 + i * 50)}>
                 <dt
                   className="text-body font-medium"
                   style={{
@@ -198,23 +178,14 @@ function Room({ entry }: { entry: WorkEntry }) {
                   {point.label}
                 </dt>
                 <dd className="mt-2 text-body text-hoshi">{point.text}</dd>
-              </motion.div>
+              </div>
             ))}
           </dl>
 
           {work.flaws ? (
-            <motion.aside
-              {...(reduced
-                ? {}
-                : {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: {
-                      duration: 0.9,
-                      delay: 0.4 + work.review.length * 0.09,
-                    },
-                  })}
-              className="mt-14 border-l border-border pl-6"
+            <aside
+              className="enter mt-14 border-l border-border pl-6"
+              style={at(200 + work.review.length * 50)}
             >
               <h2 className="text-body font-medium text-hoshi">
                 Flaws, stated plainly
@@ -231,7 +202,7 @@ function Room({ entry }: { entry: WorkEntry }) {
                   </div>
                 ))}
               </dl>
-            </motion.aside>
+            </aside>
           ) : null}
         </article>
       </motion.div>
