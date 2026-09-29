@@ -7,7 +7,7 @@
  * The collection itself is the work list — this script only knows WHERE each
  * work's art comes from. For each work it writes:
  *   src/assets/works/<slug>.webp        — optimized cover (≤640w)
- *   src/data/generated/covers.ts        — { placeholder, w, h, source }
+ *   src/data/generated/covers.ts        — { thumbhash, w, h, source }
  *
  * Run:  LD_LIBRARY_PATH=<gcc-lib> bun scripts/fetch-covers.ts
  * (libvips/sharp needs libstdc++ on PATH; the nix dev shell provides it.)
@@ -15,7 +15,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import sharp from "sharp";
-import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
+import { rgbaToThumbHash } from "thumbhash";
 import { load } from "../src/content/load.ts";
 import { SOURCES } from "./cover-sources.ts";
 
@@ -27,7 +27,7 @@ interface CoverMeta {
   slug: string;
   width: number;
   height: number;
-  placeholder: string;
+  thumbhash: string;
   credit: string;
   sourceUrl: string;
 }
@@ -92,23 +92,23 @@ async function process(slug: string, meta: Fetched): Promise<CoverMeta> {
     .toFile(dest)
     .then(() => out.metadata());
 
-  // The blurred stand-in, baked as a data URL rather than as thumbhash bytes:
-  // the page paints it directly, so the decoder never has to ship to a reader.
+  // The blurred stand-in, kept as the hash itself (~30 bytes): the page
+  // decodes it (src/lib/covers.ts), which costs less than one baked image.
   const small = await sharp(raw)
     .resize(90, 90, { fit: "inside" })
     .ensureAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
-  const placeholder = thumbHashToDataURL(
+  const thumbhash = Buffer.from(
     rgbaToThumbHash(small.info.width, small.info.height, small.data),
-  );
+  ).toString("base64");
 
   const m = await sharp(dest).metadata();
   return {
     slug,
     width: m.width ?? width,
     height: m.height ?? height,
-    placeholder,
+    thumbhash,
     credit: meta.credit,
     sourceUrl: meta.sourceUrl,
   };
@@ -122,7 +122,8 @@ export interface CoverMeta {
   slug: string;
   width: number;
   height: number;
-  placeholder: string;
+  /** base64 thumbhash of the art, decoded into its placeholder on the page */
+  thumbhash: string;
   credit: string;
   sourceUrl: string;
 }

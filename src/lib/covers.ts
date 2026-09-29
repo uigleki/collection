@@ -1,3 +1,4 @@
+import { thumbHashToDataURL } from "thumbhash";
 import { CANON_ACCENT } from "@/data/accents.ts";
 import { type CoverMeta, covers } from "@/data/generated/covers.ts";
 
@@ -10,15 +11,34 @@ const urls = import.meta.glob<string>("../assets/works/*.webp", {
 
 interface Cover extends CoverMeta {
   url: string;
+  /** the blurred stand-in, as an image the page can paint */
+  readonly placeholder: string;
+}
+
+function decode(hash: string): string {
+  return thumbHashToDataURL(
+    Uint8Array.from(atob(hash), (c) => c.charCodeAt(0)),
+  );
 }
 
 // The generated module holds data; the index over it belongs here. The asset
 // URL is resolved once as the index is built — both sides are fixed at build
-// time, and Cover asks for this on every render.
+// time, and Cover asks for this on every render. A placeholder is decoded the
+// first time it is asked for: a room paints one, the colophon none.
 const bySlug: ReadonlyMap<string, Cover> = new Map(
   covers.flatMap((cover) => {
     const url = urls[`../assets/works/${cover.slug}.webp`];
-    return url ? [[cover.slug, { ...cover, url }] as const] : [];
+    if (!url) return [];
+    let placeholder: string | undefined;
+    const entry: Cover = {
+      ...cover,
+      url,
+      get placeholder() {
+        placeholder ??= decode(cover.thumbhash);
+        return placeholder;
+      },
+    };
+    return [[cover.slug, entry] as const];
   }),
 );
 
