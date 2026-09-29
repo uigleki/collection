@@ -8,10 +8,18 @@
 import type { TitleLang, Track, Work, WorkCategory } from "../data/types.ts";
 import type { Readme, Review } from "./parse.ts";
 
+/** Where a work's cover art is fetched from (scripts/fetch-covers.ts). */
+export type CoverSource =
+  | { kind: "anilist"; search: string }
+  | { kind: "steam"; appid: number };
+
 export interface WorkMeta {
-  /** the work's address, its cover asset and its accent's key */
+  /** the work's address and its cover asset's name */
   slug: string;
   lang?: TitleLang;
+  accent: string;
+  /** absent when the art has no licensed source: a typographic panel */
+  art?: CoverSource;
 }
 
 export interface SongMeta {
@@ -62,7 +70,11 @@ export function assemble(
   const categories = readme.shelves.map(({ medium, titles }) => ({
     name: medium,
     works: titles.map((title): Work => {
-      const meta = take(uncataloged, title, "catalog entry");
+      const { art: _fetchOnly, ...meta } = take(
+        uncataloged,
+        title,
+        "catalog entry",
+      );
       const { subtitle, points, flaws } = take(unreviewed, title, "review");
       if (HAN_OR_KANA.test(title) && !meta.lang)
         throw new Error(`content: say which language "${title}" is in`);

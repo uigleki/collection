@@ -24,11 +24,20 @@ const reviews = () =>
   ]);
 
 const catalog = (): Catalog => ({
-  works: { 化物語: { slug: "bakemonogatari", lang: "ja" } },
+  works: {
+    化物語: {
+      slug: "bakemonogatari",
+      lang: "ja",
+      accent: "#9b59d0",
+      art: { kind: "anilist", search: "Bakemonogatari" },
+    },
+  },
   songs: { "COP - 凉雨": { lang: "zh-Hans" } },
 });
 
 describe("assemble", () => {
+  // Where the art is fetched from matters to the fetch script, never to a
+  // reader, so it stops at the catalog instead of shipping in every work.
   it("joins each title to its review and its catalog entry", () => {
     const collection = assemble(readme, reviews(), catalog());
     expect(collection.tagline).toBe("Works that enrich rather than diminish.");
@@ -40,6 +49,7 @@ describe("assemble", () => {
             title: "化物語",
             slug: "bakemonogatari",
             lang: "ja",
+            accent: "#9b59d0",
             subtitle: "Supernatural tales of adolescent awakening",
             review: [
               { label: "Dialogue as art", text: "Rapid-fire wordplay." },
@@ -76,7 +86,7 @@ describe("assemble", () => {
 
   it("refuses a catalog entry the README does not list", () => {
     const extra = catalog();
-    extra.works.偽物語 = { slug: "nisemonogatari" };
+    extra.works.偽物語 = { slug: "nisemonogatari", accent: "#f4653f" };
     expect(() => assemble(readme, reviews(), extra)).toThrow(/偽物語/);
   });
 

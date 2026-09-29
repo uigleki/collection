@@ -31,6 +31,12 @@ export interface Work extends Titled {
    * `view-transition-name` are all this one string.
    */
   slug: string;
+  /**
+   * The color the work itself is known by (heroine, key visual, studio
+   * branding), set by hand to read against the night ground — art direction,
+   * never sampled from the cover. It lights only this work's row and room.
+   */
+  accent: string;
   readonly review: readonly ReviewPoint[];
   readonly flaws?: readonly ReviewPoint[];
 }

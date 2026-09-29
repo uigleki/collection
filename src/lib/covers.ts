@@ -1,5 +1,4 @@
 import { thumbHashToDataURL } from "thumbhash";
-import { CANON_ACCENT } from "@/data/accents.ts";
 import { type CoverMeta, covers } from "@/data/generated/covers.ts";
 
 // Vite resolves every cover to its hashed asset URL at build time.
@@ -46,13 +45,4 @@ const bySlug: ReadonlyMap<string, Cover> = new Map(
  * licensed source (they get a typographic panel instead). */
 export function coverFor(slug: string): Cover | null {
   return bySlug.get(slug) ?? null;
-}
-
-/**
- * The work's accent: the color the work is actually known by, art-directed
- * per work in accents.ts. The moon's warmth stands behind it for anything
- * added to the collection before it has been given a color of its own.
- */
-export function accentFor(slug: string): string {
-  return CANON_ACCENT[slug] ?? "var(--color-tsukikage)";
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { Work } from "@/data/types.ts";
-import { accentFor, coverFor } from "@/lib/covers.ts";
+import { coverFor } from "@/lib/covers.ts";
 
 interface CoverProps {
   work: Work;
@@ -82,7 +82,7 @@ export function Cover({
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-sm"
         style={{
-          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${accentFor(slug)} 45%, transparent)`,
+          boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${work.accent} 45%, transparent)`,
         }}
       />
     </div>

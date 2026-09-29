@@ -3,7 +3,6 @@ import { useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import { siteMeta } from "@/data/site.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
-import { accentFor } from "@/lib/covers.ts";
 import { ENTER, RISE } from "@/lib/motion.ts";
 import { walkShelf } from "@/lib/scroll.ts";
 import { useSky } from "@/lib/sky.ts";
@@ -26,9 +25,8 @@ function Room({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const navigate = useNavigate();
   const { work, night, category, ordinal } = entry;
-  const { title, slug, lang } = work;
+  const { title, slug, lang, accent } = work;
   const h1 = usePage(`${title} — ${siteMeta.title}`);
-  const accent = accentFor(slug);
   const { prev, next } = neighbors(slug);
 
   useSky({ dim: 1, night });

@@ -4,8 +4,8 @@
  *
  *   AniList (anime + anime films) · Steam CDN (games)
  *
- * The collection itself is the work list — this script only knows WHERE each
- * work's art comes from. For each work it writes:
+ * Each work's `art` in src/content/catalog.ts says where its art comes from;
+ * a work without one keeps its typographic panel. For each work it writes:
  *   src/assets/works/<slug>.webp        — optimized cover (≤640w)
  *   src/data/generated/covers.ts        — { thumbhash, w, h, source }
  *
@@ -16,8 +16,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import sharp from "sharp";
 import { rgbaToThumbHash } from "thumbhash";
-import { load } from "../src/content/load.ts";
-import { SOURCES } from "./cover-sources.ts";
+import { catalog } from "../src/content/catalog.ts";
+import type { WorkMeta } from "../src/content/collection.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ASSETS = resolve(ROOT, "src/assets/works");
@@ -139,9 +139,9 @@ async function main() {
 
   const covers: CoverMeta[] = [];
   let sourced = 0;
-  const works = load().collection.categories.flatMap((c) => c.works);
+  const works: readonly WorkMeta[] = Object.values(catalog.works);
   for (const work of works) {
-    const source = SOURCES[work.slug];
+    const source = work.art;
     if (!source) {
       console.log(`· ${work.slug}  no licensed source — typographic panel`);
       continue;

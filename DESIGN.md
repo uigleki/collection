@@ -2,7 +2,7 @@
 
 The design constitution.
 Every file derives from this document; anything that contradicts it is a bug.
-The tokens live in `src/styles/index.css` (@theme) and `src/data/accents.ts`;
+The tokens live in `src/styles/index.css` (@theme) and `src/content/catalog.ts`;
 this document is their rationale.
 The site must pass the collection's own three-fold test (docs/why.md):
 creative love, internal coherence, authentic beauty —
@@ -70,7 +70,8 @@ The Markdown is the only source of the words.
 `src/content` parses README.md,
 docs/reviews.md and docs/why.md at build time and serves them
 as virtual modules; `src/content/catalog.ts` holds only what Markdown cannot
-carry — each work's slug and each non-Latin name's language.
+carry — slugs, accents, art sources, and each non-Latin name's language.
+Adding a work is its Markdown plus one catalog entry.
 The build refuses to run when the files disagree:
 a work listed but not reviewed, reviewed but not listed,
 missing from the catalog, or a non-Latin name without a stated language.
@@ -103,8 +104,9 @@ the color the work is actually known by
 (Senjougahara's purple, the Ocean's blue, Kurisu's auburn),
 researched from the web, calibrated by hand against the night ground;
 少女終末旅行 is deliberately muted because the work itself is.
-They live in `src/data/accents.ts` rather than as CSS tokens —
-chrome must never be able to reach for one.
+They live in the catalog
+(each work carries its own)
+rather than as CSS tokens — chrome must never be able to reach for one.
 They appear only inside that work's row and room
 (title underline, cover hairline and glow,
 review labels via color-mix toward tsuki).

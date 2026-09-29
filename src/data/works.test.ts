@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { catalog } from "@/content/catalog.ts";
+import type { WorkMeta } from "@/content/collection.ts";
 import { FULL_NIGHT } from "@/lib/moon.ts";
-import { SOURCES } from "../../scripts/cover-sources.ts";
-import { CANON_ACCENT } from "./accents.ts";
 import { covers } from "./generated/covers.ts";
 import {
   allWorks,
@@ -86,28 +86,25 @@ describe("the collection spine", () => {
   // The colophon credits cover art by walking the collection and asking each
   // work for its art, so a cover the fetch run failed to bring back leaves a
   // rights holder uncredited — silently, on the page that must not do that.
-  // Which works have art at all is asked of the source map itself, so a work
+  // Which works have art at all is asked of the catalog itself, so a work
   // that gains or loses a licensed source is held to the new answer.
   it("keeps a credited cover for every work that has a source", () => {
+    const sourced = new Set(
+      Object.values(catalog.works as Record<string, WorkMeta>).flatMap((w) =>
+        w.art ? [w.slug] : [],
+      ),
+    );
     const credited = new Map<string, (typeof covers)[number]>(
       covers.map((c) => [c.slug, c]),
     );
     for (const { work } of allWorks) {
       const cover = credited.get(work.slug);
-      if (!SOURCES[work.slug]) {
+      if (!sourced.has(work.slug)) {
         expect(cover, work.slug).toBeUndefined();
         continue;
       }
       expect(cover?.credit, work.slug).toBeTruthy();
       expect(cover?.sourceUrl, work.slug).toMatch(/^https:\/\//);
     }
-  });
-
-  // accentFor falls back to the moon's warmth so an unlisted work still
-  // renders. DESIGN.md asks for more than renders: each room is lit by its
-  // work's own canonical color, so the fallback must stay unreachable.
-  it("gives every work a canonical accent of its own", () => {
-    for (const { work } of allWorks)
-      expect(CANON_ACCENT[work.slug], work.slug).toBeDefined();
   });
 });

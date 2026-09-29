@@ -1,7 +1,6 @@
 import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
 import type { WorkEntry } from "@/data/works.ts";
-import { accentFor } from "@/lib/covers.ts";
 import { ENTER, FOLLOW } from "@/lib/motion.ts";
 import { revealed } from "@/lib/reveal.ts";
 import { useNight } from "@/lib/sky.ts";
@@ -15,8 +14,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const ref = useNight<HTMLElement>(entry.night);
   const { work, category, ordinal } = entry;
-  const { title, slug, lang } = work;
-  const accent = accentFor(slug);
+  const { title, slug, lang, accent } = work;
   const settled = reduced || rows.has(slug);
 
   // Lift and tilt live on the SAME spring so the cover rises and turns
