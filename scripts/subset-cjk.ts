@@ -20,6 +20,7 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import subsetFont from "subset-font";
+import { SOURCES as MARKDOWN } from "../src/content/load.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SRC = resolve(ROOT, "src");
@@ -57,7 +58,8 @@ async function walk(dir: string): Promise<string[]> {
 }
 
 async function collectGlyphs(): Promise<string> {
-  const files = await walk(SRC);
+  // The site's words live in the Markdown as much as in the code.
+  const files = [...(await walk(SRC)), ...Object.values(MARKDOWN)];
   const set = new Set<string>();
   for (const f of files) {
     const text = await readFile(f, "utf8");

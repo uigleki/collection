@@ -8,7 +8,7 @@ import { couplets, data } from "./why.ts";
 describe("the home page's display couplets", () => {
   it("opens on the essay's first sentence", () => {
     expect(couplets.opening.join(" ")).toBe(
-      data.opening[0].replaceAll("**", ""),
+      data.opening[0]?.replaceAll("**", ""),
     );
   });
 

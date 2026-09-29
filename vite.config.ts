@@ -5,8 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
+import { load } from "./src/content/load.ts";
+import { content } from "./src/content/plugin.ts";
 import { origin, pages, siteMeta } from "./src/data/site.ts";
-import { allWorks } from "./src/data/works.ts";
 
 const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
 
@@ -72,7 +73,9 @@ const sitemap = () => {
     ...pages.map((page) =>
       url(page.path === "/" ? "" : page.path, page.priority),
     ),
-    ...allWorks.map(({ work }) => url(`/works/${work.slug}`, "0.6")),
+    ...load().collection.categories.flatMap((category) =>
+      category.works.map((work) => url(`/works/${work.slug}`, "0.6")),
+    ),
   ];
   return `<?xml version="1.0" encoding="UTF-8" ?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${lines.join("\n")}\n</urlset>\n`;
 };
@@ -218,7 +221,7 @@ function siteMetadata(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [siteMetadata(), react(), tailwindcss()],
+  plugins: [content(), siteMetadata(), react(), tailwindcss()],
   resolve: {
     alias: {
       "@": resolve(import.meta.dirname, "src"),

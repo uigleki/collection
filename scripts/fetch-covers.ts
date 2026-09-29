@@ -16,7 +16,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import sharp from "sharp";
 import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
-import { allWorks } from "../src/data/works.ts";
+import { load } from "../src/content/load.ts";
 import { SOURCES } from "./cover-sources.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
@@ -138,7 +138,8 @@ async function main() {
 
   const covers: CoverMeta[] = [];
   let sourced = 0;
-  for (const { work } of allWorks) {
+  const works = load().collection.categories.flatMap((c) => c.works);
+  for (const work of works) {
     const source = SOURCES[work.slug];
     if (!source) {
       console.log(`· ${work.slug}  no licensed source — typographic panel`);

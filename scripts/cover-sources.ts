@@ -1,6 +1,6 @@
 /**
  * Where a work's cover comes from, keyed by the slug authored in
- * src/data/works/. A work absent from this map has no licensed image source
+ * src/content/catalog.ts. A work absent from this map has no licensed image source
  * and gets a typographic panel instead — that is a valid state, not an
  * omission, so the fetch run does not fail over it.
  *

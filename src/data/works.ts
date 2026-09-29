@@ -1,18 +1,9 @@
-import type { Track, Work, WorkCategory } from "./types.ts";
-import { anime } from "./works/anime.ts";
-import { artists } from "./works/artists.ts";
-import { games } from "./works/games.ts";
-import { movies } from "./works/movies.ts";
-import { music } from "./works/music.ts";
+import collection from "virtual:collection";
+import type { Track, Work } from "./types.ts";
 
-export const categories = [
-  { name: "Anime", works: anime },
-  { name: "Movies", works: movies },
-  { name: "Games", works: games },
-  { name: "Artists", works: artists },
-] as const satisfies readonly WorkCategory[];
-
-export { music };
+// Read out of README.md and docs/reviews.md at build time (src/content):
+// the Markdown is the collection, and this module only places it.
+export const { categories, music } = collection;
 
 /**
  * A song's full name. The title alone is not one — two different artists

@@ -64,6 +64,17 @@ Why this passes the three-fold test:
   the reading progress; each work's night IS its place in line; each room
   is lit by its work's own canonical color.
 
+## Content
+
+The Markdown is the only source of the words.
+`src/content` parses README.md,
+docs/reviews.md and docs/why.md at build time and serves them
+as virtual modules; `src/content/catalog.ts` holds only what Markdown cannot
+carry — each work's slug and each non-Latin name's language.
+The build refuses to run when the files disagree:
+a work listed but not reviewed, reviewed but not listed,
+missing from the catalog, or a non-Latin name without a stated language.
+
 ## Colors
 
 Two skies, one discipline:
