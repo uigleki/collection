@@ -227,6 +227,19 @@ export default defineConfig({
       "@": resolve(import.meta.dirname, "src"),
     },
   },
+  server: {
+    watch: {
+      // .direnv links the flake's inputs — all of nixpkgs — into the tree,
+      // and the watcher follows links: crawling them held the dev server's
+      // start for seventeen seconds. None of these is ever a source.
+      ignored: [
+        "**/.direnv/**",
+        "**/.lighthouseci/**",
+        "**/dist/**",
+        "**/playwright-report/**",
+      ],
+    },
+  },
   test: {
     include: ["src/**/*.test.{ts,tsx}"],
   },
