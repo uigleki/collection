@@ -21,10 +21,8 @@ precision highp float;
 
 uniform vec2  uRes;
 uniform float uTime;
-uniform float uFlow;    // integrated water phase — NEVER rate × total time
 uniform float uPhase;   // terminator: +1 new moon … -1 full moon
 uniform vec2  uMoon;    // moon center, uv space
-uniform float uVel;     // smoothed scroll velocity
 uniform float uDay;     // 0 night … 1 day theme
 uniform float uDawn;    // 0 … 1 dawn warmth at the end of the page
 uniform float uGlade;   // 0 … 1 music section: the sky moon yields to its reflection
@@ -84,7 +82,7 @@ float litMask(vec2 q) {
   return smoothstep(uPhase * band - 0.04, uPhase * band + 0.04, q.x);
 }
 
-vec3 skyColor(vec2 uv, float aspect) {
+vec3 skyColor(vec2 uv, float aspect, float stars) {
   float h = smoothstep(WATER, 1.0, uv.y);
   vec3 night = mix(NIGHT_HOR, NIGHT_TOP, h);
   vec3 dusk = mix(DUSK_HOR, DUSK_TOP, pow(h, 0.8));
@@ -105,7 +103,7 @@ vec3 skyColor(vec2 uv, float aspect) {
   // keep the moon's halo region clean
   float nearMoon = 1.0 - smoothstep(0.1, 0.34, distance(uv * vec2(aspect, 1.0), uMoon * vec2(aspect, 1.0)));
   glow *= (1.0 - nearMoon) * (1.0 - uDay) * (1.0 - uDawn * 0.8);
-  c += MOON_C * glow * 0.85;
+  c += MOON_C * glow * 0.85 * stars;
   return c;
 }
 
@@ -141,87 +139,114 @@ vec3 moonLayer(vec3 base, vec2 uv, float aspect) {
   return base;
 }
 
-// Ridge-wave octave after Alekseev's Seascape (shadertoy Ms2SD1): sine
-// ridges warped by one noise tap, sharpened by pow — crisp crests instead
-// of value-noise fog. One noise tap per octave.
-float seaOctave(vec2 uv, float choppy) {
-  uv += noise(uv);
-  vec2 wv = 1.0 - abs(sin(uv));
-  vec2 swv = abs(cos(uv));
-  wv = mix(wv, swv, wv);
-  return pow(1.0 - pow(wv.x * wv.y, 0.65), choppy);
+// ---- water ------------------------------------------------------------------
+// A real surface seen through a real lens. The eye stands EYE above a flat
+// sea and looks level at the horizon (the screen row WATER); each pixel below
+// it is a ray that meets the sea somewhere, near at the bottom of the
+// screen and ever farther toward the horizon. Waves live on that plane, in
+// the world, so they shrink and crowd with distance the way water does.
+const float FOCAL = 1.2;   // lens: screen heights per unit of ray depth
+const float EYE = 1.0;     // height of the eye above the water
+const int WAVES = 12;
+
+// The ray through a screen point: horizon at WATER, looking straight ahead.
+vec3 viewRay(vec2 uv, float aspect) {
+  return normalize(vec3((uv.x - 0.5) * aspect, uv.y - WATER, FOCAL));
+}
+// And back: where a direction lands on the screen (used for reflections).
+vec2 screenOf(vec3 d, float aspect) {
+  return vec2(0.5 + d.x / d.z * FOCAL / aspect, WATER + d.y / d.z * FOCAL);
 }
 
-// Water height field: crests run across the view, two layers drift at
-// different speeds, and everything packs toward the horizon (persp).
-float waterH(vec2 q, float persp, float t) {
-  vec2 a = vec2(q.x * 1.7, q.y * persp * 5.0 - t);
-  vec2 b = vec2(q.x * 3.1 + 2.7 + t * 0.21, q.y * persp * 9.0 - t * 1.6);
-  return 0.65 * seaOctave(a, 2.0) + 0.35 * seaOctave(b, 1.6);
+// The surface's slope at a point of the sea: a sum of wind waves, long
+// swells to short ripples, each running its own way around the wind and
+// at the speed deep water gives its length (w = sqrt(g k)). Their slopes are
+// summed analytically — no differences, no noise lattice to repeat. A wave
+// shorter than the patch of sea one pixel covers cannot be drawn, only
+// aliased: it is left out, and the slope it would have added is returned as
+// roughness instead, which spreads the moon's reflection the way the
+// unseen ripples would.
+vec3 seaSlope(vec2 p, float footprint, float t) {
+  vec2 slope = vec2(0.0);
+  float rough = 0.0;
+  float len = 7.0;
+  for (int i = 0; i < WAVES; i++) {
+    float fi = float(i);
+    float a = 0.3 + 1.1 * sin(fi * 2.39996);   // spread around the wind
+    vec2 dir = vec2(sin(a), cos(a));
+    float k = 6.28318 / len;
+    float w = sqrt(9.81 * k);
+    float steep = 0.05;                        // slope amplitude of each wave
+    float phase = dot(dir, p) * k - w * t + fi * 1.7;
+    // how much of this wave the pixel can resolve: none once it is shorter
+    // than two footprints
+    float seen = smoothstep(2.0, 4.0, len / footprint);
+    slope += dir * cos(phase) * steep * seen;
+    rough += steep * steep * 0.5 * (1.0 - seen);
+    len *= 0.72;
+  }
+  return vec3(slope, rough);
+}
+
+vec3 waterColor(vec2 uv, float aspect) {
+  vec3 ray = viewRay(uv, aspect);
+  float dist = EYE / max(-ray.y, 1e-4);
+  vec2 p = ray.xz * dist;
+  // One pixel's footprint on the sea: it grows with distance, and
+  // stretches along the view as the ray grazes the surface.
+  float pixel = 1.0 / (uRes.y * FOCAL);
+  float footprint = pixel * dist / max(-ray.y, 1e-3);
+
+  vec3 sl = seaSlope(p, footprint, uTime * 0.55);
+  vec3 n = normalize(vec3(-sl.x, 1.0, -sl.y));
+  vec3 r = reflect(ray, n);
+  r.y = abs(r.y);                              // no ray ever goes under
+
+  // What the water mirrors: the same sky, seen along the reflected ray.
+  vec3 sky = skyColor(screenOf(r, aspect), aspect, 0.0);
+
+  // The moon, mirrored: a glint wherever a facet is tilted just so — its
+  // normal halfway between the eye and the moon. How far the drawn surface
+  // is from that tilt, against how much tilt the moon's own width and the
+  // unseen ripples allow, is how bright the glint is; the allowance widens
+  // only by dimming, so light is spread, never added. Measured in slope,
+  // not angle, the path narrows toward the horizon on its own, as real
+  // moonglades do. It is not painted: it is every such facet at once.
+  vec3 moonDir = viewRay(uMoon, aspect);
+  vec3 mid = normalize(moonDir - ray);
+  vec2 need = -mid.xz / mid.y;
+  float radius = 0.5 * MOON_R / FOCAL;
+  float allow = radius * radius + sl.z;
+  vec2 miss = need - sl.xy;
+  float illum = (1.0 - uPhase) * 0.5;
+  float glint = exp(-dot(miss, miss) / (2.0 * allow)) * radius * radius / allow;
+  vec3 gladeC = mix(mix(MOON_C, WARM, 0.25), GOLD, uDay);
+  // by night the glint is as bright as the moon is full; at dusk the ball
+  // is always whole
+  float shine = mix(0.15 + illum * 1.1, 0.8, uDay) * (1.0 + uGlade * 0.8);
+
+  // Water is dark before it is a mirror: looking down, it shows its body;
+  // toward the horizon, only the sky (Fresnel, Schlick's form for water).
+  float cosI = clamp(dot(-ray, n), 0.0, 1.0);
+  float fresnel = 0.02 + 0.98 * pow(1.0 - cosI, 5.0);
+  vec3 body = mix(vec3(0.010, 0.016, 0.034), vec3(0.80, 0.72, 0.60), uDay);
+  vec3 c = mix(body, sky, fresnel) + gladeC * glint * shine * fresnel * 6.0;
+
+  // the far sea melts into the horizon's haze instead of ending on a line
+  float haze = exp(-dist * 0.012);
+  return mix(skyColor(vec2(uv.x, WATER), aspect, 0.0), c, haze);
 }
 
 void main() {
   vec2 uv = gl_FragCoord.xy / uRes;
   float aspect = uRes.x / uRes.y;
-  float vel = clamp(abs(uVel) / 40.0, 0.0, 1.0);
 
   vec3 col;
   if (uv.y >= WATER) {
-    col = skyColor(uv, aspect);
+    col = skyColor(uv, aspect, 1.0);
     col = moonLayer(col, uv, aspect);
   } else {
-    float depth = (WATER - uv.y) / WATER;          // 0 horizon … 1 near shore
-    float persp = 1.0 / (depth * depth + 0.06);
-    // uFlow is accumulated on the CPU (phase += rate·dt). Multiplying a
-    // velocity-dependent rate by total time here made the whole wave field
-    // jump phase every frame the scroll speed changed — the flicker.
-    float speed = uFlow;
-    float amp = (0.05 + vel * 0.14) * (1.0 - uDay * 0.6);
-
-    vec2 p = vec2(uv.x * aspect, uv.y);
-    float e = 0.004;
-    float hC = waterH(p, persp, speed);
-    // one-sided differences: 3 height samples total instead of 5.
-    // The vertical component is amplified so reflections streak downward
-    // (the way calm water smears lights), the horizontal stays subtle.
-    vec2 n = vec2(
-      waterH(p + vec2(e, 0.0), persp, speed) - hC,
-      waterH(p + vec2(0.0, e), persp, speed) - hC) * vec2(1.0, 1.9);
-
-    // mirror the sky through the disturbed surface — slope-driven on BOTH
-    // axes (height-only warps smear; slope warps refract)
-    vec2 rp = vec2(uv.x, WATER * 2.0 - uv.y) + n * amp * (0.35 + depth);
-    vec3 skyRef = skyColor(vec2(rp.x, max(rp.y, WATER)), aspect);
-
-    // Water is dark before it is a mirror: a near-black indigo base, with
-    // the reflected sky admitted only by Fresnel — full mirror at grazing
-    // angle (horizon), almost none looking down at the shore. The missing
-    // dark/bright separation is what reads as fog.
-    vec3 base = mix(vec3(0.012, 0.020, 0.042), vec3(0.760, 0.690, 0.575), uDay);
-    float fres = 0.05 + 0.95 * pow(1.0 - depth, 3.0);
-    vec3 water = mix(base, skyRef, fres * 0.9);
-    water += base * hC * 0.35;
-
-    // The moonglade: a path of discrete glints, one per wave facet tilted
-    // to throw the moon back at the eye — narrow as the moon itself at the
-    // horizon, flaring wider and breaking into separate soft flashes near
-    // the shore. Never one uniform streak. Cox-Munk measured how those
-    // slopes are really distributed (a wind-driven gaussian); this is a
-    // power lobe standing in for it, shaped by eye rather than by wind.
-    float illum = (1.0 - uPhase) * 0.5;
-    float pathW = MOON_R * mix(0.9, 4.5, depth) * (1.0 + uGlade * 0.6);
-    float dx = (uv.x - uMoon.x) * aspect / pathW;
-    float envelope = exp(-dx * dx * 3.5);
-    float sparkle = pow(
-      max(0.0, 1.0 - abs(n.x) * mix(26.0, 8.0, depth)),
-      mix(22.0, 4.0, depth));
-    // the stable bright core where the still-water reflection would sit
-    float core = exp(-dx * dx * 8.0) *
-                 exp(-pow((WATER - uv.y) * 16.0, 2.0));
-    vec3 gladeC = mix(mix(MOON_C, WARM, 0.3), GOLD, uDay);
-    float shine = (0.25 + illum) * (0.6 + uGlade * 0.8) * (1.0 - uDay * 0.2);
-    water += gladeC * (envelope * sparkle * 0.9 + core * (0.5 + illum * 0.6)) * shine;
-    col = water;
+    col = waterColor(uv, aspect);
   }
 
   // rooms: the sky steps back so reading can stand in front
@@ -277,16 +302,21 @@ export function MoonSky() {
     const uniforms = {
       uRes: { value: [1, 1] as [number, number] },
       uTime: { value: 0 },
-      uFlow: { value: 0 },
       uPhase: { value: 1 },
       uMoon: { value: [0.64, 0.56] as [number, number] },
-      uVel: { value: 0 },
       uDay: { value: 0 },
       uDawn: { value: 0 },
       uGlade: { value: 0 },
       uDim: { value: 0 },
     };
     const program = new Program(gl, { vertex: VERT, fragment: FRAG, uniforms });
+    // A shader this driver will not build leaves the night to the poster
+    // rather than taking the page down with it.
+    if (!gl.getProgramParameter(program.program, gl.LINK_STATUS)) {
+      gl.canvas.remove();
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      return;
+    }
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -333,15 +363,12 @@ export function MoonSky() {
 
     let raf = 0;
     let last = performance.now();
-    let lastY = window.scrollY;
     let time = 0;
-    let flow = 0;
     let glade = 0;
     let dim = 0;
     // Eased and sampled entirely inside this loop — nothing outside the sky
     // ever reads them, so they are locals, not part of the page's channel.
     let night = 1;
-    let velocity = 0;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
       const ms = now - last;
@@ -359,11 +386,6 @@ export function MoonSky() {
       // sky is the only thing that reads these, and this loop already runs
       // every frame.
       const y = window.scrollY;
-      // A page change puts the reader somewhere else in one frame: that is
-      // a teleport, not a scroll, and must not whip the water.
-      const moved = Math.abs(y - lastY) > window.innerHeight ? 0 : y - lastY;
-      velocity += (moved - velocity) * 0.25;
-      lastY = y;
       const progress = span > 0 ? y / span : 0;
       // An instant jump (deep link, keyboard End) can skip every night's
       // observer band. Which pages that matters on is the page's business,
@@ -376,13 +398,10 @@ export function MoonSky() {
         sky.targetNight = FULL_NIGHT;
       }
 
-      if (!still) {
-        time += dt;
-        // integrate the water's phase: faster while the reader scrolls,
-        // continuous always
-        const v = Math.min(Math.abs(velocity) / 40, 1);
-        flow += (0.28 + v * 1.1) * dt;
-      }
+      // The water keeps its own time. It once ran faster while the reader
+      // scrolled — a sea that answers the scroll wheel reads as a screen
+      // effect, not a sea.
+      if (!still) time += dt;
 
       night = still ? sky.targetNight : ease(night, sky.targetNight, 3.0, dt);
       sky.day = still ? sky.targetDay : ease(sky.day, sky.targetDay, 4.0, dt);
@@ -394,8 +413,6 @@ export function MoonSky() {
       uniforms.uMoon.value[0] = aspect > 1.05 ? 0.66 : 0.5;
       uniforms.uMoon.value[1] = 0.52 + 0.32 * alt;
       uniforms.uTime.value = time;
-      uniforms.uFlow.value = flow;
-      uniforms.uVel.value = still ? 0 : velocity;
       uniforms.uDay.value = sky.day;
       uniforms.uDawn.value = progress > 0.84 ? (progress - 0.84) / 0.16 : 0;
       uniforms.uGlade.value = glade;
@@ -413,7 +430,6 @@ export function MoonSky() {
       cancelAnimationFrame(raf);
       if (!document.hidden) {
         last = performance.now();
-        lastY = window.scrollY; // no phantom velocity from a scroll while away
         raf = requestAnimationFrame(frame);
       }
     };

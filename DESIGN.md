@@ -48,8 +48,12 @@ UI utility copy (buttons, 404) is the only exception.
 
 **The signature (the one bold thing):** scroll waxes the moon.
 One persistent WebGL sky
-(phase-accurate terminator from `src/lib/moon.ts`, ridge-wave water,
-a moonglade of discrete glints, star field).
+(phase-accurate terminator from `src/lib/moon.ts`,
+a sea seen through a real lens that mirrors that same sky and moon, star field).
+The moonglade is never painted:
+it is every wave facet tilted to throw the moon back at the eye,
+so it narrows toward the horizon as real ones do.
+The sea keeps its own time — it never answers the scroll.
 Everything else is quiet: no cursor gimmicks, no sound,
 no second ambient effect.
 
