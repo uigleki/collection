@@ -302,20 +302,21 @@ export function MoonSky() {
       renderer.setSize(el.clientWidth, el.clientHeight);
       uniforms.uRes.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
       measure();
+      // Sizing a canvas clears it, and observers run after this frame's
+      // draw: without a draw of its own, the frame would show black.
+      renderer.render({ scene: mesh });
     };
     resize();
 
     // The entry beat: the living sky rises out of the still poster once,
-    // when the visit begins — an arrival, not a loader.
-    if (!reduced.matches) {
-      el.style.opacity = "0";
+    // when the visit begins — an arrival, not a loader. The host is hidden
+    // from its first paint (a hiding set here would itself transition, and
+    // leave the canvas showing while it faded), and it is the loop that
+    // reveals it, once there is a drawn frame to reveal: a canvas shown
+    // before that is a black one.
+    if (!reduced.matches)
       el.style.transition = "opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1)";
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          el.style.opacity = "1";
-        });
-      });
-    }
+    let shown = false;
     const ro = new ResizeObserver(resize);
     ro.observe(el);
     // The document grows and shrinks without the canvas ever changing size —
@@ -402,6 +403,10 @@ export function MoonSky() {
       uniforms.uDim.value = dim;
 
       renderer.render({ scene: mesh });
+      if (!shown) {
+        shown = true;
+        el.style.opacity = "1";
+      }
     };
     raf = requestAnimationFrame(frame);
 
@@ -422,6 +427,8 @@ export function MoonSky() {
       docRo.disconnect();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
       gl.canvas.remove();
+      el.style.opacity = "";
+      el.style.transition = "";
     };
   }, []);
 
@@ -429,7 +436,7 @@ export function MoonSky() {
     <div
       ref={host}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10"
+      className="pointer-events-none fixed inset-0 -z-10 opacity-0"
     />
   );
 }
