@@ -229,31 +229,31 @@ Master of moe aesthetics and light
 
 ## 🎵 Music
 
-### COP - 世末积雨云
-
-Even as the world crumbles, I remain standing to witness it all
-
-### COP - 凉雨
-
-When the rain finally stops, I will find you waiting there
-
-### COP - 同归世界线
+### COP feat. 乐正绫 - 同归世界线
 
 This time when the world ends, I won't let you face it alone
 
-### COP - 灰烬
+### COP feat. 洛天依 & 言和 - 灰烬 (重制)
 
 I chose to burn with you rather than exist without you
 
-### Capchii & 凛々咲 - Letters from Heaven
+### COP feat. 洛天依 - 世末积雨云 (重新混缩)
+
+Even as the world crumbles, I remain standing to witness it all
+
+### COP feat. 洛天依 - 凉雨
+
+When the rain finally stops, I will find you waiting there
+
+### Capchii feat. 凛々咲 - Letters From Heaven
 
 Rain connects us across the distance between earth and sky
 
-### Ceui - 今、歩き出す君へ。
+### Ceui - 今、歩き出す君へ
 
 Your existence alone taught me that hope never fades
 
-### ClariS - With You
+### ClariS - with you
 
 Under the same sky, you're never truly alone
 
@@ -269,7 +269,7 @@ Open this door and you can go anywhere you dream
 
 I found my heavenly world the moment I reached for you
 
-### DECO＊27 & 初音ミク - 初嵐
+### DECO*27 feat. 初音ミク - 初嵐
 
 Thank you for singing with me, let's move forward together
 
@@ -277,7 +277,7 @@ Thank you for singing with me, let's move forward together
 
 You exist to understand others, to hold the hands that matter
 
-### JUSF周存 - 心跳同步的时光 (Memory Ver.)
+### JUSF周存 feat. 洛天依 - 心跳同步的时光 (Memory Ver.)
 
 I'll treasure this moment when our hearts beat as one
 
@@ -285,7 +285,7 @@ I'll treasure this moment when our hearts beat as one
 
 Gentle melodies remain even as the world turns cruel
 
-### MIMI - 水音とカーテン
+### MIMI feat. 初音ミク - 水音とカーテン
 
 Rain made this moment ours alone
 
@@ -293,7 +293,7 @@ Rain made this moment ours alone
 
 The wind sings for our reunion as I climb to find you
 
-### MoreanP - Feeling The Rain
+### MoreanP - Feeling the Rain
 
 Some experience the rain, others simply endure it
 
@@ -305,11 +305,7 @@ Though uncertain of myself, I reach for you and call this life
 
 Thank you for being the place I can always return to
 
-### SOUNDORBIS - LIFE
-
-When this melody plays, you understand what living means
-
-### Schnuffel - Häschenparty
+### Schnuffel - Häschenparty (Album Version)
 
 Life is a party when you're here with me
 
@@ -325,6 +321,10 @@ Everything shines brighter when you're beside me
 
 Dreams don't wait for nightfall
 
+### Soda纯白 feat. 星尘 - 海棠仙 (Album Version)
+
+I crossed a thousand years just to understand your wait
+
 ### Xad - Birds
 
 Some souls are meant to soar
@@ -333,41 +333,37 @@ Some souls are meant to soar
 
 This irreplaceable now was worth every yesterday
 
-### daniwellP - UZ
+### daniwell feat. 初音ミク & 鏡音リン & 鏡音レン & 巡音ルカ & IA & 桃音モモ & 重音テト - UZ
 
 The universe speaks in frequencies
 
-### daniwellP - てすてすブロードキャスト.proj
+### daniwell feat. 初音ミク - てすてすブロードキャスト.proj
 
 Even through static, I'll find your frequency
 
-### daniwellP - 夏の終わりの彼女は
+### daniwell feat. 初音ミク - 夏の終わりの彼女は
 
 The cloudy sky may rain, but I believe it will clear someday
 
-### doriko - ロミオとシンデレラ
+### doriko feat. 初音ミク - ロミオとシンデレラ
 
 Take me far away where only our story matters
 
-### doriko - 歌に形はないけれど
+### doriko feat. 初音ミク - 歌に形はないけれど (再ミックス)
 
 What has no form cannot fade with time
 
-### doriko - 茜コントラスト
+### doriko feat. 初音ミク - 茜コントラスト
 
 Unspoken love stays perfect in memory
 
-### himmel - 远枫
+### himmel feat. 瑶山百霊 - 远枫
 
 Autumn teaches us to let go so spring can return
 
-### iolli - Through Mist and Fog
+### iolli feat. Ashley Woods - Through Mist and Fog
 
 I walk through fog because stopping is not an option
-
-### minato & 初音ミク - 朧月
-
-My light may blur with distance but never disappears
 
 ### niki feat. Lily - ジッタードール
 
@@ -377,11 +373,15 @@ Love exists because it defies logic, not despite it
 
 Choosing to love yourself is the bravest uprising
 
-### supercell - My Dearest
+### soundorbis - LIFE
+
+When this melody plays, you understand what living means
+
+### supercell feat. こゑだ - My Dearest
 
 Even when the world abandons you, I will stand beside you
 
-### あやりす - 愛を誓いしヒメ飾り
+### あやりす feat. GUMI - 愛を誓いしヒメ飾り
 
 If freedom means forgetting you, I choose captivity
 
@@ -405,17 +405,17 @@ Time moved on, my heart stayed with you
 
 Time changes everything beautiful, but not what it meant
 
-### 甘茶の音楽工房 - 赤い風船とメリーゴーランド
+### 湊貴大 feat. 初音ミク - 朧月
+
+My light may blur with distance but never disappears
+
+### 甘茶 - 赤い風船とメリーゴーランド
 
 Joy preserved in a music box sounds like longing
 
 ### 竹達彩奈 & 巽悠衣子 - バランスKISS
 
 Happiness needs no explanation to those who feel it
-
-### 纯白P - 海棠仙 (Album Version)
-
-I crossed a thousand years just to understand your wait
 
 ### 茶太 - 夢笑顔
 

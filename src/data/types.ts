@@ -51,7 +51,7 @@ export interface Track extends Titled {
   artist: string;
   /**
    * Language of the performer's name, judged independently of the song's:
-   * 凛々咲 sings "Letters from Heaven", and 朝香智子 sings "post-script".
+   * 凛々咲 sings "Letters From Heaven", and 朝香智子 sings "post-script".
    * One `lang` over both would dress a Latin title in Japanese letterforms,
    * or leave a Japanese name in Simplified-Chinese ones.
    */

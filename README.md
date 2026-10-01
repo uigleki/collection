@@ -32,53 +32,53 @@ Works that enrich rather than diminish — created from love, not manipulation.
 
 ## 🎵 Music
 
-- COP - 世末积雨云
-- COP - 凉雨
-- COP - 同归世界线
-- COP - 灰烬
-- Capchii & 凛々咲 - Letters from Heaven
-- Ceui - 今、歩き出す君へ。
-- ClariS - With You
+- COP feat. 乐正绫 - 同归世界线
+- COP feat. 洛天依 & 言和 - 灰烬 (重制)
+- COP feat. 洛天依 - 世末积雨云 (重新混缩)
+- COP feat. 洛天依 - 凉雨
+- Capchii feat. 凛々咲 - Letters From Heaven
+- Ceui - 今、歩き出す君へ
+- ClariS - with you
 - ClariS - ヒトリゴト
 - ClariS - 桜咲く
 - Cream puff - Mermaid girl (Extended RRver.)
-- DECO＊27 & 初音ミク - 初嵐
+- DECO*27 feat. 初音ミク - 初嵐
 - EGOIST - The Everlasting Guilty Crown
-- JUSF周存 - 心跳同步的时光 (Memory Ver.)
+- JUSF周存 feat. 洛天依 - 心跳同步的时光 (Memory Ver.)
 - Ken Arai - NEXT TO YOU
-- MIMI - 水音とカーテン
+- MIMI feat. 初音ミク - 水音とカーテン
 - Mili - Nine Point Eight
-- MoreanP - Feeling The Rain
+- MoreanP - Feeling the Rain
 - Neuro-sama - LIFE
 - Poppin'Party - Returns
-- SOUNDORBIS - LIFE
-- Schnuffel - Häschenparty
+- Schnuffel - Häschenparty (Album Version)
 - Schnuffel - Ich hab' dich lieb
 - Schnuffel - Nur mit Dir
 - Shirfine - Illusionary Daytime
+- Soda纯白 feat. 星尘 - 海棠仙 (Album Version)
 - Xad - Birds
 - azusa - 真夏のフォトグラフ
-- daniwellP - UZ
-- daniwellP - てすてすブロードキャスト.proj
-- daniwellP - 夏の終わりの彼女は
-- doriko - ロミオとシンデレラ
-- doriko - 歌に形はないけれど
-- doriko - 茜コントラスト
-- himmel - 远枫
-- iolli - Through Mist and Fog
-- minato & 初音ミク - 朧月
+- daniwell feat. 初音ミク & 鏡音リン & 鏡音レン & 巡音ルカ & IA & 桃音モモ & 重音テト - UZ
+- daniwell feat. 初音ミク - てすてすブロードキャスト.proj
+- daniwell feat. 初音ミク - 夏の終わりの彼女は
+- doriko feat. 初音ミク - ロミオとシンデレラ
+- doriko feat. 初音ミク - 歌に形はないけれど (再ミックス)
+- doriko feat. 初音ミク - 茜コントラスト
+- himmel feat. 瑶山百霊 - 远枫
+- iolli feat. Ashley Woods - Through Mist and Fog
 - niki feat. Lily - ジッタードール
 - niki feat. Lily - テロリスト
-- supercell - My Dearest
-- あやりす - 愛を誓いしヒメ飾り
+- soundorbis - LIFE
+- supercell feat. こゑだ - My Dearest
+- あやりす feat. GUMI - 愛を誓いしヒメ飾り
 - いとうかなこ - アマデウス
 - やくしまるえつこ - アンノウン・ワールドマップ
 - 上村叶恵 - 雨霧
 - 朝香智子 - post-script
 - 清漪 - 但叹清风错
-- 甘茶の音楽工房 - 赤い風船とメリーゴーランド
+- 湊貴大 feat. 初音ミク - 朧月
+- 甘茶 - 赤い風船とメリーゴーランド
 - 竹達彩奈 & 巽悠衣子 - バランスKISS
-- 纯白P - 海棠仙 (Album Version)
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
 

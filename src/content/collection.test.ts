@@ -5,7 +5,7 @@ import type { Readme, Review } from "./parse.ts";
 const readme: Readme = {
   tagline: "Works that enrich rather than diminish.",
   shelves: [{ medium: "Anime", titles: ["化物語"] }],
-  songs: [{ artist: "COP", title: "凉雨" }],
+  songs: [{ artist: "COP feat. 洛天依", title: "凉雨" }],
 };
 
 const review = (subtitle: string): Review => ({
@@ -18,7 +18,7 @@ const reviews = () =>
   new Map<string, Review>([
     ["化物語", review("Supernatural tales of adolescent awakening")],
     [
-      "COP - 凉雨",
+      "COP feat. 洛天依 - 凉雨",
       { subtitle: "When the rain finally stops", points: [], flaws: [] },
     ],
   ]);
@@ -32,7 +32,9 @@ const catalog = (): Catalog => ({
       art: { kind: "anilist", search: "Bakemonogatari" },
     },
   },
-  songs: { "COP - 凉雨": { lang: "zh-Hans" } },
+  songs: {
+    "COP feat. 洛天依 - 凉雨": { lang: "zh-Hans", artistLang: "zh-Hans" },
+  },
 });
 
 describe("assemble", () => {
@@ -60,9 +62,10 @@ describe("assemble", () => {
     ]);
     expect(collection.music).toEqual([
       {
-        artist: "COP",
+        artist: "COP feat. 洛天依",
         title: "凉雨",
         lang: "zh-Hans",
+        artistLang: "zh-Hans",
         subtitle: "When the rain finally stops",
       },
     ]);

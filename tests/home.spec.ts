@@ -34,7 +34,7 @@ test.describe("the collection", () => {
     await expect(rows).toHaveCount(49);
     const row = rows.filter({ hasText: "朧月" });
     await expect(row).toHaveCount(1);
-    await expect(row.getByText("minato & 初音ミク")).toBeAttached();
+    await expect(row.getByText("湊貴大 feat. 初音ミク")).toBeAttached();
   });
 
   test("ends on the essay's own final beat", async ({ page }) => {
@@ -62,14 +62,14 @@ test.describe("the collection", () => {
     page,
   }) => {
     await page.goto("/");
-    // 凛々咲 sings "Letters from Heaven": the name takes Japanese
+    // 凛々咲 sings "Letters From Heaven": the name takes Japanese
     // letterforms, the Latin title must be left alone.
     const row = page.locator('section[aria-label="Music"] li', {
-      hasText: "Letters from Heaven",
+      hasText: "Letters From Heaven",
     });
     const japanese = row.locator('[lang="ja"]');
     await expect(japanese).toHaveCount(1);
-    await expect(japanese).toContainText("Capchii & 凛々咲");
-    await expect(japanese).not.toContainText("Letters from Heaven");
+    await expect(japanese).toContainText("Capchii feat. 凛々咲");
+    await expect(japanese).not.toContainText("Letters From Heaven");
   });
 });

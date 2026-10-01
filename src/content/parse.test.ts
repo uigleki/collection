@@ -18,8 +18,8 @@ Works that enrich rather than diminish — created from love, not manipulation.
 
 ## 🎵 Music
 
-- COP - 世末积雨云
-- Capchii & 凛々咲 - Letters from Heaven
+- COP feat. 洛天依 - 世末积雨云 (重新混缩)
+- Capchii feat. 凛々咲 - Letters From Heaven
 
 <!-- markdownlint-enable MD013 -->
 
@@ -50,8 +50,8 @@ describe("parseReadme", () => {
 
   it("reads the music as songs split at the first spaced hyphen", () => {
     expect(readme.songs).toEqual([
-      { artist: "COP", title: "世末积雨云" },
-      { artist: "Capchii & 凛々咲", title: "Letters from Heaven" },
+      { artist: "COP feat. 洛天依", title: "世末积雨云 (重新混缩)" },
+      { artist: "Capchii feat. 凛々咲", title: "Letters From Heaven" },
     ]);
   });
 });
@@ -80,7 +80,7 @@ Fate's ultimate decree
 
 ## 🎵 Music
 
-### COP - 世末积雨云
+### COP feat. 洛天依 - 世末积雨云 (重新混缩)
 
 Even as the world crumbles, I remain standing to witness it all
 `;
@@ -89,7 +89,10 @@ describe("parseReviews", () => {
   const reviews = parseReviews(REVIEWS);
 
   it("keys each review by its heading, exactly as written", () => {
-    expect([...reviews.keys()]).toEqual(["Steins;Gate", "COP - 世末积雨云"]);
+    expect([...reviews.keys()]).toEqual([
+      "Steins;Gate",
+      "COP feat. 洛天依 - 世末积雨云 (重新混缩)",
+    ]);
   });
 
   it("reads a work's subtitle, points and shortcomings", () => {
@@ -112,7 +115,7 @@ describe("parseReviews", () => {
   });
 
   it("reads a song's one line", () => {
-    expect(reviews.get("COP - 世末积雨云")).toEqual({
+    expect(reviews.get("COP feat. 洛天依 - 世末积雨云 (重新混缩)")).toEqual({
       subtitle:
         "Even as the world crumbles, I remain standing to witness it all",
       points: [],
