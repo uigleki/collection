@@ -62,6 +62,7 @@
 
               biome.enable = true;
               convco.enable = true;
+              deadnix.enable = true;
 
               nil = {
                 enable = true;
@@ -74,6 +75,8 @@
                 enable = true;
                 args = [ "--fix" ];
               };
+
+              statix.enable = true;
 
               tombi = {
                 enable = true;
