@@ -1,7 +1,14 @@
 [default]
 locale = "en-us"
-extend-ignore-re = ["Poppin'Party", "Ubuntu Font Licence"]
+extend-ignore-re = [
+  # the band's own name
+  "Poppin'Party",
+  # the license's own title
+  "Ubuntu Font Licence",
+]
 
 [default.extend-words]
+# the axe-core accessibility checker
 axe = "axe"
+# 夜, a palette color named throughout the site
 yoru = "yoru"
