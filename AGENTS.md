@@ -7,19 +7,16 @@ Perfect Collection — works that enrich rather than diminish.
 - `README.md` — the collection itself: works grouped by medium.
 - `docs/why.md` — essays on why each work matters.
 - `docs/reviews.md` — brief, spoiler-free impressions per work.
-- `DESIGN.md` — the design constitution the code defers to; anything that
-  contradicts it is a bug.
+- `DESIGN.md` — the design constitution the code defers to; anything that contradicts it is a bug.
 
 ## Commands
 
 - `package.json` holds the script list; run them with `bun run <script>`.
-- Refresh cover art: `bun scripts/fetch-covers.ts`
-  (not a `package.json` script).
+- Refresh cover art: `bun scripts/fetch-covers.ts` (not a `package.json` script).
 
 ## Gotchas
 
-- Regenerate the CJK font subsets whenever a work title introduces a new glyph:
-  `bun run fonts:cjk`.
+- Regenerate the CJK font subsets whenever a work title introduces a new glyph: `bun run fonts:cjk`.
   Nothing else catches a missing glyph.
 
 ## Conventions
