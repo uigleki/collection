@@ -1,6 +1,5 @@
-# Nix
-.direnv
-/.pre-commit-config.yaml
+# for statix, which skips git's global excludes
+.direnv/
 
 # Dependencies
 node_modules/
