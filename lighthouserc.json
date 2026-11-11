@@ -36,7 +36,6 @@
         ],
         "prefers-color-scheme": "off"
       }
-    },
-    "upload": { "target": "temporary-public-storage" }
+    }
   }
 }
