@@ -4,6 +4,7 @@ import { expect, test } from "./helpers.ts";
 declare global {
   interface Window {
     skyDraws: number;
+    skyAsked: number;
   }
 }
 
@@ -66,4 +67,32 @@ test.describe("a sky asked to hold still", () => {
     );
     await expect.poll(draws).toBeGreaterThan(settled);
   });
+});
+
+test("a browser with no WebGL is left the poster, and no complaint", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  page.on("console", (m) => {
+    if (m.type() === "error") errors.push(m.text());
+  });
+  await page.addInitScript(() => {
+    window.skyAsked = 0;
+    const ask = HTMLCanvasElement.prototype.getContext as (
+      ...args: unknown[]
+    ) => unknown;
+    Object.assign(HTMLCanvasElement.prototype, {
+      getContext(this: unknown, kind: string, ...rest: unknown[]) {
+        if (!kind.startsWith("webgl")) return ask.call(this, kind, ...rest);
+        window.skyAsked += 1;
+        return null;
+      },
+    });
+  });
+  await page.goto("/");
+  await expect
+    .poll(() => page.evaluate(() => window.skyAsked))
+    .toBeGreaterThan(0);
+  expect(errors).toEqual([]);
 });

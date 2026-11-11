@@ -267,21 +267,25 @@ export function MoonSky() {
     if (!el) return;
 
     const sharpest = Math.min(window.devicePixelRatio, 1.75);
-    let renderer: Renderer;
-    try {
-      renderer = new Renderer({
-        dpr: sharpest,
-        alpha: false,
-        antialias: false,
-        // One triangle, no depth test: a depth buffer would be tens of MB
-        // of VRAM cleared every frame for nothing. The COLOR clear stays —
-        // on tiled mobile GPUs it is what lets the driver skip loading the
-        // previous frame back into tile memory.
-        depth: false,
-      });
-    } catch {
-      return; // no WebGL — the CSS poster carries the night
-    }
+    const canvas = document.createElement("canvas");
+    const surface = {
+      alpha: false,
+      antialias: false,
+      // One triangle, no depth test: a depth buffer would be tens of MB
+      // of VRAM cleared every frame for nothing. The COLOR clear stays —
+      // on tiled mobile GPUs it is what lets the driver skip loading the
+      // previous frame back into tile memory.
+      depth: false,
+    };
+    // Asked for here, before the renderer asks: it reports a canvas with no
+    // WebGL to the console as an error, and the CSS poster carrying the
+    // night is not one.
+    if (
+      !canvas.getContext("webgl2", surface) &&
+      !canvas.getContext("webgl", surface)
+    )
+      return;
+    const renderer = new Renderer({ canvas, dpr: sharpest, ...surface });
     const gl = renderer.gl;
 
     // Software rasterizers (SwiftShader, llvmpipe — headless CI, GPU-less
