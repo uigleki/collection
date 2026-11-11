@@ -1,27 +1,34 @@
 /**
- * How sharply the sky can afford to draw.
+ * Adaptive render scale for the sky canvas.
  *
- * The sky is one full-screen shader, so its cost is its pixel count: a big
- * high-density screen on a modest GPU cannot draw it at full resolution in
- * time, and a late frame is a stutter under everything the reader does.
- * The governor watches the frames arrive and trades resolution for time —
- * quickly when frames run late, slowly when they are on time again, so it
- * settles instead of hunting. The sky is soft light and water; drawn a
- * little under the screen's density and scaled up, it looks the same.
+ * The sky is one full-screen shader, so its cost is its pixel count. A big
+ * high-density screen on a slow GPU cannot draw it at full resolution
+ * within a frame, and a late frame makes everything the reader does
+ * stutter. The governor measures frame times and lowers the scale quickly
+ * when frames are late, and raises it slowly once they are on time again,
+ * so the scale settles instead of oscillating. The sky is soft gradients
+ * and water: drawn slightly below the screen's density and scaled up, it
+ * looks the same.
  */
 
-/** Frames per judgment: about a second on most screens. */
+/** Frames per measurement window: about a second on most screens. */
 const WINDOW = 60;
-/** Longer than this was a pause (a tab away, a collection), not the sky. */
+/**
+ * A frame longer than this (ms) was a pause, such as a hidden tab or a
+ * garbage collection, and does not measure render cost.
+ */
 const HITCH = 100;
-/** Faster than this is two callbacks in one frame, not a real display. */
+/**
+ * A frame shorter than this (ms) is two callbacks in one frame, not the
+ * display's refresh period.
+ */
 const FASTEST = 1000 / 240;
-/** On-time windows needed before resolution is won back. */
+/** Consecutive on-time windows needed before the scale is raised. */
 const PATIENCE = 8;
 
 export function governor({ max, min }: { max: number; min: number }) {
   let scale = max;
-  // the display's own pace, learned from the fastest frames it delivers
+  // the display's refresh period, estimated from the shortest frames seen
   let period = 1000 / 60;
   let sum = 0;
   let count = 0;

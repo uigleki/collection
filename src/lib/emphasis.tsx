@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
 /**
- * The why-essay marks its load-bearing lines with **strong** emphasis; that
- * is the only markdown the content uses, so that is all this renders.
+ * The why-essay marks its key lines with **strong** emphasis. That is the
+ * only Markdown the content uses, so it is all this renders.
  */
 export function renderEmphasis(text: string): ReactNode[] {
   return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {

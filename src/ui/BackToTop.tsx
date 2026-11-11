@@ -3,9 +3,8 @@ import { scrollToTop } from "@/lib/scroll.ts";
 import { Icon } from "./Icon.tsx";
 
 /**
- * Bottom-right, same glass language as every other fixture. Appears only
- * once the reader is more than a viewport deep — before that it would be
- * furniture.
+ * Shown only once the page is scrolled more than a viewport down: before
+ * that it has no use.
  */
 export function BackToTop() {
   const [shown, setShown] = useState(false);

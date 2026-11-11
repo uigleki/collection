@@ -9,7 +9,10 @@ import {
   test,
 } from "./helpers.ts";
 
-/** Enter a room from the spine, come back, and expect the reading position. */
+/**
+ * Open a work page from the home page, go back, and expect the home page's
+ * scroll position to be restored.
+ */
 async function roundTrip(
   page: Page,
   row: Locator,
@@ -18,7 +21,7 @@ async function roundTrip(
 ) {
   await row.click();
   await expect(page).toHaveURL(/girls-last-tour/);
-  // rooms open at the top (once the transition settles)
+  // work pages open scrolled to the top (once the transition has finished)
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
 
   await page.getByRole("button", { name: "Back to the collection" }).click();
@@ -30,8 +33,8 @@ async function roundTrip(
     .toBeLessThan(tolerance);
 }
 
-// Playwright's touchscreen only taps, so a gesture is dispatched directly —
-// exactly what a finger sends: down, a run of moves, up.
+// Playwright's touchscreen can only tap, so a swipe is dispatched as raw
+// pointer events: pointerdown, a series of pointermove, then pointerup.
 async function swipe(
   page: Page,
   dx: number,
@@ -58,7 +61,7 @@ async function swipe(
   );
 }
 
-/** Lift the finger a held swipe left at (dx, dy). */
+/** End a swipe that was held at (dx, dy) by dispatching pointerup. */
 async function release(page: Page, dx: number, dy: number) {
   await page.evaluate(
     ({ dx, dy }) =>
@@ -76,39 +79,41 @@ async function release(page: Page, dx: number, dy: number) {
   );
 }
 
-test.describe("rooms", () => {
-  test("a work opens into its room", async ({ page }) => {
+test.describe("work pages", () => {
+  test("clicking a work on the home page opens its work page", async ({
+    page,
+  }) => {
     await page.goto("/");
     await row(page, "化物語").click();
     await expect(page).toHaveURL(/\/works\/bakemonogatari$/);
     await expect(heading(page, "化物語")).toBeVisible();
-    // the collection may still be fading out; the room is what is read
+    // the home page may still be fading out; scope to the work page's main
     await expect(page.getByRole("main").getByText("Anime 01")).toBeVisible();
     await expect(page).toHaveTitle(/化物語/);
   });
 
-  test("prev/next walk the whole shelf and never scroll away", async ({
+  test("previous/next buttons change work; back button stays in view", async ({
     page,
   }) => {
     await page.goto("/works/bakemonogatari");
     await page.getByRole("button", { name: "Next: 偽物語" }).click();
     await expect(page).toHaveURL(/\/works\/nisemonogatari$/);
     await expect(heading(page, "偽物語")).toBeVisible();
-    // 化物語 is first on the whole shelf, so it has no previous
+    // 化物語 is the first work overall, so it has no previous button
     await page.getByRole("button", { name: "Previous: 化物語" }).click();
     await expect(page).toHaveURL(/\/works\/bakemonogatari$/);
     await expect(page.getByRole("button", { name: /^Previous:/ })).toHaveCount(
       0,
     );
     await expect(page.getByRole("button", { name: /^Next:/ })).toHaveCount(1);
-    // the doorway stays pinned after a deep scroll
+    // the back button stays fixed in the viewport after a long scroll
     await page.mouse.wheel(0, 2000);
     await expect(
       page.getByRole("button", { name: "Back to the collection" }),
     ).toBeInViewport();
   });
 
-  test("a touch swipe walks the shelf, a vertical drag never does", async ({
+  test("only a long, mostly horizontal touch swipe changes work", async ({
     page,
   }) => {
     await page.goto("/works/nisemonogatari");
@@ -116,15 +121,15 @@ test.describe("rooms", () => {
 
     await swipe(page, -160, 10); // left → the next work
     await room("ハイスコアガール");
-    await swipe(page, 160, 10); // right → back
+    await swipe(page, 160, 10); // right → the previous work
     await room("偽物語");
 
-    await swipe(page, -160, 400); // mostly vertical: reading, not a swipe
-    await swipe(page, -30, 0); // too short to be decisive, however quick
+    await swipe(page, -160, 400); // mostly vertical: scrolling, not a swipe
+    await swipe(page, -30, 0); // too short to count, at any speed
     await expect(page).toHaveURL(/nisemonogatari$/);
   });
 
-  test("the room follows the finger, and resists past the shelf's end", async ({
+  test("held swipe drags the page; at the first work it springs back", async ({
     page,
   }) => {
     await page.goto("/works/bakemonogatari");
@@ -133,14 +138,14 @@ test.describe("rooms", () => {
     const at = async () => (await title.boundingBox())?.x ?? 0;
     const rest = await at();
 
-    // held, not released: the page is wherever the finger is
+    // held, not released: the page has moved with the pointer
     await swipe(page, -120, 0, { release: false });
     await expect.poll(async () => (await at()) - rest).toBeLessThan(-100);
     await release(page, -120, 0);
     await expect(page).toHaveURL(/nisemonogatari$/);
 
-    // 化物語 is the first work: nothing stands before it, so a pull toward
-    // the previous one gives a little and springs back
+    // 化物語 is the first work, so a swipe toward the previous one moves the
+    // page only slightly, and it springs back on release
     await page.goto("/works/bakemonogatari");
     await expect(title).toBeVisible();
     await swipe(page, 200, 0, { release: false });
@@ -153,7 +158,9 @@ test.describe("rooms", () => {
     await expect(page).toHaveURL(/bakemonogatari$/);
   });
 
-  test("the arrow keys walk the shelf", async ({ page }) => {
+  test("the arrow keys move to the next and previous work", async ({
+    page,
+  }) => {
     await page.goto("/works/nisemonogatari");
     await expect(page).toHaveTitle(/^偽物語/);
     await page.keyboard.press("ArrowRight");
@@ -162,14 +169,14 @@ test.describe("rooms", () => {
     await expect(heading(page, "偽物語")).toBeVisible();
   });
 
-  test("a room scrolls the moment it opens", async ({ page }) => {
+  test("a work page can be scrolled as soon as it opens", async ({ page }) => {
     await page.goto("/");
     const link = row(page, "化物語");
     await link.scrollIntoViewIfNeeded();
     await link.click();
     await expect(heading(page, "化物語")).toBeAttached();
-    // No animation owns the page: the reader's wheel is obeyed at once,
-    // whatever is still settling.
+    // No animation blocks scrolling: the wheel scrolls the page at once,
+    // even while the page transition is still running.
     const before = await page.evaluate(() => window.scrollY);
     await page.mouse.move(640, 400);
     await page.mouse.wheel(0, 400);
@@ -178,10 +185,11 @@ test.describe("rooms", () => {
       .toBeGreaterThan(before + 100);
   });
 
-  test("a back swipe the browser already animated is not animated again", async ({
+  test("a back navigation the browser animated is not animated again", async ({
     page,
   }) => {
-    // What a phone's edge swipe reports: the browser has drawn the change.
+    // What a phone's edge-swipe back reports: the browser has already
+    // animated the navigation.
     await page.addInitScript(() =>
       window.addEventListener(
         "popstate",
@@ -204,11 +212,11 @@ test.describe("rooms", () => {
       }
       return counts;
     });
-    // the room is simply gone: no second page fading out behind the first
+    // the work page is removed at once: no outgoing page is kept to fade out
     expect(Math.max(...scenes)).toBe(1);
   });
 
-  test("works without cover art still have complete rooms", async ({
+  test("a work without cover art still has a full work page", async ({
     page,
   }) => {
     await page.goto("/works/kantoku");
@@ -216,14 +224,16 @@ test.describe("rooms", () => {
     await expect(page.getByText("Artists 01")).toBeVisible();
   });
 
-  test("flaws are stated plainly where they exist", async ({ page }) => {
+  test("the flaws section is shown only for works that list flaws", async ({
+    page,
+  }) => {
     await page.goto("/works/steins-gate");
     await expect(page.getByText("Flaws, stated plainly")).toBeAttached();
     await page.goto("/works/bakemonogatari");
     await expect(page.getByText("Flaws, stated plainly")).toHaveCount(0);
   });
 
-  test("returning to the collection restores the reading position", async ({
+  test("going back to the home page restores the scroll position", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -236,30 +246,34 @@ test.describe("rooms", () => {
     await roundTrip(page, link, before, 200);
   });
 
-  test("wheel reading restores the position exactly", async ({ page }) => {
+  test("going back restores the scroll position after wheel scrolling", async ({
+    page,
+  }) => {
     await page.goto("/");
     const link = row(page, "少女終末旅行");
-    // Real reading: wheel down until the row sits in the viewport. Each look
-    // waits for the glide to land first — a fixed pause measures a page still
-    // in flight, and on a loaded machine the row never seems to arrive, so
-    // the loop wheels its full thirty and the test ends up asserting about
-    // the bottom of the page instead of the row it meant to open.
+    // Scroll with the wheel until the row is in the viewport. Each check
+    // waits for the smooth scroll to stop first: after a fixed pause the
+    // page may still be moving, and on a loaded machine the row is then
+    // never seen in range, so the loop runs all thirty steps and the test
+    // ends up at the bottom of the page instead of at the row.
     for (let i = 0; i < 30; i++) {
       const box = await link.boundingBox().catch(() => null);
       if (box && box.y > 80 && box.y < 480) break;
       await page.mouse.wheel(0, 400);
       await restingScrollY(page);
     }
-    // Playwright scrolls a target into view before clicking it, and that
-    // nudge would move the page after the position was sampled — so it
-    // happens first, and the position measured is the position clicked from.
+    // Playwright scrolls a target into view before clicking it, which would
+    // move the page after the position was sampled. So the row is scrolled
+    // into view first, and the position is sampled after that.
     await link.scrollIntoViewIfNeeded();
     const before = await restingScrollY(page);
     expect(before).toBeGreaterThan(500);
     await roundTrip(page, link, before, 50);
   });
 
-  test("a missing page says so", async ({ page }) => {
+  test("an unknown URL shows the not-found page and a link home", async ({
+    page,
+  }) => {
     const res = await page.goto("/works/does-not-exist");
     expect(res).not.toBeNull();
     await expect(heading(page, NOT_FOUND)).toBeVisible();
@@ -267,7 +281,9 @@ test.describe("rooms", () => {
     await expect(heading(page, HOME)).toBeVisible();
   });
 
-  test("the theme toggle flips the sky and persists", async ({ page }) => {
+  test("the theme toggle switches theme; the choice survives a reload", async ({
+    page,
+  }) => {
     const theme = (value: string) =>
       expect(page.locator("html")).toHaveAttribute("data-theme", value);
     await page.goto("/");
@@ -279,10 +295,12 @@ test.describe("rooms", () => {
     await theme("dark");
   });
 
-  test("the browser's own chrome turns with the page", async ({ page }) => {
+  test("theme-color matches the page background after a theme switch", async ({
+    page,
+  }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    // What the browser paints its own UI with — the first theme-color whose
-    // media applies — beside the ground the page stands on.
+    // The color the browser uses for its own UI (the first theme-color meta
+    // whose media query matches) and the page's background color.
     const colors = () =>
       page.evaluate(() => {
         const meta = [
@@ -306,7 +324,8 @@ test.describe("rooms", () => {
     };
 
     await page.goto("/");
-    // the system stays dark (playwright.config.ts): day is the visitor's own
+    // the system scheme stays dark (playwright.config.ts): the light theme
+    // here is the visitor's own choice
     await page.getByRole("button", { name: "Switch to day" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
     await agree();
@@ -315,7 +334,7 @@ test.describe("rooms", () => {
     await agree();
   });
 
-  test("the theme turns live, and can be turned back mid-way", async ({
+  test("a theme change uses no view transition and reverses midway", async ({
     page,
   }) => {
     await page.goto("/");
@@ -338,20 +357,20 @@ test.describe("rooms", () => {
         'button[aria-label^="Switch to"]',
       );
       button?.click();
-      // the first frame in which the ground has begun to turn
+      // wait for the first frame in which the background color has changed
       let between = night;
       for (let i = 0; i < 60 && between === night; i++) {
         await new Promise(requestAnimationFrame);
         between = ground();
       }
-      // turned back before dusk arrives
+      // toggle back before the light theme's color is reached
       button?.click();
       return { night, between, frozen };
     });
-    // no picture of the page stands in for it while the colors turn
+    // no view transition (a snapshot of the page) runs while the colors change
     expect(seen.frozen).toBe(false);
     expect(seen.between).not.toBe(seen.night);
-    // …and was caught mid-turn, not already at dusk
+    // …and it was sampled mid-transition, not already at the light value
     expect(seen.between).not.toBe("rgb(242, 236, 224)");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
     await expect
@@ -365,11 +384,12 @@ test.describe("rooms", () => {
       .toBe(seen.night);
   });
 
-  test("a system switch before the app starts is still followed", async ({
+  test("a system theme change before the app script runs is applied", async ({
     page,
   }) => {
-    // Hold the app's script back: the pre-paint theme has run, the listener
-    // that follows the system has not, and the system changes in between.
+    // Delay the app's script: the inline theme script has run, the listener
+    // that follows the system scheme is not attached yet, and the system
+    // scheme changes in between.
     let release = () => {};
     const held = new Promise<void>((resolve) => {
       release = resolve;
@@ -387,10 +407,10 @@ test.describe("rooms", () => {
   });
 });
 
-test.describe("the cover's flight", () => {
-  // Runs in the page. The live copy of a work's cover on the page headed
-  // `page` (a departing page is inert), waiting up to half a second of
-  // frames for that page to exist.
+test.describe("cover transition", () => {
+  // Runs in the page. Returns the rect of a work's cover on the page whose
+  // h1 is `page`, skipping the outgoing page (which is inert). Waits up to
+  // 30 frames for that page to exist.
   const script = `
     window.__cover = async (title, page) => {
       for (let i = 0; i < 30; i++) {
@@ -415,7 +435,9 @@ test.describe("the cover's flight", () => {
     await restingScrollY(page);
   });
 
-  test("a cover flies from its row into its room", async ({ page }) => {
+  test("the cover animates from its row to its place on the work page", async ({
+    page,
+  }) => {
     const { from, early, landed } = await page.evaluate(async (home) => {
       const cover = (window as unknown as { __cover: Seen }).__cover;
       const from = await cover("化物語", home);
@@ -426,14 +448,14 @@ test.describe("the cover's flight", () => {
       await new Promise((r) => setTimeout(r, 1500));
       return { from, early, landed: await cover("化物語", "化物語") };
     }, HOME_H1);
-    // It leaves from where the reader saw it…
+    // It starts at its position in the row…
     expect(Math.abs(early.left - from.left)).toBeLessThan(60);
     expect(Math.abs(early.top - from.top)).toBeLessThan(60);
-    // …and lands somewhere else entirely: its place in the room.
+    // …and ends at a different size: its place on the work page.
     expect(Math.abs(landed.width - from.width)).toBeGreaterThan(40);
   });
 
-  test("the cover is seen the whole way, not only once it has landed", async ({
+  test("the cover stays visible throughout the transition", async ({
     page,
   }) => {
     const frames = await page.evaluate(async () => {
@@ -441,8 +463,9 @@ test.describe("the cover's flight", () => {
         .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
         ?.click();
       const seen: { opacity: number; visible: boolean }[] = [];
-      // Counted from the cover's first frame in the room, not from the
-      // click: how long the room's code takes to arrive is not the flight's.
+      // Count frames from the first one with the cover on the work page,
+      // not from the click: the time the work page's code takes to load is
+      // not part of the transition.
       for (let i = 0; i < 120 && seen.length < 8; i++) {
         await new Promise(requestAnimationFrame);
         const img = [
@@ -454,10 +477,11 @@ test.describe("the cover's flight", () => {
             !img.closest("[inert]") &&
             img.closest("main")?.querySelector("h1")?.textContent === "化物語",
         );
-        // not yet in the room
+        // not yet on the work page
         if (!img) continue;
-        // what actually reaches the screen: every ancestor's opacity, up to
-        // the top layer, which none of them reach into
+        // effective opacity: the product of the opacities up to the
+        // popover. It is in the top layer, so opacity on its ancestors does
+        // not apply to it.
         let opacity = 1;
         for (let el: Element | null = img; el; el = el.parentElement) {
           opacity *= Number(getComputedStyle(el).opacity);
@@ -477,7 +501,7 @@ test.describe("the cover's flight", () => {
     }
   });
 
-  test("going back mid-flight turns the cover around where it is", async ({
+  test("going back mid-transition reverses the cover from where it is", async ({
     page,
   }) => {
     const { before, after } = await page.evaluate(async (home) => {
@@ -491,7 +515,8 @@ test.describe("the cover's flight", () => {
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
       return { before, after: await cover("化物語", home) };
     }, HOME_H1);
-    // one continuous object: no jump back to the row, no jump to the room
+    // no jump: it continues from where it was, not from its position in the
+    // row or on the work page
     expect(Math.abs(after.left - before.left)).toBeLessThan(60);
     expect(Math.abs(after.top - before.top)).toBeLessThan(60);
     expect(Math.abs(after.width - before.width)).toBeLessThan(60);

@@ -3,7 +3,6 @@ import { meta } from "@/data/why.ts";
 import { FULL_NIGHT } from "@/lib/moon.ts";
 import { useNight } from "@/lib/sky.ts";
 
-/** Under the full moon the shrine points past itself (docs/why.md). */
 export function Koan() {
   const ref = useNight<HTMLElement>(FULL_NIGHT);
 

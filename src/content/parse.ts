@@ -1,10 +1,11 @@
 /**
- * Reads the collection's three Markdown files into plain data. README.md,
- * docs/reviews.md and docs/why.md are the collection; the site typesets
- * them and says nothing of its own, so nothing here rewrites a word — it
- * only finds where each piece stands.
+ * Parses the collection's three Markdown files (README.md, docs/reviews.md
+ * and docs/why.md) into plain data. The site shows their text verbatim and
+ * adds none of its own, so this module never changes a word; it only
+ * locates each part.
  *
- * Runs at build time (see ./plugin.ts): the parser never ships to a browser.
+ * Runs at build time (see ./plugin.ts): the parser is not shipped to the
+ * browser.
  */
 import type {
   Heading,
@@ -52,17 +53,18 @@ export interface Why {
 }
 
 const MUSIC = "Music";
-/** Where the README stops being the collection and starts being a README. */
+/** README sections that are not part of the collection. */
 const AFTERWORD = new Set(["Documentation", "License"]);
 
-// A soft line break is a space: the files wrap one sentence per line for
-// the linter, and that is not something a reader should ever see.
+// A soft line break becomes a space: the files put one sentence per line
+// for the linter, and those breaks must not appear on the site.
 const flat = (value: string) => value.replace(/\s*\n\s*/g, " ");
 
 /**
- * Running text with its strong emphasis kept as `**…**` — the one mark the
- * site renders (src/lib/emphasis.tsx). Italics are a whole paragraph's
- * voice (the epigraph, the sign-off), never a mark inside one.
+ * Inline text with its strong emphasis kept as `**…**`, the only inline
+ * mark the site renders (src/lib/emphasis.tsx). Italics apply only to whole
+ * paragraphs (the epigraph, the sign-off), never to part of one, so their
+ * markers are dropped.
  */
 function markup(nodes: readonly PhrasingContent[], strong = true): string {
   return nodes
@@ -79,13 +81,13 @@ function markup(nodes: readonly PhrasingContent[], strong = true): string {
     .join("");
 }
 
-/** The words of a node with every mark taken off. */
+/** The text of the nodes with every emphasis marker removed. */
 const plain = (nodes: readonly PhrasingContent[]) => markup(nodes, false);
 
 const parse = (md: string): RootContent[] =>
   (fromMarkdown(md) as Root).children.filter((node) => node.type !== "html");
 
-/** A heading's text, without the emoji a README section leads with. */
+/** A heading's text, without the emoji a README section starts with. */
 const headingText = (node: Heading) =>
   plain(node.children)
     .replace(/^[^\p{L}\p{N}"'(]+/u, "")
@@ -155,7 +157,7 @@ export function parseReviews(md: string): Map<string, Review> {
         reviews.set(plain(node.children), current);
       }
     } else if (!current) {
-      // the page's own title and preface
+      // reviews.md's own title and introduction: skipped
     } else if (isShortcomings(node)) {
       inFlaws = true;
     } else if (node.type === "paragraph" && !current.subtitle) {
@@ -171,7 +173,7 @@ export function parseReviews(md: string): Map<string, Review> {
   return reviews;
 }
 
-/** A paragraph that opens on a bold label and a colon: **The trick**: … */
+/** A paragraph that starts with a bold label and a colon: **The trick**: … */
 function labeled(node: Paragraph): ReviewPoint | null {
   const [label, next, ...rest] = node.children;
   if (label?.type !== "strong" || next?.type !== "text") return null;
@@ -180,7 +182,7 @@ function labeled(node: Paragraph): ReviewPoint | null {
   return { label: plain(label.children), text: text.trim() };
 }
 
-/** A paragraph set wholly in italics: the epigraph, or the sign-off. */
+/** A paragraph entirely in italics: the epigraph, or the sign-off. */
 function voice(node: RootContent | undefined): string | null {
   if (node?.type !== "paragraph" || node.children.length !== 1) return null;
   const [only] = node.children;
@@ -194,7 +196,7 @@ function paragraphs(nodes: readonly RootContent[], where: string): Paragraph[] {
   return nodes as Paragraph[];
 }
 
-/** Splits a run of nodes at each heading of one depth. */
+/** Splits a list of nodes at each heading of the given depth. */
 function chapters(nodes: readonly RootContent[], depth: number) {
   const before: RootContent[] = [];
   const parts: { title: string; body: RootContent[] }[] = [];
@@ -207,8 +209,9 @@ function chapters(nodes: readonly RootContent[], depth: number) {
 }
 
 /**
- * The essay's argument: an intro, its concepts, and — closing the last
- * concept, under no heading of its own — the paragraph that sums them up.
+ * One section of the essay: an intro, its concepts and an outro. The outro
+ * has no heading of its own: it is the last paragraph under the last
+ * concept's heading.
  */
 function section({
   title,
@@ -237,9 +240,9 @@ function section({
 }
 
 /**
- * docs/why.md as the site reads it: the title and its epigraph; the first
- * chapter opens, the last closes, every one between is an argument; and
- * after the rule, the sign-off.
+ * Parses docs/why.md. Expected structure: the title and its epigraph; then
+ * chapters, of which the first is the opening, the last is the closing and
+ * each one between is a section; then a thematic break and the sign-off.
  */
 export function parseWhy(md: string): Why {
   const nodes = parse(md);

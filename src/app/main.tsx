@@ -14,9 +14,10 @@ import { noteDrawnChanges } from "./Stage.tsx";
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("#root missing");
 
-// The page arrived already drawn, and React adopts markup only if its first
-// render draws the same: so this page's own code is in hand before the
-// router exists, or it would start on an empty outlet and tear the page down.
+// The page is prerendered, and hydration only works if React's first
+// render produces the same markup. So this route's lazy module is loaded
+// before the router is created; otherwise the first render would have an
+// empty outlet and React would discard the prerendered page.
 for (const { route } of matchRoutes(routes, window.location) ?? []) {
   if (typeof route.lazy === "function")
     Object.assign(route, await route.lazy(), { lazy: undefined });
@@ -29,10 +30,10 @@ const app = (
   </StrictMode>
 );
 
-// The build writes every page into #root; the development server sends it
-// empty. A written page is adopted as a transition: React then works through
-// it in slices and yields to the reader between them, where by default it
-// would hold the main thread until the whole page was done.
+// The build prerenders every page into #root; the development server sends
+// #root empty. A prerendered page is hydrated inside a transition: React
+// then hydrates in time slices and yields to input between them, where by
+// default it would block the main thread until hydration finished.
 if (rootEl.hasChildNodes())
   startTransition(() => void hydrateRoot(rootEl, app));
 else createRoot(rootEl).render(app);

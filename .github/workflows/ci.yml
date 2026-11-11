@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  # The major flake.nix puts in the dev shell.
+  # Same major version as the dev shell in flake.nix.
   NODE_VERSION: 24
 
 concurrency:

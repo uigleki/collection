@@ -4,33 +4,31 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
-  // Playwright derives its worker count from CPU cores, but three engines
-  // running at once are bound by memory, not by cores — over-committing makes
-  // WebKit miss its own timeouts and the suite reports site failures that are
-  // really starvation.
+  // Playwright sets its worker count from CPU cores, but three engines
+  // running at once are limited by memory. With more than one worker, WebKit
+  // times out and tests fail for lack of resources, not because of the site.
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  // Two reporters in CI, not one: `github` writes the failure onto the diff
-  // where it is read, and only the HTML one leaves the playwright-report/
-  // the workflow uploads.
+  // Two reporters in CI: `github` annotates the failure on the diff, and only
+  // `html` writes the playwright-report/ directory the workflow uploads.
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "html",
 
-  // Longer than Playwright's five seconds: every route change here plays out
-  // on springs, and three engines sharing one machine do not always spare
-  // the frames one needs promptly.
+  // Longer than Playwright's default of five seconds: every route change is
+  // a spring animation, and three engines sharing one machine can delay its
+  // frames.
   expect: { timeout: 8000 },
 
   use: {
     baseURL: "http://localhost:4173",
     trace: "on-first-retry",
-    colorScheme: "dark", // the night is the default sky
+    colorScheme: "dark", // dark is the site's default theme
   },
 
-  // The sky, the cover's flight and the scroll behave differently per
+  // The WebGL sky, the cover transition and scrolling behave differently per
   // engine, so the behavioral specs run on all three. The visual snapshots
-  // stay on one engine: they pin the site's look, not the renderers'
-  // disagreements about antialiasing.
+  // run on one engine: they check the site's appearance, and engines differ
+  // in antialiasing.
   projects: [
     {
       name: "chromium",
@@ -47,8 +45,9 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
       testIgnore: /(visual|dev)\.spec\.ts/,
     },
-    // The development build, where React's StrictMode tears down and rebuilds
-    // what it mounts: the site is worked on there, so it has to hold up there.
+    // The development server, where React's StrictMode unmounts and remounts
+    // each component it mounts. Development happens there, so the site has to
+    // work there too.
     {
       name: "dev",
       use: { ...devices["Desktop Chrome"], baseURL: "http://localhost:5173" },

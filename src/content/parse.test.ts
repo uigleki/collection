@@ -114,7 +114,7 @@ describe("parseReviews", () => {
     });
   });
 
-  it("reads a song's one line", () => {
+  it("reads a song's one-line review as its subtitle", () => {
     expect(reviews.get("COP feat. 洛天依 - 世末积雨云 (重新混缩)")).toEqual({
       subtitle:
         "Even as the world crumbles, I remain standing to witness it all",
@@ -169,7 +169,7 @@ describe("parseWhy", () => {
     });
   });
 
-  it("opens on the first chapter and closes on the last", () => {
+  it("takes the opening from the first chapter and the closing from the last", () => {
     expect(why.data.opening).toEqual([
       "**If we're here to experience beauty, what beauty is worth our finite time?**",
       "These works. Only these.",
@@ -177,7 +177,7 @@ describe("parseWhy", () => {
     expect(why.data.closing).toEqual(["They did. They're here."]);
   });
 
-  it("reads each chapter between as an argument, its last paragraph the outro", () => {
+  it("reads each chapter between them as a section, its last paragraph the outro", () => {
     expect(why.data.sections).toEqual([
       {
         title: "The Shortcuts to False Impact",
@@ -200,7 +200,7 @@ describe("parseWhy", () => {
     ]);
   });
 
-  it("refuses a construct it has no way to typeset", () => {
+  it("throws on Markdown it does not support", () => {
     expect(() =>
       parseWhy(WHY.replace("They did.", "- a list\n\nThey did.")),
     ).toThrow(/list/);

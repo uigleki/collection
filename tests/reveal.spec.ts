@@ -1,11 +1,13 @@
 import { expect, row, test } from "./helpers.ts";
 
-test.describe("entrances", () => {
-  // The collection's entrances are drawn by the scroll itself, on the
-  // browser's compositor: where the reader stands decides what has arrived,
-  // so a jump (a restored position, a deep link, End) finds everything
-  // already there — nothing starts a clock and makes the reader wait.
-  test("a work scrolled straight to is already standing", async ({ page }) => {
+test.describe("entrance animations", () => {
+  // The home page's entrance animations are scroll-driven and run on the
+  // compositor: the scroll position alone decides how far each has played.
+  // So after a jump (a restored position, a deep link, End) the content at
+  // that position is already fully shown; no timed animation has to finish.
+  test("a work jumped to by scrolling is already fully visible", async ({
+    page,
+  }) => {
     await page.goto("/");
     const link = row(page, "少女終末旅行");
     await expect(link).toBeAttached();
@@ -29,7 +31,7 @@ test.describe("entrances", () => {
     ).toBeGreaterThan(0.95);
   });
 
-  test("entrances ride the scroll where the browser can draw them so", async ({
+  test("uses a view() timeline where supported; else content is shown", async ({
     page,
   }) => {
     await page.goto("/");
@@ -41,7 +43,7 @@ test.describe("entrances", () => {
           ? getComputedStyle(el).animationTimeline
           : null,
       );
-    // where scroll-driven animation is missing, the page simply stands
+    // without scroll-driven animation support, content is shown unanimated
     if (timeline === null) {
       const opacity = await page
         .locator("article")

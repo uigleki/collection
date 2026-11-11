@@ -1,23 +1,23 @@
 import { expect, HOME, heading, test } from "./helpers.ts";
 
-// Every page's code is small; once the first page stands and the browser is
-// idle, the rest is fetched, so no later change of page waits on the
-// network — a visitor who arrived in a room has the collection ready
-// behind the back chip before they reach for it.
-test("the pages not yet visited are fetched while the reader reads", async ({
+// Each page's code is small. Once the first page has loaded and the browser
+// is idle, the other pages' code is fetched, so later navigation does not
+// wait on the network: a visitor whose first page is a work page already
+// has the home page's code when they press the back button.
+test("code for pages not yet visited is prefetched after load", async ({
   page,
 }) => {
   const home = page.waitForRequest(/\/assets\/Home-[^/]*\.js$/);
   await page.goto("/works/bakemonogatari");
   await home;
 
-  // and with it fetched, leaving needs nothing more from the network
+  // once it is fetched, going back needs no further network requests
   await page.route(/\/assets\/.*\.js$/, (route) => route.abort());
   await page.getByRole("button", { name: "Back to the collection" }).click();
   await expect(heading(page, HOME)).toBeVisible();
 });
 
-test("a reader saving data is not sent pages they did not ask for", async ({
+test("nothing is prefetched when the Save-Data preference is set", async ({
   page,
 }) => {
   await page.addInitScript(() =>
@@ -31,12 +31,12 @@ test("a reader saving data is not sent pages they did not ask for", async ({
   });
   await page.goto("/works/bakemonogatari");
   await expect(page).toHaveTitle(/^化物語/);
-  // everything the page was going to fetch on its own has been fetched
+  // by network idle, the page has fetched everything it fetches on its own
   await page.waitForLoadState("networkidle");
   expect(fetched).toEqual([]);
 });
 
-test("a page that could not be fetched ahead is no error", async ({ page }) => {
+test("a failed prefetch raises no page error", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.route(/\/assets\/Why-[^/]*\.js$/, (route) => route.abort());

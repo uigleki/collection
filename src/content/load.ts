@@ -1,6 +1,6 @@
 /**
- * Reads the collection off disk. Build time only: the Vite plugin serves
- * what this returns to the app, and the tests hold the real files to it.
+ * Reads the collection from disk. Build time only: the Vite plugin serves
+ * the result to the app, and the tests run it against the real files.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -10,7 +10,7 @@ import { parseReadme, parseReviews, parseWhy, type Why } from "./parse.ts";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 
-/** The three files the collection is written in. */
+/** The three Markdown files that hold the collection's content. */
 export const SOURCES = {
   readme: resolve(ROOT, "README.md"),
   reviews: resolve(ROOT, "docs/reviews.md"),

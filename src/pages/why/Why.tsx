@@ -7,9 +7,6 @@ import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Reading } from "@/ui/Reading.tsx";
 
-/**
- * The essay, read under a full moon — the page the koan points to.
- */
 export function Why() {
   const h1 = usePage(`${meta.title} — ${siteMeta.title}`);
 

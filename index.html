@@ -31,7 +31,7 @@
         <link rel="manifest" href="/manifest.webmanifest" />
 
         <script>
-            // Theme before paint — deterministic, never a flash.
+            // Runs before first paint, so the wrong theme is never shown.
             try {
                 const t = localStorage.getItem("theme");
                 const theme =

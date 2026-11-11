@@ -1,5 +1,5 @@
 // subset-font ships no types. Only the one call subset-cjk.ts makes is
-// declared — a wider guess would be fiction.
+// declared: anything more would be a guess.
 declare module "subset-font" {
   export default function subsetFont(
     font: Buffer,

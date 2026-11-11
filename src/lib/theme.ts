@@ -3,10 +3,10 @@ import { sky } from "@/scene/signal.ts";
 
 export type Theme = "dark" | "light";
 
-// One owner for the theme: the pre-paint script (index.html) sets the first
-// value; this module handles every change after — the toggle, and the OS
-// switching mid-visit (which only counts until the visitor states a
-// preference of their own).
+// The theme has one owner: the pre-paint script (index.html) sets the first
+// value, and this module handles every later change: the toggle, and an OS
+// theme switch during the visit (followed only until the visitor chooses a
+// theme).
 
 const listeners = new Set<() => void>();
 
@@ -16,7 +16,7 @@ function current(): Theme {
 
 function apply(theme: Theme) {
   document.documentElement.dataset.theme = theme;
-  // index.html carries both grounds on the meta, as data-dark and data-light
+  // index.html's meta has both background colors: data-dark and data-light
   const chrome = document.querySelector<HTMLMetaElement>(
     'meta[name="theme-color"]',
   );
@@ -36,9 +36,9 @@ function chooseTheme(theme: Theme) {
 }
 
 /**
- * Turn to the other theme — whichever is showing *now*, not whichever was
- * showing when the control last rendered: two presses inside one frame
- * must turn the page there and back.
+ * Switch to the other theme. The current theme is read from the document at
+ * call time, not from the control's last render: two presses within one
+ * frame must switch the theme and switch it back.
  */
 export function flipTheme() {
   chooseTheme(current() === "dark" ? "light" : "dark");
@@ -60,8 +60,9 @@ export function initTheme(): () => void {
     if (!chosen && theme !== current()) apply(theme);
   };
   media.addEventListener("change", follow);
-  // The system may have switched after the pre-paint script ran but before
-  // this listener existed; that change fired into nothing, so catch up.
+  // The system theme may have changed after the pr
+  // before this listener was added. That change event was missed, so apply
+  // the current system theme now.
   follow();
   return () => media.removeEventListener("change", follow);
 }

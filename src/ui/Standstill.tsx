@@ -1,8 +1,8 @@
 import type { ReactNode, RefObject } from "react";
 
 /**
- * A page with nothing on it — no work here, or the night broke while it was
- * being drawn. One centered line, one explanation, one way back.
+ * Layout for the not-found page and the render-error page: a centered
+ * heading, one line of explanation, and a link back (the children).
  */
 export function Standstill({
   h1,

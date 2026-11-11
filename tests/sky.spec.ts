@@ -9,10 +9,11 @@ declare global {
 }
 
 /**
- * The sky as a reader who asked for stillness gets it, with its draws
- * counted. ?gl keeps it on a software rasterizer, where it would otherwise
- * stand down for the poster (src/scene/MoonSky.tsx); a browser with no WebGL
- * at all has only the poster, and nothing here to watch.
+ * Loads the home page with reduced motion and returns a counter of WebGL
+ * draw calls. ?gl keeps the sky running on a software rasterizer, where
+ * MoonSky would otherwise leave only the `.poster` fallback
+ * (src/scene/MoonSky.tsx). A browser with no WebGL at all has no canvas to
+ * count draws on, so the test is skipped.
  */
 async function stillSky(page: Page): Promise<() => Promise<number>> {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -38,7 +39,7 @@ async function stillSky(page: Page): Promise<() => Promise<number>> {
   await page.waitForFunction(() => history.scrollRestoration === "manual");
   test.skip(
     (await page.locator("canvas").count()) === 0,
-    "this browser has no WebGL here: the poster is the sky",
+    "no WebGL in this browser: only the poster fallback is shown",
   );
   const draws = () => page.evaluate(() => window.skyDraws);
   await expect.poll(draws).toBeGreaterThan(0);
@@ -46,8 +47,10 @@ async function stillSky(page: Page): Promise<() => Promise<number>> {
   return draws;
 }
 
-test.describe("a sky asked to hold still", () => {
-  test("is drawn once, then only when it changes", async ({ page }) => {
+test.describe("sky with reduced motion", () => {
+  test("does not redraw while idle; redraws on a theme change", async ({
+    page,
+  }) => {
     const draws = await stillSky(page);
     const settled = await draws();
     await page.waitForTimeout(500);
@@ -57,9 +60,7 @@ test.describe("a sky asked to hold still", () => {
     await expect.poll(draws).toBeGreaterThan(settled);
   });
 
-  test("is drawn afresh for a tab brought back to the front", async ({
-    page,
-  }) => {
+  test("redraws on visibilitychange", async ({ page }) => {
     const draws = await stillSky(page);
     const settled = await draws();
     await page.evaluate(() =>
@@ -69,9 +70,7 @@ test.describe("a sky asked to hold still", () => {
   });
 });
 
-test("a browser with no WebGL is left the poster, and no complaint", async ({
-  page,
-}) => {
+test("logs no error when WebGL is unavailable", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   page.on("console", (m) => {

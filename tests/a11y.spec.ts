@@ -2,10 +2,9 @@ import AxeBuilder from "@axe-core/playwright";
 import { pages } from "../src/data/site.ts";
 import { expect, HOME, heading, row, test } from "./helpers.ts";
 
-// The standing pages come from the site itself, so a page added there is
-// audited the day it is added — a route that gets a sitemap entry and no axe
-// run is exactly the one that ships a violation. The two rooms are the two
-// shapes a work room has: with cover art, and without.
+// The static pages are read from src/data/site.ts, which also feeds the
+// sitemap, so a page added there is audited without editing this list. The
+// two work pages cover both layouts: with cover art and without.
 const ROUTES = [
   ...pages.map((page) => page.path),
   "/works/bakemonogatari",
@@ -13,9 +12,9 @@ const ROUTES = [
 ];
 const THEMES = ["dark", "light"] as const;
 
-// Reduced motion renders every reveal at its end state instantly, so axe
-// sees the real colors (not a mid-spring opacity blend) and every piece of
-// text on the page — including below the fold — gets checked.
+// With reduced motion every entrance animation renders at its end state, so
+// axe measures the final colors (not a partly faded-in blend) and checks all
+// text on the page, including text below the fold.
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
@@ -23,18 +22,16 @@ test.beforeEach(async ({ page }) => {
 for (const theme of THEMES) {
   for (const route of ROUTES) {
     test(`axe: ${route} (${theme})`, async ({ page }) => {
-      // Seeded before anything runs, so the page opens in the theme under
-      // test — a goto to set it and a reload to apply it would load every
-      // route twice, and the inline theme script reads it at document start
-      // either way.
+      // Set before any page script runs, so the page loads in the theme
+      // under test. Setting it after a goto and reloading would load every
+      // route twice; the inline theme script reads it at document start.
       await page.addInitScript((t) => {
         localStorage.setItem("theme", t);
       }, theme);
       await page.goto(route);
-      // Wait for the page, not for a duration: the routes are lazy, and axe
-      // finds nothing wrong with a chunk that has not mounted yet — a silent
-      // pass. The fonts settle too, since contrast is measured on rendered
-      // text.
+      // Wait for the h1, not a fixed time: routes are lazy-loaded, and axe
+      // reports no violations on a page whose chunk has not mounted yet.
+      // Wait for the fonts too, since contrast is measured on rendered text.
       await expect(page.locator("h1")).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       const results = await new AxeBuilder({ page })
@@ -45,7 +42,7 @@ for (const theme of THEMES) {
   }
 }
 
-test("keyboard: skip link lands on the content", async ({ page }) => {
+test("keyboard: the skip link jumps to #main", async ({ page }) => {
   await page.goto("/");
   await expect(heading(page, HOME)).toBeVisible();
   await page.keyboard.press("Tab");

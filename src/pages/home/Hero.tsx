@@ -2,10 +2,14 @@ import type { RefObject } from "react";
 import { couplets } from "@/data/why.ts";
 import { useNight } from "@/lib/sky.ts";
 
-// The opening question, verbatim from docs/why.md — the page is its answer.
+// The essay's opening question, verbatim from docs/why.md.
 const [questionA, questionB] = couplets.opening;
 
-/** Each line rises behind its own mask, a beat after the one before. */
+/**
+ * One line of text that slides up from behind its own overflow mask (.rise)
+ * after a delay of `at` ms. Callers stagger `at` so the lines follow one
+ * another.
+ */
 function Line({ at, children }: { at: number; children: string }) {
   return (
     <span className="block overflow-hidden">
@@ -19,7 +23,7 @@ function Line({ at, children }: { at: number; children: string }) {
   );
 }
 
-/** The opening sky: no loader, nothing to wait for. */
+/** The home page's first section. It shows no loader (DESIGN.md). */
 export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
   const section = useNight<HTMLElement>(1);
 

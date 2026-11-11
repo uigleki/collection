@@ -11,15 +11,15 @@ import { PageHead } from "@/lib/usePage.ts";
 import { routes } from "./routes.tsx";
 
 /**
- * The face every page's reading is set in. A stylesheet's fonts are only
- * asked for once a layout has needed them; the build asks for this one with
- * the page itself.
+ * URL of the font file used for body text on every page. A browser requests
+ * a stylesheet's fonts only once a layout needs them; the build preloads
+ * this one from the page's HTML (vite.config.ts).
  */
 export const face = text;
 
 /**
- * One page as the build writes it into its file (vite.config.ts): what
- * stands in #root, and the title the page gave itself.
+ * Renders one page for the build (vite.config.ts): the HTML that goes into
+ * #root, and the title the page set through usePage.
  */
 export async function render(
   path: string,
@@ -33,8 +33,8 @@ export async function render(
   const html = renderToString(
     <StrictMode>
       <PageHead value={head}>
-        {/* no hydration script: there is no loader data to carry over, and
-            the policy admits one inline script by hash — the theme's */}
+        {/* no hydration script: there is no loader data to pass on, and the
+            CSP allows one inline script by hash, which is the theme script */}
         <StaticRouterProvider
           router={createStaticRouter(dataRoutes, context)}
           context={context}

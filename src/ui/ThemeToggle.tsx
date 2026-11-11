@@ -2,12 +2,13 @@ import { flipTheme, type Theme, useTheme } from "@/lib/theme.ts";
 import { Icon } from "./Icon.tsx";
 
 /**
- * Shows where you're going: a sun by night, a moon by day. Both glyphs are
- * always there, one turned away, so a press turns one out as the other
- * turns in — on a spring, and back again from mid-turn. Which one shows is
- * the stylesheet's call, read off the document's theme (index.css): the
- * page is drawn before this runs, and the right glyph has to be in it. The
- * page's colors follow on their own transition.
+ * Shows the theme a press switches to: a sun in the dark theme, a moon in
+ * the light theme. Both icons are always rendered and one is rotated away
+ * and faded out, so a press rotates one out and the other in, on a spring
+ * that can reverse mid-rotation. The stylesheet picks the visible icon from
+ * the document's data-theme (index.css), not this component: the page is
+ * prerendered and painted before this code runs, and the correct icon must
+ * already be showing. The page's colors change on their own transition.
  */
 export function ThemeToggle() {
   const theme = useTheme();

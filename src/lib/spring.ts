@@ -1,9 +1,9 @@
 /**
- * A spring, spelled for CSS. `linear()` takes any curve as a list of points,
- * so a damped spring can drive a plain CSS transition: it runs on the
- * compositor, and a transition retargeted mid-flight starts from where the
- * value is — the two things a hover or a press needs that a cubic-bezier
- * of fixed duration cannot give.
+ * A spring expressed as a CSS easing. `linear()` takes any curve as a list
+ * of points, so a damped spring can drive a plain CSS transition. The
+ * transition runs on the compositor, and one retargeted partway starts from
+ * the current value: the two things a hover or a press needs that a
+ * cubic-bezier of fixed duration cannot give.
  */
 export interface Spring {
   stiffness: number;
@@ -11,7 +11,7 @@ export interface Spring {
   mass?: number;
 }
 
-/** Close enough to rest that no one can see it still moving. */
+/** At rest: the remaining distance and speed are too small to see. */
 const REST_DISTANCE = 0.001;
 const REST_SPEED = 0.01;
 

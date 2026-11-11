@@ -1,19 +1,20 @@
 /**
- * Builds hyper-minimal self-hosted CJK subsets so the collection's Chinese /
- * Japanese text renders in one consistent PingFang-grade gothic on EVERY device
- * — not just Apple/Noto machines — instead of an OS-dependent fallback.
+ * Builds minimal self-hosted CJK font subsets, so the collection's Chinese
+ * and Japanese text renders in the same PingFang-grade gothic on every
+ * device (not only Apple or Noto machines) instead of an OS-dependent
+ * fallback.
  *
- * Two faces are built from the SAME used-glyph set, because Han unification
- * means one codepoint (e.g. 直, 骨, 今) has DIFFERENT correct shapes in Chinese
- * vs Japanese. On a shrine that reveres original-language titles, a Japanese
- * work rendered in Simplified-Chinese letterforms is the one tell that the
- * maker doesn't read the language:
- *   - CollectionCJK    ← Noto Sans CJK SC  (default; Chinese text, e.g. the koan)
+ * Two faces are built from the same glyph set, because Han unification
+ * means one codepoint (e.g. 直, 骨, 今) has different correct shapes in
+ * Chinese and Japanese. The site shows titles in their original language,
+ * so a Japanese title must not render in Simplified-Chinese letterforms:
+ *   - CollectionCJK    ← Noto Sans CJK SC  (default; Chinese text, e.g. Koan)
  *   - CollectionCJK-JP ← Noto Sans CJK JP  (served to :lang(ja) nodes — titles)
  *
- * Only glyphs actually used on the site are kept (scanned live from src/ and
- * the Markdown), so each output is a few dozen KB. Any missed glyph falls
- * through to the system CJK stack per-glyph, so this can never produce tofu.
+ * Only glyphs used on the site are kept (collected from src/ and the
+ * Markdown each time the script runs), so each output is a few dozen KB. A
+ * glyph the subset lacks falls back to the system CJK fonts per glyph, so
+ * no character renders as a missing-glyph box.
  */
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -40,10 +41,10 @@ const FACES = [
   },
 ] as const;
 
-// The OpenType features src/styles/index.css can reach: palt on CJK
-// headings, halt for text-spacing-trim, kern by default. Every feature kept
-// brings its alternate glyphs with it, so one the stylesheet starts using
-// has to be added here.
+// The OpenType features src/styles/index.css uses: palt on CJK headings,
+// halt for text-spacing-trim, kern by default. Each kept feature adds its
+// alternate glyphs to the files, so only these are kept; a feature the
+// stylesheet starts using has to be added here.
 const FEATURES = ["halt", "kern", "palt"];
 
 // CJK / kana / full-width ranges — everything the CJK faces should cover.
@@ -62,7 +63,7 @@ async function walk(dir: string): Promise<string[]> {
 }
 
 async function collectGlyphs(): Promise<string> {
-  // The site's words live in the Markdown as much as in the code.
+  // The site's text comes from the Markdown files as well as from src/.
   const files = [...(await walk(SRC)), ...Object.values(MARKDOWN)];
   const set = new Set<string>();
   for (const f of files) {
@@ -101,8 +102,8 @@ async function main() {
   const glyphs = await collectGlyphs();
   console.log(`Collecting glyphs → ${[...glyphs].length} unique codepoints`);
   await mkdir(OUT_DIR, { recursive: true });
-  // Both faces are a ~16 MB download apiece and share nothing but the glyph
-  // set above, so they overlap instead of queuing.
+  // Each face is a ~16 MB download, and the two share only the glyph set
+  // above, so they are built in parallel.
   await Promise.all(FACES.map((face) => build(glyphs, face)));
 }
 

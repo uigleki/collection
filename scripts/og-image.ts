@@ -1,6 +1,7 @@
 /**
- * Bakes the social card (og:image) by photographing the site itself —
- * the real hero, real shader, real type; zero drift from the design.
+ * Generates the social card (og:image) as a screenshot of the home page's
+ * hero, with the real shader and fonts, so the card cannot differ from the
+ * site's design.
  *
  * Run with the preview server up on :4173:
  *   pnpm run preview &  node scripts/og-image.ts
@@ -16,7 +17,7 @@ const page = await browser.newPage({
   colorScheme: "dark",
 });
 await page.goto("http://localhost:4173/?gl");
-await page.waitForTimeout(3200); // entry fade + reveals settle
+await page.waitForTimeout(3200); // until the entrance animations finish
 await page.screenshot({ path: OUT });
 await browser.close();
 console.log(`✓ wrote ${OUT}`);

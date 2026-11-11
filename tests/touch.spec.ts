@@ -1,10 +1,10 @@
 import { expect, test } from "./helpers.ts";
 
-// A touch screen keeps :hover on whatever it last touched — on iOS a tapped
-// button stays lifted until something else is tapped. Emulators do not
-// reproduce that, so the rule is checked where it lives: every hover style
-// the site ships must stand inside a query for a device that can hover.
-test("hover styles apply only where there is a pointer to hover", async ({
+// A touch screen keeps :hover on the last element touched: on iOS a tapped
+// button keeps its hover style until something else is tapped. Emulators do
+// not reproduce that, so the stylesheets are checked instead: every :hover
+// rule must be inside a `(hover: hover)` media query.
+test("every :hover rule is inside a (hover: hover) media query", async ({
   page,
 }) => {
   await page.goto("/");

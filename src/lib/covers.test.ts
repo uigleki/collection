@@ -3,8 +3,9 @@ import { covers } from "@/data/generated/covers.ts";
 import { coverFor } from "./covers.ts";
 
 describe("cover placeholders", () => {
-  // A placeholder baked as an image costs every page kilobytes per cover;
-  // its hash is ~30 bytes, and the decoder costs about one such image.
+  // A placeholder stored as an image adds kilobytes per cover to every
+  // page; its hash is ~30 bytes, and the decoder costs about as much as one
+  // such image.
   it("ships each placeholder as its thumbhash, not as an image", () => {
     for (const cover of covers) {
       expect(cover, cover.slug).not.toHaveProperty("placeholder");
@@ -12,7 +13,7 @@ describe("cover placeholders", () => {
     }
   });
 
-  it("paints the placeholder the hash describes", () => {
+  it("decodes the hash into a PNG data URL", () => {
     const cover = coverFor("bakemonogatari");
     expect(cover?.placeholder).toMatch(/^data:image\/png;base64,/);
   });

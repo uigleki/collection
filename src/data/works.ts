@@ -1,26 +1,27 @@
 import collection from "virtual:collection";
 import type { Track, Work } from "./types.ts";
 
-// Read out of README.md and docs/reviews.md at build time (src/content):
-// the Markdown is the collection, and this module only places it.
+// Parsed from README.md and docs/reviews.md at build time (src/content).
+// This module does not change the content; it only orders and indexes it.
 export const { categories, music } = collection;
 
 /**
- * A song's full name. The title alone is not one — two different artists
- * each have a song called LIFE — so performer and song together identify a
- * track, both on the water and in the test that proves no two collide.
+ * A track's full name. The title alone is not unique (two different artists
+ * each have a song called LIFE), so the performer and the title together
+ * identify a track: as the list key in MusicWater, and in the test that
+ * checks no two tracks share a name.
  */
 export const trackName = (track: Track) => `${track.artist} · ${track.title}`;
 
-/** A work placed in the collection: what it is, and where it stands. */
+/** A work together with its position in the collection. */
 export interface WorkEntry {
   readonly work: Work;
   readonly category: string;
   /** 1-based position within the work's own medium */
   readonly ordinal: number;
   /**
-   * The work's night in the collection's lunar month (see lib/moon.ts):
-   * the first work is night 2 and the last stands under the full moon.
+   * The work's night number in the lunar month (see lib/moon.ts): the first
+   * work is night 2 and the last is the full-moon night.
    */
   readonly night: number;
 }
@@ -30,10 +31,10 @@ export interface Section {
   readonly entries: readonly WorkEntry[];
 }
 
-// Turn the curation into addressable rooms, keeping the grouping the home
-// page reads rather than flattening and re-joining it by category NAME —
-// a display string is no way to find a work again. Nights are handed out as
-// the pass walks, so a work's night is simply its place in reading order.
+// Build the entries per category and keep that grouping for the home page,
+// instead of flattening the list and regrouping it by category name: a
+// display string is not a reliable key. Nights are assigned in iteration
+// order, so a work's night follows its position in reading order.
 let night = 2;
 export const sections: readonly Section[] = categories.map((category) => ({
   name: category.name,
@@ -54,9 +55,9 @@ export const workBySlug: ReadonlyMap<string, WorkEntry> = new Map(
 );
 
 /**
- * Previous / next room across the WHOLE collection, in reading order —
- * the media share one format, so the shelf runs unbroken from the first
- * work to the last.
+ * The previous and next work across the whole collection, in reading
+ * order. Every category uses the same page format, so the sequence runs
+ * from the first work to the last without stopping at category boundaries.
  */
 export function neighbors(slug: string): {
   prev: WorkEntry | null;

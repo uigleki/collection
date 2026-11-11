@@ -1,8 +1,8 @@
 import type { PageMeta } from "./types.ts";
 
-// Its own module rather than a field of works.ts: every route titles itself
-// from this, and routes like /why and /404 have no other reason to pull in
-// the works data (and, through it, the cover placeholders).
+// A separate module from works.ts: every route reads its title from here,
+// and routes like /why and /404 would otherwise import the works data (and
+// with it the cover placeholders) only for this.
 export const siteMeta = {
   title: "Perfect Collection",
   description:
@@ -10,17 +10,17 @@ export const siteMeta = {
 } as const satisfies PageMeta;
 
 /**
- * Where the collection lives. Written once: the canonical URL each route
- * declares, the share card's image, the sitemap and robots.txt all read it,
- * so moving the site is one edit.
+ * The site's origin. Each route's canonical URL, the og:image URL, the
+ * sitemap and robots.txt all read it from here, so moving the site is one
+ * edit.
  */
 export const origin = "https://spotless.pages.dev";
 
 /**
- * The standing pages, for the sitemap. Work rooms are deliberately absent —
- * they come from the collection itself, the only thing that knows how many
- * there are. This mirrors the routes in src/app/routes.tsx, and an e2e test
- * walks every URL the sitemap advertises and fails if one does not resolve.
+ * The fixed pages, for the sitemap. Work pages are not listed here: they
+ * are derived from the collection. This list must match the routes in
+ * src/app/routes.tsx; an e2e test requests every URL in the sitemap and
+ * fails if one does not resolve.
  */
 export const pages = [
   { path: "/", priority: "1.0" },

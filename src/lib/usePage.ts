@@ -8,22 +8,22 @@ import {
 import { useLocation } from "react-router";
 import { origin } from "@/data/site.ts";
 
-// The key of the last page the visitor stood on. Lets the hook tell a real
-// route CHANGE (focus moves to the new h1 — including Back to Home) from the
-// first render of a visit or a StrictMode re-run (focus order stays natural,
-// so the first Tab reaches the skip link).
+// The location key of the previous page. Lets the hook tell a route change
+// (focus moves to the new h1, including on Back to the home page) from the
+// first render of a visit or a StrictMode re-run (focus is not moved, so
+// the first Tab reaches the skip link).
 let lastKey: string | null = null;
 
 /**
- * Where a page being written to its file leaves its title (prerender.tsx).
- * No effect runs there, so the title is handed over as the page renders; in
- * the browser nobody is listening.
+ * Receives a page's title while the build prerenders it (prerender.tsx).
+ * Effects do not run there, so the title is set during render. In the
+ * browser there is no provider, and the value is null.
  */
 export const PageHead = createContext<{ title?: string } | null>(null);
 
-// One link element, moved from route to route: the one the page's file
-// arrived with, or — on the development server, whose shell has none — one
-// made here.
+// One canonical link element, updated on each route change: the one in
+// the prerendered HTML, or one created here on the development server,
+// whose HTML has none.
 let canonicalLink: HTMLLinkElement | null = null;
 
 function canonical(pathname: string) {
@@ -36,16 +36,16 @@ function canonical(pathname: string) {
     document.head.append(link);
   }
   canonicalLink = link;
-  // The site's own origin, never the host being browsed: a preview
-  // deployment must not nominate itself as the canonical copy.
+  // Always the site's own origin, not the current host: a preview
+  // deployment must not declare itself the canonical copy.
   link.href = `${origin}${pathname}`;
 }
 
 /**
  * Per-route page setup: a deterministic document title (React 19's <title>
  * hoisting races the static one on lazy routes), the canonical URL, and
- * focus moved to the h1 so keyboard and screen-reader users land on the new
- * content, not a stale link.
+ * focus moved to the h1 so keyboard and screen-reader users start at the new
+ * content, not on the link they activated.
  */
 export function usePage(title: string): RefObject<HTMLHeadingElement | null> {
   const h1 = useRef<HTMLHeadingElement>(null);

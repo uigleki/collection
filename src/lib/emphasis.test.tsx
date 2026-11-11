@@ -2,7 +2,7 @@ import { isValidElement } from "react";
 import { describe, expect, it } from "vitest";
 import { renderEmphasis } from "./emphasis.tsx";
 
-/** The marked segments, in order — what the function actually decides. */
+/** The text of each <strong> segment, in order. */
 function marks(nodes: ReturnType<typeof renderEmphasis>): string[] {
   return nodes
     .filter((n) => isValidElement<{ children: string }>(n))

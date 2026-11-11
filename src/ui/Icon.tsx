@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
 /**
- * The fixtures' one drawing hand. Every chip's glyph is decorative — the
- * control it sits in carries the label — so it is always hidden from the
- * accessibility tree.
+ * The SVG wrapper for every button icon, so they share one size and stroke.
+ * Every icon is decorative: the control that contains it has the label, so
+ * the icon is always hidden from the accessibility tree.
  */
 export function Icon({
   children,

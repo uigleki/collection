@@ -12,17 +12,18 @@ import { origin, pages, siteMeta } from "./src/data/site.ts";
 import { cssSprings } from "./src/lib/motion.ts";
 
 const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
-// Where the build leaves the code that writes the pages out. It never ships:
-// it runs once, here, and dist/ gets only what it wrote.
+// Output directory of the server (prerender) build. It is not deployed: the
+// build runs it once to write the HTML pages into dist/.
 const WRITER = resolve(import.meta.dirname, "node_modules/.prerender");
 
 /**
- * The ground each theme stands on, read out of the tokens themselves.
- * DESIGN.md puts the palette in src/styles/index.css and nowhere else, so
- * the browser-chrome colors — which have to be literal values in the
- * document head, before any stylesheet applies — are lifted from there at
- * build time rather than copied by hand. A renamed token fails the build
- * instead of quietly leaving the address bar the wrong color.
+ * Each theme's background color (--color-yoru), read from
+ * src/styles/index.css. DESIGN.md defines the palette there and nowhere
+ * else, but the browser-UI colors in the document head must be literal
+ * values, because they apply before any stylesheet does. So they are read
+ * from the stylesheet at build time instead of copied by hand, and a
+ * renamed token fails the build instead of leaving the address bar the
+ * wrong color.
  */
 function grounds(): { night: string; dusk: string } {
   const css = readFileSync(STYLES, "utf8");
@@ -67,9 +68,9 @@ const manifest = () => {
 };
 
 /**
- * Every page the site has. The rooms come from the collection, so a work
- * cannot join it and stay invisible to search or unwritten by the build —
- * nor can a renamed slug leave a dead URL advertised behind it.
+ * Every page of the site. The work pages are derived from the collection,
+ * so every work is in the sitemap and gets a prerendered file, and a
+ * renamed slug leaves no old URL in the sitemap.
  */
 const everyPage = (): { path: string; priority: string }[] => [
   ...pages,
@@ -93,20 +94,19 @@ const robots = () =>
   `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`;
 
 /**
- * The site loads nothing from anywhere else — lighthouserc.json puts the
- * third-party allowance at zero — so the policy that says exactly that is
- * both cheap and honest. The one inline script (the theme, set before
- * paint) and the one inline stylesheet (inlineStyles) are each admitted by
- * the hash of what actually shipped, read back out of the built HTML rather
- * than assumed, so an edit can never leave a stale hash behind and silently
- * disable the theme or unstyle the page.
+ * The response headers. The site loads no third-party resources
+ * (lighthouserc.json asserts a third-party count of zero), so the CSP
+ * allows same-origin sources only. The one inline script (it sets the theme
+ * before first paint) and the one inline stylesheet (inlineStyles) are each
+ * allowed by hash. The hash is computed from the built HTML, not written by
+ * hand, so an edit cannot leave a stale hash that blocks the theme script
+ * or the stylesheet.
  *
- * Beyond that one stylesheet, styles get one inline allowance, and it is
- * the narrow one: the build writes each page out with its style attributes
- * in the markup — a cover's aspect ratio, a work's accent, an entrance's
- * place in line — so the attribute is admitted. Any other <style> element is
- * not, and what a script styles goes through the CSSOM (`el.style`), which
- * the policy does not govern.
+ * Besides that stylesheet, the only inline styles allowed are style
+ * attributes: the prerendered markup carries them (a cover's aspect ratio,
+ * a work's accent, an entrance animation's delay). Any other <style>
+ * element is blocked. Styles set by a script go through the CSSOM
+ * (`el.style`), which the CSP does not restrict.
  */
 function headers(html: string): string {
   const hashOfTheOne = (tag: "script" | "style") => {
@@ -137,19 +137,21 @@ function headers(html: string): string {
     "form-action 'none'",
     "frame-ancestors 'none'",
     "object-src 'none'",
-    // Nothing here ever hands a string to innerHTML — the page is React and
-    // a shader, and neither writes markup. Saying so turns the whole class
-    // of DOM-sink XSS into a load-time error rather than a thing to audit.
+    // The site never passes a string to innerHTML or another DOM sink: the
+    // page is React and a shader, and neither writes markup. With this
+    // directive such a call throws, so DOM-sink XSS is blocked by the
+    // browser instead of having to be audited for.
     "require-trusted-types-for 'script'",
     // No upgrade-insecure-requests: every URL the site emits is relative and
-    // same-origin, so it would upgrade nothing in production — while over
-    // http://localhost it upgrades the preview's own assets out of existence
-    // on engines that do not exempt loopback, and the shell test catches it.
+    // same-origin, so it would change nothing in production. Over
+    // http://localhost, engines that do not exempt loopback would upgrade
+    // the preview's own asset URLs to https, where they fail to load;
+    // tests/shell.spec.ts catches that.
   ].join("; ");
 
-  // The three cross-origin headers together, not one of them: the site loads
-  // nothing from anywhere else, so the isolation is free, and any future
-  // resource that breaks the promise fails loudly instead of shipping.
+  // All three Cross-Origin-* headers are set, not just one. The site loads
+  // no cross-origin resources, so they cost nothing, and a cross-origin
+  // resource added later fails to load instead of shipping unnoticed.
   return `/*
   Content-Security-Policy: ${csp}
   X-Content-Type-Options: nosniff
@@ -167,9 +169,9 @@ function headers(html: string): string {
 }
 
 /**
- * Move the stylesheet into the page. Once a page arrives written, the
- * stylesheet is all its first paint still waits on — and on a phone the
- * second round trip costs more than these few kilobytes do, every visit.
+ * Inline the stylesheet into the page. A prerendered page waits only on the
+ * stylesheet for its first paint, and on a phone that extra request costs
+ * more than sending these few kilobytes with every page.
  */
 function inlineStyles(dist: string, shell: string): string {
   const link = shell.match(/<link rel="stylesheet"[^>]*href="\/([^"]+)"[^>]*>/);
@@ -187,14 +189,15 @@ const escapeHtml = (text: string) =>
   text.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
 /**
- * Write every page out as its own file, so that what arrives is the page:
- * read at once on a slow phone, and whole where no script ever runs. The
- * client build's index.html is the shell each one is poured into; the server
- * build is the same app, rendered here once per page (src/app/prerender.tsx).
+ * Prerender every page to its own HTML file, so the response already
+ * contains the page: it is readable at once on a slow phone, and complete
+ * where scripts never run. The client build's index.html is the template
+ * each page is inserted into; the server build is the same app, rendered
+ * here once per page (src/app/prerender.tsx).
  *
- * A file per page is also what lets a missing one be missing: with a
- * 404.html and no catch-all rewrite, the edge answers a path it has no file
- * for with that page and a real 404.
+ * A file per page also allows a real 404: with a 404.html and no catch-all
+ * rewrite, the host answers a path it has no file for with that page and
+ * status 404.
  */
 async function writePages(dist: string): Promise<void> {
   const { render, face } = (await import(
@@ -212,7 +215,7 @@ async function writePages(dist: string): Promise<void> {
   };
   const write = async (path: string, file: string, canonical: boolean) => {
     const { html, title } = await render(path);
-    // the policy admits one inline script, by its hash: the shell's
+    // The CSP allows one inline script, by hash: the one in index.html.
     if (html.includes("<script"))
       throw new Error(`site-metadata: ${path} renders a script of its own`);
     let page = pour(
@@ -225,10 +228,10 @@ async function writePages(dist: string): Promise<void> {
       page,
       `<title>${escapeHtml(title)}</title>`,
     );
-    // What the page shows is asked for before what runs it. The scripts
-    // travel at the same priority as the page's own art and its text face,
-    // and a connection serves equals in the order they were asked for —
-    // which, left to the shell, is scripts first.
+    // Request what the page shows before the scripts. The scripts load at
+    // the same priority as the page's main image and its text font, and a
+    // connection serves requests of equal priority in the order they were
+    // made, which in index.html's own order is scripts first.
     const art = html
       .match(/<img[^>]*fetchpriority="high"[^>]*>/i)?.[0]
       .match(/ src="([^"]+)"/)?.[1];
@@ -253,9 +256,9 @@ async function writePages(dist: string): Promise<void> {
     writeFileSync(to, page);
   };
 
-  // <path>.html, not <path>/index.html: the edge serves the first at the
+  // <path>.html, not <path>/index.html: the host serves the first at the
   // bare path and redirects the second to a trailing slash, which is not
-  // the URL the sitemap and every link name.
+  // the URL the sitemap and the links use.
   for (const { path } of everyPage())
     await write(
       path,
@@ -268,12 +271,12 @@ async function writePages(dist: string): Promise<void> {
 }
 
 /**
- * The site is named once in src/data/site.ts, colored once in
- * src/styles/index.css, and curated once in README.md. This carries all
- * three out to where the app cannot reach at runtime — the document a
- * reader or a crawler gets before any JavaScript runs, the manifest, the
- * sitemap, robots.txt and the edge's response headers — so nothing the
- * outside world is told can drift from what the site actually is.
+ * The site's name is defined once in src/data/site.ts, its colors in
+ * src/styles/index.css and its works in README.md. This plugin copies all
+ * three into the outputs the app cannot write at runtime: the HTML a reader
+ * or a crawler gets before any JavaScript runs, the manifest, the sitemap,
+ * robots.txt and the response headers. These outputs therefore cannot
+ * differ from the site itself.
  */
 function siteMetadata(): Plugin {
   const generated = {
@@ -287,9 +290,9 @@ function siteMetadata(): Plugin {
 
   return {
     name: "site-metadata",
-    // One pass over the shell, and a placeholder with nothing behind it stops
-    // the build — a typo in index.html would otherwise ship __SITE_TITLE__
-    // itself to every crawler, silently.
+    // A placeholder with no value fails the build. Otherwise a typo in
+    // index.html would ship the literal text __SITE_TITLE__ to every
+    // crawler without any error.
     transformIndexHtml: {
       order: "pre",
       handler: (html) => {
@@ -328,8 +331,9 @@ function siteMetadata(): Plugin {
         });
       }
     },
-    // The pages are written from the shell that shipped, and the CSP names
-    // that shell's own script by hash — so both wait until it is on disk.
+    // The pages are written from the built index.html, and the CSP hashes
+    // that file's inline script, so both run after the client build has
+    // written it to disk.
     async buildApp(builder) {
       const { client, ssr } = builder.environments;
       if (!client || !ssr)
@@ -338,9 +342,9 @@ function siteMetadata(): Plugin {
       await builder.build(ssr);
       await writePages(resolve(client.config.root, client.config.build.outDir));
     },
-    // The edge answers a path it has no file for with 404.html; the preview
-    // server would answer it with the home page, which is then taken over by
-    // a script that expected to find a different page there.
+    // The host answers a path it has no file for with 404.html. The preview
+    // server would answer it with the home page, and the script would then
+    // hydrate that markup as a different page.
     configurePreviewServer(server) {
       return () =>
         server.middlewares.use((req, res, next) => {
@@ -376,9 +380,9 @@ export default defineConfig({
   builder: {},
   server: {
     watch: {
-      // .direnv links the flake's inputs — all of nixpkgs — into the tree,
-      // and the watcher follows links: crawling them holds up the dev
-      // server's start. None of these is ever a source.
+      // .direnv symlinks the flake's inputs (all of nixpkgs) into the tree,
+      // and the watcher follows symlinks: crawling them delays the dev
+      // server's start. None of these directories holds source files.
       ignored: [
         "**/.direnv/**",
         "**/.lighthouseci/**",

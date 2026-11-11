@@ -10,14 +10,14 @@ export interface ReviewPoint {
 }
 
 /**
- * BCP-47 language of a title where it isn't Latin. Judged per title and
+ * BCP-47 language of a title that is not Latin. Set by hand per title and
  * never detected: Han unification means 少女終末旅行 and 世末积雨云 are both
- * kanji-only yet want different regional letterforms and line-breaking
+ * kanji-only yet need different regional letterforms and line-breaking
  * (DESIGN.md — languages are data, not heuristics).
  */
 export type TitleLang = "ja" | "zh-Hans";
 
-/** Anything the collection names in its own language. */
+/** An item whose title is shown in its original language. */
 export interface Titled {
   title: string;
   subtitle: string;
@@ -26,15 +26,16 @@ export interface Titled {
 
 export interface Work extends Titled {
   /**
-   * The work's stable identity, authored here beside the title. Its room's
-   * URL, its cover asset, its accent, and its cover's flight between
-   * pages are all this one string.
+   * The work's stable identifier, set in src/content/catalog.ts. The work
+   * page's URL, the cover asset's file name and the cover's animated
+   * transition between pages (src/lib/flight.ts) are all keyed by it.
    */
   slug: string;
   /**
    * The color the work itself is known by (heroine, key visual, studio
-   * branding), set by hand to read against the night ground — art direction,
-   * never sampled from the cover. It lights only this work's row and room.
+   * branding). Chosen by hand for contrast against the dark background,
+   * never sampled from the cover. Used only in this work's row and work
+   * page.
    */
   accent: string;
   readonly review: readonly ReviewPoint[];
@@ -47,13 +48,13 @@ export interface WorkCategory {
 }
 
 export interface Track extends Titled {
-  /** the performer, as they write their own name */
+  /** the performer's name, in its original spelling */
   artist: string;
   /**
-   * Language of the performer's name, judged independently of the song's:
+   * Language of the performer's name, set separately from the song's:
    * 凛々咲 sings "Letters From Heaven", and 朝香智子 sings "post-script".
-   * One `lang` over both would dress a Latin title in Japanese letterforms,
-   * or leave a Japanese name in Simplified-Chinese ones.
+   * A single `lang` for both would render a Latin title in Japanese
+   * letterforms, or a Japanese name in Simplified-Chinese ones.
    */
   artistLang?: TitleLang;
 }

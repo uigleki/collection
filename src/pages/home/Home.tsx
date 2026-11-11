@@ -9,11 +9,10 @@ import { Koan } from "./Koan.tsx";
 import { MusicWater } from "./MusicWater.tsx";
 import { NightRow } from "./NightRow.tsx";
 
-/** The whole night: the works → the koan → the music → dawn. */
 export function Home() {
   const h1 = usePage(siteMeta.title);
 
-  // The one page that is a whole month: scrolling it waxes the moon.
+  // The only page where scroll progress advances the moon's phase.
   useSky({ waxWithProgress: true });
 
   return (

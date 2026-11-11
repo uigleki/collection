@@ -1,12 +1,14 @@
 import { expect, HOME, heading, test } from "./helpers.ts";
 
-test.describe("the collection", () => {
-  test("opens on the thesis with no loader", async ({ page }) => {
+test.describe("home page", () => {
+  test("shows the Perfect Collection heading", async ({ page }) => {
     await page.goto("/");
     await expect(heading(page, HOME)).toBeVisible();
   });
 
-  test("holds all fourteen works across the four media", async ({ page }) => {
+  test("lists all 14 works under the four category headings", async ({
+    page,
+  }) => {
     await page.goto("/");
     for (const name of ["Anime", "Movies", "Games", "Artists"]) {
       await expect(
@@ -17,7 +19,7 @@ test.describe("the collection", () => {
     await expect(page.getByText("カントク").first()).toBeAttached();
   });
 
-  test("says the koan and points to why", async ({ page }) => {
+  test("shows the moon quote and links to /why", async ({ page }) => {
     await page.goto("/");
     await expect(
       page.getByText("The finger pointing at the moon is not the moon."),
@@ -27,7 +29,7 @@ test.describe("the collection", () => {
     await expect(heading(page, "Why These Works")).toBeVisible();
   });
 
-  test("carries all 49 songs on the water", async ({ page }) => {
+  test("lists all 49 songs in the Music section", async ({ page }) => {
     await page.goto("/");
     const rows = page.locator('section[aria-label="Music"] li');
     await expect(rows).toHaveCount(49);
@@ -36,7 +38,9 @@ test.describe("the collection", () => {
     await expect(row.getByText("湊貴大 feat. 初音ミク")).toBeAttached();
   });
 
-  test("ends on the essay's own final beat", async ({ page }) => {
+  test("ends with the essay's closing lines and a Colophon link", async ({
+    page,
+  }) => {
     await page.goto("/");
     await expect(
       page.getByRole("heading", { level: 2, name: /found it/ }),
@@ -47,7 +51,7 @@ test.describe("the collection", () => {
     await expect(page.getByRole("link", { name: "Colophon" })).toBeAttached();
   });
 
-  test("titles carry their language for correct letterforms", async ({
+  test("titles have a lang attribute matching their language", async ({
     page,
   }) => {
     await page.goto("/");
@@ -57,12 +61,12 @@ test.describe("the collection", () => {
     await expect(zh).toBeAttached();
   });
 
-  test("a performer's language never spills onto the song's", async ({
+  test("a performer's lang attribute does not cover the song title", async ({
     page,
   }) => {
     await page.goto("/");
-    // 凛々咲 sings "Letters From Heaven": the name takes Japanese
-    // letterforms, the Latin title must be left alone.
+    // 凛々咲 sings "Letters From Heaven": the name is marked lang="ja", and
+    // the Latin title must stay outside that element.
     const row = page.locator('section[aria-label="Music"] li', {
       hasText: "Letters From Heaven",
     });

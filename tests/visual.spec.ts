@@ -1,15 +1,15 @@
 import { expect, test } from "./helpers.ts";
 
-// Reduced motion freezes the shader's clock (uTime stays 0) and skips all
-// entrance animation, so the canvas itself is deterministic — the whole
-// night can be visually pinned without masking.
+// Reduced motion stops the shader's clock (uTime stays 0) and skips all
+// entrance animation, so the canvas is deterministic and the screenshots
+// need no masking.
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
-// ?gl opts back into WebGL under the software rasterizer of headless CI —
-// these two tests exist to pin the sky itself.
-test("the hero night", async ({ page }) => {
+// ?gl turns WebGL back on under headless CI's software rasterizer: these
+// two tests check how the sky itself renders.
+test("screenshot: top of the home page", async ({ page }) => {
   await page.goto("/?gl");
   await page.waitForTimeout(900);
   await expect(page).toHaveScreenshot("hero-night.png", {
@@ -17,7 +17,7 @@ test("the hero night", async ({ page }) => {
   });
 });
 
-test("a room", async ({ page }) => {
+test("screenshot: 化物語 work page", async ({ page }) => {
   await page.goto("/works/bakemonogatari?gl");
   await page.waitForTimeout(1200);
   await expect(page).toHaveScreenshot("room-bakemonogatari.png", {

@@ -18,7 +18,7 @@ function Root() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      {/* The night exists before (and without) WebGL. */}
+      {/* CSS background shown before WebGL starts, and when there is none. */}
       <div aria-hidden="true" className="poster fixed inset-0 -z-20" />
       <MoonSky />
       <ThemeToggle />
@@ -34,8 +34,8 @@ function BrokenNight() {
       title="Clouds crossed the moon."
       message="Something failed while rendering this page."
     >
-      {/* a full reload, not a client navigation: the router that would have
-          carried it is the thing that just failed */}
+      {/* a plain link for a full page load, not a client-side navigation:
+          the router is what just failed */}
       <a href="/" className="pill mt-10 text-body hover:text-tsukikage">
         Return to the collection
       </a>
@@ -43,8 +43,8 @@ function BrokenNight() {
   );
 }
 
-// Each page's code, fetched when first needed — and, once the first page
-// stands and the browser has nothing better to do, fetched ahead (below).
+// Each page's code is loaded when first needed, and prefetched once the
+// first page has loaded and the browser is idle (prefetchPages).
 const pages = [
   () => import("@/pages/home/Home.tsx"),
   () => import("@/pages/work/WorkRoom.tsx"),
@@ -55,9 +55,8 @@ const pages = [
 const [home, room, why, credits, missing] = pages;
 
 /**
- * One table, read twice: by the build, which writes every page out as a
- * file (prerender.tsx), and by the browser, which takes each one over
- * (main.tsx).
+ * The route table. Used by the build, which prerenders every page to a file
+ * (prerender.tsx), and by the browser, which hydrates that page (main.tsx).
  */
 export const routes: RouteObject[] = [
   {
@@ -75,11 +74,11 @@ export const routes: RouteObject[] = [
 ];
 
 /**
- * Fetch every page's code while the reader reads the first. It is all small
- * (the rooms share one chunk), and a change of page that waits on the
- * network is a change of page that stutters — unless the reader has asked
- * to save data, in which case nothing is fetched until it is asked for.
- * One that fails to arrive is let go: the visit that needs it asks again.
+ * Prefetch every page's code once the first page has loaded. The chunks are
+ * small (all work pages share one), and a page change that waits on the
+ * network stutters. Nothing is prefetched when the browser reports
+ * Save-Data. A failed prefetch is ignored: navigating to that page requests
+ * the chunk again.
  */
 export function prefetchPages(): void {
   const connection = (navigator as { connection?: { saveData?: boolean } })

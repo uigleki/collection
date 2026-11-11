@@ -4,9 +4,9 @@ import { sky } from "@/scene/signal.ts";
 
 type Cross = (visible: boolean) => void;
 
-// One observer per band, shared by every element watching that band: an
-// observer apiece is a callback apiece to service on one scroll, each holding
-// its own component scope.
+// One IntersectionObserver per band (rootMargin), shared by every element
+// watching that band. An observer per element would run one callback per
+// element on each scroll, each holding its own component scope.
 const bands = new Map<
   string,
   { io: IntersectionObserver; watchers: WeakMap<Element, Cross> }
@@ -31,9 +31,9 @@ function band(rootMargin: string) {
 }
 
 /**
- * Mark an element; `onCross` fires as it enters and leaves the band — only
- * while its page is the one being read. A page on its way out still has
- * elements crossing the viewport as it fades, and they no longer speak for
+ * Observe an element; `onCross` fires when it enters or leaves the band,
+ * but only while its page is the current one. An outgoing page's elements
+ * still cross the viewport while it fades out, and they must not change
  * the sky.
  */
 function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
@@ -58,9 +58,9 @@ function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
 }
 
 /**
- * When the marked element crosses the middle band of the viewport, its night
- * becomes the sky's target — this is how scrolling waxes the moon, one night
- * at a time, exactly in step with the work being read.
+ * When the observed element enters the middle band of the viewport, its
+ * night becomes the sky's target. This is how scrolling advances the moon's
+ * phase: one night per work, matching the work in the middle of the screen.
  */
 export function useNight<T extends HTMLElement>(night: number) {
   return useBand<T>("-40% 0px -40% 0px", (visible) => {
@@ -68,7 +68,10 @@ export function useNight<T extends HTMLElement>(night: number) {
   });
 }
 
-/** The music section brightens the moonglade while it holds the viewport. */
+/**
+ * Brightens the moon's reflection on the water while the music section is
+ * in the middle of the viewport.
+ */
 export function useGlade<T extends HTMLElement>() {
   return useBand<T>("-30% 0px -30% 0px", (visible) => {
     sky.glade = visible ? 1 : 0;
@@ -76,17 +79,18 @@ export function useGlade<T extends HTMLElement>() {
 }
 
 export interface SkyClaim {
-  /** how far the sky stands back behind the reading, 0..1 */
+  /** how far the sky is dimmed behind the page content, 0..1 */
   dim?: number | undefined;
-  /** the night the page opens on */
+  /** the night the page sets when it becomes the current page */
   night?: number | undefined;
-  /** whether reading progress waxes the moon (see signal.ts) */
+  /** whether scroll progress can set the full moon (see signal.ts) */
   waxWithProgress?: boolean | undefined;
 }
 
-// Every page that wants something of the sky, oldest first. Pages overlap
-// while one leaves and the next arrives, and the departing one lets go
-// last — so the sky belongs to the newest claim, not to whoever spoke last.
+// The claims of every mounted page, oldest first. Pages overlap during a
+// page change, and the outgoing page releases its claim after the incoming
+// page has made its own. So the newest claim applies, not the most recent
+// call.
 const claims: SkyClaim[] = [];
 
 function settle() {
@@ -96,7 +100,7 @@ function settle() {
   if (night !== undefined) sky.targetNight = night;
 }
 
-/** Ask the sky for something; the returned function lets go. */
+/** Register a claim on the sky; the returned function releases it. */
 export function claimSky(claim: SkyClaim): () => void {
   const own = { ...claim };
   claims.push(own);
@@ -107,7 +111,7 @@ export function claimSky(claim: SkyClaim): () => void {
   };
 }
 
-/** A route's claim on the sky, for as long as it is the page being read. */
+/** A route's claim on the sky, held while it is the current page. */
 export function useSky({ dim, night, waxWithProgress }: SkyClaim) {
   const present = useIsPresent();
   useEffect(

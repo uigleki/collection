@@ -8,7 +8,7 @@ const points = (easing: string) =>
     .map(Number);
 
 describe("cssSpring", () => {
-  it("runs from rest to the target", () => {
+  it("starts at 0 and ends at 1", () => {
     const { easing } = cssSpring({ stiffness: 300, damping: 30 });
     const p = points(easing);
     expect(p[0]).toBe(0);
@@ -26,11 +26,11 @@ describe("cssSpring", () => {
     expect(Math.max(...points(easing))).toBeLessThanOrEqual(1);
   });
 
-  it("lasts as long as the spring takes to settle", () => {
+  it("has the spring's settling time as its duration", () => {
     const stiff = cssSpring({ stiffness: 500, damping: 40 }).duration;
     const soft = cssSpring({ stiffness: 60, damping: 18 }).duration;
     expect(stiff).toBeLessThan(soft);
-    // a soft spring's tail is long but it does come to rest
+    // a soft spring takes long to settle, but it does settle
     expect(soft).toBeLessThan(3000);
   });
 });

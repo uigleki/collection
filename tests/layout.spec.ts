@@ -1,17 +1,19 @@
 import { expect, heading, test } from "./helpers.ts";
 
-// Every project is a desktop browser (playwright.config.ts), and every layout
-// bug this file exists to catch hides at the width where the columns collapse.
+// Every project is a desktop browser (playwright.config.ts), and the layout
+// bugs this file checks for appear only at a narrow width, where the columns
+// collapse into one.
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 
 /**
- * `.link-draw` underlines by painting a background the full width of the
- * link's own box (styles/index.css). That is the text's width for an inline
- * link and nothing else — so a link whose box has been stretched by its
- * container draws a rule across the stretch, and the site claims a reader can
- * click a place they cannot.
+ * `.link-draw` draws its underline as a background across the full width of
+ * the link's box (styles/index.css). For an inline link that is the width of
+ * the text. If a container stretches the link's box, the underline extends
+ * past the text and marks empty space as part of the link.
  */
-test("draws each link's underline no wider than the link", async ({ page }) => {
+test("each .link-draw underline is no wider than the link's text", async ({
+  page,
+}) => {
   await page.goto("/credits");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
@@ -27,14 +29,15 @@ test("draws each link's underline no wider than the link", async ({ page }) => {
   );
 
   expect(overhang.length).toBeGreaterThan(3);
-  // Sub-pixel only: the box is the text, not the column it sits in.
+  // Under 1px: the link's box is as wide as its text, not as its column.
   expect(Math.max(...overhang)).toBeLessThan(1);
 });
 
-// The mid-edge chips would sit on the reading column at this width, so they
-// are gone — and a swipe alone is a path gesture, which not every reader can
-// make and no screen reader announces.
-test("a phone walks the shelf by links at the room's foot", async ({
+// At this width the previous/next buttons at the screen edges would cover
+// the text column, so they are hidden. A swipe alone is not enough: it is a
+// path-based gesture, which some users cannot make and no screen reader
+// announces.
+test("narrow touch screen: bottom links go to the previous/next work", async ({
   page,
 }) => {
   await page.goto("/works/nisemonogatari");
@@ -48,14 +51,16 @@ test("a phone walks the shelf by links at the room's foot", async ({
   await expect(page).toHaveURL(/\/works\/hi-score-girl$/);
   await expect(heading(page, "ハイスコアガール")).toBeVisible();
 
-  // the room just left was read to its foot: going back to it by a link is
-  // a fresh visit, and a room opens at its top
+  // the previous work page was left scrolled to its bottom; opening it again
+  // by a link is a new visit, and a work page opens at its top
   await shelf.getByRole("link", { name: /^Previous\b.*偽物語$/ }).tap();
   await expect(heading(page, "偽物語")).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
 });
 
-test("the shelf's foot ends where the shelf does", async ({ page }) => {
+test("the first work has a bottom next link and no previous link", async ({
+  page,
+}) => {
   await page.goto("/works/bakemonogatari");
   const shelf = page.getByRole("navigation", { name: "Shelf" });
   await expect(shelf.getByRole("link", { name: /^Next\b/ })).toHaveCount(1);

@@ -5,17 +5,17 @@ import { FOLLOW } from "@/lib/motion.ts";
 import { useNight } from "@/lib/sky.ts";
 import { Cover } from "@/ui/Cover.tsx";
 
-/** One work; the whole row is one door. Holding the viewport makes its
- * night the sky's target — scrolling is what waxes the moon. */
+/** One work; the whole row is a single link. While the row is in the
+ * middle of the viewport, its `night` is the sky's target (useNight). */
 export function NightRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const ref = useNight<HTMLElement>(entry.night);
   const { work, category, ordinal } = entry;
   const { title, slug, lang, accent } = work;
 
-  // Lift and tilt live on the SAME spring so the cover rises and turns
-  // toward the cursor as one movement, not two queued effects. Skipped for
-  // reduced-motion and touch (no cursor to face).
+  // Lift and tilt use the same spring settings (FOLLOW), so the cover rises
+  // and tilts toward the cursor as one movement. Skipped for reduced motion
+  // and for touch, which has no cursor.
   const tiltX = useSpring(0, FOLLOW);
   const tiltY = useSpring(0, FOLLOW);
   const lift = useSpring(0, FOLLOW);

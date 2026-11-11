@@ -1,10 +1,10 @@
 import { expect, test } from "./helpers.ts";
 
-// Run against the development server, where React checks the app by
-// detaching and reattaching what it has just attached. What survives only in
-// the production build has not really been made to work.
+// Runs against the development server, where React's StrictMode unmounts
+// and remounts each component right after mounting it. These tests check
+// that the app also works there, not only in the production build.
 
-test("under React's development checks the cover still flies", async ({
+test("in development mode the cover transition still runs", async ({
   page,
 }) => {
   await page.goto("/");
@@ -24,11 +24,11 @@ test("under React's development checks the cover still flies", async ({
     }
     return frames;
   });
-  // a flight is a few hundred milliseconds, not a single frame
+  // the transition lasts a few hundred milliseconds, not a single frame
   expect(aloft).toBeGreaterThan(8);
 });
 
-test("under React's development checks the first page is simply there", async ({
+test("in development mode the first page shows without a fade-in", async ({
   page,
 }) => {
   await page.addInitScript(() => {

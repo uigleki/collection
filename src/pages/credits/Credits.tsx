@@ -5,19 +5,20 @@ import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Reading } from "@/ui/Reading.tsx";
 
-// Walked in the collection's own order, asking each work for its art — not
-// read off the generated file. A cover the fetch script failed to bring back
-// is a work missing its credit, and a credit list that quietly omits a rights
-// holder is the one failure this page must not have (works.test.ts proves it
-// cannot). The list is the same on every render, so it is built once.
+// Built by iterating allWorks in collection order and looking up each work's
+// cover, not by reading the generated covers file. A cover the fetch script
+// failed to produce leaves its work without a credit, and this page must
+// never omit a rights holder: works.test.ts checks that every work with an
+// art source has a credited cover. The list is the same on every render, so
+// it is built once.
 const CREDITED = allWorks.flatMap(({ work }) => {
   const cover = coverFor(work.slug);
   return cover ? [{ work, cover }] : [];
 });
 
 /**
- * The colophon. Where every borrowed thing is named: the cover art's
- * sources, the letterforms, the machinery. A shrine credits its carpenters.
+ * The colophon page: credits for the cover art sources, the fonts and the
+ * libraries.
  */
 export function Credits() {
   const h1 = usePage(`Colophon — ${siteMeta.title}`);
@@ -50,10 +51,9 @@ export function Credits() {
                 {work.title}
               </span>
               {/* A grid item is blockified and stretched to its track, and
-                  link-draw underlines the box it is given — left to stretch,
-                  the rule runs the width of the row and offers a reader a
-                  target that is not there. Start-aligned, the box is the
-                  words again. */}
+                  link-draw underlines the link's whole box. Stretched, the
+                  underline and the click target would span the row.
+                  justify-self-start shrinks the box back to the text. */}
               <a
                 href={cover.sourceUrl}
                 rel="noopener"

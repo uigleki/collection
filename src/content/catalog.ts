@@ -1,15 +1,14 @@
 import type { Catalog } from "./collection.ts";
 
 /**
- * What the Markdown cannot say about each name it lists: the address a work
- * lives at, the language its name is written in, the color it is known by,
- * and where its cover art comes from. Keyed by the name exactly as the
- * README writes it.
+ * Data the Markdown does not contain for each name it lists: a work's slug,
+ * the language of its name, its accent color and the source of its cover
+ * art. Keyed by the name exactly as the README writes it.
  *
- * Accents were researched from the web and calibrated by hand; confidence
- * varies, and git history holds the fuller sourced table. A work without
- * `art` has no licensed image source and gets a typographic panel — a valid
- * state, not an omission.
+ * Accents were researched on the web and adjusted by hand; confidence
+ * varies, and git history has a fuller table with sources. A work without
+ * `art` has no licensed image source and gets a typographic panel. That is
+ * intended, not a missing entry.
  */
 export const catalog = {
   works: {
@@ -38,15 +37,15 @@ export const catalog = {
     少女終末旅行: {
       slug: "girls-last-tour",
       lang: "ja",
-      // a deliberately desaturated work — a muted overcast slate is the
-      // honest choice (ANN, art-of interview)
+      // the work is deliberately desaturated, so the accent is a muted
+      // slate (ANN, art-of interview)
       accent: "#5b7a8c",
       art: { kind: "anilist", search: "Shoujo Shuumatsu Ryokou" },
     },
     "打ち上げ花火、下から見るか？横から見るか？": {
       slug: "fireworks",
       lang: "ja",
-      // the indigo firework night, lifted to read as accent
+      // the indigo of the fireworks night, lightened to work as an accent
       accent: "#3f7fd9",
       art: { kind: "anilist", search: "Uchiage Hanabi" },
     },
@@ -59,7 +58,7 @@ export const catalog = {
     },
     "Charlie and the Chocolate Factory": {
       slug: "charlie-chocolate-factory",
-      // Wonka's aubergine velvet, brightened for the dark ground
+      // Wonka's aubergine velvet, brightened for the dark background
       accent: "#7d4bc0",
     },
     "To the Moon": {

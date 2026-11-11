@@ -19,21 +19,21 @@ import { restingPlace } from "@/lib/scroll.ts";
 import { stepOf } from "@/lib/shelf.ts";
 
 /**
- * Where pages change. No view transition: those freeze the page into
- * pictures until they finish, so nothing can be scrolled, pressed, or
- * turned back halfway. Here both pages stay live — the departing one
- * fades where it stood, the arriving one is already in the reader's hands,
- * and a cover flies between them (flight.ts). A second change mid-way picks
- * everything up from where it is.
+ * Renders page changes. The View Transitions API is not used: it replaces
+ * the page with snapshots until the transition ends, so the page cannot be
+ * scrolled, clicked or navigated back mid-transition. Here both pages stay
+ * in the DOM: the old page fades out in place, the new page is interactive
+ * at once, and the cover animates between them (flight.ts). A navigation
+ * that starts mid-transition continues from the current state.
  */
 export function Stage() {
   const location = useLocation();
   const type = useNavigationType();
   const outlet = useOutlet();
 
-  // A change the browser has already drawn is a cut: the pages leaving are
-  // dropped at once (a fresh presence keeps none of them), and nothing
-  // arrives or flies.
+  // When the browser has already animated the change, nothing animates here:
+  // the new AnimatePresence key unmounts the exiting pages at once, and the
+  // new page gets no fade and no cover animation.
   const drawn = drawnByBrowser.has(location.key);
   const [cut, setCut] = useState("");
   if (drawn && cut !== location.key) setCut(location.key);
@@ -58,24 +58,24 @@ export function Stage() {
   );
 }
 
-// A phone's edge swipe back (or forward) animates the change itself, and
-// says so on the popstate. Playing ours after it would show the reader the
-// same change twice. Remembered by the history entry's key, which is the
-// location the router is about to render.
+// A phone's edge swipe back or forward is animated by the browser, which
+// sets hasUAVisualTransition on the popstate event. Animating again here
+// would show the same change twice. Stored by the history entry's key, which
+// is the key of the location the router renders next.
 const drawnByBrowser = new Set<string>();
 
 /**
- * Start noting the changes the browser draws. This has to be listening
- * before the router is (main.tsx): the window hears its listeners in the
- * order they were added, and React renders the change from inside the
- * router's — by the next listener the page has already been drawn.
+ * Record which history changes the browser animated itself. Must be called
+ * before the router is created (main.tsx): window listeners run in the
+ * order they were added, and React renders the new page inside the router's
+ * listener, so a listener added later would run after that render.
  */
 export function noteDrawnChanges(): void {
   window.addEventListener(
     "popstate",
     (e) => {
-      // the entry the visit began on has no key of its own; the router
-      // calls it "default"
+      // the history entry the visit started on has no key in its state;
+      // the router uses "default" for it
       const key = (e.state as { key?: string } | null)?.key ?? "default";
       if (e.hasUAVisualTransition) drawnByBrowser.add(key);
     },
@@ -83,14 +83,15 @@ export function noteDrawnChanges(): void {
   );
 }
 
-// The first page is simply there; every later one arrives.
+// False until the first page has mounted: the first page of a visit renders
+// without a fade-in, later pages fade in.
 let arrived = false;
 
 /**
- * One page. It keeps the location it was rendered for, so a page on its
- * way out goes on believing it is where it was — its title, its sky, and
- * its reading position stay its own — and it is inert: it can be seen
- * leaving, not used.
+ * One page. It provides the location it was rendered for to its subtree, so
+ * an exiting page keeps using its own location (for its title, sky state
+ * and scroll position) instead of the new one. An exiting page is inert:
+ * visible while it fades out, but not interactive.
  */
 function Scene({
   location,
@@ -100,7 +101,7 @@ function Scene({
 }: {
   location: Location;
   type: NavigationType;
-  /** the browser drew this change: arrive without a fade */
+  /** the browser animated this change: no fade-in */
   still: boolean;
   children: ReactNode;
 }) {
@@ -110,9 +111,10 @@ function Scene({
     () => ({ location, navigationType: type }),
     [location, type],
   );
-  // decided once, and outside render: React may render a component twice
-  // (StrictMode does, in development) and only the page's first render
-  // counts
+  // Read once in the state initializer, and `arrived` is set in an effect,
+  // not during render: React may render a component twice (StrictMode does,
+  // in development), and a flag set during render would already be true on
+  // the second render.
   const [first] = useState(() => !arrived);
   useEffect(() => {
     arrived = true;
@@ -141,14 +143,14 @@ interface Moment {
 }
 
 /**
- * The instant of the change, in three moves no frame can fall between:
- * measure the departing page as it is seen (before React touches the DOM),
- * then — with the arriving page in place — pin the departing one where
- * it stood, put the reader back where they were, and launch the covers.
+ * Runs the page change synchronously, so no frame is painted between its
+ * steps: measure the old page as displayed (before React changes the DOM);
+ * then, with the new page in the DOM, fix the old page in place, restore
+ * the scroll position and start the cover animations.
  */
 class Handover extends Component<{
   pathname: string;
-  /** reached through history, not by a link: it opens where it was left */
+  /** reached by a history navigation, not a link: restore its scroll */
   returned: boolean;
   still: boolean;
   children: ReactNode;
@@ -169,9 +171,10 @@ class Handover extends Component<{
     ].map((scene) => ({ scene, box: scene.getBoundingClientRect() }));
     for (const { scene, box } of scenes) {
       if (!scene.inert) Object.assign(scene.style, ARRIVING);
-      // Out of the flow, exactly where it was seen — its width held too, so
-      // a scrollbar leaving with it cannot reflow it as it fades. The
-      // arriving page owns the document's height and scroll from here on.
+      // Taken out of the flow at the position it was displayed. Its width is
+      // fixed too, so a scrollbar disappearing cannot reflow it while it
+      // fades. From here on the new page alone sets the document's height
+      // and scroll.
       else if (scene.style.position !== "fixed")
         Object.assign(scene.style, {
           ...LEAVING,
@@ -196,8 +199,8 @@ class Handover extends Component<{
   }
 }
 
-// The arriving page is drawn over the departing one: its cover is the one
-// in flight.
+// The new page is stacked above the old one: the animated cover belongs to
+// the new page.
 const ARRIVING = {
   position: "relative",
   zIndex: "1",

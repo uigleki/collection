@@ -1,7 +1,8 @@
 /**
- * The pause before a medium begins — mostly empty on purpose, so each group
- * of works gets its own silence first. Music sits closer to what precedes it
- * (the koan already gave that silence), hence the overridable spacing.
+ * The heading before each medium's group of works. Its tall, mostly empty
+ * block is deliberate spacing between groups. The Music heading follows the
+ * Koan, which already provides that space, so the spacing can be overridden
+ * through `className`.
  */
 export function Interlude({
   name,

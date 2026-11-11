@@ -9,7 +9,7 @@ describe("claimSky", () => {
     sky.targetNight = 1;
   });
 
-  it("gives the sky to the newest page", () => {
+  it("applies the newest claim", () => {
     const home = claimSky({ waxWithProgress: true });
     expect(sky.waxWithProgress).toBe(true);
     const room = claimSky({ dim: 1, night: 5 });
@@ -22,9 +22,9 @@ describe("claimSky", () => {
     home();
   });
 
-  // Pages overlap while one leaves and the next arrives, and the leaving
-  // one lets go last: its release must not undo the arrival's sky.
-  it("lets a departing page go without touching the page that replaced it", () => {
+  // Pages overlap during a page change, and the outgoing page releases its
+  // claim last: that release must not undo the incoming page's settings.
+  it("keeps the newer claim's settings when an older claim is released", () => {
     const first = claimSky({ dim: 1, night: 3 });
     const second = claimSky({ dim: 1, night: 4 });
     first();
@@ -32,7 +32,7 @@ describe("claimSky", () => {
     second();
   });
 
-  it("returns the sky to the page beneath when the top one leaves", () => {
+  it("falls back to the previous claim when the newest is released", () => {
     const home = claimSky({ waxWithProgress: true });
     const room = claimSky({ dim: 1, night: 5 });
     room();

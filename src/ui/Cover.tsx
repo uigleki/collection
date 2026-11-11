@@ -5,24 +5,20 @@ import { aboard } from "@/lib/flight.ts";
 
 interface CoverProps {
   work: Work;
-  /** fly between pages: the row's cover and the room's are one object */
+  /**
+   * animate between pages, so the home row's cover and the work page's
+   * cover appear as one moving element (flight.ts)
+   */
   morph?: boolean;
-  /** eager-load + high fetch priority (the room's own cover is its LCP) */
+  /** eager-load with high fetch priority (a work page's cover is its LCP) */
   priority?: boolean;
   className?: string;
 }
 
-/**
- * A work's cover in true color — never filtered, never tinted (DESIGN.md).
- * The thumbhash placeholder paints instantly at the exact aspect ratio, so
- * the page's height is stable before the art decodes (no CLS, no scroll
- * restoration drift). Works without licensed art stand behind a quiet
- * typographic panel instead.
- */
 const shown = new Set<string>();
 
 const never = () => () => {};
-/** Whether this render is the page's file being written, or adopted. */
+/** True while prerendering and while hydrating; false in other renders. */
 const useWritten = () =>
   useSyncExternalStore(
     never,
@@ -30,6 +26,13 @@ const useWritten = () =>
     () => true,
   );
 
+/**
+ * A work's cover in its original colors: no filter and no tint (DESIGN.md).
+ * The thumbhash placeholder is painted at once at the exact aspect ratio,
+ * so the page's height is stable before the image decodes (no CLS, no
+ * scroll-restoration drift). A work without licensed art gets a panel with
+ * the first character of its title instead.
+ */
 export function Cover({
   work,
   morph = false,
@@ -38,11 +41,12 @@ export function Cover({
 }: CoverProps) {
   const { title, slug, lang } = work;
   const cover = coverFor(slug);
-  // Art this visit has already shown is in memory: it paints at once and
-  // needs no fade — a cover flying into a room must arrive sharp. Nor does
-  // art that came written in the page: the browser has been loading it since
-  // before this ran, may have finished (and a load that has already happened
-  // is never heard), and what the reader is looking at is not hidden again.
+  // An image already shown during this visit is in memory, so it paints at
+  // once and gets no fade-in: a cover animating onto a work page must be
+  // sharp from the start. A prerendered image gets no fade-in either: the
+  // browser started loading it before this code ran and may have finished
+  // (a load event that already fired is never delivered), and an image the
+  // reader can already see must not be hidden again.
   const written = useWritten();
   const [loaded, setLoaded] = useState(
     () => !!cover && (written || shown.has(cover.url)),
@@ -76,7 +80,8 @@ export function Cover({
       style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
       className={`relative ${className}`}
     >
-      {/* the cover itself; the box above is where it rests (flight.ts) */}
+      {/* the element that animates between pages; the parent box keeps its
+          place in the layout (flight.ts) */}
       <div ref={flies} className="absolute inset-0 overflow-hidden rounded-sm">
         <img
           src={cover.placeholder}
@@ -101,7 +106,6 @@ export function Cover({
           }}
           className={`relative h-full w-full object-cover transition-opacity duration-500 ${loaded ? "opacity-100" : "opacity-0"}`}
         />
-        {/* hairline lit by the work's own canonical color */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-sm"

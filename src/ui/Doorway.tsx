@@ -5,21 +5,23 @@ import type { Work } from "@/data/types.ts";
 import { Icon } from "./Icon.tsx";
 
 /**
- * The page's fixtures: no bar, no gradient — the same glass chips as the
- * theme toggle, mirrored. Back stands top-left; a room's neighbors stand
- * at mid-height on either edge, the way gallery pagers do, and say who
- * they are on hover. Escape leaves, and so does a click on the empty
- * margins — a room is an expanded cover, and lightboxes close outward.
+ * A page's fixed navigation controls. There is no bar and no gradient: the
+ * controls are .chip buttons like the theme toggle. Back is top-left. On a
+ * work page the previous and next works are at mid-height on the left and
+ * right edges (EdgeChip), like an image gallery's pager, and show the
+ * work's title on hover. Escape goes back, and so does a click on the empty
+ * side margins, as in a lightbox.
  */
 export function Doorway({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
-  // A room on its way out still hears the keyboard; it must not answer.
+  // An exiting page is still mounted; it must not handle key presses.
   const present = useIsPresent();
 
-  // Decide on the history *index*, not location.key: a replace navigation
-  // mints a fresh key but keeps idx 0 when the page was deep-linked, and
-  // navigate(-1) from idx 0 would eject the visitor off-site.
-  // Stable identity so the Escape listener below binds once, not per render.
+  // Decide on the history index, not location.key: a replace navigation
+  // creates a new key but keeps idx 0 when the page was opened directly, and
+  // navigate(-1) from idx 0 would take the visitor off the site.
+  // useCallback keeps the identity stable, so the Escape listener below is
+  // attached once, not on every render.
   const goBack = useCallback(() => {
     const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
     if (idx > 0) navigate(-1);
@@ -37,8 +39,8 @@ export function Doorway({ children }: { children?: ReactNode }) {
 
   return (
     <>
-      {/* the empty side margins are also the way out (mouse affordance;
-          keyboard users have the chip and Escape) */}
+      {/* clicking the empty side margins also goes back (for mouse users;
+          keyboard users have the back button and Escape) */}
       <div
         aria-hidden="true"
         onClick={goBack}
@@ -65,7 +67,6 @@ export function Doorway({ children }: { children?: ReactNode }) {
   );
 }
 
-/** A neighboring work, standing at the room's edge. */
 export function EdgeChip({
   side,
   work,
@@ -77,8 +78,9 @@ export function EdgeChip({
 }) {
   const { title, lang } = work;
   const edge = side === "prev" ? "left-5 flex-row" : "right-5 flex-row-reverse";
-  // A mid-height chip would sit on top of a narrow screen's reading column:
-  // there the neighbors stand at the reading's foot (WorkRoom.tsx).
+  // Hidden on narrow screens, where a mid-height button would cover the
+  // text column: there the links are at the end of the article (ShelfLink,
+  // WorkRoom.tsx).
   return (
     <div
       className={`group/edge fixed top-1/2 z-50 hidden -translate-y-1/2 items-center gap-3 md:flex ${edge}`}

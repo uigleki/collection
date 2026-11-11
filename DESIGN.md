@@ -1,9 +1,8 @@
 # DESIGN — Perfect Collection
 
-The design constitution.
-Every file derives from this document; anything that contradicts it is a bug.
-The tokens live in `src/styles/index.css` (@theme) and `src/content/catalog.ts`; this document is their rationale.
-The site must pass the collection's own three-fold test (docs/why.md): creative love, internal coherence, authentic beauty — a shrine to unmanipulative art must itself be unmanipulative art.
+Design notes for the site.
+The design tokens are defined in `src/styles/index.css` (`@theme`) and `src/content/catalog.ts`; this document explains them.
+The site should meet the three criteria the collection applies to works (docs/why.md): creative love, internal coherence, authentic beauty.
 
 ## The Five Rules
 
@@ -22,117 +21,138 @@ These come from the collection's author and outrank everything below.
 
 ## Overview
 
-The home page is one lunar month, told silently.
-It opens on an empty night sky (nothing has been seen yet); each of the fourteen works is one night and **scrolling waxes the moon**; the last work stands under the full moon, where the collection says its one honest line — "The finger pointing at the moon is not the moon" — and points at /why.
-The forty-nine songs live after it on the water, where the sky's moon yields to its reflection.
-The page ends in rest, not climax: the essay's own last line, the hero's question answered in its own words — "The beauty you were born to experience?
-/ You've found it."
+The home page presents the collection as one lunar month.
 
-The reader is never told any of this.
-The mechanic is ambient; labels were tried and removed.
+- The page opens on a night sky with a new moon.
+- Each work is one night, and scrolling advances the moon's phase.
+  The last work is at the full moon.
+- At the full moon the page shows the line "The finger pointing at the moon is not the moon" and links to /why.
+- The music list comes next, over the sea.
+  There the moon in the sky fades almost out and its reflection on the water brightens.
+- The page opens with the first sentence of docs/why.md and ends with its last: "The beauty you were born to experience?
+  / You've found it."
 
-**The signature (the one bold thing):** scroll waxes the moon.
-One persistent WebGL sky (phase-accurate terminator from `src/lib/moon.ts`, a sea seen through a real lens that mirrors that same sky and moon, star field).
-The moonglade is never painted: it is every wave facet tilted to throw the moon back at the eye, so it narrows toward the horizon as real ones do.
-The sea keeps its own time — it never answers the scroll.
-Everything else is quiet: no cursor gimmicks, no sound, no second ambient effect.
+The page does not explain this mapping and has no labels for it.
 
-Why this passes the three-fold test:
+The sky is the one prominent effect: a single WebGL canvas that persists across pages.
 
-- **Peak-end negation** — no loader (the living sky rises out of the still poster, an arrival, not a wait); the ending is deliberately calm.
-- **Mere-exposure negation** — depth over loop; revisits find the phases, the glade, the accents.
-- **Negativity-bias negation** — the night is luminous, never bleak.
-- **Internal coherence** — one terminator equation draws the sky's moon and the reading progress; each work's night IS its place in line; each room is lit by its work's own canonical color.
+- The moon's terminator is computed from the phase (`src/lib/moon.ts`).
+- The sea is rendered in perspective, from a camera at a fixed height above a flat water plane, and reflects the same sky and moon.
+- The moon's reflection (the moonglade) is not drawn as a shape.
+  It comes from wave facets that reflect the moon toward the camera, so it narrows toward the horizon.
+- The sea animates on its own clock and does not react to scrolling.
+- There are no other ambient effects: no cursor effects and no sound.
+
+How the design applies the criteria in docs/why.md:
+
+- There is no loader: the static fallback image is shown first and the WebGL sky fades in over it.
+- The end of the page has no climax effect.
+- The design relies on detail, not repetition: a returning visitor can notice the moon phases, the moonglade and the work accents.
+- The dark theme is bright enough to read as moonlit, not gloomy.
+- On the home page the moon is the reading-progress indicator: its phase follows the scroll position.
+- A work's night number is set by its position in the list.
+- Each work page uses that work's accent color.
 
 ## Content
 
-The Markdown is the only source of the words.
-`src/content` parses README.md, docs/reviews.md and docs/why.md at build time; `src/content/catalog.ts` holds only what Markdown cannot carry — slugs, accents, art sources, and each non-Latin name's language.
-Adding a work is its Markdown plus one catalog entry.
-The build refuses to run when the files disagree.
+All text comes from the Markdown files.
+`src/content` parses README.md, docs/reviews.md and docs/why.md at build time.
+`src/content/catalog.ts` holds the data Markdown cannot carry: slugs, accent colors, cover sources, and the language of each non-Latin name.
+To add a work, add it to the Markdown and add one catalog entry.
+The build fails if the Markdown and the catalog disagree.
 
 ## Colors
 
-Two skies, one discipline: chrome commits to a single two-tone signature per theme plus ONE accent; the fourteen per-work colors never leak into chrome.
+Each theme uses two ground colors and one accent color for the UI.
+The per-work accent colors are never used in the UI outside that work's row and page.
 
-Night (default) — named traditional colors:
+Dark theme (default), named after traditional Japanese colors:
 
 - **yoru (#0b0e17)** 濡羽 — sky and ground.
 - **mizu (#12161f)** 藍鉄 — water, raised surfaces, chips.
 - **kasumi (#2a3140)** 藍鼠 — mist, borders.
-- **tsuki (#eaf1f8)** 月白 — text and the moon itself.
+- **tsuki (#eaf1f8)** 月白 — text and the moon.
 - **hoshi (#98a2b3)** 銀鼠 — secondary text.
-- **tsukikage (#cdb489)** 香色 — the moon's warmth; the only chrome accent.
+- **tsukikage (#cdb489)** 香色 — the only UI accent.
 
-Dusk (light theme) — a BRIGHT golden hour, so ink reads anywhere: pastel periwinkle over pale gold in the shader, warm dusk paper for the ground, deep ink for text, sunset gold as the lone accent.
-It rebinds the same six names, so every component keeps asking for `tsuki` and gets whichever sky it is under.
-The page turns with the sky, live.
-The saturation budget is spent on exactly one thing — the golden ball.
+Light theme: a bright golden-hour sky, bright enough that dark text is readable over any part of it.
+The shader draws pastel periwinkle above pale gold.
+The ground is a warm paper color, text is dark, and the single accent is gold.
+The light theme redefines the same six color names, so components use one set of names in both themes.
+Switching theme changes the page and the sky together, without a reload.
+Only the moon disc, drawn in gold, is strongly saturated.
 
-Work accents are each work's canonical color — the color the work is actually known by (Senjougahara's purple, the Ocean's blue, Kurisu's auburn), calibrated by hand against the night ground; 少女終末旅行 is deliberately muted because the work itself is.
-They live in the catalog rather than as CSS tokens — chrome must never be able to reach for one.
-They appear only inside that work's row and room (title underline, cover hairline and glow, review labels).
-Cover art is always true color — never filtered, never tinted.
+Each work has an accent color: the color the work is known for (for example Senjougahara's purple), adjusted by hand for contrast on the dark ground.
+The accent of 少女終末旅行 is muted on purpose, because the work's own palette is.
+Accents are stored in the catalog, not as CSS tokens, so UI styles cannot reference them.
+An accent is used only in that work's row and page: title underline, cover border and glow, review labels.
+Cover art is shown in its original colors, with no filter or tint.
 
-Contrast floor: WCAG AA (4.5:1 body, 3:1 large) in BOTH themes.
+Contrast: at least WCAG AA (4.5:1 body text, 3:1 large text) in both themes.
 
 ## Typography
 
-- **Latin: Ubuntu — always, everywhere.**
-  Ubuntu Mono for tabular/nav data.
-- **CJK: CollectionCJK (Noto SC subset) default; CollectionCJK-JP via `:lang(ja)`.**
-  Japanese titles must take Japanese letterforms (Han unification).
-  Languages are data (a `lang` judged per title), not heuristics.
-- Components ask for a role, never a raw size.
-- **CJK display leading never drops below 1.15**; Latin display may sit at 1.02–1.04.
-- Display text enters as masked lines, never per-character splits — CJK glyph clusters break.
+- Latin text: Ubuntu.
+  Ubuntu Mono for tabular and navigation data.
+- CJK text: CollectionCJK (a Noto Sans SC subset) by default, CollectionCJK-JP for `:lang(ja)`.
+  Han unification gives Chinese and Japanese the same code points with different glyph shapes, so Japanese titles need the JP font.
+  Each title's language is stored as data (`lang`), not guessed from its characters.
+- Components use a type-scale role, not a raw font size.
+- Line height for CJK display text is at least 1.15.
+  Latin display text may use 1.02–1.04.
+- Display text animates in line by line behind a mask.
+  It is not split per character, because that breaks CJK glyph clusters.
 
 ## Layout
 
-- Asymmetric: the reading column sits left-of-center on wide screens; the moon owns the right sky gutter.
-  Narrow screens run full-width with a quiet scrim.
-- 間 (ma): interludes between media are near-empty on purpose.
-- Fixtures speak one glass-chip language at the four corners and edges: theme (top-right), back (top-left), neighbors (mid-edges), back-to-top (bottom-right, appears a viewport deep).
-- Rooms behave like lightboxes: Escape leaves; on wide screens the empty margins are clickable exits; prev/next walk the WHOLE shelf in reading order — by chip, by arrow key, or by carrying the room with a finger.
-  A narrow screen has no edge for a neighbor's chip to stand on, so there the two neighbors close the reading as links, named in full.
+- Wide screens: the text column is left of center and the moon is in the empty space on the right.
+  Narrow screens: the text column is full width, over a faint scrim.
+- The gaps between media sections are intentionally almost empty.
+- Fixed controls share one style (round glass buttons) and fixed positions: theme toggle top-right, back top-left, previous/next at the middle of the left and right edges, back-to-top bottom-right (shown after scrolling one viewport).
+- Work pages behave like lightboxes.
+  Escape returns to the home page, and on wide screens so does a click on the empty margins.
+  Previous/next step through all works in list order, across media, by button, arrow key or horizontal swipe.
+  On narrow screens the edge buttons are hidden, and previous/next links with the works' full titles are shown at the bottom of the page instead.
 
 ## Components
 
-- **Cover** — its placeholder paints at the exact aspect (no layout shift), hairline in the work's accent.
-  The row's cover and the room's are one object: it flies between them while the pages cross-fade around it, untouched by the fade.
-  Works without licensed art get a typographic panel.
-- **NightRow** — the whole row is one door.
-  Hover: lift + cursor-facing tilt as one movement, accent underline grows, accent glow under the cover.
-- **Room** — the sky eases to the work's night and dims behind reading; the room opens at its top with one short choreography.
-  Walking the shelf slides the room along it; past either end a finger meets resistance.
-  A change the browser already animated (an edge swipe back) is a cut.
-  Flaws are stated plainly.
-- **Chips** — 44px glass circles, labels on hover.
-- **Link** — every text link draws its underline left-to-right; one gesture site-wide.
+- **Cover** — the placeholder has the image's aspect ratio, so loading causes no layout shift.
+  It has a thin border in the work's accent.
+  On navigation between a row and its work page, the cover animates from one position to the other while the pages cross-fade; the cover itself does not fade.
+  A work with no licensed cover source shows a text panel instead.
+- **NightRow** — the whole row is a single link.
+  On hover the cover lifts and tilts toward the cursor, the title's accent underline extends, and an accent glow appears under the cover.
+- **Work page** — the sky animates to the work's moon phase and dims behind the text.
+  The page opens scrolled to the top with one short entrance animation.
+  Previous/next slides the page horizontally, and a swipe past the first or last work rubber-bands.
+  If the browser already animated the navigation (for example an edge-swipe back), the site changes page without its own animation.
+  Reviews list a work's flaws in their own section.
+- **Chips** — 44px round glass buttons; the label appears on hover.
+- **Link** — every text link animates its underline in from left to right.
 
 ## Do's and Don'ts
 
 Do:
 
-- One spring per reason something moves (`src/lib/motion.ts`), shared by the script and the CSS.
-- Native scroll, never a scroll library, and the reader's scroll is never held.
-  A page returned to opens where it was left; one opened by a link opens at its top.
-- What the scroll reveals, the scroll draws: the reader's position is the timeline, and scrolling back reverses it.
-  Where the browser cannot, the page simply stands.
-- Animate only what the compositor can carry — transform and opacity.
-- Hover exists only where a pointer can hover: a touch screen would leave a tapped control stuck in it.
-- Reduced motion is a parallel design: end states render instantly, the moon still shows the truthful phase, cuts are honest.
-- Every page is written out by the build: it is read before any script runs, and stands where none ever does.
-  A page that is not there answers 404.
-- No change of page waits on the network, unless the reader has asked to save data.
-- The sky trades resolution for frames when the machine falls behind; a machine without a GPU gets the still poster, not a slideshow.
-- Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05, axe zero violations in both themes, keyboard-complete (skip link, h1 focus per route change, visible rings).
-  A change to the shader or the entry graph is not finished until Lighthouse has passed.
+- Each kind of motion has one spring definition in `src/lib/motion.ts`, used by both JavaScript and CSS.
+- Use native scrolling, with no scroll library, and never block or delay scrolling.
+  A page reached through history restores its scroll position; a page opened by a link starts at the top.
+- Scroll reveals are scroll-driven animations: progress follows the scroll position, and scrolling back reverses them.
+  In browsers without support, the content is shown without the animation.
+- Animate only compositor properties: transform and opacity.
+- Apply hover styles only on devices that can hover; on a touch screen a tapped control would stay in its hover state.
+- With reduced motion, elements render in their end state with no transition, the moon still shows the correct phase, and page changes are instant.
+- The build prerenders every page to an HTML file, so content is readable before and without JavaScript.
+  A URL with no page returns 404.
+- Page code is prefetched so navigation does not wait on the network, unless the visitor has Save-Data enabled.
+- When the frame rate drops, the sky lowers its resolution.
+  Without a GPU, the static fallback image is shown instead of the WebGL sky.
+- Required: Lighthouse performance ≥ 0.90 and accessibility ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05, zero axe violations in both themes, full keyboard access (skip link, focus moved to the h1 on route change, visible focus rings).
+  After changing the shader or the entry bundle, run Lighthouse.
 
 Don't:
 
-- No arbitrary colors, no filters over cover art, no accents in chrome.
+- No colors outside the palette, no filters on cover art, no work accents in the UI.
 - No loaders, no scroll-jacking, no autoplay audio, no cookie banners.
-- No decorative labels that explain the mechanic — the month stays silent.
-- No second ambient effect competing with the sky.
-  One moon.
+- No labels that explain the moon mapping.
+- No second ambient effect besides the sky.

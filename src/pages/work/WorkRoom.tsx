@@ -25,8 +25,6 @@ import { Doorway, EdgeChip } from "@/ui/Doorway.tsx";
 import { Icon } from "@/ui/Icon.tsx";
 import { NotFound } from "../NotFound.tsx";
 
-/** A work's room: the sky eases to its night and dims; the room is lit
- * by the work's canonical color. Flaws are stated plainly. */
 export function WorkRoom() {
   const { slug = "" } = useParams();
   const entry = workBySlug.get(slug);
@@ -52,8 +50,9 @@ function Room({ entry }: { entry: WorkEntry }) {
       navigate(`/works/${to.work.slug}`, { replace: true, state: { step } });
   };
 
-  // The arrow keys walk the shelf — only for the room being read; one on
-  // its way out still hears them.
+  // The arrow keys go to the previous or next work. The listener is attached
+  // only while this page is present: an exiting page is still mounted and
+  // would otherwise handle the keys too.
   const present = useIsPresent();
   const onKey = useEffectEvent((e: KeyboardEvent) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
@@ -66,18 +65,18 @@ function Room({ entry }: { entry: WorkEntry }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [present]);
 
-  // A finger walks it by carrying the room: the room follows 1:1 and
-  // gives only grudgingly past either end of the shelf. Let go past the
-  // threshold — or flick — and the room keeps its speed on the way out;
-  // otherwise it springs home, and it can be caught again mid-spring.
-  // Touch only: a mouse selects text. Vertical drags stay the browser's
-  // (touch-pan-y), so reading is never hijacked.
+  // A horizontal touch drag also goes to the previous or next work. The page
+  // follows the finger 1:1, with strong resistance past the first and last
+  // work. Released past the threshold, or flicked, the page keeps its
+  // velocity as it leaves; otherwise it springs back, and can be grabbed
+  // again mid-spring. Touch only: a mouse drag selects text. Vertical drags
+  // stay with the browser (touch-pan-y), so scrolling is never blocked.
   const drag = useDragControls();
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType === "touch") drag.start(e);
   };
   const onDragEnd = (_: unknown, { offset, velocity }: PanInfo) => {
-    // a drag that was mostly vertical was reading, however far it went
+    // a mostly vertical drag was a scroll, however far it moved sideways
     if (Math.abs(offset.x) < Math.abs(offset.y)) return;
     const far = Math.min(100, window.innerWidth * 0.25);
     const flick = Math.abs(velocity.x) > 500 && Math.abs(offset.x) > 40;
@@ -86,9 +85,9 @@ function Room({ entry }: { entry: WorkEntry }) {
     walk(offset.x < 0 ? 1 : -1);
   };
 
-  // The whole article enters as one quick choreography from mount: a room
-  // opens at its top, so everything in it is in view the moment it arrives.
-  // Each beat is one step behind the last (index.css: .enter, .rise).
+  // The article's parts animate in on mount, not on scroll: a work page
+  // opens at its top, so its content is in view at once. Each part starts a
+  // little later than the one before (index.css: .enter, .rise).
   const at = (ms: number) => ({ "--at": `${ms}ms` }) as React.CSSProperties;
 
   return (
@@ -106,8 +105,9 @@ function Room({ entry }: { entry: WorkEntry }) {
         ) : null}
       </Doorway>
 
-      {/* Walking the shelf slides the room along it: in from the side the
-          reader walked toward, out the way they came. */}
+      {/* Going to the previous or next work slides the page sideways: the
+          new page enters from the side of the neighbor that was chosen, and
+          the old page leaves on the opposite side. */}
       <motion.div
         custom={arrivedBy}
         variants={SHELF}
@@ -223,8 +223,8 @@ function Room({ entry }: { entry: WorkEntry }) {
 }
 
 /**
- * A neighboring work at the foot of the reading: where a narrow screen has
- * no edge for a chip to stand on, the shelf is walked from here.
+ * A link to the previous or next work, at the end of the article. Shown
+ * only on narrow screens, which have no space at the edges for EdgeChip.
  */
 function ShelfLink({ step, work }: { step: 1 | -1; work: Work }) {
   const onward = step === 1;
@@ -250,8 +250,8 @@ function ShelfLink({ step, work }: { step: 1 | -1; work: Work }) {
   );
 }
 
-// How far along the shelf the neighbors stand: far enough that a room
-// carried off by a finger keeps going the way it was thrown.
+// Horizontal distance a page slides in from and out to. Far enough that a
+// page released from a drag keeps moving in the direction it was dragged.
 const reach = () => window.innerWidth * 0.3;
 const SHELF = {
   aside: (step: Step) => ({ x: step * reach() }),

@@ -1,12 +1,13 @@
 import { test as base, expect, type Page } from "@playwright/test";
 
 /**
- * Every page arrives already written (vite.config.ts) and is taken over by
- * its script a moment later; until then a key press, a swipe or a history
- * change reaches no one. So a test's `goto` returns once the page is live:
- * the app takes scroll restoration from the browser (src/lib/scroll.ts) in
- * the same pass that attaches every listener, and it is the last to do so.
- * A test about the page as it arrives says so, with its own `waitUntil`.
+ * Every page is prerendered at build time (vite.config.ts) and hydrated a
+ * moment after it loads; until then no key press, swipe or history change is
+ * handled. So a test's `goto` returns only once the page is hydrated. The
+ * signal is `history.scrollRestoration === "manual"`: the app sets it
+ * (src/lib/scroll.ts) in the same pass that attaches every listener, and
+ * that effect runs last. A test about the page before hydration opts out by
+ * passing its own `waitUntil`.
  */
 export const test = base.extend({
   page: async ({ page }, use) => {
@@ -24,24 +25,25 @@ export const test = base.extend({
 });
 export { expect };
 
-/** The home page's own heading — spelled loosely because it wraps. */
+/** The home page's h1. The whitespace is optional because the heading wraps. */
 export const HOME = /Perfect\s*Collection/;
 
 /**
- * A work's row on the home spine. The whole row is one link, and its label
- * is a contract with NightRow, so it is named once here.
+ * A work's row on the home page. The whole row is one link, and its
+ * accessible name must match the one NightRow sets, so it is defined once
+ * here.
  */
 export const row = (page: Page, title: string) =>
   page.getByRole("link", { name: `${title} — open` });
 
-/** What a page that isn't in the collection says (src/pages/NotFound.tsx). */
+/** The heading of the not-found page (src/pages/NotFound.tsx). */
 export const NOT_FOUND = "Nothing stands here.";
 
 /**
- * Where the reader actually came to rest. The browser's smooth wheel scroll
- * glides on after the last wheel event, so any fixed wait samples a position
- * still in flight — while the position the page remembers is the one it
- * stopped at. Waiting for stillness is waiting for the real thing.
+ * The scroll position once scrolling has stopped. The browser's smooth wheel
+ * scroll continues after the last wheel event, so a fixed wait can sample a
+ * position that is still changing, while the position the page saves is the
+ * final one.
  */
 export async function restingScrollY(page: Page): Promise<number> {
   let last = Number.NaN;
@@ -59,6 +61,6 @@ export async function restingScrollY(page: Page): Promise<number> {
   return last;
 }
 
-/** The heading a route lands on, and moves focus to. */
+/** A page's h1, which receives focus after a route change. */
 export const heading = (page: Page, name: string | RegExp) =>
   page.getByRole("heading", { level: 1, name });

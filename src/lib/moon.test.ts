@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { allWorks } from "@/data/works.ts";
 import { FULL_NIGHT, terminator } from "./moon.ts";
 
-// moon.ts writes FULL_NIGHT out so the sky never imports the works data.
-// This is the seam that keeps the constant honest.
-it("gives the last work the full moon", () => {
+// moon.ts hard-codes FULL_NIGHT so the sky never imports the works data.
+// This test keeps the constant in sync with that data.
+it("sets FULL_NIGHT to the night of the last work", () => {
   expect(FULL_NIGHT).toBe(allWorks.length + 1);
 });
 
@@ -27,7 +27,7 @@ describe("terminator", () => {
     }
   });
 
-  it("accepts fractional nights for continuous scroll waxing", () => {
+  it("accepts fractional nights, for a continuous phase change", () => {
     const t = terminator(4.5);
     expect(t).toBeLessThan(terminator(4));
     expect(t).toBeGreaterThan(terminator(5));

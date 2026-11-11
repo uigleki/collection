@@ -1,17 +1,17 @@
 /**
- * The collection's lunar month: each work is one night, and the last always
- * stands under a full moon. One terminator value drives both the WebGL moon
- * and the reading progress, so the two can never disagree.
+ * The moon-phase model: each work is assigned one night of a lunar month,
+ * and the last work's night is the full moon. `terminator` maps a night to
+ * the phase the WebGL moon draws, so the phase always matches the work
+ * being read.
  */
 
 /**
- * The night the moon is seen whole — the last work's night.
+ * The night of the full moon, which is the last work's night.
  *
- * Written out rather than derived from `allWorks.length`: the sky imports
- * this on every route, and that one read would drag the whole collection —
- * every work's prose — into the eagerly loaded graph. moon.test.ts asserts
- * the two agree, so the collection cannot grow past its month without CI
- * saying so.
+ * A literal rather than derived from `allWorks.length`: the sky imports
+ * this on every route, and importing the works data would pull every work's
+ * text into the eagerly loaded graph. moon.test.ts asserts the two agree,
+ * so adding a work without updating this fails CI.
  */
 export const FULL_NIGHT = 15;
 
@@ -20,7 +20,7 @@ export const FULL_NIGHT = 15;
  *
  * For a unit disc lit from the right, the day/night boundary is the
  * half-ellipse x = t·√(1−y²); this returns t. Fractional nights are allowed
- * so scroll can wax the moon continuously.
+ * so scrolling can change the phase continuously.
  */
 export function terminator(night: number): number {
   return Math.cos((Math.PI * (night - 1)) / (FULL_NIGHT - 1));

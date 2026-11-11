@@ -2,7 +2,6 @@ import { music, trackName } from "@/data/works.ts";
 import { useGlade } from "@/lib/sky.ts";
 import { Interlude } from "./Interlude.tsx";
 
-/** The songs live on the water; in view, the moonglade burns brighter. */
 export function MusicWater() {
   const ref = useGlade<HTMLElement>();
 

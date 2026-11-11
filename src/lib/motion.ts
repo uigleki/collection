@@ -1,56 +1,55 @@
 import { cssSpring, type Spring } from "./spring.ts";
 
 /**
- * The site's motion vocabulary.
+ * The site's spring constants.
  *
- * One spring per reason something moves, each named below. Anything that
- * moves for one of those reasons uses that spring — the same gesture spelled
- * 60/18 in one file and 65/19 in the next is drift, not art direction, and
- * DESIGN.md asks this site to be internally coherent before it asks anything
- * else.
+ * One spring per kind of motion, each named below. Every motion of a kind
+ * uses that constant, so the same motion never gets slightly different
+ * values in different files (60/18 here, 65/19 there). DESIGN.md requires
+ * the site to be internally coherent.
  *
- * What the scroll reveals has no spring and no clock: the reader's position
- * is its timeline (index.css: .arrive).
+ * Scroll-driven reveals use no spring and no duration: the scroll position
+ * is their timeline (index.css: .arrive).
  */
 
-/** A masked display line lifting into place — the largest type on the page. */
+/** Display text (the largest type) sliding up into place behind its mask. */
 export const RISE = { stiffness: 60, damping: 18 } as const satisfies Spring;
 
-/** A block of reading arriving as its page mounts. */
+/** A block of body content entering when its page mounts. */
 export const ENTER = { stiffness: 70, damping: 20 } as const satisfies Spring;
 
 /** Live cursor tracking: stiff enough to feel attached to the pointer. */
 export const FOLLOW = { stiffness: 160, damping: 20 } as const;
 
 /**
- * A cover flying between its row and its room. Just short of critical: it
- * lands with the faintest settle, and a flight turned around halfway keeps
- * its speed through the turn.
+ * A cover moving between its home-page row and its work page. Slightly
+ * underdamped: it overshoots a little before it stops, and a move reversed
+ * halfway keeps its velocity through the reversal.
  */
 export const FLIGHT = { type: "spring", stiffness: 190, damping: 26 } as const;
 
 /**
- * One page giving way to the next. Opacity only — the pages overlap for
- * this long, and anything that moved them would drag their fixed chips
- * along. Quick, so a reader never waits on it; interruptible, since
- * a spring picks up from wherever the fade stands.
+ * The cross-fade between two pages. Opacity only: the pages overlap while
+ * it runs, and a transform on a page would also move its position:fixed
+ * controls. Fast, so the reader does not wait for it, and interruptible,
+ * because a spring continues from the current opacity.
  */
 export const SCENE = { type: "spring", stiffness: 260, damping: 34 } as const;
 
-/** A pointer settling onto a control: a little give, then rest. */
+/** Hover on a control: a small overshoot, then rest. */
 export const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;
 
-/** A press: crisp going in, so the control answers the finger at once. */
+/** A press: stiff, so the control responds immediately. */
 export const PRESS = { stiffness: 900, damping: 50 } as const satisfies Spring;
 
 /**
- * The CSS-side springs as custom properties (index.css reads
- * --spring-<name> and --spring-<name>-ms), so an entrance or a hover in
- * CSS and a spring in motion are the same physics, written once. The build
- * sets them on the page's body (vite.config.ts): a page is drawn — and its
- * entrances are already playing — before any script has run. The body, not
- * the root: they run to kilobytes, and ahead of the head they would push the
- * page's encoding past where a browser looks for it.
+ * The springs CSS uses, as custom properties (index.css reads
+ * --spring-<name> and --spring-<name>-ms), so a CSS entrance or hover and a
+ * motion spring share one definition. The build sets them on <body>
+ * (vite.config.ts), because a page is painted and its entrance animations
+ * start before any script runs. On <body>, not <html>: they are kilobytes
+ * long, and before <head> they would push the page's charset declaration
+ * past where a browser looks for it.
  */
 export function cssSprings(): string {
   return (

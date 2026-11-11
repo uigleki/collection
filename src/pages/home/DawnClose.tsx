@@ -1,11 +1,14 @@
 import { Link } from "react-router";
 import { couplets, meta } from "@/data/why.ts";
 
-// The essay's own final beat, verbatim: the hero's question is answered in
-// its own words — beauty for beauty, question for question.
+// The essay's last sentence, verbatim (couplets, data/why.ts). It answers
+// the question the hero shows and repeats its wording.
 const [question, answer] = couplets.closing;
 
-/** The closing beat: rest, not climax, under a lightening sky. */
+/**
+ * The home page's last section. It is deliberately calm, not a climax
+ * (DESIGN.md); the sky brightens toward dawn here.
+ */
 export function DawnClose() {
   return (
     <footer className="relative flex min-h-dvh flex-col justify-center">

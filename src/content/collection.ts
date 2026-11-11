@@ -1,9 +1,9 @@
 /**
- * The collection as the site knows it: what the README lists, in its order,
- * each piece joined to what reviews.md says about it and to the little the
- * Markdown cannot carry (catalog.ts). The three sources must agree on every
- * name — a work listed but never reviewed, reviewed but never listed, or
- * missing from the catalog stops the build rather than the site going short.
+ * Assembles the collection: the items the README lists, in its order, each
+ * joined to its review in reviews.md and to its catalog.ts entry (the data
+ * the Markdown does not contain). The three sources must agree on every
+ * name: a work that is listed but not reviewed, reviewed but not listed, or
+ * missing from the catalog fails the build.
  */
 import type { TitleLang, Track, Work, WorkCategory } from "../data/types.ts";
 import type { Readme, Review } from "./parse.ts";
@@ -14,11 +14,11 @@ export type CoverSource =
   | { kind: "steam"; appid: number };
 
 export interface WorkMeta {
-  /** the work's address and its cover asset's name */
+  /** used in the work page's URL and as the cover asset's file name */
   slug: string;
   lang?: TitleLang;
   accent: string;
-  /** absent when the art has no licensed source: a typographic panel */
+  /** absent without a licensed source: the work gets a typographic panel */
   art?: CoverSource;
 }
 

@@ -8,14 +8,13 @@ const dist = (file: string) =>
   readFileSync(resolve(import.meta.dirname, "..", "dist", file), "utf8");
 
 /**
- * The edge's headers are a file the browser never sees while these tests run
- * — vite preview does not apply _headers, and Cloudflare is not here. So they
- * are read out of the build and applied to the real pages by hand. Untested
- * headers are worse than none: they fail silently, in production, on the one
- * visitor who reported nothing.
+ * The response headers are in dist/_headers, which only Cloudflare applies:
+ * vite preview ignores the file. So these tests read the headers from the
+ * build and add them to the page responses themselves. Otherwise a wrong
+ * header would fail only in production, unnoticed.
  */
-test.describe("the shipped shell", () => {
-  /** Everything the edge sends with every document, as the browser gets it. */
+test.describe("built site", () => {
+  /** The headers in the `/*` section of dist/_headers: sent with every page. */
   const edgeHeaders = () => {
     const lines = dist("_headers").split("\n");
     const start = lines.indexOf("/*");
@@ -32,21 +31,24 @@ test.describe("the shipped shell", () => {
     return headers;
   };
 
-  // A room and the spine: between them they exercise every kind of thing the
-  // policy has to allow.
+  // A work page and the home page: together they use every kind of resource
+  // the Content-Security-Policy has to allow.
   const VISITS = ["/works/bakemonogatari", "/"] as const;
 
-  test("allows nothing unsafe but a style attribute", () => {
+  test("the CSP has no 'unsafe-' source except for style attributes", () => {
     const unsafe = edgeHeaders()
       ["content-security-policy"]?.split("; ")
       .filter((directive) => directive.includes("'unsafe-"));
     expect(unsafe).toEqual(["style-src-attr 'unsafe-inline'"]);
   });
 
-  test("runs clean under the headers it ships with", async ({ page }) => {
+  test("pages load with no CSP violation under the production headers", async ({
+    page,
+  }) => {
     const violations: string[] = [];
-    // The event as well as the console: Firefox reports a blocked style to
-    // neither the console Playwright hears nor pageerror.
+    // Listen for the securitypolicyviolation event as well as the console:
+    // Firefox reports a blocked style neither to the console Playwright
+    // listens to nor as a pageerror.
     await page.exposeFunction("blocked", (what: string) => {
       violations.push(what);
     });
@@ -63,12 +65,12 @@ test.describe("the shipped shell", () => {
     });
     page.on("pageerror", (e) => violations.push(String(e)));
 
-    // Only the two documents are rewritten — the policies arrive with the page
-    // and the browser applies them to everything the page then loads. Routing
-    // the subresources too would race every navigation (the ones still in
-    // flight when the next goto starts are disposed before they can be
-    // fulfilled) and send every chunk, font and cover out through the driver
-    // for nothing.
+    // Only the two document responses get the headers: the policy is sent
+    // with the document, and the browser applies it to everything the page
+    // loads. Routing subresources too would race every navigation (requests
+    // still pending when the next goto starts are disposed before they can
+    // be fulfilled) and pass every chunk, font and cover through the driver
+    // for no benefit.
     await page.route(
       (url) => VISITS.some((path) => path === url.pathname),
       async (route) => {
@@ -80,9 +82,9 @@ test.describe("the shipped shell", () => {
       },
     );
 
-    // The whole vocabulary in one visit: the inline theme script, the shader,
-    // the self-hosted fonts, the data: cover placeholders, the accent styles,
-    // and a cover's flight.
+    // One visit that uses everything the policy must allow: the inline theme
+    // script, the shader, the self-hosted fonts, the data: cover
+    // placeholders, the accent styles, and a cover transition.
     await page.goto(VISITS[0]);
     await expect(heading(page, "化物語")).toBeVisible();
     await page.goto(VISITS[1]);
@@ -94,7 +96,7 @@ test.describe("the shipped shell", () => {
     expect(violations).toEqual([]);
   });
 
-  test("advertises only URLs that resolve", async ({ page }) => {
+  test("every URL in sitemap.xml resolves to a page", async ({ page }) => {
     const paths = [...dist("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(
       (m) => new URL(m[1] ?? "").pathname,
     );
@@ -107,7 +109,7 @@ test.describe("the shipped shell", () => {
     }
   });
 
-  test("names each route as its own canonical URL", async ({ page }) => {
+  test("each route's canonical link is its own URL", async ({ page }) => {
     await page.goto("/why");
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
@@ -122,11 +124,11 @@ test.describe("the shipped shell", () => {
 });
 
 /**
- * Every page is written out by the build (vite.config.ts), so what arrives is
- * the page — on a phone it is read seconds before the script that will run it
- * has even been parsed.
+ * Every page is prerendered to its own HTML file at build time
+ * (vite.config.ts), so it can be read before its script runs. On a phone
+ * that can be seconds before the script has been parsed.
  */
-test.describe("the written pages", () => {
+test.describe("prerendered pages", () => {
   const WRITTEN = [
     ["/", /^Perfect Collection$/],
     ["/works/bakemonogatari", /^化物語 — /],
@@ -135,7 +137,7 @@ test.describe("the written pages", () => {
     ["/credits", /^Colophon — /],
   ] as const;
 
-  test("stand before any script runs", async ({ browser }) => {
+  test("render with JavaScript disabled", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
 
@@ -159,10 +161,12 @@ test.describe("the written pages", () => {
     { theme: "dark", reducedMotion: "no-preference" },
     { theme: "light", reducedMotion: "reduce" },
   ] as const) {
-    test(`are taken over as they stand (${reader.theme})`, async ({ page }) => {
+    test(`hydrate in place with no React errors (${reader.theme})`, async ({
+      page,
+    }) => {
       const errors: string[] = [];
-      // React's own complaints only: the missing page is meant to be
-      // missing, and the browser says so
+      // Only React's errors count: the missing page is requested on
+      // purpose, and the browser logs its 404 as a console error
       const note = (said: string) => {
         if (/react|hydrat/i.test(said)) errors.push(said);
       };
@@ -175,8 +179,8 @@ test.describe("the written pages", () => {
         localStorage.setItem("theme", theme);
       }, reader.theme);
 
-      // The page's scripts wait at the door until they are let in, so the
-      // page can be looked at as it arrived.
+      // The page's scripts are held back until released, so the page can be
+      // inspected before hydration.
       let waiting: (() => void)[] = [];
       let held = true;
       const letIn = () => {
@@ -206,30 +210,33 @@ test.describe("the written pages", () => {
 
         letIn();
         await expect.poll(() => h1.evaluate(adopted)).toBe(true);
-        // the heading React runs is the one the reader was already reading
+        // React adopted the existing h1 element instead of replacing it
         expect(await h1.evaluate((el: Marked) => el.written)).toBe(true);
       }
       expect(errors).toEqual([]);
     });
   }
 
-  test("name their encoding where a browser looks for it", () => {
+  test("declare their charset within the first 1024 bytes", () => {
     for (const [path] of WRITTEN) {
       const file = path === "/" ? "index.html" : `${path.slice(1)}.html`;
-      // HTML has a browser settle the encoding from a page's first 1024
-      // bytes, before it parses any of them
+      // The HTML spec has a browser determine the encoding from a page's
+      // first 1024 bytes, before parsing them
       const opening = Buffer.from(dist(file)).subarray(0, 1024);
       expect(opening.toString("latin1"), file).toMatch(/<meta charset=/i);
     }
   });
 
-  test("answer 404 for what is not there", async ({ page, request }) => {
+  test("an unknown path gets a 404 status and the not-found page", async ({
+    page,
+    request,
+  }) => {
     const res = await page.goto("/works/does-not-exist");
     expect(res?.status()).toBe(404);
     await expect(heading(page, NOT_FOUND)).toBeVisible();
     await expect(page).toHaveTitle(/^Not found — /);
-    // a chunk from a build long gone must not come back as a page, cached
-    // as a script for a year
+    // a request for a chunk from an old build must get a 404, not an HTML
+    // page that would be cached as a script for a year
     expect((await request.get("/assets/gone-abc123.js")).status()).toBe(404);
   });
 });
