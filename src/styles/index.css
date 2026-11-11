@@ -289,7 +289,8 @@ body {
     opacity 0.3s,
     transform var(--spring-hover-ms, 0.3s) var(--spring-hover, ease);
 }
-.glyph[data-shown="false"] {
+:root[data-theme="light"] .glyph[data-turns-to="light"],
+:root:not([data-theme="light"]) .glyph[data-turns-to="dark"] {
   opacity: 0;
   transform: rotate(-90deg) scale(0.5);
 }

@@ -121,6 +121,8 @@ Do:
 - Animate only what the compositor can carry — transform and opacity.
 - Hover exists only where a pointer can hover: a touch screen would leave a tapped control stuck in it.
 - Reduced motion is a parallel design: end states render instantly, the moon still shows the truthful phase, cuts are honest.
+- Every page is written out by the build: it is read before any script runs, and stands where none ever does.
+  A page that is not there answers 404.
 - No change of page waits on the network, unless the reader has asked to save data.
 - The sky trades resolution for frames when the machine falls behind; a machine without a GPU gets the still poster, not a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05, axe zero violations in both themes, keyboard-complete (skip link, h1 focus per route change, visible rings).

@@ -1,4 +1,28 @@
-import { expect, type Page } from "@playwright/test";
+import { test as base, expect, type Page } from "@playwright/test";
+
+/**
+ * Every page arrives already written (vite.config.ts) and is taken over by
+ * its script a moment later; until then a key press, a swipe or a history
+ * change reaches no one. So a test's `goto` returns once the page is live:
+ * the app takes scroll restoration from the browser (src/lib/scroll.ts) in
+ * the same pass that attaches every listener, and it is the last to do so.
+ * A test about the page as it arrives says so, with its own `waitUntil`.
+ */
+export const test = base.extend({
+  page: async ({ page }, use) => {
+    const goto = page.goto.bind(page);
+    page.goto = async (url, options) => {
+      const response = await goto(url, options);
+      if (!options?.waitUntil)
+        await page.waitForFunction(
+          () => history.scrollRestoration === "manual",
+        );
+      return response;
+    };
+    await use(page);
+  },
+});
+export { expect };
 
 /** The home page's own heading — spelled loosely because it wraps. */
 export const HOME = /Perfect\s*Collection/;

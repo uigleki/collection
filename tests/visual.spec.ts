@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers.ts";
 
 // Reduced motion freezes the shader's clock (uTime stays 0) and skips all
 // entrance animation, so the canvas itself is deterministic — the whole

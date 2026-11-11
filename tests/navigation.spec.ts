@@ -1,5 +1,13 @@
-import { expect, type Locator, type Page, test } from "@playwright/test";
-import { HOME, heading, NOT_FOUND, restingScrollY, row } from "./helpers.ts";
+import type { Locator, Page } from "@playwright/test";
+import {
+  expect,
+  HOME,
+  heading,
+  NOT_FOUND,
+  restingScrollY,
+  row,
+  test,
+} from "./helpers.ts";
 
 /** Enter a room from the spine, come back, and expect the reading position. */
 async function roundTrip(
@@ -146,7 +154,6 @@ test.describe("rooms", () => {
   });
 
   test("the arrow keys walk the shelf", async ({ page }) => {
-    // The title is set in the same breath the room starts listening.
     await page.goto("/works/nisemonogatari");
     await expect(page).toHaveTitle(/^偽物語/);
     await page.keyboard.press("ArrowRight");

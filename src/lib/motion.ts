@@ -47,19 +47,26 @@ export const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;
 export const PRESS = { stiffness: 900, damping: 50 } as const satisfies Spring;
 
 /**
- * Publish the CSS-side springs as custom properties (index.css reads
+ * The CSS-side springs as custom properties (index.css reads
  * --spring-<name> and --spring-<name>-ms), so an entrance or a hover in
- * CSS and a spring in motion are the same physics, written once.
+ * CSS and a spring in motion are the same physics, written once. The build
+ * sets them on the page's body (vite.config.ts): a page is drawn — and its
+ * entrances are already playing — before any script has run. The body, not
+ * the root: they run to kilobytes, and ahead of the head they would push the
+ * page's encoding past where a browser looks for it.
  */
-export function publishSprings(root: HTMLElement): void {
-  for (const [name, spring] of [
-    ["rise", RISE],
-    ["enter", ENTER],
-    ["hover", HOVER],
-    ["press", PRESS],
-  ] as const) {
-    const { easing, duration } = cssSpring(spring);
-    root.style.setProperty(`--spring-${name}`, easing);
-    root.style.setProperty(`--spring-${name}-ms`, `${duration}ms`);
-  }
+export function cssSprings(): string {
+  return (
+    [
+      ["rise", RISE],
+      ["enter", ENTER],
+      ["hover", HOVER],
+      ["press", PRESS],
+    ] as const
+  )
+    .map(([name, spring]) => {
+      const { easing, duration } = cssSpring(spring);
+      return `--spring-${name}: ${easing}; --spring-${name}-ms: ${duration}ms`;
+    })
+    .join("; ");
 }

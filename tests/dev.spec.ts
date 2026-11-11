@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers.ts";
 
 // Run against the development server, where React checks the app by
 // detaching and reattaching what it has just attached. What survives only in

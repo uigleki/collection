@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { HOME, heading } from "./helpers.ts";
+import { expect, HOME, heading, test } from "./helpers.ts";
 
 // Every page's code is small; once the first page stands and the browser is
 // idle, the rest is fetched, so no later change of page waits on the

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { createBrowserRouter } from "react-router";
+import type { RouteObject } from "react-router";
 import { useScrollMemory } from "@/lib/scroll.ts";
 import { initTheme } from "@/lib/theme.ts";
 import { MoonSky } from "@/scene/MoonSky.tsx";
@@ -54,7 +54,12 @@ const pages = [
 ] as const;
 const [home, room, why, credits, missing] = pages;
 
-export const router = createBrowserRouter([
+/**
+ * One table, read twice: by the build, which writes every page out as a
+ * file (prerender.tsx), and by the browser, which takes each one over
+ * (main.tsx).
+ */
+export const routes: RouteObject[] = [
   {
     path: "/",
     Component: Root,
@@ -67,7 +72,7 @@ export const router = createBrowserRouter([
       { path: "*", lazy: missing },
     ],
   },
-]);
+];
 
 /**
  * Fetch every page's code while the reader reads the first. It is all small

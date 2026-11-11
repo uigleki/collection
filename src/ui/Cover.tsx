@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import type { Work } from "@/data/types.ts";
 import { coverFor } from "@/lib/covers.ts";
 import { aboard } from "@/lib/flight.ts";
@@ -21,6 +21,15 @@ interface CoverProps {
  */
 const shown = new Set<string>();
 
+const never = () => () => {};
+/** Whether this render is the page's file being written, or adopted. */
+const useWritten = () =>
+  useSyncExternalStore(
+    never,
+    () => false,
+    () => true,
+  );
+
 export function Cover({
   work,
   morph = false,
@@ -30,8 +39,14 @@ export function Cover({
   const { title, slug, lang } = work;
   const cover = coverFor(slug);
   // Art this visit has already shown is in memory: it paints at once and
-  // needs no fade — a cover flying into a room must arrive sharp.
-  const [loaded, setLoaded] = useState(() => !!cover && shown.has(cover.url));
+  // needs no fade — a cover flying into a room must arrive sharp. Nor does
+  // art that came written in the page: the browser has been loading it since
+  // before this ran, may have finished (and a load that has already happened
+  // is never heard), and what the reader is looking at is not hidden again.
+  const written = useWritten();
+  const [loaded, setLoaded] = useState(
+    () => !!cover && (written || shown.has(cover.url)),
+  );
   const flies = useMemo(
     () => (morph ? aboard(slug) : undefined),
     [morph, slug],
@@ -77,6 +92,9 @@ export function Cover({
           loading={priority ? "eager" : "lazy"}
           fetchPriority={priority ? "high" : "auto"}
           decoding={loaded ? "sync" : "async"}
+          ref={(img) => {
+            if (img?.complete && img.naturalWidth > 0) shown.add(cover.url);
+          }}
           onLoad={() => {
             shown.add(cover.url);
             setLoaded(true);

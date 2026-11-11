@@ -19,7 +19,7 @@ export const origin = "https://spotless.pages.dev";
 /**
  * The standing pages, for the sitemap. Work rooms are deliberately absent —
  * they come from the collection itself, the only thing that knows how many
- * there are. This mirrors the routes in src/app/router.tsx, and an e2e test
+ * there are. This mirrors the routes in src/app/routes.tsx, and an e2e test
  * walks every URL the sitemap advertises and fails if one does not resolve.
  */
 export const pages = [

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./helpers.ts";
 
 // The desktop projects are the only ones Playwright ships, and every layout
 // bug this file exists to catch hides at the width where the columns collapse.

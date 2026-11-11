@@ -57,19 +57,27 @@ export function Stage() {
 // A phone's edge swipe back (or forward) animates the change itself, and
 // says so on the popstate. Playing ours after it would show the reader the
 // same change twice. Remembered by the history entry's key, which is the
-// location the router is about to render; listened for in the capture
-// phase so it is known before the router hears the same event.
+// location the router is about to render.
 const drawnByBrowser = new Set<string>();
-window.addEventListener(
-  "popstate",
-  (e) => {
-    // the entry the visit began on has no key of its own; the router
-    // calls it "default"
-    const key = (e.state as { key?: string } | null)?.key ?? "default";
-    if (e.hasUAVisualTransition) drawnByBrowser.add(key);
-  },
-  { capture: true },
-);
+
+/**
+ * Start noting the changes the browser draws. This has to be listening
+ * before the router is (main.tsx): the window hears its listeners in the
+ * order they were added, and React renders the change from inside the
+ * router's — by the next listener the page has already been drawn.
+ */
+export function noteDrawnChanges(): void {
+  window.addEventListener(
+    "popstate",
+    (e) => {
+      // the entry the visit began on has no key of its own; the router
+      // calls it "default"
+      const key = (e.state as { key?: string } | null)?.key ?? "default";
+      if (e.hasUAVisualTransition) drawnByBrowser.add(key);
+    },
+    { capture: true },
+  );
+}
 
 // The first page is simply there; every later one arrives.
 let arrived = false;

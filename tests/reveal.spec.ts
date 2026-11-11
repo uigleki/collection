@@ -1,5 +1,4 @@
-import { expect, test } from "@playwright/test";
-import { row } from "./helpers.ts";
+import { expect, row, test } from "./helpers.ts";
 
 test.describe("entrances", () => {
   // The collection's entrances are drawn by the scroll itself, on the
