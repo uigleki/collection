@@ -32,10 +32,10 @@
             inputsFrom = [ config.pre-commit.devShell ];
 
             packages = with pkgs; [
-              bun
               nixd
+              nodejs-slim
               playwright-driver.browsers
-              typescript-language-server
+              pnpm
             ];
 
             shellHook = ''

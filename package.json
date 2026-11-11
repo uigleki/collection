@@ -1,8 +1,9 @@
 {
   "name": "collection",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "packageManager": "bun@1.4.2",
+  "packageManager": "pnpm@12.3.4",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -15,8 +16,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:a11y": "playwright test a11y",
     "test:visual": "playwright test visual",
-    "lighthouse": "vite build && lhci autorun",
-    "fonts:cjk": "bun scripts/subset-cjk.ts"
+    "lighthouse": "pnpm run build && lhci autorun",
+    "fonts:cjk": "node scripts/subset-cjk.ts"
   },
   "dependencies": {
     "@fontsource/ubuntu": "^5.3.0",
@@ -28,7 +29,7 @@
     "react-router": "^8.4.0"
   },
   "//": "@playwright/test is held to its minor: the browsers come from nixpkgs (flake.nix takes playwright-driver.browsers, whose version flake.lock fixes), each minor expects the browser builds of its own release, and a minor nix does not have fails every e2e run at launch. Move it when nixpkgs moves.",
-  "//biome": "@biomejs/biome is held to an exact version, the one nixpkgs gives the pre-commit hook. Two installers reach for this linter — nix before a commit, bun in CI — and a linter that disagrees with itself between them would reformat on every commit and fail the gate it just passed. Move it when nixpkgs moves.",
+  "//biome": "@biomejs/biome is held to an exact version, the one nixpkgs gives the pre-commit hook. Two installers reach for this linter — nix before a commit, pnpm in CI — and a linter that disagrees with itself between them would reformat on every commit and fail the gate it just passed. Move it when nixpkgs moves.",
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "2.5.14",
@@ -36,7 +37,7 @@
     "@playwright/test": "~1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^26.6.3",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",

@@ -11,12 +11,12 @@ Perfect Collection — works that enrich rather than diminish.
 
 ## Commands
 
-- `package.json` holds the script list; run them with `bun run <script>`.
-- Refresh cover art: `bun scripts/fetch-covers.ts` (not a `package.json` script).
+- `package.json` holds the script list; run them with `pnpm run <script>`.
+- Refresh cover art: `node scripts/fetch-covers.ts` (not a `package.json` script).
 
 ## Gotchas
 
-- Regenerate the CJK font subsets whenever a work title introduces a new glyph: `bun run fonts:cjk`.
+- Regenerate the CJK font subsets whenever a work title introduces a new glyph: `pnpm run fonts:cjk`.
   Nothing else catches a missing glyph.
 
 ## Conventions

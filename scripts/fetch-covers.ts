@@ -6,11 +6,8 @@
  *
  * Each work's `art` in src/content/catalog.ts says where its art comes from;
  * a work without one keeps its typographic panel. For each work it writes:
- *   src/assets/works/<slug>.webp        — optimized cover (≤640w)
- *   src/data/generated/covers.ts        — { thumbhash, w, h, source }
- *
- * Run:  LD_LIBRARY_PATH=<gcc-lib> bun scripts/fetch-covers.ts
- * (libvips/sharp needs libstdc++ on PATH; the nix dev shell provides it.)
+ *   src/assets/works/<slug>.webp        — the optimized cover
+ *   src/data/generated/covers.ts        — its size, placeholder hash and credit
  */
 import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";

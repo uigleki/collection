@@ -64,12 +64,12 @@ export default defineConfig({
 
   webServer: [
     {
-      command: "bun run build && bun run preview",
+      command: "pnpm run build && pnpm run preview",
       url: "http://localhost:4173",
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: "bun run dev --port 5173 --strictPort",
+      command: "pnpm run dev --port 5173 --strictPort",
       url: "http://localhost:5173",
       reuseExistingServer: !process.env.CI,
     },

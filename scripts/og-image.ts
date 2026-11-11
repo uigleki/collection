@@ -3,7 +3,7 @@
  * the real hero, real shader, real type; zero drift from the design.
  *
  * Run with the preview server up on :4173:
- *   bun run preview &  bun scripts/og-image.ts
+ *   pnpm run preview &  node scripts/og-image.ts
  */
 import { resolve } from "node:path";
 import { chromium } from "@playwright/test";

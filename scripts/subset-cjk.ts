@@ -11,11 +11,9 @@
  *   - CollectionCJK    ← Noto Sans CJK SC  (default; Chinese text, e.g. the koan)
  *   - CollectionCJK-JP ← Noto Sans CJK JP  (served to :lang(ja) nodes — titles)
  *
- * Only glyphs actually used on the site are kept (scanned live from src/), so
- * each output is a few dozen KB. Any missed glyph falls through to the system
- * CJK stack per-glyph, so this can never produce tofu.
- *
- * Run:  bun scripts/subset-cjk.ts   (pure JS/WASM, no native deps)
+ * Only glyphs actually used on the site are kept (scanned live from src/ and
+ * the Markdown), so each output is a few dozen KB. Any missed glyph falls
+ * through to the system CJK stack per-glyph, so this can never produce tofu.
  */
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
