@@ -1,14 +1,14 @@
 # for statix, which skips git's global excludes
 .direnv/
 
-# Dependencies
+# for biome, which skips them too and follows this link into the nix store
+/.pre-commit-config.yaml
+
 node_modules/
 
-# Build output
 dist
 *.tsbuildinfo
 
-# Secrets
 .env
 .env.*
 !.env.example
