@@ -198,9 +198,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
               className="enter mt-14 border-l border-border pl-6"
               style={at(200 + work.review.length * 50)}
             >
-              <h2 className="text-body font-medium text-muted">
-                Flaws, stated plainly
-              </h2>
+              <h2 className="text-body font-medium text-muted">Shortcomings</h2>
               <dl className="mt-5 space-y-6">
                 {work.flaws.map((point) => (
                   <div key={point.label}>

@@ -225,13 +225,14 @@ test.describe("work pages", () => {
     await expect(page.getByText("Artists 01")).toBeVisible();
   });
 
-  test("the flaws section is shown only for works that list flaws", async ({
+  test("the shortcomings section is shown only for works that list shortcomings", async ({
     page,
   }) => {
+    const shortcomings = page.getByRole("heading", { name: "Shortcomings" });
     await page.goto("/works/steins-gate");
-    await expect(page.getByText("Flaws, stated plainly")).toBeAttached();
+    await expect(shortcomings).toBeAttached();
     await page.goto("/works/bakemonogatari");
-    await expect(page.getByText("Flaws, stated plainly")).toHaveCount(0);
+    await expect(shortcomings).toHaveCount(0);
   });
 
   test("going back to the home page restores the scroll position", async ({

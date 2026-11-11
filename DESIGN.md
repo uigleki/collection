@@ -111,7 +111,7 @@ Contrast: at least WCAG AA (4.5:1 body text, 3:1 large text) in both themes.
   The page opens scrolled to the top with one short entrance animation.
   Previous/next slides the page horizontally, and a swipe past the first or last work rubber-bands.
   If the browser already animated the navigation (for example an edge-swipe back), the site changes page without its own animation.
-  Reviews list a work's flaws in their own section.
+  Reviews list a work's shortcomings in their own section, under the heading reviews.md uses.
 - **Icon buttons** — 44px round glass buttons; the label appears on hover.
 - **Link** — every text link animates its underline in from left to right.
 
