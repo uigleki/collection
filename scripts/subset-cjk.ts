@@ -40,6 +40,12 @@ const FACES = [
   },
 ] as const;
 
+// The OpenType features src/styles/index.css can reach: palt on CJK
+// headings, halt for text-spacing-trim, kern by default. Every feature kept
+// brings its alternate glyphs with it, so one the stylesheet starts using
+// has to be added here.
+const FEATURES = ["halt", "kern", "palt"];
+
 // CJK / kana / full-width ranges — everything the CJK faces should cover.
 const CJK = /[　-〿぀-ゟ゠-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/gu;
 
@@ -80,7 +86,10 @@ async function build(glyphs: string, face: (typeof FACES)[number]) {
   const src = Buffer.from(await res.arrayBuffer());
   console.log(`[${face.label}]   source ${(src.length / 1e6).toFixed(1)} MB`);
 
-  const woff2 = await subsetFont(src, glyphs, { targetFormat: "woff2" });
+  const woff2 = await subsetFont(src, glyphs, {
+    targetFormat: "woff2",
+    keepFeatures: FEATURES,
+  });
   const out = resolve(OUT_DIR, face.out);
   await writeFile(out, woff2);
   console.log(
