@@ -48,7 +48,11 @@ const FACES = [
 const FEATURES = ["halt", "kern", "palt"];
 
 // CJK / kana / full-width ranges — everything the CJK faces should cover.
-const CJK = /[　-〿぀-ゟ゠-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/gu;
+// Written as escapes: normalizing the file replaces a literal compatibility
+// ideograph (U+F900) with its unified form (U+8C48), which moves the start
+// of that range.
+const CJK =
+  /[\u3000-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\uFF00-\uFFEF]/gu;
 
 async function collectGlyphs(): Promise<string> {
   const source = (await readdir(SRC, { recursive: true }))
