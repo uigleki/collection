@@ -79,7 +79,8 @@ Time strengthens their impact rather than exposing their emptiness.
 Memory doesn't record experiences faithfully — it disproportionately weights emotional peaks and endings, forgetting the journey between.
 
 **The trick**: Coast on emptiness, deploy one manipulative climax.
-"It gets good after episode X." Memory rewrites the experience, making you forget how much nothing you endured.
+"It gets good after episode X."
+Memory rewrites the experience, making you forget how much nothing you endured.
 
 **The truth**: **True works respect your time from the first moment.**
 They captivate immediately while building toward earned crescendos.

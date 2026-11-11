@@ -84,8 +84,7 @@ Contrast floor: WCAG AA (4.5:1 body, 3:1 large) in BOTH themes.
   Japanese titles must take Japanese letterforms (Han unification).
   Languages are data (a `lang` judged per title), not heuristics.
 - Components ask for a role, never a raw size.
-- **CJK display leading never drops below 1.15**;
-  Latin display may sit at 1.02–1.04.
+- **CJK display leading never drops below 1.15**; Latin display may sit at 1.02–1.04.
 - Display text enters as masked lines, never per-character splits — CJK glyph clusters break.
 
 ## Layout
@@ -123,8 +122,7 @@ Do:
 - Hover exists only where a pointer can hover: a touch screen would leave a tapped control stuck in it.
 - Reduced motion is a parallel design: end states render instantly, the moon still shows the truthful phase, cuts are honest.
 - No change of page waits on the network, unless the reader has asked to save data.
-- The sky trades resolution for frames when the machine falls behind;
-  a machine without a GPU gets the still poster, not a slideshow.
+- The sky trades resolution for frames when the machine falls behind; a machine without a GPU gets the still poster, not a slideshow.
 - Hard floors: Lighthouse perf ≥ 0.90 / a11y ≥ 0.95, LCP ≤ 2s, CLS ≤ 0.05, axe zero violations in both themes, keyboard-complete (skip link, h1 focus per route change, visible rings).
   A change to the shader or the entry graph is not finished until Lighthouse has passed.
 
