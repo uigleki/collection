@@ -79,6 +79,7 @@ export const routes: RouteObject[] = [
  * (the rooms share one chunk), and a change of page that waits on the
  * network is a change of page that stutters — unless the reader has asked
  * to save data, in which case nothing is fetched until it is asked for.
+ * One that fails to arrive is let go: the visit that needs it asks again.
  */
 export function prefetchPages(): void {
   const connection = (navigator as { connection?: { saveData?: boolean } })
@@ -88,7 +89,8 @@ export function prefetchPages(): void {
     "requestIdleCallback" in window
       ? requestIdleCallback(run, { timeout: 3000 })
       : setTimeout(run, 1000);
-  const start = () => idle(() => pages.forEach((page) => void page()));
+  const start = () =>
+    idle(() => pages.forEach((page) => void page().catch(() => {})));
   if (document.readyState === "complete") start();
   else window.addEventListener("load", start, { once: true });
 }

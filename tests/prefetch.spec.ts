@@ -35,3 +35,14 @@ test("a reader saving data is not sent pages they did not ask for", async ({
   await page.waitForLoadState("networkidle");
   expect(fetched).toEqual([]);
 });
+
+test("a page that could not be fetched ahead is no error", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.route(/\/assets\/Why-[^/]*\.js$/, (route) => route.abort());
+  const refused = page.waitForEvent("requestfailed");
+  await page.goto("/works/bakemonogatari");
+  await refused;
+  await page.waitForLoadState("networkidle");
+  expect(errors).toEqual([]);
+});
