@@ -16,6 +16,12 @@ function current(): Theme {
 
 function apply(theme: Theme) {
   document.documentElement.dataset.theme = theme;
+  // index.html carries both grounds on the meta, as data-dark and data-light
+  const chrome = document.querySelector<HTMLMetaElement>(
+    'meta[name="theme-color"]',
+  );
+  const ground = chrome?.dataset[theme];
+  if (chrome && ground) chrome.content = ground;
   sky.targetDay = theme === "light" ? 1 : 0;
   for (const l of listeners) l();
 }

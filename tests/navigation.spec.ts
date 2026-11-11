@@ -272,6 +272,42 @@ test.describe("rooms", () => {
     await theme("dark");
   });
 
+  test("the browser's own chrome turns with the page", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    // What the browser paints its own UI with — the first theme-color whose
+    // media applies — beside the ground the page stands on.
+    const colors = () =>
+      page.evaluate(() => {
+        const meta = [
+          ...document.querySelectorAll<HTMLMetaElement>(
+            'meta[name="theme-color"]',
+          ),
+        ].find((m) => matchMedia(m.media || "all").matches);
+        const probe = document.createElement("i");
+        probe.style.color = meta?.content ?? "";
+        document.body.append(probe);
+        const chrome = getComputedStyle(probe).color;
+        probe.remove();
+        return {
+          chrome,
+          ground: getComputedStyle(document.documentElement).backgroundColor,
+        };
+      });
+    const agree = async () => {
+      const { chrome, ground } = await colors();
+      expect(chrome).toBe(ground);
+    };
+
+    await page.goto("/");
+    // the system stays dark (playwright.config.ts): day is the visitor's own
+    await page.getByRole("button", { name: "Switch to day" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await agree();
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await agree();
+  });
+
   test("the theme turns live, and can be turned back mid-way", async ({
     page,
   }) => {

@@ -23,13 +23,9 @@
         <meta name="color-scheme" content="dark light" />
         <meta
             name="theme-color"
-            content="__GROUND_DUSK__"
-            media="(prefers-color-scheme: light)"
-        />
-        <meta
-            name="theme-color"
             content="__GROUND_NIGHT__"
-            media="(prefers-color-scheme: dark)"
+            data-dark="__GROUND_NIGHT__"
+            data-light="__GROUND_DUSK__"
         />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="manifest" href="/manifest.webmanifest" />
@@ -38,12 +34,17 @@
             // Theme before paint — deterministic, never a flash.
             try {
                 const t = localStorage.getItem("theme");
-                document.documentElement.dataset.theme =
+                const theme =
                     t === "light" || t === "dark"
                         ? t
                         : matchMedia("(prefers-color-scheme: light)").matches
                           ? "light"
                           : "dark";
+                document.documentElement.dataset.theme = theme;
+                const chrome = document.querySelector(
+                    'meta[name="theme-color"]',
+                );
+                chrome.content = chrome.dataset[theme];
             } catch {}
         </script>
     </head>
