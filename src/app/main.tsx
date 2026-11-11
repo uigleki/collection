@@ -1,8 +1,3 @@
-import "@fontsource/ubuntu/latin-300.css";
-import "@fontsource/ubuntu/latin-400.css";
-import "@fontsource/ubuntu/latin-400-italic.css";
-import "@fontsource/ubuntu/latin-500.css";
-import "@fontsource/ubuntu-mono/latin-400.css";
 import "@/styles/index.css";
 import { StrictMode, startTransition } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
