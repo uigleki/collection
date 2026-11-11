@@ -9,8 +9,7 @@
       ],
       "numberOfRuns": 5,
       "settings": {
-        "preset": "desktop",
-        "budgetsPath": "./budget.json"
+        "preset": "desktop"
       }
     },
     "assert": {
@@ -21,6 +20,20 @@
         "largest-contentful-paint": ["error", { "maxNumericValue": 2000 }],
         "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
         "total-blocking-time": ["error", { "maxNumericValue": 200 }],
+        "resource-summary:script:size": [
+          "error",
+          { "maxNumericValue": 327680 }
+        ],
+        "resource-summary:font:size": ["error", { "maxNumericValue": 327680 }],
+        "resource-summary:image:size": ["error", { "maxNumericValue": 921600 }],
+        "resource-summary:total:size": [
+          "error",
+          { "maxNumericValue": 1843200 }
+        ],
+        "resource-summary:third-party:count": [
+          "error",
+          { "maxNumericValue": 0 }
+        ],
         "prefers-color-scheme": "off"
       }
     },

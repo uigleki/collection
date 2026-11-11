@@ -84,7 +84,7 @@ const robots = () =>
   `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`;
 
 /**
- * The site loads nothing from anywhere else — budget.json puts the
+ * The site loads nothing from anywhere else — lighthouserc.json puts the
  * third-party allowance at zero — so the policy that says exactly that is
  * both cheap and honest. The one inline script (the theme, set before
  * paint) is admitted by the hash of what actually shipped, read back out of
