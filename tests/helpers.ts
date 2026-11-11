@@ -29,8 +29,7 @@ export const HOME = /Perfect\s*Collection/;
 
 /**
  * A work's row on the home spine. The whole row is one link, and its label
- * is a contract with NightRow — asserted from three specs, so it is named
- * once here.
+ * is a contract with NightRow, so it is named once here.
  */
 export const row = (page: Page, title: string) =>
   page.getByRole("link", { name: `${title} — open` });

@@ -424,9 +424,8 @@ export function MoonSky() {
         sky.targetNight = FULL_NIGHT;
       }
 
-      // The water keeps its own time. It once ran faster while the reader
-      // scrolled — a sea that answers the scroll wheel reads as a screen
-      // effect, not a sea.
+      // The water keeps its own time: a sea that answers the scroll wheel
+      // reads as a screen effect, not a sea.
       if (!still) time += dt;
 
       night = still ? sky.targetNight : ease(night, sky.targetNight, 3.0, dt);

@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 
 /**
- * The fixtures' one drawing hand: 16px on a 24 unit grid, hairline, round
- * ends. Every chip's glyph is decorative — the control it sits in carries
- * the label — so it is always hidden from the accessibility tree.
+ * The fixtures' one drawing hand. Every chip's glyph is decorative — the
+ * control it sits in carries the label — so it is always hidden from the
+ * accessibility tree.
  */
 export function Icon({
   children,

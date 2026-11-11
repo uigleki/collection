@@ -9,7 +9,7 @@ import { Koan } from "./Koan.tsx";
 import { MusicWater } from "./MusicWater.tsx";
 import { NightRow } from "./NightRow.tsx";
 
-/** The whole night: fourteen works → the koan → the music → dawn. */
+/** The whole night: the works → the koan → the music → dawn. */
 export function Home() {
   const h1 = usePage(siteMeta.title);
 

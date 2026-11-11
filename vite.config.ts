@@ -377,8 +377,8 @@ export default defineConfig({
   server: {
     watch: {
       // .direnv links the flake's inputs — all of nixpkgs — into the tree,
-      // and the watcher follows links: crawling them held the dev server's
-      // start for seventeen seconds. None of these is ever a source.
+      // and the watcher follows links: crawling them holds up the dev
+      // server's start. None of these is ever a source.
       ignored: [
         "**/.direnv/**",
         "**/.lighthouseci/**",

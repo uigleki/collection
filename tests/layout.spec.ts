@@ -1,6 +1,6 @@
 import { expect, heading, test } from "./helpers.ts";
 
-// The desktop projects are the only ones Playwright ships, and every layout
+// Every project is a desktop browser (playwright.config.ts), and every layout
 // bug this file exists to catch hides at the width where the columns collapse.
 test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
 

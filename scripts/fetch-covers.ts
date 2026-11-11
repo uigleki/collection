@@ -89,8 +89,8 @@ async function process(slug: string, meta: Fetched): Promise<CoverMeta> {
     .toFile(dest)
     .then(() => out.metadata());
 
-  // The blurred stand-in, kept as the hash itself (~30 bytes): the page
-  // decodes it (src/lib/covers.ts), which costs less than one baked image.
+  // The blurred stand-in, kept as the hash itself: the page decodes it
+  // (src/lib/covers.ts; covers.test.ts beside it says why).
   const small = await sharp(raw)
     .resize(90, 90, { fit: "inside" })
     .ensureAlpha()

@@ -7,24 +7,18 @@ export default defineConfig({
   // Playwright derives its worker count from CPU cores, but three engines
   // running at once are bound by memory, not by cores — over-committing makes
   // WebKit miss its own timeouts and the suite reports site failures that are
-  // really starvation. At two workers the same run would pass, then fail two
-  // unrelated specs, then pass again; a suite that answers differently each
-  // time cannot be used to decide anything. One worker trades minutes for an
-  // answer that means something.
+  // really starvation.
   workers: 1,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   // Two reporters in CI, not one: `github` writes the failure onto the diff
-  // where it is read, and the HTML report is what survives the run as an
-  // artifact. `github` alone produced no playwright-report/ at all, so the
-  // upload step in the workflow had nothing to find, every time.
+  // where it is read, and only the HTML one leaves the playwright-report/
+  // the workflow uploads.
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "html",
 
   // Longer than Playwright's five seconds: every route change here plays out
   // on springs, and three engines sharing one machine do not always spare
-  // the frames one needs promptly. Nothing about what is asserted
-  // changes — only the patience, so a loaded run reports what the site did
-  // rather than how busy the box was.
+  // the frames one needs promptly.
   expect: { timeout: 8000 },
 
   use: {
@@ -34,9 +28,9 @@ export default defineConfig({
   },
 
   // The sky, the cover's flight and the scroll behave differently per
-  // engine, so the behavioral specs run on all three. The visual snapshots stay on one
-  // engine: they pin the site's look, not the renderers' disagreements about
-  // antialiasing.
+  // engine, so the behavioral specs run on all three. The visual snapshots
+  // stay on one engine: they pin the site's look, not the renderers'
+  // disagreements about antialiasing.
   projects: [
     {
       name: "chromium",

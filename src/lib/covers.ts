@@ -41,8 +41,8 @@ const bySlug: ReadonlyMap<string, Cover> = new Map(
   }),
 );
 
-/** Cover art + metadata for a work, or null for the two whose art has no
- * licensed source (they get a typographic panel instead). */
+/** Cover art + metadata for a work, or null for one whose art has no
+ * licensed source (it gets a typographic panel instead). */
 export function coverFor(slug: string): Cover | null {
   return bySlug.get(slug) ?? null;
 }

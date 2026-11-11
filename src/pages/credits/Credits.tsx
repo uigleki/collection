@@ -53,8 +53,7 @@ export function Credits() {
                   link-draw underlines the box it is given — left to stretch,
                   the rule runs the width of the row and offers a reader a
                   target that is not there. Start-aligned, the box is the
-                  words again. The wide track only exists below md; the fix
-                  is written once because the bug is one bug. */}
+                  words again. */}
               <a
                 href={cover.sourceUrl}
                 rel="noopener"

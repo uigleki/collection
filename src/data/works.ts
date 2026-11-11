@@ -16,11 +16,11 @@ export const trackName = (track: Track) => `${track.artist} · ${track.title}`;
 export interface WorkEntry {
   readonly work: Work;
   readonly category: string;
-  /** 1-based position within the work's own medium (Anime 01…04) */
+  /** 1-based position within the work's own medium */
   readonly ordinal: number;
   /**
    * The work's night in the collection's lunar month (see lib/moon.ts):
-   * the first work is night 2 and the last stands under the full moon (15).
+   * the first work is night 2 and the last stands under the full moon.
    */
   readonly night: number;
 }

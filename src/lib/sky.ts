@@ -4,10 +4,9 @@ import { sky } from "@/scene/signal.ts";
 
 type Cross = (visible: boolean) => void;
 
-// One observer per band, shared by every element watching that band. The home
-// page marks seventeen elements; seventeen separate IntersectionObservers meant
-// seventeen callbacks to service on one scroll, each holding its own component
-// scope. Here the closure captures a single number.
+// One observer per band, shared by every element watching that band: an
+// observer apiece is a callback apiece to service on one scroll, each holding
+// its own component scope.
 const bands = new Map<
   string,
   { io: IntersectionObserver; watchers: WeakMap<Element, Cross> }

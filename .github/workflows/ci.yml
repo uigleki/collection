@@ -100,8 +100,6 @@ jobs:
 
   deploy:
     name: Deploy
-    # build takes nothing from test, so the two run side by side; the gate is
-    # unchanged because nothing deploys until both have passed.
     needs: [test, build]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest

@@ -12,7 +12,7 @@ export const sky = {
    * this page is long enough to read as a month: once past its works the
    * moon must already stand full, even for a reader who jumped there. Only
    * a page that says so gets it — a room's own scroll must never touch the
-   * month (it did once, and read as the moon moving at random).
+   * month: it reads as the moon moving at random.
    */
   waxWithProgress: false,
   /** how deep into the music section we are, 0..1 — brightens the glade */

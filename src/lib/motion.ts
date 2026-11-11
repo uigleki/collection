@@ -3,14 +3,11 @@ import { cssSpring, type Spring } from "./spring.ts";
 /**
  * The site's motion vocabulary.
  *
- * One spring per reason something moves: a display line lifting behind its
- * mask, a block of reading arriving, a cover following the cursor, a cover
- * flying between pages, a page changing, a control under a hovering
- * pointer, a control being pressed.
- * Anything that moves for one of those reasons
- * uses that spring — the same gesture spelled 60/18 in one file and 65/19 in
- * the next is drift, not art direction, and DESIGN.md asks this site to be
- * internally coherent before it asks anything else.
+ * One spring per reason something moves, each named below. Anything that
+ * moves for one of those reasons uses that spring — the same gesture spelled
+ * 60/18 in one file and 65/19 in the next is drift, not art direction, and
+ * DESIGN.md asks this site to be internally coherent before it asks anything
+ * else.
  *
  * What the scroll reveals has no spring and no clock: the reader's position
  * is its timeline (index.css: .arrive).

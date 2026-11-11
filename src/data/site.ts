@@ -12,7 +12,7 @@ export const siteMeta = {
 /**
  * Where the collection lives. Written once: the canonical URL each route
  * declares, the share card's image, the sitemap and robots.txt all read it,
- * so moving the site is one edit instead of twenty.
+ * so moving the site is one edit.
  */
 export const origin = "https://spotless.pages.dev";
 
