@@ -7,12 +7,14 @@ import {
 } from "motion/react";
 import { useEffect, useEffectEvent } from "react";
 import {
+  Link,
   useLocation,
   useNavigate,
   useNavigationType,
   useParams,
 } from "react-router";
 import { siteMeta } from "@/data/site.ts";
+import type { Work } from "@/data/types.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
 import { FLIGHT } from "@/lib/motion.ts";
 import { type Step, stepOf } from "@/lib/shelf.ts";
@@ -20,6 +22,7 @@ import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Cover } from "@/ui/Cover.tsx";
 import { Doorway, EdgeChip } from "@/ui/Doorway.tsx";
+import { Icon } from "@/ui/Icon.tsx";
 import { NotFound } from "../NotFound.tsx";
 
 /** A work's room: the sky eases to its night and dims; the room is lit
@@ -204,9 +207,46 @@ function Room({ entry }: { entry: WorkEntry }) {
               </dl>
             </aside>
           ) : null}
+
+          <nav
+            aria-label="Shelf"
+            className="enter mt-16 grid grid-cols-2 gap-x-6 md:hidden"
+            style={at(250 + work.review.length * 50)}
+          >
+            {prev ? <ShelfLink step={-1} work={prev.work} /> : null}
+            {next ? <ShelfLink step={1} work={next.work} /> : null}
+          </nav>
         </article>
       </motion.div>
     </main>
+  );
+}
+
+/**
+ * A neighboring work at the foot of the reading: where a narrow screen has
+ * no edge for a chip to stand on, the shelf is walked from here.
+ */
+function ShelfLink({ step, work }: { step: 1 | -1; work: Work }) {
+  const onward = step === 1;
+  return (
+    <Link
+      to={`/works/${work.slug}`}
+      replace
+      state={{ step }}
+      className={`flex flex-col gap-1 ${onward ? "col-start-2 items-end text-right" : "items-start"}`}
+    >
+      <span
+        className={`flex items-center gap-1.5 font-mono text-caption text-hoshi ${onward ? "flex-row-reverse" : ""}`}
+      >
+        <Icon>
+          {onward ? <path d="M9 6l6 6-6 6" /> : <path d="M15 18l-6-6 6-6" />}
+        </Icon>
+        {onward ? "Next" : "Previous"}
+      </span>
+      <span lang={work.lang} className="text-body text-balance">
+        <span className="link-draw">{work.title}</span>
+      </span>
+    </Link>
   );
 }
 

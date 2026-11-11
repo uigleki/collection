@@ -218,13 +218,15 @@ body {
     100% 1px;
   transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.link-draw:focus-visible {
+.link-draw:focus-visible,
+a:focus-visible .link-draw {
   background-size:
     100% 1px,
     100% 1px;
 }
 @media (hover: hover) {
-  .link-draw:hover {
+  .link-draw:hover,
+  a:hover .link-draw {
     background-size:
       100% 1px,
       100% 1px;

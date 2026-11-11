@@ -94,6 +94,7 @@ Contrast floor: WCAG AA (4.5:1 body, 3:1 large) in BOTH themes.
 - 間 (ma): interludes between media are near-empty on purpose.
 - Fixtures speak one glass-chip language at the four corners and edges: theme (top-right), back (top-left), neighbors (mid-edges), back-to-top (bottom-right, appears a viewport deep).
 - Rooms behave like lightboxes: Escape leaves; on wide screens the empty margins are clickable exits; prev/next walk the WHOLE shelf in reading order — by chip, by arrow key, or by carrying the room with a finger.
+  A narrow screen has no edge for a neighbor's chip to stand on, so there the two neighbors close the reading as links, named in full.
 
 ## Components
 
@@ -115,7 +116,7 @@ Do:
 
 - One spring per reason something moves (`src/lib/motion.ts`), shared by the script and the CSS.
 - Native scroll, never a scroll library, and the reader's scroll is never held.
-  A page returned to opens where it was left.
+  A page returned to opens where it was left; one opened by a link opens at its top.
 - What the scroll reveals, the scroll draws: the reader's position is the timeline, and scrolling back reverses it.
   Where the browser cannot, the page simply stands.
 - Animate only what the compositor can carry — transform and opacity.

@@ -39,7 +39,11 @@ export function Stage() {
   if (drawn && cut !== location.key) setCut(location.key);
 
   return (
-    <Handover pathname={location.pathname} still={drawn}>
+    <Handover
+      pathname={location.pathname}
+      returned={type === "POP"}
+      still={drawn}
+    >
       <AnimatePresence key={cut} custom={stepOf(location, type)}>
         <Scene
           key={location.pathname}
@@ -144,6 +148,8 @@ interface Moment {
  */
 class Handover extends Component<{
   pathname: string;
+  /** reached through history, not by a link: it opens where it was left */
+  returned: boolean;
   still: boolean;
   children: ReactNode;
 }> {
@@ -175,7 +181,7 @@ class Handover extends Component<{
         });
     }
     window.scrollTo({
-      top: restingPlace(this.props.pathname),
+      top: this.props.returned ? restingPlace(this.props.pathname) : 0,
       behavior: "instant",
     });
     land(

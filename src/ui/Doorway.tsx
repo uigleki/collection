@@ -77,8 +77,8 @@ export function EdgeChip({
 }) {
   const { title, lang } = work;
   const edge = side === "prev" ? "left-5 flex-row" : "right-5 flex-row-reverse";
-  // Hidden on touch-sized screens: there the shelf is walked by swiping,
-  // and a mid-height chip would sit on top of the reading column.
+  // A mid-height chip would sit on top of a narrow screen's reading column:
+  // there the neighbors stand at the reading's foot (WorkRoom.tsx).
   return (
     <div
       className={`group/edge fixed top-1/2 z-50 hidden -translate-y-1/2 items-center gap-3 md:flex ${edge}`}
