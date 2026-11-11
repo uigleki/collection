@@ -41,8 +41,8 @@ describe("parseReadme", () => {
     );
   });
 
-  it("reads each medium as a shelf of titles, in order, without its emoji", () => {
-    expect(readme.shelves).toEqual([
+  it("reads each medium as a group of titles, in order, without its emoji", () => {
+    expect(readme.groups).toEqual([
       { medium: "Anime", titles: ["化物語", "偽物語"] },
       { medium: "Games", titles: ["To the Moon"] },
     ]);

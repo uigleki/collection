@@ -5,7 +5,7 @@ import { renderEmphasis } from "@/lib/emphasis.tsx";
 import { FULL_NIGHT } from "@/lib/moon.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
-import { Reading } from "@/ui/Reading.tsx";
+import { TextPage } from "@/ui/TextPage.tsx";
 
 export function Why() {
   const h1 = usePage(`${meta.title} — ${siteMeta.title}`);
@@ -13,8 +13,8 @@ export function Why() {
   useSky({ dim: 0.75, night: FULL_NIGHT });
 
   return (
-    <Reading>
-      <p className="enter text-center text-lead text-hoshi italic">
+    <TextPage>
+      <p className="enter text-center text-lead text-muted italic">
         {meta.description}
       </p>
 
@@ -43,16 +43,16 @@ export function Why() {
           <h2 className="max-w-xl text-title font-light tracking-tight">
             {section.title}
           </h2>
-          <p className="mt-4 text-body text-hoshi">{section.intro}</p>
+          <p className="mt-4 text-body text-muted">{section.intro}</p>
 
           <div className="mt-12 space-y-14">
             {section.concepts.map((concept) => (
-              <article key={concept.title} className="arrive">
+              <article key={concept.title} className="reveal">
                 <h3 className="text-lead font-medium">{concept.title}</h3>
                 <div className="mt-4 space-y-4">
                   {concept.explanation.map((item) =>
                     typeof item === "string" ? (
-                      <p key={item} className="text-body text-hoshi">
+                      <p key={item} className="text-body text-muted">
                         {renderEmphasis(item)}
                       </p>
                     ) : (
@@ -64,7 +64,7 @@ export function Why() {
             ))}
           </div>
 
-          <p className="arrive-fade mt-14 text-center text-lead text-hoshi italic">
+          <p className="reveal-fade mt-14 text-center text-lead text-muted italic">
             {section.outro}
           </p>
         </section>
@@ -72,23 +72,23 @@ export function Why() {
 
       <div className="mt-28 space-y-6 md:mt-36">
         {data.closing.map((line) => (
-          <p key={line} className="arrive text-lead leading-relaxed">
+          <p key={line} className="reveal text-lead leading-relaxed">
             {renderEmphasis(line)}
           </p>
         ))}
       </div>
 
-      <p className="mt-24 border-t border-border/60 pt-6 text-center text-caption text-hoshi italic">
+      <p className="mt-24 border-t border-border/60 pt-6 text-center text-caption text-muted italic">
         {meta.footer}
       </p>
-    </Reading>
+    </TextPage>
   );
 }
 
 function LabeledPoint({ point }: { point: ReviewPoint }) {
   return (
-    <p className="text-body text-hoshi">
-      <strong className="font-medium text-tsuki">{point.label}: </strong>
+    <p className="text-body text-muted">
+      <strong className="font-medium text-foreground">{point.label}: </strong>
       {renderEmphasis(point.text)}
     </p>
   );

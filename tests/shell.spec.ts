@@ -129,7 +129,7 @@ test.describe("built site", () => {
  * that can be seconds before the script has been parsed.
  */
 test.describe("prerendered pages", () => {
-  const WRITTEN = [
+  const PRERENDERED = [
     ["/", /^Perfect Collection$/],
     ["/works/bakemonogatari", /^化物語 — /],
     ["/works/kantoku", /^カントク — /],
@@ -141,15 +141,15 @@ test.describe("prerendered pages", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
 
-    const art = page.waitForResponse(/\/assets\/bakemonogatari-[^/]*\.webp$/);
+    const cover = page.waitForResponse(/\/assets\/bakemonogatari-[^/]*\.webp$/);
     await page.goto("/works/bakemonogatari");
-    expect((await art).ok()).toBe(true);
+    expect((await cover).ok()).toBe(true);
     await expect(page.getByAltText("Cover art of 化物語")).toHaveCSS(
       "opacity",
       "1",
     );
 
-    for (const [path, title] of WRITTEN) {
+    for (const [path, title] of PRERENDERED) {
       await page.goto(path);
       await expect(page.locator("h1")).toBeVisible();
       await expect(page).toHaveTitle(title);
@@ -157,73 +157,76 @@ test.describe("prerendered pages", () => {
     await context.close();
   });
 
-  for (const reader of [
+  for (const settings of [
     { theme: "dark", reducedMotion: "no-preference" },
     { theme: "light", reducedMotion: "reduce" },
   ] as const) {
-    test(`hydrate in place with no React errors (${reader.theme})`, async ({
+    test(`hydrate in place with no React errors (${settings.theme})`, async ({
       page,
     }) => {
       const errors: string[] = [];
       // Only React's errors count: the missing page is requested on
       // purpose, and the browser logs its 404 as a console error
-      const note = (said: string) => {
-        if (/react|hydrat/i.test(said)) errors.push(said);
+      const record = (text: string) => {
+        if (/react|hydrat/i.test(text)) errors.push(text);
       };
-      page.on("pageerror", (e) => note(String(e)));
+      page.on("pageerror", (e) => record(String(e)));
       page.on("console", (m) => {
-        if (m.type() === "error") note(m.text());
+        if (m.type() === "error") record(m.text());
       });
-      await page.emulateMedia({ reducedMotion: reader.reducedMotion });
+      await page.emulateMedia({ reducedMotion: settings.reducedMotion });
       await page.addInitScript((theme) => {
         localStorage.setItem("theme", theme);
-      }, reader.theme);
+      }, settings.theme);
 
       // The page's scripts are held back until released, so the page can be
       // inspected before hydration.
-      let waiting: (() => void)[] = [];
+      let pending: (() => void)[] = [];
       let held = true;
-      const letIn = () => {
+      const releaseScripts = () => {
         held = false;
-        for (const open of waiting) open();
-        waiting = [];
+        for (const resume of pending) resume();
+        pending = [];
       };
       await page.route(/\/assets\/[^/]*\.js$/, async (route) => {
-        if (held) await new Promise<void>((open) => waiting.push(open));
+        if (held) await new Promise<void>((resume) => pending.push(resume));
         await route.continue();
       });
 
-      type Marked = HTMLElement & { written?: boolean };
-      const adopted = (h1: Marked) =>
+      type Marked = HTMLElement & { marked?: boolean };
+      const hydrated = (h1: Marked) =>
         Object.keys(h1).some((key) => key.startsWith("__react"));
 
-      for (const [path] of [...WRITTEN, ["/works/does-not-exist"] as const]) {
+      for (const [path] of [
+        ...PRERENDERED,
+        ["/works/does-not-exist"] as const,
+      ]) {
         held = true;
         // not "load": the scripts are being held back, and load waits on them
         await page.goto(path, { waitUntil: "commit" });
         const h1 = page.locator("h1");
         await expect(h1).toBeVisible();
-        expect(await h1.evaluate(adopted)).toBe(false);
+        expect(await h1.evaluate(hydrated)).toBe(false);
         await h1.evaluate((el: Marked) => {
-          el.written = true;
+          el.marked = true;
         });
 
-        letIn();
-        await expect.poll(() => h1.evaluate(adopted)).toBe(true);
-        // React adopted the existing h1 element instead of replacing it
-        expect(await h1.evaluate((el: Marked) => el.written)).toBe(true);
+        releaseScripts();
+        await expect.poll(() => h1.evaluate(hydrated)).toBe(true);
+        // React hydrated the existing h1 element instead of replacing it
+        expect(await h1.evaluate((el: Marked) => el.marked)).toBe(true);
       }
       expect(errors).toEqual([]);
     });
   }
 
   test("declare their charset within the first 1024 bytes", () => {
-    for (const [path] of WRITTEN) {
+    for (const [path] of PRERENDERED) {
       const file = path === "/" ? "index.html" : `${path.slice(1)}.html`;
       // The HTML spec has a browser determine the encoding from a page's
       // first 1024 bytes, before parsing them
-      const opening = Buffer.from(dist(file)).subarray(0, 1024);
-      expect(opening.toString("latin1"), file).toMatch(/<meta charset=/i);
+      const firstBytes = Buffer.from(dist(file)).subarray(0, 1024);
+      expect(firstBytes.toString("latin1"), file).toMatch(/<meta charset=/i);
     }
   });
 

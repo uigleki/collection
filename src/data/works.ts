@@ -8,7 +8,7 @@ export const { categories, music } = collection;
 /**
  * A track's full name. The title alone is not unique (two different artists
  * each have a song called LIFE), so the performer and the title together
- * identify a track: as the list key in MusicWater, and in the test that
+ * identify a track: as the list key in MusicSection, and in the test that
  * checks no two tracks share a name.
  */
 export const trackName = (track: Track) => `${track.artist} · ${track.title}`;

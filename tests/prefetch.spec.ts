@@ -40,9 +40,9 @@ test("a failed prefetch raises no page error", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.route(/\/assets\/Why-[^/]*\.js$/, (route) => route.abort());
-  const refused = page.waitForEvent("requestfailed");
+  const failed = page.waitForEvent("requestfailed");
   await page.goto("/works/bakemonogatari");
-  await refused;
+  await failed;
   await page.waitForLoadState("networkidle");
   expect(errors).toEqual([]);
 });

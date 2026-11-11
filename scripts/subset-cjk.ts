@@ -8,7 +8,7 @@
  * means one codepoint (e.g. 直, 骨, 今) has different correct shapes in
  * Chinese and Japanese. The site shows titles in their original language,
  * so a Japanese title must not render in Simplified-Chinese letterforms:
- *   - CollectionCJK    ← Noto Sans CJK SC  (default; Chinese text, e.g. Koan)
+ *   - CollectionCJK    ← Noto Sans CJK SC  (default; Chinese text: song titles)
  *   - CollectionCJK-JP ← Noto Sans CJK JP  (served to :lang(ja) nodes — titles)
  *
  * Only glyphs used on the site are kept (collected from src/ and the

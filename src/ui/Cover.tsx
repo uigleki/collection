@@ -1,13 +1,13 @@
 import { useMemo, useState, useSyncExternalStore } from "react";
 import type { Work } from "@/data/types.ts";
 import { coverFor } from "@/lib/covers.ts";
-import { aboard } from "@/lib/flight.ts";
+import { trackCover } from "@/lib/coverTransition.ts";
 
 interface CoverProps {
   work: Work;
   /**
    * animate between pages, so the home row's cover and the work page's
-   * cover appear as one moving element (flight.ts)
+   * cover appear as one moving element (coverTransition.ts)
    */
   morph?: boolean;
   /** eager-load with high fetch priority (a work page's cover is its LCP) */
@@ -17,11 +17,11 @@ interface CoverProps {
 
 const shown = new Set<string>();
 
-const never = () => () => {};
+const noopSubscribe = () => () => {};
 /** True while prerendering and while hydrating; false in other renders. */
-const useWritten = () =>
+const usePrerendered = () =>
   useSyncExternalStore(
-    never,
+    noopSubscribe,
     () => false,
     () => true,
   );
@@ -47,12 +47,12 @@ export function Cover({
   // browser started loading it before this code ran and may have finished
   // (a load event that already fired is never delivered), and an image the
   // reader can already see must not be hidden again.
-  const written = useWritten();
+  const prerendered = usePrerendered();
   const [loaded, setLoaded] = useState(
-    () => !!cover && (written || shown.has(cover.url)),
+    () => !!cover && (prerendered || shown.has(cover.url)),
   );
-  const flies = useMemo(
-    () => (morph ? aboard(slug) : undefined),
+  const coverRef = useMemo(
+    () => (morph ? trackCover(slug) : undefined),
     [morph, slug],
   );
 
@@ -60,13 +60,13 @@ export function Cover({
     return (
       <div style={{ aspectRatio: "3 / 4" }} className={`relative ${className}`}>
         <div
-          ref={flies}
-          className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-sm border border-border/70 bg-mizu"
+          ref={coverRef}
+          className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-sm border border-border/70 bg-surface"
         >
           <span
             lang={lang}
             aria-hidden="true"
-            className="select-none text-6xl font-light text-hoshi/50"
+            className="select-none text-6xl font-light text-muted/50"
           >
             {[...title][0]}
           </span>
@@ -81,8 +81,11 @@ export function Cover({
       className={`relative ${className}`}
     >
       {/* the element that animates between pages; the parent box keeps its
-          place in the layout (flight.ts) */}
-      <div ref={flies} className="absolute inset-0 overflow-hidden rounded-sm">
+          place in the layout (coverTransition.ts) */}
+      <div
+        ref={coverRef}
+        className="absolute inset-0 overflow-hidden rounded-sm"
+      >
         <img
           src={cover.placeholder}
           alt=""

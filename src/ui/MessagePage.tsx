@@ -4,7 +4,7 @@ import type { ReactNode, RefObject } from "react";
  * Layout for the not-found page and the render-error page: a centered
  * heading, one line of explanation, and a link back (the children).
  */
-export function Standstill({
+export function MessagePage({
   h1,
   title,
   message,
@@ -27,7 +27,7 @@ export function Standstill({
       >
         {title}
       </h1>
-      <p className="mt-4 text-body text-hoshi">{message}</p>
+      <p className="mt-4 text-body text-muted">{message}</p>
       {children}
     </main>
   );

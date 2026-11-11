@@ -3,7 +3,7 @@ import { allWorks } from "@/data/works.ts";
 import { coverFor } from "@/lib/covers.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
-import { Reading } from "@/ui/Reading.tsx";
+import { TextPage } from "@/ui/TextPage.tsx";
 
 // Built by iterating allWorks in collection order and looking up each work's
 // cover, not by reading the generated covers file. A cover the fetch script
@@ -26,7 +26,7 @@ export function Credits() {
   useSky({ dim: 0.75 });
 
   return (
-    <Reading>
+    <TextPage>
       <h1
         ref={h1}
         tabIndex={-1}
@@ -37,7 +37,7 @@ export function Credits() {
 
       <section className="mt-14">
         <h2 className="text-lead font-medium">Cover art</h2>
-        <p className="mt-3 text-body text-hoshi">
+        <p className="mt-3 text-body text-muted">
           Shown in true color, unfiltered, at reduced size, linking to each
           source — the art belongs to its creators.
         </p>
@@ -57,7 +57,7 @@ export function Credits() {
               <a
                 href={cover.sourceUrl}
                 rel="noopener"
-                className="link-draw justify-self-start text-caption text-hoshi hover:text-tsuki"
+                className="link-draw justify-self-start text-caption text-muted hover:text-foreground"
               >
                 {cover.credit} ↗
               </a>
@@ -68,7 +68,7 @@ export function Credits() {
 
       <section className="mt-14">
         <h2 className="text-lead font-medium">Letterforms</h2>
-        <ul className="mt-4 space-y-2 text-body text-hoshi">
+        <ul className="mt-4 space-y-2 text-body text-muted">
           <li>
             Latin — Ubuntu, by Dalton Maag (Ubuntu Font Licence), self-hosted.
           </li>
@@ -82,7 +82,7 @@ export function Credits() {
 
       <section className="mt-14">
         <h2 className="text-lead font-medium">Machinery</h2>
-        <p className="mt-4 text-body text-hoshi">
+        <p className="mt-4 text-body text-muted">
           React, Vite, Tailwind CSS, Motion, OGL — one WebGL sky, native scroll,
           no trackers, no analytics, no cookies.
         </p>
@@ -90,12 +90,12 @@ export function Credits() {
 
       <section className="mt-14">
         <h2 className="text-lead font-medium">License</h2>
-        <p className="mt-4 text-body text-hoshi">
+        <p className="mt-4 text-body text-muted">
           Text and curation{" "}
           <a
             href="https://creativecommons.org/licenses/by-sa/4.0/"
             rel="license noopener"
-            className="link-draw hover:text-tsuki"
+            className="link-draw hover:text-foreground"
           >
             CC BY-SA 4.0
           </a>
@@ -103,7 +103,7 @@ export function Credits() {
           <a
             href="https://www.gnu.org/licenses/agpl-3.0.html"
             rel="license noopener"
-            className="link-draw hover:text-tsuki"
+            className="link-draw hover:text-foreground"
           >
             AGPL-3.0-only
           </a>
@@ -111,7 +111,7 @@ export function Credits() {
           <a
             href="https://github.com/uigleki/collection"
             rel="noopener"
-            className="link-draw hover:text-tsuki"
+            className="link-draw hover:text-foreground"
           >
             source on GitHub ↗
           </a>
@@ -120,7 +120,7 @@ export function Credits() {
           immediately.
         </p>
       </section>
-    </Reading>
+    </TextPage>
   );
 }
 

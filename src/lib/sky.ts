@@ -1,6 +1,6 @@
 import { useIsPresent } from "motion/react";
 import { useEffect, useRef } from "react";
-import { sky } from "@/scene/signal.ts";
+import { sky } from "@/scene/skyState.ts";
 
 type Cross = (visible: boolean) => void;
 
@@ -72,50 +72,50 @@ export function useNight<T extends HTMLElement>(night: number) {
  * Brightens the moon's reflection on the water while the music section is
  * in the middle of the viewport.
  */
-export function useGlade<T extends HTMLElement>() {
+export function useReflectionOnly<T extends HTMLElement>() {
   return useBand<T>("-30% 0px -30% 0px", (visible) => {
-    sky.glade = visible ? 1 : 0;
+    sky.reflectionOnly = visible ? 1 : 0;
   });
 }
 
-export interface SkyClaim {
+export interface SkyRequest {
   /** how far the sky is dimmed behind the page content, 0..1 */
   dim?: number | undefined;
   /** the night the page sets when it becomes the current page */
   night?: number | undefined;
-  /** whether scroll progress can set the full moon (see signal.ts) */
-  waxWithProgress?: boolean | undefined;
+  /** whether scroll progress can set the full moon (see skyState.ts) */
+  fullMoonByScroll?: boolean | undefined;
 }
 
-// The claims of every mounted page, oldest first. Pages overlap during a
-// page change, and the outgoing page releases its claim after the incoming
-// page has made its own. So the newest claim applies, not the most recent
+// The requests of every mounted page, oldest first. Pages overlap during a
+// page change, and the outgoing page removes its request after the incoming
+// page has added its own. So the newest request applies, not the most recent
 // call.
-const claims: SkyClaim[] = [];
+const requests: SkyRequest[] = [];
 
-function settle() {
-  const { dim = 0, night, waxWithProgress = false } = claims.at(-1) ?? {};
+function applyNewest() {
+  const { dim = 0, night, fullMoonByScroll = false } = requests.at(-1) ?? {};
   sky.dim = dim;
-  sky.waxWithProgress = waxWithProgress;
+  sky.fullMoonByScroll = fullMoonByScroll;
   if (night !== undefined) sky.targetNight = night;
 }
 
-/** Register a claim on the sky; the returned function releases it. */
-export function claimSky(claim: SkyClaim): () => void {
-  const own = { ...claim };
-  claims.push(own);
-  settle();
+/** Add a page's request; the returned function removes it. */
+export function requestSky(request: SkyRequest): () => void {
+  const own = { ...request };
+  requests.push(own);
+  applyNewest();
   return () => {
-    claims.splice(claims.indexOf(own), 1);
-    settle();
+    requests.splice(requests.indexOf(own), 1);
+    applyNewest();
   };
 }
 
-/** A route's claim on the sky, held while it is the current page. */
-export function useSky({ dim, night, waxWithProgress }: SkyClaim) {
+/** A route's request for the sky, kept while it is the current page. */
+export function useSky({ dim, night, fullMoonByScroll }: SkyRequest) {
   const present = useIsPresent();
   useEffect(
-    () => (present ? claimSky({ dim, night, waxWithProgress }) : undefined),
-    [present, dim, night, waxWithProgress],
+    () => (present ? requestSky({ dim, night, fullMoonByScroll }) : undefined),
+    [present, dim, night, fullMoonByScroll],
   );
 }

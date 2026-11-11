@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("screenshot: top of the home page", async ({ page }) => {
   await page.goto("/?gl");
   await page.waitForTimeout(900);
-  await expect(page).toHaveScreenshot("hero-night.png", {
+  await expect(page).toHaveScreenshot("hero-dark.png", {
     maxDiffPixelRatio: 0.02,
   });
 });
@@ -20,7 +20,7 @@ test("screenshot: top of the home page", async ({ page }) => {
 test("screenshot: 化物語 work page", async ({ page }) => {
   await page.goto("/works/bakemonogatari?gl");
   await page.waitForTimeout(1200);
-  await expect(page).toHaveScreenshot("room-bakemonogatari.png", {
+  await expect(page).toHaveScreenshot("work-page-bakemonogatari.png", {
     maxDiffPixelRatio: 0.02,
   });
 });

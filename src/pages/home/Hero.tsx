@@ -1,9 +1,9 @@
 import type { RefObject } from "react";
-import { couplets } from "@/data/why.ts";
+import { displayLines } from "@/data/why.ts";
 import { useNight } from "@/lib/sky.ts";
 
 // The essay's opening question, verbatim from docs/why.md.
-const [questionA, questionB] = couplets.opening;
+const [questionA, questionB] = displayLines.opening;
 
 /**
  * One line of text that slides up from behind its own overflow mask (.rise)
@@ -42,7 +42,7 @@ export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
           <Line at={140}>Collection</Line>
         </h1>
 
-        <p className="mt-6 max-w-xl text-lead text-hoshi">
+        <p className="mt-6 max-w-xl text-lead text-muted">
           <Line at={280}>{questionA}</Line>
           <Line at={380}>{questionB}</Line>
         </p>

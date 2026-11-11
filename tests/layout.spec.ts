@@ -41,8 +41,8 @@ test("narrow touch screen: bottom links go to the previous/next work", async ({
   page,
 }) => {
   await page.goto("/works/nisemonogatari");
-  const shelf = page.getByRole("navigation", { name: "Shelf" });
-  const next = shelf.getByRole("link", { name: /^Next\b.*ハイスコアガール$/ });
+  const nav = page.getByRole("navigation", { name: "Shelf" });
+  const next = nav.getByRole("link", { name: /^Next\b.*ハイスコアガール$/ });
   await next.scrollIntoViewIfNeeded();
   const target = await next.boundingBox();
   expect(target?.height).toBeGreaterThanOrEqual(44);
@@ -53,7 +53,7 @@ test("narrow touch screen: bottom links go to the previous/next work", async ({
 
   // the previous work page was left scrolled to its bottom; opening it again
   // by a link is a new visit, and a work page opens at its top
-  await shelf.getByRole("link", { name: /^Previous\b.*偽物語$/ }).tap();
+  await nav.getByRole("link", { name: /^Previous\b.*偽物語$/ }).tap();
   await expect(heading(page, "偽物語")).toBeVisible();
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
 });
@@ -62,7 +62,7 @@ test("the first work has a bottom next link and no previous link", async ({
   page,
 }) => {
   await page.goto("/works/bakemonogatari");
-  const shelf = page.getByRole("navigation", { name: "Shelf" });
-  await expect(shelf.getByRole("link", { name: /^Next\b/ })).toHaveCount(1);
-  await expect(shelf.getByRole("link", { name: /^Previous\b/ })).toHaveCount(0);
+  const nav = page.getByRole("navigation", { name: "Shelf" });
+  await expect(nav.getByRole("link", { name: /^Next\b/ })).toHaveCount(1);
+  await expect(nav.getByRole("link", { name: /^Previous\b/ })).toHaveCount(0);
 });

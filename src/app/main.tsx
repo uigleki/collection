@@ -8,8 +8,8 @@ import { StrictMode, startTransition } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { createBrowserRouter, matchRoutes } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { trackBrowserTransitions } from "./PageTransition.tsx";
 import { prefetchPages, routes } from "./routes.tsx";
-import { noteDrawnChanges } from "./Stage.tsx";
 
 const rootEl = document.getElementById("root");
 if (!rootEl) throw new Error("#root missing");
@@ -23,7 +23,7 @@ for (const { route } of matchRoutes(routes, window.location) ?? []) {
     Object.assign(route, await route.lazy(), { lazy: undefined });
 }
 
-noteDrawnChanges();
+trackBrowserTransitions();
 const app = (
   <StrictMode>
     <RouterProvider router={createBrowserRouter(routes)} />

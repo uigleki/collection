@@ -1,13 +1,13 @@
 import { music, trackName } from "@/data/works.ts";
-import { useGlade } from "@/lib/sky.ts";
-import { Interlude } from "./Interlude.tsx";
+import { useReflectionOnly } from "@/lib/sky.ts";
+import { CategoryHeading } from "./CategoryHeading.tsx";
 
-export function MusicWater() {
-  const ref = useGlade<HTMLElement>();
+export function MusicSection() {
+  const ref = useReflectionOnly<HTMLElement>();
 
   return (
     <section ref={ref} aria-label="Music" className="relative py-20 md:py-28">
-      <Interlude
+      <CategoryHeading
         name="Music"
         count={music.length}
         className="mb-14 min-h-[24vh]"
@@ -18,12 +18,12 @@ export function MusicWater() {
           <li
             key={trackName(track)}
             style={{ "--from": "14px" } as React.CSSProperties}
-            className="arrive grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
+            className="reveal grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
           >
             <span className="text-body">
               <span
                 lang={track.artistLang}
-                className="font-mono text-caption text-hoshi"
+                className="font-mono text-caption text-muted"
               >
                 {track.artist}
                 <span aria-hidden="true" className="mx-2">
@@ -34,7 +34,7 @@ export function MusicWater() {
                 {track.title}
               </span>
             </span>
-            <span className="text-caption text-hoshi italic md:text-body">
+            <span className="text-caption text-muted italic md:text-body">
               {track.subtitle}
             </span>
           </li>

@@ -6,7 +6,7 @@ export const { meta, data } = why;
 /**
  * The essay's first and last sentences, each split into the two masked
  * display lines the home page shows it on: the first sentence in Hero, the
- * last in DawnClose.
+ * last in ClosingSection.
  *
  * The split point is written here, not found at runtime by searching the
  * sentence for a comma or a question mark. The essay's punctuation may be
@@ -14,7 +14,7 @@ export const { meta, data } = why;
  * the site breaks. why.test.ts checks each pair against the sentence it
  * came from, so the text stays verbatim.
  */
-export const couplets = {
+export const displayLines = {
   opening: [
     "If we're here to experience beauty,",
     "what beauty is worth our finite time?",

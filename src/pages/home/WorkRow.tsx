@@ -7,7 +7,7 @@ import { Cover } from "@/ui/Cover.tsx";
 
 /** One work; the whole row is a single link. While the row is in the
  * middle of the viewport, its `night` is the sky's target (useNight). */
-export function NightRow({ entry }: { entry: WorkEntry }) {
+export function WorkRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const ref = useNight<HTMLElement>(entry.night);
   const { work, category, ordinal } = entry;
@@ -39,7 +39,7 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
     <article
       ref={ref}
       style={{ "--from": "28px" } as React.CSSProperties}
-      className="arrive py-16 first:pt-0 md:py-20"
+      className="reveal py-16 first:pt-0 md:py-20"
     >
       <Link
         to={`/works/${slug}`}
@@ -71,17 +71,17 @@ export function NightRow({ entry }: { entry: WorkEntry }) {
               <span
                 className="underline-grow"
                 style={{
-                  backgroundImage: `linear-gradient(color-mix(in oklab, ${accent} 70%, var(--color-tsuki)), color-mix(in oklab, ${accent} 70%, var(--color-tsuki)))`,
+                  backgroundImage: `linear-gradient(color-mix(in oklab, ${accent} 70%, var(--color-foreground)), color-mix(in oklab, ${accent} 70%, var(--color-foreground)))`,
                 }}
               >
                 {title}
               </span>
             </span>
           </h3>
-          <p className="mt-3 text-lead text-hoshi italic transition-colors duration-500 group-hover:text-tsuki">
+          <p className="mt-3 text-lead text-muted italic transition-colors duration-500 group-hover:text-foreground">
             {work.subtitle}
           </p>
-          <p className="mt-5 font-mono text-caption text-hoshi tabular-nums">
+          <p className="mt-5 font-mono text-caption text-muted tabular-nums">
             {category} {String(ordinal).padStart(2, "0")}
           </p>
         </div>

@@ -1,6 +1,6 @@
 import type { Location, NavigationType } from "react-router";
 
-/** Direction of a page change along the shelf: previous, none, next. */
+/** Direction of a page change between works: previous, none, next. */
 export type Step = -1 | 0 | 1;
 
 /**

@@ -10,7 +10,7 @@ test("in development mode the cover transition still runs", async ({
   await page.goto("/");
   const row = page.getByRole("link", { name: "化物語 — open" });
   await row.scrollIntoViewIfNeeded();
-  const aloft = await page.evaluate(async () => {
+  const overlayFrames = await page.evaluate(async () => {
     document
       .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
       ?.click();
@@ -25,30 +25,32 @@ test("in development mode the cover transition still runs", async ({
     return frames;
   });
   // the transition lasts a few hundred milliseconds, not a single frame
-  expect(aloft).toBeGreaterThan(8);
+  expect(overlayFrames).toBeGreaterThan(8);
 });
 
 test("in development mode the first page shows without a fade-in", async ({
   page,
 }) => {
   await page.addInitScript(() => {
-    const seen: number[] = [];
-    (window as unknown as { __seen: number[] }).__seen = seen;
-    const look = () => {
-      const scene = document.querySelector("[data-scene]");
-      if (scene) seen.push(Number(getComputedStyle(scene).opacity));
-      if (seen.length < 30) requestAnimationFrame(look);
+    const opacities: number[] = [];
+    (window as unknown as { __opacities: number[] }).__opacities = opacities;
+    const sample = () => {
+      const layer = document.querySelector("[data-page-layer]");
+      if (layer) opacities.push(Number(getComputedStyle(layer).opacity));
+      if (opacities.length < 30) requestAnimationFrame(sample);
     };
-    requestAnimationFrame(look);
+    requestAnimationFrame(sample);
   });
   await page.goto("/");
   await expect
     .poll(() =>
-      page.evaluate(() => (window as unknown as { __seen: number[] }).__seen),
+      page.evaluate(
+        () => (window as unknown as { __opacities: number[] }).__opacities,
+      ),
     )
     .toHaveLength(30);
-  const seen = await page.evaluate(
-    () => (window as unknown as { __seen: number[] }).__seen,
+  const opacities = await page.evaluate(
+    () => (window as unknown as { __opacities: number[] }).__opacities,
   );
-  expect(Math.min(...seen)).toBe(1);
+  expect(Math.min(...opacities)).toBe(1);
 });

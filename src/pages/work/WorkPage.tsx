@@ -16,24 +16,24 @@ import {
 import { siteMeta } from "@/data/site.ts";
 import type { Work } from "@/data/types.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
-import { FLIGHT } from "@/lib/motion.ts";
-import { type Step, stepOf } from "@/lib/shelf.ts";
+import { MOVE } from "@/lib/motion.ts";
 import { useSky } from "@/lib/sky.ts";
+import { type Step, stepOf } from "@/lib/step.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Cover } from "@/ui/Cover.tsx";
-import { Doorway, EdgeChip } from "@/ui/Doorway.tsx";
 import { Icon } from "@/ui/Icon.tsx";
+import { EdgeButton, PageNav } from "@/ui/PageNav.tsx";
 import { NotFound } from "../NotFound.tsx";
 
-export function WorkRoom() {
+export function WorkPage() {
   const { slug = "" } = useParams();
   const entry = workBySlug.get(slug);
 
   if (!entry) return <NotFound />;
-  return <Room key={slug} entry={entry} />;
+  return <WorkPageBody key={slug} entry={entry} />;
 }
 
-function Room({ entry }: { entry: WorkEntry }) {
+function WorkPageBody({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const navigate = useNavigate();
   const { work, night, category, ordinal } = entry;
@@ -43,8 +43,8 @@ function Room({ entry }: { entry: WorkEntry }) {
 
   useSky({ dim: 1, night });
 
-  const arrivedBy = stepOf(useLocation(), useNavigationType());
-  const walk = (step: Step) => {
+  const entryStep = stepOf(useLocation(), useNavigationType());
+  const goToNeighbor = (step: Step) => {
     const to = step === 1 ? next : prev;
     if (to)
       navigate(`/works/${to.work.slug}`, { replace: true, state: { step } });
@@ -56,8 +56,8 @@ function Room({ entry }: { entry: WorkEntry }) {
   const present = useIsPresent();
   const onKey = useEffectEvent((e: KeyboardEvent) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
-    if (e.key === "ArrowRight") walk(1);
-    if (e.key === "ArrowLeft") walk(-1);
+    if (e.key === "ArrowRight") goToNeighbor(1);
+    if (e.key === "ArrowLeft") goToNeighbor(-1);
   });
   useEffect(() => {
     if (!present) return;
@@ -82,7 +82,7 @@ function Room({ entry }: { entry: WorkEntry }) {
     const flick = Math.abs(velocity.x) > 500 && Math.abs(offset.x) > 40;
     if (Math.abs(offset.x) < far && !flick) return;
     if (Math.sign(velocity.x || offset.x) !== Math.sign(offset.x)) return;
-    walk(offset.x < 0 ? 1 : -1);
+    goToNeighbor(offset.x < 0 ? 1 : -1);
   };
 
   // The article's parts animate in on mount, not on scroll: a work page
@@ -96,25 +96,33 @@ function Room({ entry }: { entry: WorkEntry }) {
       onPointerDown={onPointerDown}
       className="relative mx-auto max-w-6xl touch-pan-y px-5 md:px-12"
     >
-      <Doorway>
+      <PageNav>
         {prev ? (
-          <EdgeChip side="prev" work={prev.work} onClick={() => walk(-1)} />
+          <EdgeButton
+            side="prev"
+            work={prev.work}
+            onClick={() => goToNeighbor(-1)}
+          />
         ) : null}
         {next ? (
-          <EdgeChip side="next" work={next.work} onClick={() => walk(1)} />
+          <EdgeButton
+            side="next"
+            work={next.work}
+            onClick={() => goToNeighbor(1)}
+          />
         ) : null}
-      </Doorway>
+      </PageNav>
 
       {/* Going to the previous or next work slides the page sideways: the
           new page enters from the side of the neighbor that was chosen, and
           the old page leaves on the opposite side. */}
       <motion.div
-        custom={arrivedBy}
-        variants={SHELF}
-        initial={reduced || arrivedBy === 0 ? false : "aside"}
-        animate="here"
-        exit={reduced ? "here" : "gone"}
-        transition={FLIGHT}
+        custom={entryStep}
+        variants={SLIDE}
+        initial={reduced || entryStep === 0 ? false : "enter"}
+        animate="center"
+        exit={reduced ? "center" : "exit"}
+        transition={MOVE}
         drag="x"
         dragListener={false}
         dragControls={drag}
@@ -122,8 +130,8 @@ function Room({ entry }: { entry: WorkEntry }) {
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={{ left: next ? 1 : 0.12, right: prev ? 1 : 0.12 }}
         dragTransition={{
-          bounceStiffness: FLIGHT.stiffness,
-          bounceDamping: FLIGHT.damping,
+          bounceStiffness: MOVE.stiffness,
+          bounceDamping: MOVE.damping,
         }}
         onDragEnd={onDragEnd}
         className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16"
@@ -139,7 +147,7 @@ function Room({ entry }: { entry: WorkEntry }) {
 
         <article className="max-w-2xl pb-10">
           <p
-            className="enter mb-6 font-mono text-caption text-hoshi tabular-nums"
+            className="enter mb-6 font-mono text-caption text-muted tabular-nums"
             style={at(40)}
           >
             {category} {String(ordinal).padStart(2, "0")}
@@ -156,7 +164,7 @@ function Room({ entry }: { entry: WorkEntry }) {
             </span>
           </h1>
 
-          <p className="enter mt-5 text-lead text-hoshi italic" style={at(80)}>
+          <p className="enter mt-5 text-lead text-muted italic" style={at(80)}>
             {work.subtitle}
           </p>
 
@@ -175,12 +183,12 @@ function Room({ entry }: { entry: WorkEntry }) {
                 <dt
                   className="text-body font-medium"
                   style={{
-                    color: `color-mix(in oklab, ${accent} 55%, var(--color-tsuki))`,
+                    color: `color-mix(in oklab, ${accent} 55%, var(--color-foreground))`,
                   }}
                 >
                   {point.label}
                 </dt>
-                <dd className="mt-2 text-body text-hoshi">{point.text}</dd>
+                <dd className="mt-2 text-body text-muted">{point.text}</dd>
               </div>
             ))}
           </dl>
@@ -190,16 +198,16 @@ function Room({ entry }: { entry: WorkEntry }) {
               className="enter mt-14 border-l border-border pl-6"
               style={at(200 + work.review.length * 50)}
             >
-              <h2 className="text-body font-medium text-hoshi">
+              <h2 className="text-body font-medium text-muted">
                 Flaws, stated plainly
               </h2>
               <dl className="mt-5 space-y-6">
                 {work.flaws.map((point) => (
                   <div key={point.label}>
-                    <dt className="text-body font-medium text-hoshi">
+                    <dt className="text-body font-medium text-muted">
                       {point.label}
                     </dt>
-                    <dd className="mt-1.5 text-body text-hoshi">
+                    <dd className="mt-1.5 text-body text-muted">
                       {point.text}
                     </dd>
                   </div>
@@ -213,8 +221,8 @@ function Room({ entry }: { entry: WorkEntry }) {
             className="enter mt-16 grid grid-cols-2 gap-x-6 md:hidden"
             style={at(250 + work.review.length * 50)}
           >
-            {prev ? <ShelfLink step={-1} work={prev.work} /> : null}
-            {next ? <ShelfLink step={1} work={next.work} /> : null}
+            {prev ? <NeighborLink step={-1} work={prev.work} /> : null}
+            {next ? <NeighborLink step={1} work={next.work} /> : null}
           </nav>
         </article>
       </motion.div>
@@ -224,24 +232,24 @@ function Room({ entry }: { entry: WorkEntry }) {
 
 /**
  * A link to the previous or next work, at the end of the article. Shown
- * only on narrow screens, which have no space at the edges for EdgeChip.
+ * only on narrow screens, which have no space at the edges for EdgeButton.
  */
-function ShelfLink({ step, work }: { step: 1 | -1; work: Work }) {
-  const onward = step === 1;
+function NeighborLink({ step, work }: { step: 1 | -1; work: Work }) {
+  const isNext = step === 1;
   return (
     <Link
       to={`/works/${work.slug}`}
       replace
       state={{ step }}
-      className={`flex flex-col gap-1 ${onward ? "col-start-2 items-end text-right" : "items-start"}`}
+      className={`flex flex-col gap-1 ${isNext ? "col-start-2 items-end text-right" : "items-start"}`}
     >
       <span
-        className={`flex items-center gap-1.5 font-mono text-caption text-hoshi ${onward ? "flex-row-reverse" : ""}`}
+        className={`flex items-center gap-1.5 font-mono text-caption text-muted ${isNext ? "flex-row-reverse" : ""}`}
       >
         <Icon>
-          {onward ? <path d="M9 6l6 6-6 6" /> : <path d="M15 18l-6-6 6-6" />}
+          {isNext ? <path d="M9 6l6 6-6 6" /> : <path d="M15 18l-6-6 6-6" />}
         </Icon>
-        {onward ? "Next" : "Previous"}
+        {isNext ? "Next" : "Previous"}
       </span>
       <span lang={work.lang} className="text-body text-balance">
         <span className="link-draw">{work.title}</span>
@@ -252,11 +260,11 @@ function ShelfLink({ step, work }: { step: 1 | -1; work: Work }) {
 
 // Horizontal distance a page slides in from and out to. Far enough that a
 // page released from a drag keeps moving in the direction it was dragged.
-const reach = () => window.innerWidth * 0.3;
-const SHELF = {
-  aside: (step: Step) => ({ x: step * reach() }),
-  here: { x: 0 },
-  gone: (step: Step) => ({ x: -step * reach() }),
+const slideDistance = () => window.innerWidth * 0.3;
+const SLIDE = {
+  enter: (step: Step) => ({ x: step * slideDistance() }),
+  center: { x: 0 },
+  exit: (step: Step) => ({ x: -step * slideDistance() }),
 };
 
-export { WorkRoom as Component };
+export { WorkPage as Component };

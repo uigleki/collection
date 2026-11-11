@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from "react";
-import { sky } from "@/scene/signal.ts";
+import { sky } from "@/scene/skyState.ts";
 
 export type Theme = "dark" | "light";
 
@@ -17,12 +17,12 @@ function current(): Theme {
 function apply(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   // index.html's meta has both background colors: data-dark and data-light
-  const chrome = document.querySelector<HTMLMetaElement>(
+  const meta = document.querySelector<HTMLMetaElement>(
     'meta[name="theme-color"]',
   );
-  const ground = chrome?.dataset[theme];
-  if (chrome && ground) chrome.content = ground;
-  sky.targetDay = theme === "light" ? 1 : 0;
+  const color = meta?.dataset[theme];
+  if (meta && color) meta.content = color;
+  sky.targetLightTheme = theme === "light" ? 1 : 0;
   for (const l of listeners) l();
 }
 
@@ -40,13 +40,13 @@ function chooseTheme(theme: Theme) {
  * call time, not from the control's last render: two presses within one
  * frame must switch the theme and switch it back.
  */
-export function flipTheme() {
+export function toggleTheme() {
   chooseTheme(current() === "dark" ? "light" : "dark");
 }
 
 /** Sync the sky on load and follow the OS until the visitor chooses. */
 export function initTheme(): () => void {
-  sky.targetDay = sky.day = current() === "light" ? 1 : 0;
+  sky.targetLightTheme = sky.lightTheme = current() === "light" ? 1 : 0;
 
   const media = window.matchMedia("(prefers-color-scheme: light)");
   const follow = () => {
@@ -60,7 +60,7 @@ export function initTheme(): () => void {
     if (!chosen && theme !== current()) apply(theme);
   };
   media.addEventListener("change", follow);
-  // The system theme may have changed after the pr
+  // The system theme may have changed after the pre-paint script ran but
   // before this listener was added. That change event was missed, so apply
   // the current system theme now.
   follow();

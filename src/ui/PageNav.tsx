@@ -6,13 +6,13 @@ import { Icon } from "./Icon.tsx";
 
 /**
  * A page's fixed navigation controls. There is no bar and no gradient: the
- * controls are .chip buttons like the theme toggle. Back is top-left. On a
- * work page the previous and next works are at mid-height on the left and
- * right edges (EdgeChip), like an image gallery's pager, and show the
- * work's title on hover. Escape goes back, and so does a click on the empty
- * side margins, as in a lightbox.
+ * controls are .icon-button buttons like the theme toggle. Back is
+ * top-left. On a work page the previous and next works are at mid-height on
+ * the left and right edges (EdgeButton), like an image gallery's pager, and
+ * show the work's title on hover. Escape goes back, and so does a click on
+ * the empty side margins, as in a lightbox.
  */
-export function Doorway({ children }: { children?: ReactNode }) {
+export function PageNav({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
   // An exiting page is still mounted; it must not handle key presses.
   const present = useIsPresent();
@@ -56,7 +56,7 @@ export function Doorway({ children }: { children?: ReactNode }) {
         onClick={goBack}
         aria-label="Back to the collection"
         title="Back to the collection"
-        className="chip fixed top-5 left-5 z-50"
+        className="icon-button fixed top-5 left-5 z-50"
       >
         <Icon>
           <path d="M19 12H5M11 18l-6-6 6-6" />
@@ -67,7 +67,7 @@ export function Doorway({ children }: { children?: ReactNode }) {
   );
 }
 
-export function EdgeChip({
+export function EdgeButton({
   side,
   work,
   onClick,
@@ -79,8 +79,8 @@ export function EdgeChip({
   const { title, lang } = work;
   const edge = side === "prev" ? "left-5 flex-row" : "right-5 flex-row-reverse";
   // Hidden on narrow screens, where a mid-height button would cover the
-  // text column: there the links are at the end of the article (ShelfLink,
-  // WorkRoom.tsx).
+  // text column: there the links are at the end of the article (NeighborLink,
+  // WorkPage.tsx).
   return (
     <div
       className={`group/edge fixed top-1/2 z-50 hidden -translate-y-1/2 items-center gap-3 md:flex ${edge}`}
@@ -89,7 +89,7 @@ export function EdgeChip({
         type="button"
         onClick={onClick}
         aria-label={`${side === "prev" ? "Previous" : "Next"}: ${title}`}
-        className="chip"
+        className="icon-button"
       >
         <Icon>
           {side === "prev" ? (
@@ -102,7 +102,7 @@ export function EdgeChip({
       <span
         lang={lang}
         aria-hidden="true"
-        className="hidden max-w-48 truncate rounded-full border border-border/50 bg-mizu/70 px-3 py-1 text-caption text-hoshi opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/edge:opacity-100 md:block"
+        className="hidden max-w-48 truncate rounded-full border border-border/50 bg-surface/70 px-3 py-1 text-caption text-muted opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/edge:opacity-100 md:block"
       >
         {title}
       </span>

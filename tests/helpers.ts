@@ -30,7 +30,7 @@ export const HOME = /Perfect\s*Collection/;
 
 /**
  * A work's row on the home page. The whole row is one link, and its
- * accessible name must match the one NightRow sets, so it is defined once
+ * accessible name must match the one WorkRow sets, so it is defined once
  * here.
  */
 export const row = (page: Page, title: string) =>
@@ -45,7 +45,7 @@ export const NOT_FOUND = "Nothing stands here.";
  * position that is still changing, while the position the page saves is the
  * final one.
  */
-export async function restingScrollY(page: Page): Promise<number> {
+export async function settledScrollY(page: Page): Promise<number> {
   let last = Number.NaN;
   await expect
     .poll(

@@ -4,9 +4,9 @@ import { useScrollMemory } from "@/lib/scroll.ts";
 import { initTheme } from "@/lib/theme.ts";
 import { MoonSky } from "@/scene/MoonSky.tsx";
 import { BackToTop } from "@/ui/BackToTop.tsx";
-import { Standstill } from "@/ui/Standstill.tsx";
+import { MessagePage } from "@/ui/MessagePage.tsx";
 import { ThemeToggle } from "@/ui/ThemeToggle.tsx";
-import { Stage } from "./Stage.tsx";
+import { PageTransition } from "./PageTransition.tsx";
 
 function Root() {
   useScrollMemory();
@@ -23,23 +23,23 @@ function Root() {
       <MoonSky />
       <ThemeToggle />
       <BackToTop />
-      <Stage />
+      <PageTransition />
     </>
   );
 }
 
-function BrokenNight() {
+function RenderError() {
   return (
-    <Standstill
+    <MessagePage
       title="Clouds crossed the moon."
       message="Something failed while rendering this page."
     >
       {/* a plain link for a full page load, not a client-side navigation:
           the router is what just failed */}
-      <a href="/" className="pill mt-10 text-body hover:text-tsukikage">
+      <a href="/" className="pill mt-10 text-body hover:text-accent">
         Return to the collection
       </a>
-    </Standstill>
+    </MessagePage>
   );
 }
 
@@ -47,12 +47,12 @@ function BrokenNight() {
 // first page has loaded and the browser is idle (prefetchPages).
 const pages = [
   () => import("@/pages/home/Home.tsx"),
-  () => import("@/pages/work/WorkRoom.tsx"),
+  () => import("@/pages/work/WorkPage.tsx"),
   () => import("@/pages/why/Why.tsx"),
   () => import("@/pages/credits/Credits.tsx"),
   () => import("@/pages/NotFound.tsx"),
 ] as const;
-const [home, room, why, credits, missing] = pages;
+const [home, work, why, credits, notFound] = pages;
 
 /**
  * The route table. Used by the build, which prerenders every page to a file
@@ -62,13 +62,13 @@ export const routes: RouteObject[] = [
   {
     path: "/",
     Component: Root,
-    ErrorBoundary: BrokenNight,
+    ErrorBoundary: RenderError,
     children: [
       { index: true, lazy: home },
-      { path: "works/:slug", lazy: room },
+      { path: "works/:slug", lazy: work },
       { path: "why", lazy: why },
       { path: "credits", lazy: credits },
-      { path: "*", lazy: missing },
+      { path: "*", lazy: notFound },
     ],
   },
 ];

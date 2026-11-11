@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { siteMeta } from "@/data/site.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
-import { Standstill } from "@/ui/Standstill.tsx";
+import { MessagePage } from "@/ui/MessagePage.tsx";
 
 /** A page that isn't in the collection. */
 export function NotFound() {
@@ -11,15 +11,15 @@ export function NotFound() {
   useSky({ dim: 0.4, night: 1 });
 
   return (
-    <Standstill
+    <MessagePage
       h1={h1}
       title="Nothing stands here."
       message="Whatever stood here has set below the horizon."
     >
-      <Link to="/" className="pill mt-10 text-body hover:text-tsukikage">
+      <Link to="/" className="pill mt-10 text-body hover:text-accent">
         Return to the collection
       </Link>
-    </Standstill>
+    </MessagePage>
   );
 }
 

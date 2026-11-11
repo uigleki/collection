@@ -55,8 +55,8 @@ test.describe("home page", () => {
     page,
   }) => {
     await page.goto("/");
-    const bakemono = page.locator('h3[lang="ja"]', { hasText: "化物語" });
-    await expect(bakemono).toBeAttached();
+    const title = page.locator('h3[lang="ja"]', { hasText: "化物語" });
+    await expect(title).toBeAttached();
     const zh = page.locator('[lang="zh-Hans"]', { hasText: "海棠仙" });
     await expect(zh).toBeAttached();
   });

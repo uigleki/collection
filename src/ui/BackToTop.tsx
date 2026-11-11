@@ -24,7 +24,7 @@ export function BackToTop() {
       title="Back to top"
       tabIndex={shown ? 0 : -1}
       aria-hidden={shown ? undefined : true}
-      className={`chip fixed right-5 bottom-5 z-50 ${shown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+      className={`icon-button fixed right-5 bottom-5 z-50 ${shown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
     >
       <Icon>
         <path d="M12 19V5M6 11l6-6 6 6" />

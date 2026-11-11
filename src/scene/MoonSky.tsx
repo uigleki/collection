@@ -2,7 +2,7 @@ import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 import { FULL_NIGHT, terminator } from "@/lib/moon.ts";
 import { governor } from "./governor.ts";
-import { ease, sky } from "./signal.ts";
+import { ease, sky } from "./skyState.ts";
 
 /**
  * The sky: one fixed WebGL canvas that stays mounted for the whole visit.
@@ -23,21 +23,22 @@ precision highp float;
 
 uniform vec2  uRes;
 uniform float uTime;
-uniform float uPhase;   // terminator: +1 new moon … -1 full moon
-uniform vec2  uMoon;    // moon center, uv space
-uniform float uDay;     // 0 night … 1 day theme
-uniform float uDawn;    // 0 … 1 dawn tint near the end of the page
-uniform float uGlade;   // 0 … 1 music section: moon fades, reflection brightens
-uniform float uDim;     // 0 … 1 dimming toward the page background
+uniform float uPhase;          // terminator: +1 new moon … -1 full moon
+uniform vec2  uMoon;           // moon center, uv space
+uniform float uLightTheme;     // 0 dark theme … 1 light theme
+uniform float uDawn;           // 0 … 1 dawn tint near the end of the page
+// 0 … 1 music section: moon fades, reflection brightens
+uniform float uReflectionOnly;
+uniform float uDim;            // 0 … 1 dimming toward the page background
 
 const float WATER = 0.30;
 const float MOON_R = 0.075;
 
 // ---- palette (DESIGN.md tokens) -------------------------------------------
-const vec3 NIGHT_TOP = vec3(0.043, 0.055, 0.090);  // 濡羽 yoru
+const vec3 NIGHT_TOP = vec3(0.043, 0.055, 0.090);  // --color-background (dark)
 const vec3 NIGHT_HOR = vec3(0.102, 0.133, 0.204);  // horizon haze
-const vec3 MOON_C    = vec3(0.918, 0.945, 0.973);  // 月白 geppaku
-const vec3 WARM      = vec3(0.803, 0.706, 0.537);  // 香色 tsukikage
+const vec3 MOON_C    = vec3(0.918, 0.945, 0.973);  // --color-foreground (dark)
+const vec3 WARM      = vec3(0.803, 0.706, 0.537);  // --color-accent (dark)
 // The light theme is bright: pastel periwinkle over pale gold, so dark
 // text is readable anywhere on it. Only the moon (GOLD) is saturated.
 const vec3 DUSK_TOP  = vec3(0.740, 0.750, 0.880);
@@ -88,10 +89,10 @@ vec3 skyColor(vec2 uv, float aspect, float stars) {
   float h = smoothstep(WATER, 1.0, uv.y);
   vec3 night = mix(NIGHT_HOR, NIGHT_TOP, h);
   vec3 dusk = mix(DUSK_HOR, DUSK_TOP, pow(h, 0.8));
-  vec3 c = mix(night, dusk, uDay);
+  vec3 c = mix(night, dusk, uLightTheme);
 
   // dawn: a faint warm band above the horizon near the end of the page
-  float dawnBand = (1.0 - smoothstep(WATER, 0.62, uv.y)) * uDawn * (1.0 - uDay);
+  float dawnBand = (1.0 - smoothstep(WATER, 0.62, uv.y)) * uDawn * (1.0 - uLightTheme);
   c = mix(c, DAWN, dawnBand * 0.45);
 
   // stars: sparse, hashed, slow twinkle; gone by day and dawn
@@ -104,7 +105,7 @@ vec3 skyColor(vec2 uv, float aspect, float stars) {
   float glow = star * tw * (1.0 - smoothstep(0.0, 0.12, d));
   // no stars inside the moon's halo
   float nearMoon = 1.0 - smoothstep(0.1, 0.34, distance(uv * vec2(aspect, 1.0), uMoon * vec2(aspect, 1.0)));
-  glow *= (1.0 - nearMoon) * (1.0 - uDay) * (1.0 - uDawn * 0.8);
+  glow *= (1.0 - nearMoon) * (1.0 - uLightTheme) * (1.0 - uDawn * 0.8);
   c += MOON_C * glow * 0.85 * stars;
   return c;
 }
@@ -115,28 +116,28 @@ vec3 moonLayer(vec3 base, vec2 uv, float aspect) {
 
   // In the music section the moon in the sky fades almost completely, and
   // its reflection on the water stays.
-  float presence = 1.0 - uGlade * 0.92;
+  float moonOpacity = 1.0 - uReflectionOnly * 0.92;
 
   // halo: stronger the fuller the moon; gold in the light theme
   float illum = (1.0 - uPhase) * 0.5;
   float halo = exp(-max(r - 1.0, 0.0) * 3.2) * (0.10 + illum * 0.22);
-  vec3 haloC = mix(mix(MOON_C, WARM, 0.35), GOLD, uDay);
-  base += haloC * halo * (1.0 - uDay * 0.45) * presence;
+  vec3 haloC = mix(mix(MOON_C, WARM, 0.35), GOLD, uLightTheme);
+  base += haloC * halo * (1.0 - uLightTheme * 0.45) * moonOpacity;
 
   if (r < 1.1) {
     float disc = 1.0 - smoothstep(0.985, 1.0, r);
     float lit = litMask(q);
     // maria: faint dark patches, so the full moon is not a flat disc
-    float seas = fbm(q * 2.6 + 19.7) * 0.10 + fbm(q * 6.0 + 4.2) * 0.045;
-    vec3 face = MOON_C * (1.0 - seas);
+    float maria = fbm(q * 2.6 + 19.7) * 0.10 + fbm(q * 6.0 + 4.2) * 0.045;
+    vec3 face = MOON_C * (1.0 - maria);
     face = mix(face, face * vec3(1.02, 1.0, 0.95), 0.25);
     // earthshine: the unlit part stays faintly visible
     vec3 dark = mix(base, MOON_C, 0.07);
     vec3 moon = mix(dark, face, lit);
     // light theme: the moon is gold, to stand out against the pale sky
-    vec3 duskMoon = GOLD * (1.0 - seas * 0.5);
-    moon = mix(moon, mix(mix(base, GOLD, 0.35), duskMoon, lit), uDay);
-    base = mix(base, moon, disc * presence);
+    vec3 duskMoon = GOLD * (1.0 - maria * 0.5);
+    moon = mix(moon, mix(mix(base, GOLD, 0.35), duskMoon, lit), uLightTheme);
+    base = mix(base, moon, disc * moonOpacity);
   }
   return base;
 }
@@ -226,17 +227,17 @@ vec3 waterColor(vec2 uv, float aspect) {
   vec2 miss = need - sl.xy;
   float illum = (1.0 - uPhase) * 0.5;
   float glint = exp(-dot(miss, miss) / (2.0 * allow)) * radius * radius / allow;
-  vec3 gladeC = mix(mix(MOON_C, WARM, 0.25), GOLD, uDay);
-  // night theme: the reflection is as bright as the moon's lit fraction;
+  vec3 reflectionC = mix(mix(MOON_C, WARM, 0.25), GOLD, uLightTheme);
+  // dark theme: the reflection is as bright as the moon's lit fraction;
   // light theme: constant, because the whole disc is visible there
-  float shine = mix(0.15 + illum * 1.1, 0.8, uDay) * (1.0 + uGlade * 0.8);
+  float shine = mix(0.15 + illum * 1.1, 0.8, uLightTheme) * (1.0 + uReflectionOnly * 0.8);
 
   // Fresnel (Schlick's approximation for water): looking down, the water
   // shows its own body color; toward the horizon it only reflects the sky.
   float cosI = clamp(dot(-ray, n), 0.0, 1.0);
   float fresnel = 0.02 + 0.98 * pow(1.0 - cosI, 5.0);
-  vec3 body = mix(vec3(0.010, 0.016, 0.034), vec3(0.80, 0.72, 0.60), uDay);
-  vec3 c = mix(body, sky, fresnel) + gladeC * glint * shine * fresnel * 6.0;
+  vec3 body = mix(vec3(0.010, 0.016, 0.034), vec3(0.80, 0.72, 0.60), uLightTheme);
+  vec3 c = mix(body, sky, fresnel) + reflectionC * glint * shine * fresnel * 6.0;
 
   // distant water fades into the horizon color: no hard edge at the horizon
   float haze = exp(-dist * 0.012);
@@ -256,8 +257,8 @@ void main() {
   }
 
   // uDim: blend toward the page background so text is readable over it
-  vec3 ground = mix(NIGHT_TOP, vec3(0.949, 0.925, 0.878), uDay);
-  col = mix(col, ground, uDim * 0.62);
+  vec3 background = mix(NIGHT_TOP, vec3(0.949, 0.925, 0.878), uLightTheme);
+  col = mix(col, background, uDim * 0.62);
 
   // dither removes gradient banding in the night sky
   col += (hash(gl_FragCoord.xy) - 0.5) / 255.0;
@@ -272,9 +273,9 @@ export function MoonSky() {
     const el = host.current;
     if (!el) return;
 
-    const sharpest = Math.min(window.devicePixelRatio, 1.75);
+    const maxDpr = Math.min(window.devicePixelRatio, 1.75);
     const canvas = document.createElement("canvas");
-    const surface = {
+    const contextAttributes = {
       alpha: false,
       antialias: false,
       // One triangle, no depth test: a depth buffer would be tens of MB
@@ -287,11 +288,15 @@ export function MoonSky() {
     // console error for a canvas with no WebGL, and falling back to the CSS
     // `.poster` background is not an error.
     if (
-      !canvas.getContext("webgl2", surface) &&
-      !canvas.getContext("webgl", surface)
+      !canvas.getContext("webgl2", contextAttributes) &&
+      !canvas.getContext("webgl", contextAttributes)
     )
       return;
-    const renderer = new Renderer({ canvas, dpr: sharpest, ...surface });
+    const renderer = new Renderer({
+      canvas,
+      dpr: maxDpr,
+      ...contextAttributes,
+    });
     const gl = renderer.gl;
 
     // Software rasterizers (SwiftShader, llvmpipe: headless CI, VMs without
@@ -314,9 +319,9 @@ export function MoonSky() {
       uTime: { value: 0 },
       uPhase: { value: 1 },
       uMoon: { value: [0.64, 0.56] as [number, number] },
-      uDay: { value: 0 },
+      uLightTheme: { value: 0 },
       uDawn: { value: 0 },
-      uGlade: { value: 0 },
+      uReflectionOnly: { value: 0 },
       uDim: { value: 0 },
     };
     const program = new Program(gl, { vertex: VERT, fragment: FRAG, uniforms });
@@ -335,10 +340,10 @@ export function MoonSky() {
     // resizes — measured here rather than in the frame loop, where they cost
     // a forced style-and-layout flush sixty times a second.
     let aspect = 1;
-    let span = 0;
+    let scrollRange = 0;
     const measure = () => {
       aspect = el.clientWidth / Math.max(el.clientHeight, 1);
-      span = document.documentElement.scrollHeight - window.innerHeight;
+      scrollRange = document.documentElement.scrollHeight - window.innerHeight;
     };
     // `stale`: the canvas no longer matches the uniforms. A frame with no
     // change is not drawn again; with reduced motion that is nearly every
@@ -372,7 +377,7 @@ export function MoonSky() {
       draw();
     };
     // The render scale adapts to this machine's frame times (governor.ts).
-    const pace = governor({ max: sharpest, min: Math.min(sharpest, 0.6) });
+    const renderScale = governor({ max: maxDpr, min: Math.min(maxDpr, 0.6) });
     resize();
 
     // The canvas fades in over the static `.poster` background once, at the
@@ -393,10 +398,10 @@ export function MoonSky() {
     let raf = 0;
     let last = performance.now();
     let time = 0;
-    let glade = 0;
+    let reflectionOnly = 0;
     let dim = 0;
-    // The eased values (glade, dim, night) are read only inside this loop,
-    // so they are locals and not fields of `sky` (signal.ts).
+    // The eased values (reflectionOnly, dim, night) are read only inside this
+    // loop, so they are locals and not fields of `sky` (skyState.ts).
     let night = 1;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -404,8 +409,8 @@ export function MoonSky() {
       const dt = Math.min(ms / 1000, 0.1);
       last = now;
       // Only frames that drew are timed: others do not measure render cost.
-      if (drew && pace.frame(ms)) {
-        renderer.dpr = pace.scale;
+      if (drew && renderScale.frame(ms)) {
+        renderer.dpr = renderScale.scale;
         size();
       }
       drew = false;
@@ -417,12 +422,12 @@ export function MoonSky() {
       // Scroll position. Read here rather than in a separate rAF: only the
       // sky uses it, and this loop already runs every frame.
       const y = window.scrollY;
-      const progress = span > 0 ? y / span : 0;
+      const progress = scrollRange > 0 ? y / scrollRange : 0;
       // An instant jump (deep link, keyboard End) can skip every observer
       // band that sets a night (lib/sky.ts), so the full moon is also set
-      // from scroll progress. A page opts in with `sky.waxWithProgress`.
+      // from scroll progress. A page opts in with `sky.fullMoonByScroll`.
       if (
-        sky.waxWithProgress &&
+        sky.fullMoonByScroll &&
         progress > 0.6 &&
         sky.targetNight < FULL_NIGHT
       ) {
@@ -434,8 +439,12 @@ export function MoonSky() {
       if (!still) time += dt;
 
       night = still ? sky.targetNight : ease(night, sky.targetNight, 3.0, dt);
-      sky.day = still ? sky.targetDay : ease(sky.day, sky.targetDay, 4.0, dt);
-      glade = still ? sky.glade : ease(glade, sky.glade, 2.2, dt);
+      sky.lightTheme = still
+        ? sky.targetLightTheme
+        : ease(sky.lightTheme, sky.targetLightTheme, 4.0, dt);
+      reflectionOnly = still
+        ? sky.reflectionOnly
+        : ease(reflectionOnly, sky.reflectionOnly, 2.2, dt);
       dim = still ? sky.dim : ease(dim, sky.dim, 4.0, dt);
 
       const alt = (night - 1) / (FULL_NIGHT - 1);
@@ -443,13 +452,13 @@ export function MoonSky() {
       set(uniforms.uMoon.value, 0, aspect > 1.05 ? 0.66 : 0.5);
       set(uniforms.uMoon.value, 1, 0.52 + 0.32 * alt);
       set(uniforms.uTime, "value", time);
-      set(uniforms.uDay, "value", sky.day);
+      set(uniforms.uLightTheme, "value", sky.lightTheme);
       set(
         uniforms.uDawn,
         "value",
         progress > 0.84 ? (progress - 0.84) / 0.16 : 0,
       );
-      set(uniforms.uGlade, "value", glade);
+      set(uniforms.uReflectionOnly, "value", reflectionOnly);
       set(uniforms.uDim, "value", dim);
 
       if (stale) draw();

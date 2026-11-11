@@ -17,17 +17,17 @@ export const sky = {
    * only: a work page's scroll must not change the phase, because that
    * looks like the moon moving at random.
    */
-  waxWithProgress: false,
+  fullMoonByScroll: false,
   /**
    * 0..1, 1 while the music section is in view (lib/sky.ts): brightens the
    * moon's reflection on the water
    */
-  glade: 0,
+  reflectionOnly: 0,
   /** how far the sky is dimmed behind the page content, 0..1 */
   dim: 0,
-  /** theme: 0 night, 1 dusk — eased in the loop */
-  day: 0,
-  targetDay: 0,
+  /** 0 in the dark theme, 1 in the light theme; eased in the loop */
+  lightTheme: 0,
+  targetLightTheme: 0,
 };
 
 /** Frame-rate independent exponential approach. */

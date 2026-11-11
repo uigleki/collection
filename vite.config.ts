@@ -14,10 +14,10 @@ import { cssSprings } from "./src/lib/motion.ts";
 const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
 // Output directory of the server (prerender) build. It is not deployed: the
 // build runs it once to write the HTML pages into dist/.
-const WRITER = resolve(import.meta.dirname, "node_modules/.prerender");
+const PRERENDER_OUT = resolve(import.meta.dirname, "node_modules/.prerender");
 
 /**
- * Each theme's background color (--color-yoru), read from
+ * Each theme's background color (--color-background), read from
  * src/styles/index.css. DESIGN.md defines the palette there and nowhere
  * else, but the browser-UI colors in the document head must be literal
  * values, because they apply before any stylesheet does. So they are read
@@ -25,17 +25,18 @@ const WRITER = resolve(import.meta.dirname, "node_modules/.prerender");
  * renamed token fails the build instead of leaving the address bar the
  * wrong color.
  */
-function grounds(): { night: string; dusk: string } {
+function backgroundColors(): { dark: string; light: string } {
   const css = readFileSync(STYLES, "utf8");
   const read = (block: RegExp, where: string) => {
     const scope = css.match(block)?.[1];
-    const value = scope?.match(/--color-yoru:\s*([^;]+);/)?.[1]?.trim();
-    if (!value) throw new Error(`site-metadata: no --color-yoru in ${where}`);
+    const value = scope?.match(/--color-background:\s*([^;]+);/)?.[1]?.trim();
+    if (!value)
+      throw new Error(`site-metadata: no --color-background in ${where}`);
     return value;
   };
   return {
-    night: read(/@theme\s*\{([\s\S]*?)\n\}/, "@theme"),
-    dusk: read(
+    dark: read(/@theme\s*\{([\s\S]*?)\n\}/, "@theme"),
+    light: read(
       /:root\[data-theme="light"\]\s*\{([\s\S]*?)\n\}/,
       "the light theme",
     ),
@@ -43,7 +44,7 @@ function grounds(): { night: string; dusk: string } {
 }
 
 const manifest = () => {
-  const { night } = grounds();
+  const { dark } = backgroundColors();
   return JSON.stringify(
     {
       name: siteMeta.title,
@@ -51,8 +52,8 @@ const manifest = () => {
       description: siteMeta.description,
       start_url: "/",
       display: "standalone",
-      theme_color: night,
-      background_color: night,
+      theme_color: dark,
+      background_color: dark,
       icons: [
         {
           src: "/favicon.svg",
@@ -109,7 +110,7 @@ const robots = () =>
  * (`el.style`), which the CSP does not restrict.
  */
 function headers(html: string): string {
-  const hashOfTheOne = (tag: "script" | "style") => {
+  const inlineHash = (tag: "script" | "style") => {
     const inline = [
       ...html.matchAll(
         new RegExp(`<${tag}(?![^>]*\\ssrc=)[^>]*>([\\s\\S]*?)</${tag}>`, "g"),
@@ -126,8 +127,8 @@ function headers(html: string): string {
 
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'sha256-${hashOfTheOne("script")}'`,
-    `style-src 'self' 'sha256-${hashOfTheOne("style")}'`,
+    `script-src 'self' 'sha256-${inlineHash("script")}'`,
+    `style-src 'self' 'sha256-${inlineHash("style")}'`,
     "style-src-attr 'unsafe-inline'",
     "img-src 'self' data:",
     "font-src 'self'",
@@ -200,15 +201,15 @@ const escapeHtml = (text: string) =>
  * status 404.
  */
 async function writePages(dist: string): Promise<void> {
-  const { render, face } = (await import(
-    pathToFileURL(resolve(WRITER, "prerender.js")).href
+  const { render, textFontUrl } = (await import(
+    pathToFileURL(resolve(PRERENDER_OUT, "prerender.js")).href
   )) as typeof import("./src/app/prerender.tsx");
   const shell = inlineStyles(
     dist,
     readFileSync(resolve(dist, "index.html"), "utf8"),
   );
 
-  const pour = (part: string | RegExp, into: string, what: string) => {
+  const fill = (part: string | RegExp, into: string, what: string) => {
     if (into.search(part) === -1)
       throw new Error(`site-metadata: the shell has no ${part} to fill`);
     return into.replace(part, () => what);
@@ -218,12 +219,12 @@ async function writePages(dist: string): Promise<void> {
     // The CSP allows one inline script, by hash: the one in index.html.
     if (html.includes("<script"))
       throw new Error(`site-metadata: ${path} renders a script of its own`);
-    let page = pour(
+    let page = fill(
       '<div id="root"></div>',
       shell,
       `<div id="root">${html}</div>`,
     );
-    page = pour(
+    page = fill(
       /<title>[^<]*<\/title>/,
       page,
       `<title>${escapeHtml(title)}</title>`,
@@ -232,21 +233,21 @@ async function writePages(dist: string): Promise<void> {
     // the same priority as the page's main image and its text font, and a
     // connection serves requests of equal priority in the order they were
     // made, which in index.html's own order is scripts first.
-    const art = html
+    const cover = html
       .match(/<img[^>]*fetchpriority="high"[^>]*>/i)?.[0]
       .match(/ src="([^"]+)"/)?.[1];
     const first = [
-      art &&
-        `<link rel="preload" as="image" fetchpriority="high" href="${art}" />`,
-      `<link rel="preload" as="font" type="font/woff2" crossorigin href="${face}" />`,
+      cover &&
+        `<link rel="preload" as="image" fetchpriority="high" href="${cover}" />`,
+      `<link rel="preload" as="font" type="font/woff2" crossorigin href="${textFontUrl}" />`,
     ].filter(Boolean);
-    page = pour(
+    page = fill(
       '<script type="module"',
       page,
       `${first.join("\n      ")}\n      <script type="module"`,
     );
     if (canonical)
-      page = pour(
+      page = fill(
         "</head>",
         page,
         `    <link rel="canonical" href="${origin}${path}" />\n    </head>`,
@@ -296,13 +297,13 @@ function siteMetadata(): Plugin {
     transformIndexHtml: {
       order: "pre",
       handler: (html) => {
-        const { night, dusk } = grounds();
+        const { dark, light } = backgroundColors();
         const values: Record<string, string> = {
           __SITE_TITLE__: siteMeta.title,
           __SITE_DESCRIPTION__: siteMeta.description,
           __SITE_ORIGIN__: origin,
-          __GROUND_NIGHT__: night,
-          __GROUND_DUSK__: dusk,
+          __BACKGROUND_DARK__: dark,
+          __BACKGROUND_LIGHT__: light,
           __SPRINGS__: cssSprings(),
         };
         return html.replace(/__[A-Z_]+__/g, (name) => {
@@ -337,7 +338,9 @@ function siteMetadata(): Plugin {
     async buildApp(builder) {
       const { client, ssr } = builder.environments;
       if (!client || !ssr)
-        throw new Error("site-metadata: the build has lost an environment");
+        throw new Error(
+          "site-metadata: the client or ssr environment is missing",
+        );
       await builder.build(client);
       await builder.build(ssr);
       await writePages(resolve(client.config.root, client.config.build.outDir));
@@ -370,7 +373,7 @@ export default defineConfig({
   environments: {
     ssr: {
       build: {
-        outDir: WRITER,
+        outDir: PRERENDER_OUT,
         copyPublicDir: false,
         rolldownOptions: { input: "src/app/prerender.tsx" },
       },

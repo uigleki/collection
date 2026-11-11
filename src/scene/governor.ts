@@ -17,14 +17,14 @@ const WINDOW = 60;
  * A frame longer than this (ms) was a pause, such as a hidden tab or a
  * garbage collection, and does not measure render cost.
  */
-const HITCH = 100;
+const PAUSE_MS = 100;
 /**
  * A frame shorter than this (ms) is two callbacks in one frame, not the
  * display's refresh period.
  */
-const FASTEST = 1000 / 240;
+const MIN_PERIOD_MS = 1000 / 240;
 /** Consecutive on-time windows needed before the scale is raised. */
-const PATIENCE = 8;
+const WINDOWS_BEFORE_RAISE = 8;
 
 export function governor({ max, min }: { max: number; min: number }) {
   let scale = max;
@@ -40,8 +40,8 @@ export function governor({ max, min }: { max: number; min: number }) {
     },
     /** Report one frame's length in ms; true when the scale changed. */
     frame(ms: number): boolean {
-      if (ms > HITCH) return false;
-      period = Math.min(period, Math.max(ms, FASTEST));
+      if (ms > PAUSE_MS) return false;
+      period = Math.min(period, Math.max(ms, MIN_PERIOD_MS));
       sum += ms;
       count += 1;
       if (count < WINDOW) return false;
@@ -55,7 +55,7 @@ export function governor({ max, min }: { max: number; min: number }) {
         scale = Math.max(min, scale * 0.85);
       } else if (late < 1.1) {
         onTime += 1;
-        if (onTime >= PATIENCE) {
+        if (onTime >= WINDOWS_BEFORE_RAISE) {
           onTime = 0;
           scale = Math.min(max, scale * 1.1);
         }

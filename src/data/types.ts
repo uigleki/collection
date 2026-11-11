@@ -28,7 +28,7 @@ export interface Work extends Titled {
   /**
    * The work's stable identifier, set in src/content/catalog.ts. The work
    * page's URL, the cover asset's file name and the cover's animated
-   * transition between pages (src/lib/flight.ts) are all keyed by it.
+   * transition between pages (src/lib/coverTransition.ts) are all keyed by it.
    */
   slug: string;
   /**

@@ -33,15 +33,15 @@ function positions(): Map<string, number> {
 }
 
 /** The saved scroll position for a path, or 0 if none was saved. */
-export function restingPlace(pathname: string): number {
+export function savedScrollY(pathname: string): number {
   return positions().get(pathname) ?? 0;
 }
 
 /**
- * Save the scroll position per path. Restoring it is done in Stage.tsx: it
- * has to happen between the page change and the cover transition
- * (flight.ts), which measures the incoming page at its restored scroll
- * position.
+ * Save the scroll position per path. Restoring it is done in
+ * PageTransition.tsx: it has to happen between the page change and the cover
+ * transition (coverTransition.ts), which measures the incoming page at its
+ * restored scroll position.
  */
 export function useScrollMemory(): void {
   const { pathname } = useLocation();

@@ -9,7 +9,7 @@ import { cssSpring, type Spring } from "./spring.ts";
  * the site to be internally coherent.
  *
  * Scroll-driven reveals use no spring and no duration: the scroll position
- * is their timeline (index.css: .arrive).
+ * is their timeline (index.css: .reveal).
  */
 
 /** Display text (the largest type) sliding up into place behind its mask. */
@@ -22,11 +22,12 @@ export const ENTER = { stiffness: 70, damping: 20 } as const satisfies Spring;
 export const FOLLOW = { stiffness: 160, damping: 20 } as const;
 
 /**
- * A cover moving between its home-page row and its work page. Slightly
- * underdamped: it overshoots a little before it stops, and a move reversed
- * halfway keeps its velocity through the reversal.
+ * An element moving across the page: a cover between its home-page row and
+ * its work page, and a work page sliding to the previous or next work.
+ * Slightly underdamped: it overshoots a little before it stops, and a move
+ * reversed halfway keeps its velocity through the reversal.
  */
-export const FLIGHT = { type: "spring", stiffness: 190, damping: 26 } as const;
+export const MOVE = { type: "spring", stiffness: 190, damping: 26 } as const;
 
 /**
  * The cross-fade between two pages. Opacity only: the pages overlap while
@@ -34,7 +35,11 @@ export const FLIGHT = { type: "spring", stiffness: 190, damping: 26 } as const;
  * controls. Fast, so the reader does not wait for it, and interruptible,
  * because a spring continues from the current opacity.
  */
-export const SCENE = { type: "spring", stiffness: 260, damping: 34 } as const;
+export const PAGE_FADE = {
+  type: "spring",
+  stiffness: 260,
+  damping: 34,
+} as const;
 
 /** Hover on a control: a small overshoot, then rest. */
 export const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;

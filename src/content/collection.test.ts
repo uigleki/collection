@@ -4,7 +4,7 @@ import type { Readme, Review } from "./parse.ts";
 
 const readme: Readme = {
   tagline: "Works that enrich rather than diminish.",
-  shelves: [{ medium: "Anime", titles: ["化物語"] }],
+  groups: [{ medium: "Anime", titles: ["化物語"] }],
   songs: [{ artist: "COP feat. 洛天依", title: "凉雨" }],
 };
 
@@ -105,8 +105,8 @@ describe("assemble", () => {
   });
 
   it("throws for a Han song title with no language in the catalog", () => {
-    const silent = { ...catalog(), songs: {} };
-    expect(() => assemble(readme, reviews(), silent)).toThrow(/凉雨/);
+    const noLanguage = { ...catalog(), songs: {} };
+    expect(() => assemble(readme, reviews(), noLanguage)).toThrow(/凉雨/);
   });
 
   // Han and kana outside the common blocks: half-width katakana, a katakana
@@ -121,16 +121,16 @@ describe("assemble", () => {
     ["a compatibility ideograph", "\uFA10"],
     ["an ideograph beyond the BMP", "\u{20B9F}"],
   ])("throws for a title in %s with no stated language", (_form, title) => {
-    const shelf: Readme = {
+    const edited: Readme = {
       ...readme,
-      shelves: [{ medium: "Anime", titles: [title] }],
+      groups: [{ medium: "Anime", titles: [title] }],
     };
     const reviewed = reviews();
     const entry = reviewed.get("化物語");
     reviewed.delete("化物語");
     if (entry) reviewed.set(title, entry);
-    const silent = catalog();
-    silent.works = { [title]: { slug: "unstated", accent: "#9b59d0" } };
-    expect(() => assemble(shelf, reviewed, silent)).toThrow(title);
+    const noLanguage = catalog();
+    noLanguage.works = { [title]: { slug: "unstated", accent: "#9b59d0" } };
+    expect(() => assemble(edited, reviewed, noLanguage)).toThrow(title);
   });
 });

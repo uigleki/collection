@@ -15,7 +15,7 @@ import { routes } from "./routes.tsx";
  * a stylesheet's fonts only once a layout needs them; the build preloads
  * this one from the page's HTML (vite.config.ts).
  */
-export const face = text;
+export const textFontUrl = text;
 
 /**
  * Renders one page for the build (vite.config.ts): the HTML that goes into

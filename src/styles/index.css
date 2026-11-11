@@ -42,19 +42,16 @@
   --text-title--line-height: 1.1;
   --text-display: clamp(2.6rem, 1.6rem + 5vw, 5.25rem);
   --text-display--line-height: 1.04;
-  --text-colossus: clamp(3.25rem, 1.8rem + 7.5vw, 7.5rem);
-  --text-colossus--line-height: 1.02;
+  --text-display-large: clamp(3.25rem, 1.8rem + 7.5vw, 7.5rem);
+  --text-display-large--line-height: 1.02;
 
-  /* ---- palette: named colors only (DESIGN.md) — night defaults ---- */
-  --color-yoru: #0b0e17; /* 濡羽 — sky, ground */
-  --color-mizu: #12161f; /* 藍鉄 — water, raised surfaces */
-  --color-kasumi: #2a3140; /* 藍鼠 — mist, borders */
-  --color-tsuki: #eaf1f8; /* 月白 — text, the moon */
-  --color-hoshi: #98a2b3; /* 銀鼠 — secondary text */
-  --color-tsukikage: #cdb489; /* 香色 — accent, used sparingly */
-
-  /* the only alias: 1px lines everywhere use it as their border color */
-  --color-border: var(--color-kasumi);
+  /* The palette (DESIGN.md). These are the dark theme's values. */
+  --color-background: #0b0e17;
+  --color-surface: #12161f; /* raised surfaces: buttons, panels */
+  --color-border: #2a3140;
+  --color-foreground: #eaf1f8; /* text */
+  --color-muted: #98a2b3; /* secondary text */
+  --color-accent: #cdb489; /* used sparingly */
   --color-ring: #c7d3e0;
 }
 
@@ -67,33 +64,33 @@
    text, border and background color together. It is a CSS transition, not
    a snapshot of the page: the page can be scrolled while it runs, and a
    second press reverses it from its current state. The sky changes at the
-   same time in its own loop (signal.ts). */
-@property --color-yoru {
+   same time in its own loop (skyState.ts). */
+@property --color-background {
   syntax: "<color>";
   inherits: true;
   initial-value: #0b0e17;
 }
-@property --color-mizu {
+@property --color-surface {
   syntax: "<color>";
   inherits: true;
   initial-value: #12161f;
 }
-@property --color-kasumi {
+@property --color-border {
   syntax: "<color>";
   inherits: true;
   initial-value: #2a3140;
 }
-@property --color-tsuki {
+@property --color-foreground {
   syntax: "<color>";
   inherits: true;
   initial-value: #eaf1f8;
 }
-@property --color-hoshi {
+@property --color-muted {
   syntax: "<color>";
   inherits: true;
   initial-value: #98a2b3;
 }
-@property --color-tsukikage {
+@property --color-accent {
   syntax: "<color>";
   inherits: true;
   initial-value: #cdb489;
@@ -106,29 +103,28 @@
 @media (prefers-reduced-motion: no-preference) {
   :root {
     transition-property:
-      --color-yoru, --color-mizu, --color-kasumi, --color-tsuki, --color-hoshi,
-      --color-tsukikage, --color-ring;
+      --color-background, --color-surface, --color-border, --color-foreground,
+      --color-muted, --color-accent, --color-ring;
     transition-duration: 0.8s;
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
-/* The light theme is dusk: a warm paper-colored ground under the sky's
-   golden sun. */
+/* The light theme: a warm paper-colored background under the dusk sky. */
 :root[data-theme="light"] {
   color-scheme: light;
-  --color-yoru: #f2ece0; /* warm dusk paper */
-  --color-mizu: #e9e1d0;
-  --color-kasumi: #d6cbb4;
-  --color-tsuki: #211a10; /* 墨茶 ink */
-  --color-hoshi: #48412f; /* AA even over the golden horizon band */
-  --color-tsukikage: #7d5606; /* deep sunset gold — AA large on dusk ground */
+  --color-background: #f2ece0;
+  --color-surface: #e9e1d0;
+  --color-border: #d6cbb4;
+  --color-foreground: #211a10;
+  --color-muted: #48412f; /* AA even over the golden horizon band */
+  --color-accent: #7d5606; /* AA for large text on the background */
   --color-ring: #7a6733;
 }
 
 html {
-  background-color: var(--color-yoru);
-  color: var(--color-tsuki);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans);
   /* CJK typography as progressive enhancement (ignored where unsupported):
      punctuation trimming and automatic Latin↔CJK inter-script spacing. palt
@@ -158,8 +154,8 @@ body {
 }
 
 ::selection {
-  background: color-mix(in oklab, var(--color-tsukikage) 60%, transparent);
-  color: var(--color-yoru);
+  background: color-mix(in oklab, var(--color-accent) 60%, transparent);
+  color: var(--color-background);
 }
 
 :focus-visible {
@@ -179,10 +175,11 @@ body {
 .poster {
   background: linear-gradient(
     180deg,
-    var(--color-yoru) 0%,
-    color-mix(in oklab, var(--color-yoru) 82%, var(--color-tsuki)) 68%,
-    color-mix(in oklab, var(--color-mizu) 88%, var(--color-tsuki)) 70%,
-    var(--color-mizu) 100%
+    var(--color-background) 0%,
+    color-mix(in oklab, var(--color-background) 82%, var(--color-foreground))
+      68%,
+    color-mix(in oklab, var(--color-surface) 88%, var(--color-foreground)) 70%,
+    var(--color-surface) 100%
   );
 }
 
@@ -194,8 +191,8 @@ body {
     background: linear-gradient(
       180deg,
       transparent,
-      color-mix(in oklab, var(--color-yoru) 85%, transparent) 6%,
-      color-mix(in oklab, var(--color-yoru) 85%, transparent) 94%,
+      color-mix(in oklab, var(--color-background) 85%, transparent) 6%,
+      color-mix(in oklab, var(--color-background) 85%, transparent) 94%,
       transparent
     );
   }
@@ -235,17 +232,17 @@ a:focus-visible .link-draw {
   }
 }
 
-/* The translucent style shared by every fixed button (.chip) and by the
-   standalone call-to-action links (.pill), which are the same style in a
-   pill shape. Both scale on press with a spring (src/lib/motion.ts provides
-   it as --spring-*), so a press released early springs back from its
-   current scale instead of finishing a fixed-duration curve. */
-.chip,
+/* The translucent style shared by every fixed button (.icon-button) and by
+   the standalone call-to-action links (.pill), which are the same style in
+   a pill shape. Both scale on press with a spring (src/lib/motion.ts
+   provides it as --spring-*), so a press released early springs back from
+   its current scale instead of finishing a fixed-duration curve. */
+.icon-button,
 .pill {
   align-items: center;
-  border: 1px solid color-mix(in oklab, var(--color-kasumi) 70%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
   border-radius: 9999px;
-  background: color-mix(in oklab, var(--color-mizu) 60%, transparent);
+  background: color-mix(in oklab, var(--color-surface) 60%, transparent);
   /* opacity is listed for back-to-top, which fades in on scroll. Listing
      the four properties is cheaper than `all`, which makes the browser
      compare every property. */
@@ -255,29 +252,29 @@ a:focus-visible .link-draw {
     opacity 0.3s,
     transform var(--spring-hover-ms, 0.3s) var(--spring-hover, ease);
 }
-.chip:active,
+.icon-button:active,
 .pill:active {
   transition-duration: 0.3s, 0.3s, 0.3s, var(--spring-press-ms, 0.1s);
   transition-timing-function: ease, ease, ease, var(--spring-press, ease);
 }
-.chip:focus-visible,
+.icon-button:focus-visible,
 .pill:focus-visible {
-  border-color: var(--color-kasumi);
+  border-color: var(--color-border);
 }
 
-.chip {
+.icon-button {
   display: flex;
   height: 2.75rem;
   width: 2.75rem;
   justify-content: center;
-  color: var(--color-hoshi);
+  color: var(--color-muted);
   backdrop-filter: blur(8px);
 }
-.chip:focus-visible {
-  color: var(--color-tsuki);
+.icon-button:focus-visible {
+  color: var(--color-foreground);
   transform: scale(1.1);
 }
-.chip:active {
+.icon-button:active {
   transform: scale(0.92);
 }
 
@@ -293,8 +290,8 @@ a:focus-visible .link-draw {
     opacity 0.3s,
     transform var(--spring-hover-ms, 0.3s) var(--spring-hover, ease);
 }
-:root[data-theme="light"] .glyph[data-turns-to="light"],
-:root:not([data-theme="light"]) .glyph[data-turns-to="dark"] {
+:root[data-theme="light"] .glyph[data-target-theme="light"],
+:root:not([data-theme="light"]) .glyph[data-target-theme="dark"] {
   opacity: 0;
   transform: rotate(-90deg) scale(0.5);
 }
@@ -313,19 +310,19 @@ a:focus-visible .link-draw {
 }
 
 @media (hover: hover) {
-  .chip:hover,
+  .icon-button:hover,
   .pill:hover {
-    border-color: var(--color-kasumi);
+    border-color: var(--color-border);
   }
-  .chip:hover {
-    color: var(--color-tsuki);
+  .icon-button:hover {
+    color: var(--color-foreground);
     transform: scale(1.1);
   }
   .pill:hover {
     transform: scale(1.04);
   }
   /* :active after :hover, or the hover scale would override the press */
-  .chip:hover:active {
+  .icon-button:hover:active {
     transform: scale(0.92);
   }
   .pill:hover:active {
@@ -380,7 +377,7 @@ a:focus-visible .link-draw {
    for a block of text) play once when the page appears, using the site's
    springs (motion.ts provides them as linear() curves); --at sets each
    one's delay.
-   Scroll-driven ones (.arrive, .arrive-fade, and .line inside a .mask) use
+   Scroll-driven ones (.reveal, .reveal-fade, and .line inside a .mask) use
    a view timeline: the scroll position sets each animation's progress. So
    jumping down the page shows everything already in place, scrolling back
    reverses them, and the compositor runs them without script. Where
@@ -396,13 +393,13 @@ a:focus-visible .link-draw {
       var(--at, 0ms) both;
   }
   @supports (animation-timeline: view()) {
-    .arrive,
-    .arrive-fade {
+    .reveal,
+    .reveal-fade {
       animation: enter cubic-bezier(0.22, 1, 0.36, 1) both;
       animation-timeline: view();
       animation-range: entry 10% cover 35%;
     }
-    .arrive-fade {
+    .reveal-fade {
       animation-name: fade;
     }
     .mask {
@@ -442,9 +439,9 @@ a:focus-visible .link-draw {
   left: 0.75rem;
   z-index: 100;
   padding: 0.5rem 1rem;
-  background: var(--color-mizu);
-  color: var(--color-tsuki);
-  border: 1px solid var(--color-kasumi);
+  background: var(--color-surface);
+  color: var(--color-foreground);
+  border: 1px solid var(--color-border);
   border-radius: 0.25rem;
   transform: translateY(-200%);
 }

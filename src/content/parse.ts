@@ -25,7 +25,7 @@ import type {
   WhySection,
 } from "../data/types.ts";
 
-export interface Shelf {
+export interface MediumGroup {
   medium: string;
   titles: string[];
 }
@@ -37,7 +37,7 @@ export interface SongName {
 
 export interface Readme {
   tagline: string;
-  shelves: Shelf[];
+  groups: MediumGroup[];
   songs: SongName[];
 }
 
@@ -54,7 +54,7 @@ export interface Why {
 
 const MUSIC = "Music";
 /** README sections that are not part of the collection. */
-const AFTERWORD = new Set(["Documentation", "License"]);
+const OTHER_SECTIONS = new Set(["Documentation", "License"]);
 
 // A soft line break becomes a space: the files put one sentence per line
 // for the linter, and those breaks must not appear on the site.
@@ -110,24 +110,24 @@ export function parseReadme(md: string): Readme {
   const nodes = parse(md);
   let tagline: string | null = null;
   let medium: string | null = null;
-  const shelves: Shelf[] = [];
+  const groups: MediumGroup[] = [];
   const songs: SongName[] = [];
 
   for (const node of nodes) {
     if (node.type === "heading" && node.depth === 2) {
       const name = headingText(node);
-      medium = AFTERWORD.has(name) ? null : name;
-      if (medium && medium !== MUSIC) shelves.push({ medium, titles: [] });
+      medium = OTHER_SECTIONS.has(name) ? null : name;
+      if (medium && medium !== MUSIC) groups.push({ medium, titles: [] });
     } else if (node.type === "paragraph" && tagline === null && !medium) {
       tagline = plain(node.children);
     } else if (node.type === "list" && medium) {
       const names = (node as List).children.map(itemText);
       if (medium === MUSIC) songs.push(...names.map(splitSong));
-      else shelves.at(-1)?.titles.push(...names);
+      else groups.at(-1)?.titles.push(...names);
     }
   }
   if (!tagline) throw new Error("content: README has no tagline");
-  return { tagline, shelves, songs };
+  return { tagline, groups, songs };
 }
 
 function point(item: ListItem): ReviewPoint {
@@ -183,7 +183,7 @@ function labeled(node: Paragraph): ReviewPoint | null {
 }
 
 /** A paragraph entirely in italics: the epigraph, or the sign-off. */
-function voice(node: RootContent | undefined): string | null {
+function italicParagraph(node: RootContent | undefined): string | null {
   if (node?.type !== "paragraph" || node.children.length !== 1) return null;
   const [only] = node.children;
   return only?.type === "emphasis" ? plain(only.children) : null;
@@ -247,12 +247,12 @@ function section({
 export function parseWhy(md: string): Why {
   const nodes = parse(md);
   const [head, epigraph, ...rest] = nodes;
-  const description = voice(epigraph);
+  const description = italicParagraph(epigraph);
   if (head?.type !== "heading" || head.depth !== 1 || !description)
     throw new Error("content: the essay opens on its title and an epigraph");
 
   const rule = rest.findIndex((node) => node.type === "thematicBreak");
-  const footer = voice(rest[rule + 1]);
+  const footer = italicParagraph(rest[rule + 1]);
   if (rule < 0 || !footer || rest.length !== rule + 2)
     throw new Error("content: the essay ends on a rule and its sign-off");
 

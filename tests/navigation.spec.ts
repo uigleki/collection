@@ -4,8 +4,8 @@ import {
   HOME,
   heading,
   NOT_FOUND,
-  restingScrollY,
   row,
+  settledScrollY,
   test,
 } from "./helpers.ts";
 
@@ -117,12 +117,13 @@ test.describe("work pages", () => {
     page,
   }) => {
     await page.goto("/works/nisemonogatari");
-    const room = (name: string) => expect(heading(page, name)).toBeVisible();
+    const expectWork = (name: string) =>
+      expect(heading(page, name)).toBeVisible();
 
     await swipe(page, -160, 10); // left → the next work
-    await room("ハイスコアガール");
+    await expectWork("ハイスコアガール");
     await swipe(page, 160, 10); // right → the previous work
-    await room("偽物語");
+    await expectWork("偽物語");
 
     await swipe(page, -160, 400); // mostly vertical: scrolling, not a swipe
     await swipe(page, -30, 0); // too short to count, at any speed
@@ -136,11 +137,11 @@ test.describe("work pages", () => {
     const title = heading(page, "化物語");
     await expect(title).toBeVisible();
     const at = async () => (await title.boundingBox())?.x ?? 0;
-    const rest = await at();
+    const start = await at();
 
     // held, not released: the page has moved with the pointer
     await swipe(page, -120, 0, { release: false });
-    await expect.poll(async () => (await at()) - rest).toBeLessThan(-100);
+    await expect.poll(async () => (await at()) - start).toBeLessThan(-100);
     await release(page, -120, 0);
     await expect(page).toHaveURL(/nisemonogatari$/);
 
@@ -149,11 +150,11 @@ test.describe("work pages", () => {
     await page.goto("/works/bakemonogatari");
     await expect(title).toBeVisible();
     await swipe(page, 200, 0, { release: false });
-    await expect.poll(async () => (await at()) - rest).toBeGreaterThan(5);
-    expect((await at()) - rest).toBeLessThan(100);
+    await expect.poll(async () => (await at()) - start).toBeGreaterThan(5);
+    expect((await at()) - start).toBeLessThan(100);
     await release(page, 200, 0);
     await expect
-      .poll(async () => Math.abs((await at()) - rest))
+      .poll(async () => Math.abs((await at()) - start))
       .toBeLessThan(2);
     await expect(page).toHaveURL(/bakemonogatari$/);
   });
@@ -201,19 +202,19 @@ test.describe("work pages", () => {
     await page.goto("/");
     await row(page, "化物語").click();
     await expect(page).toHaveTitle(/^化物語/);
-    await expect(page.locator("[data-scene]")).toHaveCount(1);
-    const scenes = await page.evaluate(async () => {
+    await expect(page.locator("[data-page-layer]")).toHaveCount(1);
+    const layerCounts = await page.evaluate(async () => {
       history.back();
       await new Promise((r) => addEventListener("popstate", r, { once: true }));
       const counts: number[] = [];
       for (let i = 0; i < 6; i++) {
         await new Promise(requestAnimationFrame);
-        counts.push(document.querySelectorAll("[data-scene]").length);
+        counts.push(document.querySelectorAll("[data-page-layer]").length);
       }
       return counts;
     });
     // the work page is removed at once: no outgoing page is kept to fade out
-    expect(Math.max(...scenes)).toBe(1);
+    expect(Math.max(...layerCounts)).toBe(1);
   });
 
   test("a work without cover art still has a full work page", async ({
@@ -240,7 +241,7 @@ test.describe("work pages", () => {
     await page.goto("/");
     const link = row(page, "少女終末旅行");
     await link.scrollIntoViewIfNeeded();
-    const before = await restingScrollY(page);
+    const before = await settledScrollY(page);
     expect(before).toBeGreaterThan(500);
 
     await roundTrip(page, link, before, 200);
@@ -260,13 +261,13 @@ test.describe("work pages", () => {
       const box = await link.boundingBox().catch(() => null);
       if (box && box.y > 80 && box.y < 480) break;
       await page.mouse.wheel(0, 400);
-      await restingScrollY(page);
+      await settledScrollY(page);
     }
     // Playwright scrolls a target into view before clicking it, which would
     // move the page after the position was sampled. So the row is scrolled
     // into view first, and the position is sampled after that.
     await link.scrollIntoViewIfNeeded();
-    const before = await restingScrollY(page);
+    const before = await settledScrollY(page);
     expect(before).toBeGreaterThan(500);
     await roundTrip(page, link, before, 50);
   });
@@ -311,16 +312,17 @@ test.describe("work pages", () => {
         const probe = document.createElement("i");
         probe.style.color = meta?.content ?? "";
         document.body.append(probe);
-        const chrome = getComputedStyle(probe).color;
+        const themeColor = getComputedStyle(probe).color;
         probe.remove();
         return {
-          chrome,
-          ground: getComputedStyle(document.documentElement).backgroundColor,
+          themeColor,
+          background: getComputedStyle(document.documentElement)
+            .backgroundColor,
         };
       });
-    const agree = async () => {
-      const { chrome, ground } = await colors();
-      expect(chrome).toBe(ground);
+    const expectSame = async () => {
+      const { themeColor, background } = await colors();
+      expect(themeColor).toBe(background);
     };
 
     await page.goto("/");
@@ -328,10 +330,10 @@ test.describe("work pages", () => {
     // here is the visitor's own choice
     await page.getByRole("button", { name: "Switch to day" }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-    await agree();
+    await expectSame();
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-    await agree();
+    await expectSame();
   });
 
   test("a theme change uses no view transition and reverses midway", async ({
@@ -341,16 +343,16 @@ test.describe("work pages", () => {
     const toggle = page.getByRole("button", { name: /^Switch to/ });
     await expect(toggle).toBeVisible();
     const seen = await page.evaluate(async () => {
-      const ground = () =>
+      const background = () =>
         getComputedStyle(document.documentElement)
-          .getPropertyValue("--color-yoru")
+          .getPropertyValue("--color-background")
           .trim();
-      const night = ground();
-      let frozen = false;
+      const dark = background();
+      let usedViewTransition = false;
       const vt = document.startViewTransition?.bind(document);
       if (vt)
         document.startViewTransition = (...args) => {
-          frozen = true;
+          usedViewTransition = true;
           return vt(...args);
         };
       const button = document.querySelector<HTMLElement>(
@@ -358,18 +360,18 @@ test.describe("work pages", () => {
       );
       button?.click();
       // wait for the first frame in which the background color has changed
-      let between = night;
-      for (let i = 0; i < 60 && between === night; i++) {
+      let between = dark;
+      for (let i = 0; i < 60 && between === dark; i++) {
         await new Promise(requestAnimationFrame);
-        between = ground();
+        between = background();
       }
       // toggle back before the light theme's color is reached
       button?.click();
-      return { night, between, frozen };
+      return { dark, between, usedViewTransition };
     });
     // no view transition (a snapshot of the page) runs while the colors change
-    expect(seen.frozen).toBe(false);
-    expect(seen.between).not.toBe(seen.night);
+    expect(seen.usedViewTransition).toBe(false);
+    expect(seen.between).not.toBe(seen.dark);
     // …and it was sampled mid-transition, not already at the light value
     expect(seen.between).not.toBe("rgb(242, 236, 224)");
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
@@ -377,11 +379,11 @@ test.describe("work pages", () => {
       .poll(() =>
         page.evaluate(() =>
           getComputedStyle(document.documentElement)
-            .getPropertyValue("--color-yoru")
+            .getPropertyValue("--color-background")
             .trim(),
         ),
       )
-      .toBe(seen.night);
+      .toBe(seen.dark);
   });
 
   test("a system theme change before the app script runs is applied", async ({
@@ -424,7 +426,7 @@ test.describe("cover transition", () => {
       }
       throw new Error("no cover of " + title + " on " + page);
     };`;
-  type Seen = (title: string, page: string) => Promise<DOMRect>;
+  type MeasureCover = (title: string, page: string) => Promise<DOMRect>;
   const HOME_H1 = "Perfect Collection";
 
   test.beforeEach(async ({ page }) => {
@@ -432,27 +434,27 @@ test.describe("cover transition", () => {
     await page.goto("/");
     const link = row(page, "化物語");
     await link.scrollIntoViewIfNeeded();
-    await restingScrollY(page);
+    await settledScrollY(page);
   });
 
   test("the cover animates from its row to its place on the work page", async ({
     page,
   }) => {
-    const { from, early, landed } = await page.evaluate(async (home) => {
-      const cover = (window as unknown as { __cover: Seen }).__cover;
+    const { from, early, final } = await page.evaluate(async (home) => {
+      const cover = (window as unknown as { __cover: MeasureCover }).__cover;
       const from = await cover("化物語", home);
       document
         .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
         ?.click();
       const early = await cover("化物語", "化物語");
       await new Promise((r) => setTimeout(r, 1500));
-      return { from, early, landed: await cover("化物語", "化物語") };
+      return { from, early, final: await cover("化物語", "化物語") };
     }, HOME_H1);
     // It starts at its position in the row…
     expect(Math.abs(early.left - from.left)).toBeLessThan(60);
     expect(Math.abs(early.top - from.top)).toBeLessThan(60);
     // …and ends at a different size: its place on the work page.
-    expect(Math.abs(landed.width - from.width)).toBeGreaterThan(40);
+    expect(Math.abs(final.width - from.width)).toBeGreaterThan(40);
   });
 
   test("the cover stays visible throughout the transition", async ({
@@ -505,7 +507,7 @@ test.describe("cover transition", () => {
     page,
   }) => {
     const { before, after } = await page.evaluate(async (home) => {
-      const cover = (window as unknown as { __cover: Seen }).__cover;
+      const cover = (window as unknown as { __cover: MeasureCover }).__cover;
       document
         .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
         ?.click();

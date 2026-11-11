@@ -10,5 +10,3 @@ extend-ignore-re = [
 [default.extend-words]
 # the axe-core accessibility checker
 axe = "axe"
-# 夜, a palette color named throughout the site
-yoru = "yoru"

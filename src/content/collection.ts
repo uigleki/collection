@@ -50,7 +50,7 @@ function take<T>(source: Map<string, T>, name: string, what: string): T {
   return found;
 }
 
-function leftovers(source: Map<string, unknown>, where: string) {
+function rejectUnused(source: Map<string, unknown>, where: string) {
   const names = [...source.keys()];
   if (names.length > 0)
     throw new Error(
@@ -63,19 +63,19 @@ export function assemble(
   reviews: ReadonlyMap<string, Review>,
   catalog: Catalog,
 ): Collection {
-  const unreviewed = new Map(reviews);
-  const uncataloged = new Map(Object.entries(catalog.works));
-  const unsung = new Map(Object.entries(catalog.songs));
+  const unusedReviews = new Map(reviews);
+  const unusedWorks = new Map(Object.entries(catalog.works));
+  const unusedSongs = new Map(Object.entries(catalog.songs));
 
-  const categories = readme.shelves.map(({ medium, titles }) => ({
+  const categories = readme.groups.map(({ medium, titles }) => ({
     name: medium,
     works: titles.map((title): Work => {
       const { art: _fetchOnly, ...meta } = take(
-        uncataloged,
+        unusedWorks,
         title,
         "catalog entry",
       );
-      const { subtitle, points, flaws } = take(unreviewed, title, "review");
+      const { subtitle, points, flaws } = take(unusedReviews, title, "review");
       if (HAN_OR_KANA.test(title) && !meta.lang)
         throw new Error(`content: say which language "${title}" is in`);
       return {
@@ -90,9 +90,9 @@ export function assemble(
 
   const music = readme.songs.map(({ artist, title }): Track => {
     const name = `${artist} - ${title}`;
-    const { subtitle } = take(unreviewed, name, "review");
-    const meta = unsung.get(name) ?? {};
-    unsung.delete(name);
+    const { subtitle } = take(unusedReviews, name, "review");
+    const meta = unusedSongs.get(name) ?? {};
+    unusedSongs.delete(name);
     if (HAN_OR_KANA.test(title) && !meta.lang)
       throw new Error(`content: say which language the title "${name}" is in`);
     if (HAN_OR_KANA.test(artist) && !meta.artistLang)
@@ -100,8 +100,8 @@ export function assemble(
     return { artist, title, ...meta, subtitle };
   });
 
-  leftovers(unreviewed, "reviews.md");
-  leftovers(uncataloged, "the catalog");
-  leftovers(unsung, "the catalog's songs");
+  rejectUnused(unusedReviews, "reviews.md");
+  rejectUnused(unusedWorks, "the catalog");
+  rejectUnused(unusedSongs, "the catalog's songs");
   return { tagline: readme.tagline, categories, music };
 }

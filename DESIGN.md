@@ -38,7 +38,7 @@ The sky is the one prominent effect: a single WebGL canvas that persists across 
 
 - The moon's terminator is computed from the phase (`src/lib/moon.ts`).
 - The sea is rendered in perspective, from a camera at a fixed height above a flat water plane, and reflects the same sky and moon.
-- The moon's reflection (the moonglade) is not drawn as a shape.
+- The moon's reflection is not drawn as a shape.
   It comes from wave facets that reflect the moon toward the camera, so it narrows toward the horizon.
 - The sea animates on its own clock and does not react to scrolling.
 - There are no other ambient effects: no cursor effects and no sound.
@@ -47,7 +47,7 @@ How the design applies the criteria in docs/why.md:
 
 - There is no loader: the static fallback image is shown first and the WebGL sky fades in over it.
 - The end of the page has no climax effect.
-- The design relies on detail, not repetition: a returning visitor can notice the moon phases, the moonglade and the work accents.
+- The design relies on detail, not repetition: a returning visitor can notice the moon phases, the moon's reflection and the work accents.
 - The dark theme is bright enough to read as moonlit, not gloomy.
 - On the home page the moon is the reading-progress indicator: its phase follows the scroll position.
 - A work's night number is set by its position in the list.
@@ -63,26 +63,26 @@ The build fails if the Markdown and the catalog disagree.
 
 ## Colors
 
-Each theme uses two ground colors and one accent color for the UI.
+Each theme uses two background colors and one accent color for the UI.
 The per-work accent colors are never used in the UI outside that work's row and page.
 
-Dark theme (default), named after traditional Japanese colors:
+Dark theme (default):
 
-- **yoru (#0b0e17)** 濡羽 — sky and ground.
-- **mizu (#12161f)** 藍鉄 — water, raised surfaces, chips.
-- **kasumi (#2a3140)** 藍鼠 — mist, borders.
-- **tsuki (#eaf1f8)** 月白 — text and the moon.
-- **hoshi (#98a2b3)** 銀鼠 — secondary text.
-- **tsukikage (#cdb489)** 香色 — the only UI accent.
+- **background (#0b0e17)** — the page background and the top of the sky.
+- **surface (#12161f)** — raised surfaces and buttons.
+- **border (#2a3140)** — borders.
+- **foreground (#eaf1f8)** — text and the moon.
+- **muted (#98a2b3)** — secondary text.
+- **accent (#cdb489)** — the only UI accent.
 
 Light theme: a bright golden-hour sky, bright enough that dark text is readable over any part of it.
 The shader draws pastel periwinkle above pale gold.
-The ground is a warm paper color, text is dark, and the single accent is gold.
+The background is a warm paper color, text is dark, and the single accent is gold.
 The light theme redefines the same six color names, so components use one set of names in both themes.
 Switching theme changes the page and the sky together, without a reload.
 Only the moon disc, drawn in gold, is strongly saturated.
 
-Each work has an accent color: the color the work is known for (for example Senjougahara's purple), adjusted by hand for contrast on the dark ground.
+Each work has an accent color: the color the work is known for (for example Senjougahara's purple), adjusted by hand for contrast on the dark background.
 The accent of 少女終末旅行 is muted on purpose, because the work's own palette is.
 Accents are stored in the catalog, not as CSS tokens, so UI styles cannot reference them.
 An accent is used only in that work's row and page: title underline, cover border and glow, review labels.
@@ -120,14 +120,14 @@ Contrast: at least WCAG AA (4.5:1 body text, 3:1 large text) in both themes.
   It has a thin border in the work's accent.
   On navigation between a row and its work page, the cover animates from one position to the other while the pages cross-fade; the cover itself does not fade.
   A work with no licensed cover source shows a text panel instead.
-- **NightRow** — the whole row is a single link.
+- **WorkRow** — the whole row is a single link.
   On hover the cover lifts and tilts toward the cursor, the title's accent underline extends, and an accent glow appears under the cover.
 - **Work page** — the sky animates to the work's moon phase and dims behind the text.
   The page opens scrolled to the top with one short entrance animation.
   Previous/next slides the page horizontally, and a swipe past the first or last work rubber-bands.
   If the browser already animated the navigation (for example an edge-swipe back), the site changes page without its own animation.
   Reviews list a work's flaws in their own section.
-- **Chips** — 44px round glass buttons; the label appears on hover.
+- **Icon buttons** — 44px round glass buttons; the label appears on hover.
 - **Link** — every text link animates its underline in from left to right.
 
 ## Do's and Don'ts

@@ -9,7 +9,7 @@ export function renderEmphasis(text: string): ReactNode[] {
     const m = /^\*\*([^*]+)\*\*$/.exec(part);
     if (m) {
       return (
-        <strong key={i} className="font-medium text-tsuki">
+        <strong key={i} className="font-medium text-foreground">
           {m[1]}
         </strong>
       );
