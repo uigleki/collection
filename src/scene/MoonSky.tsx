@@ -330,16 +330,36 @@ export function MoonSky() {
       aspect = el.clientWidth / Math.max(el.clientHeight, 1);
       span = document.documentElement.scrollHeight - window.innerHeight;
     };
+    // Whether the canvas still shows what the uniforms say. A sky that has
+    // not changed is not drawn again: for a reader who asked for stillness
+    // that is nearly every frame.
+    let stale = true;
+    let drew = false;
+    const set = <K extends PropertyKey>(
+      on: Record<K, number>,
+      key: K,
+      value: number,
+    ) => {
+      if (on[key] === value) return;
+      on[key] = value;
+      stale = true;
+    };
+    const draw = () => {
+      renderer.render({ scene: mesh });
+      stale = false;
+      drew = true;
+    };
     const size = () => {
       renderer.setSize(el.clientWidth, el.clientHeight);
       uniforms.uRes.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
+      stale = true; // sizing a canvas clears it
     };
     const resize = () => {
       size();
       measure();
-      // Sizing a canvas clears it, and observers run after this frame's
-      // draw: without a draw of its own, the frame would show black.
-      renderer.render({ scene: mesh });
+      // Observers run after this frame's draw: without a draw of its own,
+      // the frame would show the cleared canvas.
+      draw();
     };
     // Resolution follows what this machine can draw in time (governor.ts).
     const pace = governor({ max: sharpest, min: Math.min(sharpest, 0.6) });
@@ -374,10 +394,12 @@ export function MoonSky() {
       const ms = now - last;
       const dt = Math.min(ms / 1000, 0.1);
       last = now;
-      if (pace.frame(ms)) {
+      // A frame that drew nothing says nothing about what the sky costs.
+      if (drew && pace.frame(ms)) {
         renderer.dpr = pace.scale;
-        size(); // drawn below, in this same frame
+        size();
       }
+      drew = false;
       // reduced motion: the ambient time stands still and states cut cleanly,
       // but the moon still shows the truthful phase for where the reader is.
       const still = reduced.matches;
@@ -409,16 +431,20 @@ export function MoonSky() {
       dim = still ? sky.dim : ease(dim, sky.dim, 4.0, dt);
 
       const alt = (night - 1) / (FULL_NIGHT - 1);
-      uniforms.uPhase.value = terminator(night);
-      uniforms.uMoon.value[0] = aspect > 1.05 ? 0.66 : 0.5;
-      uniforms.uMoon.value[1] = 0.52 + 0.32 * alt;
-      uniforms.uTime.value = time;
-      uniforms.uDay.value = sky.day;
-      uniforms.uDawn.value = progress > 0.84 ? (progress - 0.84) / 0.16 : 0;
-      uniforms.uGlade.value = glade;
-      uniforms.uDim.value = dim;
+      set(uniforms.uPhase, "value", terminator(night));
+      set(uniforms.uMoon.value, 0, aspect > 1.05 ? 0.66 : 0.5);
+      set(uniforms.uMoon.value, 1, 0.52 + 0.32 * alt);
+      set(uniforms.uTime, "value", time);
+      set(uniforms.uDay, "value", sky.day);
+      set(
+        uniforms.uDawn,
+        "value",
+        progress > 0.84 ? (progress - 0.84) / 0.16 : 0,
+      );
+      set(uniforms.uGlade, "value", glade);
+      set(uniforms.uDim, "value", dim);
 
-      renderer.render({ scene: mesh });
+      if (stale) draw();
       if (!shown) {
         shown = true;
         el.style.opacity = "1";
@@ -430,6 +456,8 @@ export function MoonSky() {
       cancelAnimationFrame(raf);
       if (!document.hidden) {
         last = performance.now();
+        // a browser may let go of the frame a hidden tab was showing
+        stale = true;
         raf = requestAnimationFrame(frame);
       }
     };
