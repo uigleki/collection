@@ -1,13 +1,7 @@
-import type { PageMeta } from "./types.ts";
-
 // A separate module from works.ts: every route reads its title from here,
 // and routes like /why and /404 would otherwise import the works data (and
 // with it the cover placeholders) only for this.
-export const siteMeta = {
-  title: "Perfect Collection",
-  description:
-    "Works that enrich rather than diminish — created from love, not manipulation.",
-} as const satisfies PageMeta;
+export const siteTitle = "Perfect Collection";
 
 /**
  * The site's origin. Each route's canonical URL, the og:image URL, the
@@ -17,13 +11,23 @@ export const siteMeta = {
 export const origin = "https://spotless.pages.dev";
 
 /**
- * The fixed pages, for the sitemap. Work pages are not listed here: they
- * are derived from the collection. This list must match the routes in
- * src/app/routes.tsx; an e2e test requests every URL in the sitemap and
- * fails if one does not resolve.
+ * The fixed pages. The sitemap lists them, and src/app/routes.tsx has a
+ * route for each. Work pages are not listed here: they are derived from the
+ * collection.
  */
 export const pages = [
   { path: "/", priority: "1.0" },
   { path: "/why", priority: "0.8" },
   { path: "/credits", priority: "0.3" },
 ] as const;
+
+/** The path of a work's page. */
+export const workPath = (slug: string) => `/works/${slug}`;
+
+/**
+ * The file a page is prerendered to. <path>.html, not <path>/index.html:
+ * the host serves the first at the bare path and redirects the second to a
+ * trailing slash, which is not the URL the sitemap and the links use.
+ */
+export const pageFile = (path: string) =>
+  path === "/" ? "index.html" : `${path.slice(1)}.html`;

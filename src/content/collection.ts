@@ -35,7 +35,6 @@ export interface Catalog {
 }
 
 export interface Collection {
-  tagline: string;
   categories: WorkCategory[];
   music: Track[];
 }
@@ -83,7 +82,7 @@ export function assemble(
         ...meta,
         subtitle,
         review: points,
-        ...(flaws.length > 0 && { flaws }),
+        ...(flaws && { flaws }),
       };
     }),
   }));
@@ -103,5 +102,5 @@ export function assemble(
   rejectUnused(unusedReviews, "reviews.md");
   rejectUnused(unusedWorks, "the catalog");
   rejectUnused(unusedSongs, "the catalog's songs");
-  return { tagline: readme.tagline, categories, music };
+  return { categories, music };
 }

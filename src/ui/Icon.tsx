@@ -32,3 +32,12 @@ export function Icon({
     </svg>
   );
 }
+
+/** The arrowhead of a control that goes to the previous (-1) or next (1). */
+export function Chevron({ step }: { step: 1 | -1 }) {
+  return (
+    <Icon>
+      <path d={step === 1 ? "M9 6l6 6-6 6" : "M15 18l-6-6 6-6"} />
+    </Icon>
+  );
+}

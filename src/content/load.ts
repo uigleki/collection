@@ -18,18 +18,18 @@ export const SOURCES = {
 } as const;
 
 export interface Content {
+  /** the README's opening sentence, which is the site's description */
+  tagline: string;
   collection: Collection;
   why: Why;
 }
 
 export function load(): Content {
   const read = (path: string) => readFileSync(path, "utf8");
+  const readme = parseReadme(read(SOURCES.readme));
   return {
-    collection: assemble(
-      parseReadme(read(SOURCES.readme)),
-      parseReviews(read(SOURCES.reviews)),
-      catalog,
-    ),
+    tagline: readme.tagline,
+    collection: assemble(readme, parseReviews(read(SOURCES.reviews)), catalog),
     why: parseWhy(read(SOURCES.why)),
   };
 }

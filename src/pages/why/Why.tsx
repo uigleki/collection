@@ -1,4 +1,3 @@
-import { siteMeta } from "@/data/site.ts";
 import type { ReviewPoint } from "@/data/types.ts";
 import { data, meta } from "@/data/why.ts";
 import { renderEmphasis } from "@/lib/emphasis.tsx";
@@ -8,7 +7,7 @@ import { usePage } from "@/lib/usePage.ts";
 import { TextPage } from "@/ui/TextPage.tsx";
 
 export function Why() {
-  const h1 = usePage(`${meta.title} — ${siteMeta.title}`);
+  const h1 = usePage(meta.title);
 
   useSky({ dim: 0.75, night: FULL_NIGHT });
 
@@ -31,7 +30,7 @@ export function Why() {
           <p
             key={line}
             className="enter text-lead leading-relaxed"
-            style={{ "--at": `${200 + i * 100}ms` } as React.CSSProperties}
+            style={{ "--at": `${200 + i * 100}ms` }}
           >
             {renderEmphasis(line)}
           </p>

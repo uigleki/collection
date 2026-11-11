@@ -50,21 +50,12 @@ const FEATURES = ["halt", "kern", "palt"];
 // CJK / kana / full-width ranges — everything the CJK faces should cover.
 const CJK = /[　-〿぀-ゟ゠-ヿ㐀-䶿一-鿿豈-﫿＀-￯]/gu;
 
-async function walk(dir: string): Promise<string[]> {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = await Promise.all(
-    entries.map((e) => {
-      const p = resolve(dir, e.name);
-      if (e.isDirectory()) return walk(p);
-      return /\.(ts|tsx)$/.test(e.name) ? [p] : [];
-    }),
-  );
-  return files.flat();
-}
-
 async function collectGlyphs(): Promise<string> {
+  const source = (await readdir(SRC, { recursive: true }))
+    .filter((name) => /\.tsx?$/.test(name))
+    .map((name) => resolve(SRC, name));
   // The site's text comes from the Markdown files as well as from src/.
-  const files = [...(await walk(SRC)), ...Object.values(MARKDOWN)];
+  const files = [...source, ...Object.values(MARKDOWN)];
   const set = new Set<string>();
   for (const f of files) {
     const text = await readFile(f, "utf8");

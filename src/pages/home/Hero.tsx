@@ -13,10 +13,7 @@ const [questionA, questionB] = displayLines.opening;
 function Line({ at, children }: { at: number; children: string }) {
   return (
     <span className="block overflow-hidden">
-      <span
-        className="rise block"
-        style={{ "--at": `${at}ms` } as React.CSSProperties}
-      >
+      <span className="rise block" style={{ "--at": `${at}ms` }}>
         {children}
       </span>
     </span>
@@ -25,7 +22,7 @@ function Line({ at, children }: { at: number; children: string }) {
 
 /** The home page's first section. It shows no loader (DESIGN.md). */
 export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {
-  const section = useNight<HTMLElement>(1);
+  const section = useNight(1);
 
   return (
     <section

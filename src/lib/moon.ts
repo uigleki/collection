@@ -4,16 +4,16 @@
  * the phase the WebGL moon draws, so the phase always matches the work
  * being read.
  */
+import workCount from "virtual:work-count";
 
 /**
  * The night of the full moon, which is the last work's night.
  *
- * A literal rather than derived from `allWorks.length`: the sky imports
- * this on every route, and importing the works data would pull every work's
- * text into the eagerly loaded graph. moon.test.ts asserts the two agree,
- * so adding a work without updating this fails CI.
+ * Derived from the number of works alone, not from `allWorks.length`: the
+ * sky imports this on every route, and importing the works data would pull
+ * every work's text into the eagerly loaded graph.
  */
-export const FULL_NIGHT = 15;
+export const FULL_NIGHT = workCount + 1;
 
 /**
  * Terminator position across the disc, +1 (new) → -1 (full).

@@ -1,5 +1,5 @@
 import { useIsPresent } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import { sky } from "@/scene/skyState.ts";
 
 type Cross = (visible: boolean) => void;
@@ -36,18 +36,17 @@ function band(rootMargin: string) {
  * still cross the viewport while it fades out, and they must not change
  * the sky.
  */
-function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
-  const ref = useRef<T>(null);
+function useBand(rootMargin: string, onCross: Cross) {
+  const ref = useRef<HTMLElement>(null);
   const present = useIsPresent();
-  const latest = useRef(onCross);
-  useEffect(() => {
-    latest.current = present ? onCross : () => {};
+  const cross = useEffectEvent((visible: boolean) => {
+    if (present) onCross(visible);
   });
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const { io, watchers } = band(rootMargin);
-    watchers.set(el, (visible) => latest.current(visible));
+    watchers.set(el, cross);
     io.observe(el);
     return () => {
       io.unobserve(el);
@@ -62,8 +61,8 @@ function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
  * night becomes the sky's target. This is how scrolling advances the moon's
  * phase: one night per work, matching the work in the middle of the screen.
  */
-export function useNight<T extends HTMLElement>(night: number) {
-  return useBand<T>("-40% 0px -40% 0px", (visible) => {
+export function useNight(night: number) {
+  return useBand("-40% 0px -40% 0px", (visible) => {
     if (visible) sky.targetNight = night;
   });
 }
@@ -72,8 +71,8 @@ export function useNight<T extends HTMLElement>(night: number) {
  * Brightens the moon's reflection on the water while the music section is
  * in the middle of the viewport.
  */
-export function useReflectionOnly<T extends HTMLElement>() {
-  return useBand<T>("-30% 0px -30% 0px", (visible) => {
+export function useReflectionOnly() {
+  return useBand("-30% 0px -30% 0px", (visible) => {
     sky.reflectionOnly = visible ? 1 : 0;
   });
 }

@@ -118,6 +118,9 @@
   --color-muted: #98a2b3; /* secondary text */
   --color-accent: #cdb489; /* used sparingly */
   --color-ring: #c7d3e0;
+
+  /* The easing of every transition that is not a spring (motion.ts). */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 :root {
@@ -171,7 +174,7 @@
       --color-background, --color-surface, --color-border, --color-foreground,
       --color-muted, --color-accent, --color-ring;
     transition-duration: 0.8s;
-    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+    transition-timing-function: var(--ease-out-quint);
   }
 }
 
@@ -280,7 +283,7 @@ body {
   background-size:
     0% 1px,
     100% 1px;
-  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-size 0.45s var(--ease-out-quint);
 }
 .link-draw:focus-visible,
 a:focus-visible .link-draw {
@@ -339,9 +342,6 @@ a:focus-visible .link-draw {
   color: var(--color-foreground);
   transform: scale(1.1);
 }
-.icon-button:active {
-  transform: scale(0.92);
-}
 
 /* The theme toggle's two icons are stacked in the same place; the hidden
    one is rotated 90° and faded out. The transform uses a spring, so a press
@@ -363,15 +363,11 @@ a:focus-visible .link-draw {
 
 .pill {
   display: inline-flex;
-  gap: 0.5rem;
   padding: 0.6rem 1.4rem;
   backdrop-filter: blur(4px);
 }
 .pill:focus-visible {
   transform: scale(1.04);
-}
-.pill:active {
-  transform: scale(0.97);
 }
 
 @media (hover: hover) {
@@ -386,22 +382,25 @@ a:focus-visible .link-draw {
   .pill:hover {
     transform: scale(1.04);
   }
-  /* :active after :hover, or the hover scale would override the press */
-  .icon-button:hover:active {
-    transform: scale(0.92);
-  }
-  .pill:hover:active {
-    transform: scale(0.97);
-  }
+}
+/* :active after :hover and :focus-visible, or their scale would override
+   the press */
+.icon-button:active {
+  transform: scale(0.92);
+}
+.pill:active {
+  transform: scale(0.97);
 }
 
 /* Row hover: the title gets an underline in the work's accent color, and
    the cover gets a glow of the same color (--glow, set per row). */
 .underline-grow {
+  --underline: color-mix(in oklab, var(--glow) 70%, var(--color-foreground));
+  background-image: linear-gradient(var(--underline), var(--underline));
   background-repeat: no-repeat;
   background-position: 0 96%;
   background-size: 0% 2px;
-  transition: background-size 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: background-size 0.55s var(--ease-out-quint);
 }
 .group:focus-visible .underline-grow {
   background-size: 100% 2px;
@@ -423,7 +422,7 @@ a:focus-visible .link-draw {
   box-shadow: 0 24px 60px -18px
     color-mix(in oklab, var(--glow) 45%, transparent);
   opacity: 0;
-  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.45s var(--ease-out-quint);
 }
 .group:focus-visible .cover-glow::after {
   opacity: 1;
@@ -460,7 +459,7 @@ a:focus-visible .link-draw {
   @supports (animation-timeline: view()) {
     .reveal,
     .reveal-fade {
-      animation: enter cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: enter var(--ease-out-quint) both;
       animation-timeline: view();
       animation-range: entry 10% cover 35%;
     }
@@ -471,7 +470,7 @@ a:focus-visible .link-draw {
       view-timeline-name: --mask;
     }
     .mask > .line {
-      animation: rise cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation: rise var(--ease-out-quint) both;
       animation-timeline: --mask;
       animation-range: entry 20% cover 45%;
     }

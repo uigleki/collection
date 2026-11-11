@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { sky } from "@/scene/skyState.ts";
 
-export type Theme = "dark" | "light";
+type Theme = "dark" | "light";
 
 // The theme has one owner: the pre-paint script (index.html) sets the first
 // value, and this module handles every later change: the toggle, and an OS

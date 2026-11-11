@@ -5,6 +5,11 @@ declare module "virtual:collection" {
   export default collection;
 }
 
+declare module "virtual:work-count" {
+  const count: number;
+  export default count;
+}
+
 declare module "virtual:why" {
   import type { Why } from "@/content/parse.ts";
 

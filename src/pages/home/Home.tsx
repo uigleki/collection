@@ -1,4 +1,3 @@
-import { siteMeta } from "@/data/site.ts";
 import { sections } from "@/data/works.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
@@ -10,7 +9,7 @@ import { MusicSection } from "./MusicSection.tsx";
 import { WorkRow } from "./WorkRow.tsx";
 
 export function Home() {
-  const h1 = usePage(siteMeta.title);
+  const h1 = usePage();
 
   // The only page where scroll progress advances the moon's phase.
   useSky({ fullMoonByScroll: true });

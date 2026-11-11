@@ -6,7 +6,7 @@ import {
   useRef,
 } from "react";
 import { useLocation } from "react-router";
-import { origin } from "@/data/site.ts";
+import { origin, siteTitle } from "@/data/site.ts";
 
 // The location key of the previous page. Lets the hook tell a route change
 // (focus moves to the new h1, including on Back to the home page) from the
@@ -45,9 +45,11 @@ function canonical(pathname: string) {
  * Per-route page setup: a deterministic document title (React 19's <title>
  * hoisting races the static one on lazy routes), the canonical URL, and
  * focus moved to the h1 so keyboard and screen-reader users start at the new
- * content, not on the link they activated.
+ * content, not on the link they activated. The title is the page's `name`
+ * followed by the site's; the home page has no name of its own.
  */
-export function usePage(title: string): RefObject<HTMLHeadingElement | null> {
+export function usePage(name?: string): RefObject<HTMLHeadingElement | null> {
+  const title = name ? `${name} — ${siteTitle}` : siteTitle;
   const h1 = useRef<HTMLHeadingElement>(null);
   const { key, pathname } = useLocation();
   const head = useContext(PageHead);

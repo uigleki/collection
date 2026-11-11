@@ -105,12 +105,15 @@ describe("parseReviews", () => {
         },
         { label: '"For River" and everything after', text: "Theme song." },
       ],
-      flaws: [
-        {
-          label: "Slow initial pacing",
-          text: "Extended slice-of-life foundation.",
-        },
-      ],
+      flaws: {
+        heading: "Shortcomings",
+        points: [
+          {
+            label: "Slow initial pacing",
+            text: "Extended slice-of-life foundation.",
+          },
+        ],
+      },
     });
   });
 
@@ -119,7 +122,6 @@ describe("parseReviews", () => {
       subtitle:
         "Even as the world crumbles, I remain standing to witness it all",
       points: [],
-      flaws: [],
     });
   });
 });

@@ -39,7 +39,22 @@ export interface Work extends Titled {
    */
   accent: string;
   readonly review: readonly ReviewPoint[];
-  readonly flaws?: readonly ReviewPoint[];
+  /** the review's shortcomings, under the heading reviews.md gives them */
+  readonly flaws?: {
+    readonly heading: string;
+    readonly points: readonly ReviewPoint[];
+  };
+}
+
+/** A work's cover art, as scripts/fetch-covers.ts records it. */
+export interface CoverMeta {
+  slug: string;
+  width: number;
+  height: number;
+  /** base64 thumbhash of the art, decoded into its placeholder on the page */
+  thumbhash: string;
+  credit: string;
+  sourceUrl: string;
 }
 
 export interface WorkCategory {

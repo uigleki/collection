@@ -8,7 +8,13 @@ import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import { load } from "./src/content/load.ts";
 import { content } from "./src/content/plugin.ts";
-import { origin, pages, siteMeta } from "./src/data/site.ts";
+import {
+  origin,
+  pageFile,
+  pages,
+  siteTitle,
+  workPath,
+} from "./src/data/site.ts";
 import { cssSprings } from "./src/lib/motion.ts";
 
 const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
@@ -47,9 +53,9 @@ const manifest = () => {
   const { dark } = backgroundColors();
   return JSON.stringify(
     {
-      name: siteMeta.title,
+      name: siteTitle,
       short_name: "Collection",
-      description: siteMeta.description,
+      description: load().tagline,
       start_url: "/",
       display: "standalone",
       theme_color: dark,
@@ -77,7 +83,7 @@ const everyPage = (): { path: string; priority: string }[] => [
   ...pages,
   ...load().collection.categories.flatMap((category) =>
     category.works.map((work) => ({
-      path: `/works/${work.slug}`,
+      path: workPath(work.slug),
       priority: "0.6",
     })),
   ),
@@ -257,15 +263,7 @@ async function writePages(dist: string): Promise<void> {
     writeFileSync(to, page);
   };
 
-  // <path>.html, not <path>/index.html: the host serves the first at the
-  // bare path and redirects the second to a trailing slash, which is not
-  // the URL the sitemap and the links use.
-  for (const { path } of everyPage())
-    await write(
-      path,
-      path === "/" ? "index.html" : `${path.slice(1)}.html`,
-      true,
-    );
+  for (const { path } of everyPage()) await write(path, pageFile(path), true);
   await write("/404", "404.html", false);
 
   writeFileSync(resolve(dist, "_headers"), headers(shell));
@@ -273,11 +271,11 @@ async function writePages(dist: string): Promise<void> {
 
 /**
  * The site's name is defined once in src/data/site.ts, its colors in
- * src/styles/index.css and its works in README.md. This plugin copies all
- * three into the outputs the app cannot write at runtime: the HTML a reader
- * or a crawler gets before any JavaScript runs, the manifest, the sitemap,
- * robots.txt and the response headers. These outputs therefore cannot
- * differ from the site itself.
+ * src/styles/index.css, and its description and works in README.md. This
+ * plugin copies them into the outputs the app cannot write at runtime: the
+ * HTML a reader or a crawler gets before any JavaScript runs, the manifest,
+ * the sitemap, robots.txt and the response headers. These outputs therefore
+ * cannot differ from the site itself.
  */
 function siteMetadata(): Plugin {
   const generated = {
@@ -299,8 +297,8 @@ function siteMetadata(): Plugin {
       handler: (html) => {
         const { dark, light } = backgroundColors();
         const values: Record<string, string> = {
-          __SITE_TITLE__: siteMeta.title,
-          __SITE_DESCRIPTION__: siteMeta.description,
+          __SITE_TITLE__: siteTitle,
+          __SITE_DESCRIPTION__: escapeHtml(load().tagline),
           __SITE_ORIGIN__: origin,
           __BACKGROUND_DARK__: dark,
           __BACKGROUND_LIGHT__: light,

@@ -4,7 +4,7 @@ import { FULL_NIGHT } from "@/lib/moon.ts";
 import { useNight } from "@/lib/sky.ts";
 
 export function EpigraphSection() {
-  const ref = useNight<HTMLElement>(FULL_NIGHT);
+  const ref = useNight(FULL_NIGHT);
 
   return (
     <section

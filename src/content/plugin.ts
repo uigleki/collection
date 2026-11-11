@@ -2,13 +2,16 @@ import type { Plugin } from "vite";
 import { load, SOURCES } from "./load.ts";
 
 /**
- * Serves the collection to the app as two modules, parsed from the Markdown
- * at build time: `virtual:collection` (README.md and docs/reviews.md: the
- * works and the songs) and `virtual:why` (docs/why.md).
+ * Serves the collection to the app as modules, parsed from the Markdown at
+ * build time: `virtual:collection` (README.md and docs/reviews.md: the works
+ * and the songs), `virtual:why` (docs/why.md) and `virtual:work-count` (the
+ * number of works, for code that must not import their text).
  */
 const MODULES = {
   "virtual:collection": () => load().collection,
   "virtual:why": () => load().why,
+  "virtual:work-count": () =>
+    load().collection.categories.reduce((n, c) => n + c.works.length, 0),
 } as const;
 
 type Id = keyof typeof MODULES;

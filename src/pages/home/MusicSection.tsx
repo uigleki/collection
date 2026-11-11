@@ -3,7 +3,7 @@ import { useReflectionOnly } from "@/lib/sky.ts";
 import { CategoryHeading } from "./CategoryHeading.tsx";
 
 export function MusicSection() {
-  const ref = useReflectionOnly<HTMLElement>();
+  const ref = useReflectionOnly();
 
   return (
     <section ref={ref} aria-label="Music" className="relative py-20 md:py-28">
@@ -17,7 +17,7 @@ export function MusicSection() {
         {music.map((track) => (
           <li
             key={trackName(track)}
-            style={{ "--from": "14px" } as React.CSSProperties}
+            style={{ "--from": "14px" }}
             className="reveal grid gap-1 py-5 md:grid-cols-[1fr_1.15fr] md:items-baseline md:gap-8"
           >
             <span className="text-body">

@@ -1,4 +1,3 @@
-import { siteMeta } from "@/data/site.ts";
 import { allWorks } from "@/data/works.ts";
 import { coverFor } from "@/lib/covers.ts";
 import { useSky } from "@/lib/sky.ts";
@@ -21,7 +20,7 @@ const CREDITED = allWorks.flatMap(({ work }) => {
  * libraries.
  */
 export function Credits() {
-  const h1 = usePage(`Colophon — ${siteMeta.title}`);
+  const h1 = usePage("Colophon");
 
   useSky({ dim: 0.75 });
 

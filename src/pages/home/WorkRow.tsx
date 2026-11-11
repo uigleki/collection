@@ -1,5 +1,6 @@
 import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
+import { workPath } from "@/data/site.ts";
 import type { WorkEntry } from "@/data/works.ts";
 import { FOLLOW } from "@/lib/motion.ts";
 import { useNight } from "@/lib/sky.ts";
@@ -9,7 +10,7 @@ import { Cover } from "@/ui/Cover.tsx";
  * middle of the viewport, its `night` is the sky's target (useNight). */
 export function WorkRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
-  const ref = useNight<HTMLElement>(entry.night);
+  const ref = useNight(entry.night);
   const { work, category, ordinal } = entry;
   const { title, slug, lang, accent } = work;
 
@@ -38,15 +39,15 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
   return (
     <article
       ref={ref}
-      style={{ "--from": "28px" } as React.CSSProperties}
+      style={{ "--from": "28px" }}
       className="reveal py-16 first:pt-0 md:py-20"
     >
       <Link
-        to={`/works/${slug}`}
+        to={workPath(slug)}
         aria-label={`${title} — open`}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
-        style={{ "--glow": accent } as React.CSSProperties}
+        style={{ "--glow": accent }}
         className="group grid gap-7 md:grid-cols-[11rem_1fr] md:gap-10 lg:grid-cols-[13rem_1fr]"
       >
         <motion.div
@@ -59,7 +60,7 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
           }}
           className="cover-glow w-40 md:w-auto"
         >
-          <Cover work={work} morph />
+          <Cover work={work} />
         </motion.div>
 
         <div className="max-w-xl self-center">
@@ -68,14 +69,7 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
             className="mask overflow-hidden text-title font-normal tracking-tight"
           >
             <span className="line block">
-              <span
-                className="underline-grow"
-                style={{
-                  backgroundImage: `linear-gradient(color-mix(in oklab, ${accent} 70%, var(--color-foreground)), color-mix(in oklab, ${accent} 70%, var(--color-foreground)))`,
-                }}
-              >
-                {title}
-              </span>
+              <span className="underline-grow">{title}</span>
             </span>
           </h3>
           <p className="mt-3 text-lead text-muted italic transition-colors duration-500 group-hover:text-foreground">

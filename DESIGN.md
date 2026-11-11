@@ -43,6 +43,7 @@ How the design applies the criteria in docs/why.md:
 
 What the site says about the works comes from the Markdown files (docs/adr/0003).
 `src/content` parses README.md, docs/reviews.md and docs/why.md at build time.
+The page description that search engines and link previews show is the README's opening sentence.
 `src/content/catalog.ts` holds the data Markdown cannot carry: slugs, accent colors, cover sources, and the language of each non-Latin name.
 To add a work, add it to the Markdown and add one catalog entry.
 The build fails if the Markdown and the catalog disagree.

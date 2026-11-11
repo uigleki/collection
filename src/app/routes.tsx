@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { RouteObject } from "react-router";
+import { pages, workPath } from "@/data/site.ts";
 import { useScrollMemory } from "@/lib/scroll.ts";
 import { initTheme } from "@/lib/theme.ts";
 import { MoonSky } from "@/scene/MoonSky.tsx";
@@ -44,15 +45,16 @@ function RenderError() {
 }
 
 // Each page's code is loaded when first needed, and prefetched once the
-// first page has loaded and the browser is idle (prefetchPages).
-const pages = [
-  () => import("@/pages/home/Home.tsx"),
-  () => import("@/pages/work/WorkPage.tsx"),
-  () => import("@/pages/why/Why.tsx"),
-  () => import("@/pages/credits/Credits.tsx"),
-  () => import("@/pages/NotFound.tsx"),
-] as const;
-const [home, work, why, credits, notFound] = pages;
+// first page has loaded and the browser is idle (prefetchPages). The fixed
+// pages are keyed by their path in site.ts, so a page listed there without
+// code here, or the reverse, is a type error.
+const fixed = {
+  "/": () => import("@/pages/home/Home.tsx"),
+  "/why": () => import("@/pages/why/Why.tsx"),
+  "/credits": () => import("@/pages/credits/Credits.tsx"),
+} satisfies Record<(typeof pages)[number]["path"], unknown>;
+const work = () => import("@/pages/work/WorkPage.tsx");
+const notFound = () => import("@/pages/NotFound.tsx");
 
 /**
  * The route table. Used by the build, which prerenders every page to a file
@@ -60,14 +62,11 @@ const [home, work, why, credits, notFound] = pages;
  */
 export const routes: RouteObject[] = [
   {
-    path: "/",
     Component: Root,
     ErrorBoundary: RenderError,
     children: [
-      { index: true, lazy: home },
-      { path: "works/:slug", lazy: work },
-      { path: "why", lazy: why },
-      { path: "credits", lazy: credits },
+      ...pages.map(({ path }) => ({ path, lazy: fixed[path] })),
+      { path: workPath(":slug"), lazy: work },
       { path: "*", lazy: notFound },
     ],
   },
@@ -89,7 +88,11 @@ export function prefetchPages(): void {
       ? requestIdleCallback(run, { timeout: 3000 })
       : setTimeout(run, 1000);
   const start = () =>
-    idle(() => pages.forEach((page) => void page().catch(() => {})));
+    idle(() =>
+      [...Object.values(fixed), work, notFound].forEach(
+        (page) => void page().catch(() => {}),
+      ),
+    );
   if (document.readyState === "complete") start();
   else window.addEventListener("load", start, { once: true });
 }

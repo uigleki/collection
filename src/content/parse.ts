@@ -9,11 +9,9 @@
  */
 import type {
   Heading,
-  List,
   ListItem,
   Paragraph,
   PhrasingContent,
-  Root,
   RootContent,
 } from "mdast";
 import { fromMarkdown } from "mdast-util-from-markdown";
@@ -44,7 +42,8 @@ export interface Readme {
 export interface Review {
   subtitle: string;
   points: ReviewPoint[];
-  flaws: ReviewPoint[];
+  /** the review's shortcomings, under the heading reviews.md gives them */
+  flaws?: { heading: string; points: ReviewPoint[] };
 }
 
 export interface Why {
@@ -85,7 +84,7 @@ function markup(nodes: readonly PhrasingContent[], strong = true): string {
 const plain = (nodes: readonly PhrasingContent[]) => markup(nodes, false);
 
 const parse = (md: string): RootContent[] =>
-  (fromMarkdown(md) as Root).children.filter((node) => node.type !== "html");
+  fromMarkdown(md).children.filter((node) => node.type !== "html");
 
 /** A heading's text, without the emoji a README section starts with. */
 const headingText = (node: Heading) =>
@@ -121,7 +120,7 @@ export function parseReadme(md: string): Readme {
     } else if (node.type === "paragraph" && tagline === null && !medium) {
       tagline = plain(node.children);
     } else if (node.type === "list" && medium) {
-      const names = (node as List).children.map(itemText);
+      const names = node.children.map(itemText);
       if (medium === MUSIC) songs.push(...names.map(splitSong));
       else groups.at(-1)?.titles.push(...names);
     }
@@ -130,56 +129,65 @@ export function parseReadme(md: string): Readme {
   return { tagline, groups, songs };
 }
 
-function point(item: ListItem): ReviewPoint {
-  const para = item.children[0];
-  const [label, ...rest] = para?.type === "paragraph" ? para.children : [];
-  if (label?.type !== "strong" || item.children.length > 1)
-    throw new Error("content: a review point is **Label**: text");
-  const text = plain(rest).replace(/^:\s*/, "").trim();
-  return { label: plain(label.children), text };
+/**
+ * A paragraph that starts with a bold label and a colon: **The trick**: …
+ * `strong` is whether the text after the colon keeps its own bold markers.
+ */
+function labeled(node: Paragraph, strong = true): ReviewPoint | null {
+  const [label, next, ...rest] = node.children;
+  if (label?.type !== "strong" || next?.type !== "text") return null;
+  if (!next.value.startsWith(":")) return null;
+  const text = markup(
+    [{ ...next, value: next.value.slice(1) }, ...rest],
+    strong,
+  );
+  return { label: plain(label.children), text: text.trim() };
 }
 
-const isShortcomings = (node: RootContent) =>
-  node.type === "paragraph" &&
-  plain((node as Paragraph).children).replace(/:$/, "") === "Shortcomings";
+function point(item: ListItem): ReviewPoint {
+  const [para, ...rest] = item.children;
+  const found =
+    para?.type === "paragraph" && rest.length === 0
+      ? labeled(para, false)
+      : null;
+  if (!found) throw new Error("content: a review point is **Label**: text");
+  return found;
+}
+
+/** A bold label and its colon with no text after: the heading of a list. */
+function listHeading(node: RootContent): string | null {
+  const found = node.type === "paragraph" ? labeled(node, false) : null;
+  return found?.text === "" ? found.label : null;
+}
 
 export function parseReviews(md: string): Map<string, Review> {
   const reviews = new Map<string, Review>();
   let current: Review | null = null;
-  let inFlaws = false;
 
   for (const node of parse(md)) {
     if (node.type === "heading") {
       current = null;
       if (node.depth === 3) {
-        current = { subtitle: "", points: [], flaws: [] };
-        inFlaws = false;
+        current = { subtitle: "", points: [] };
         reviews.set(plain(node.children), current);
       }
-    } else if (!current) {
-      // reviews.md's own title and introduction: skipped
-    } else if (isShortcomings(node)) {
-      inFlaws = true;
+      continue;
+    }
+    // reviews.md's own title and introduction
+    if (!current) continue;
+
+    const heading = current.flaws ? null : listHeading(node);
+    if (heading !== null) {
+      current.flaws = { heading, points: [] };
     } else if (node.type === "paragraph" && !current.subtitle) {
       current.subtitle = plain(node.children);
     } else if (node.type === "list") {
-      (inFlaws ? current.flaws : current.points).push(
-        ...node.children.map(point),
-      );
+      (current.flaws ?? current).points.push(...node.children.map(point));
     } else {
       throw new Error(`content: unexpected ${node.type} in a review`);
     }
   }
   return reviews;
-}
-
-/** A paragraph that starts with a bold label and a colon: **The trick**: … */
-function labeled(node: Paragraph): ReviewPoint | null {
-  const [label, next, ...rest] = node.children;
-  if (label?.type !== "strong" || next?.type !== "text") return null;
-  if (!next.value.startsWith(":")) return null;
-  const text = markup([{ ...next, value: next.value.slice(1) }, ...rest]);
-  return { label: plain(label.children), text: text.trim() };
 }
 
 /** A paragraph entirely in italics: the epigraph, or the sign-off. */
@@ -224,6 +232,10 @@ function section({
   const [intro, ...extra] = paragraphs(before, title);
   if (!intro || extra.length > 0 || parts.length === 0)
     throw new Error(`content: "${title}" is one intro and its concepts`);
+  const lastBody = parts.at(-1)?.body ?? [];
+  const outro = lastBody.pop();
+  if (outro?.type !== "paragraph" || labeled(outro) || lastBody.length === 0)
+    throw new Error(`content: "${title}" must end on a paragraph of its own`);
   const concepts = parts.map(
     (part): WhyConcept => ({
       title: part.title,
@@ -232,11 +244,12 @@ function section({
       ),
     }),
   );
-  const last = concepts.at(-1)?.explanation as (string | ReviewPoint)[];
-  const outro = last.pop();
-  if (typeof outro !== "string" || last.length === 0)
-    throw new Error(`content: "${title}" must end on a paragraph of its own`);
-  return { title, intro: markup(intro.children), concepts, outro };
+  return {
+    title,
+    intro: markup(intro.children),
+    concepts,
+    outro: markup(outro.children),
+  };
 }
 
 /**

@@ -1,4 +1,4 @@
-import { type Theme, toggleTheme, useTheme } from "@/lib/theme.ts";
+import { toggleTheme, useTheme } from "@/lib/theme.ts";
 import { Icon } from "./Icon.tsx";
 
 /**
@@ -11,9 +11,7 @@ import { Icon } from "./Icon.tsx";
  * already be showing. The page's colors change on their own transition.
  */
 export function ThemeToggle() {
-  const theme = useTheme();
-  const next: Theme = theme === "dark" ? "light" : "dark";
-  const label = next === "light" ? "Switch to day" : "Switch to night";
+  const label = useTheme() === "dark" ? "Switch to day" : "Switch to night";
 
   return (
     <button

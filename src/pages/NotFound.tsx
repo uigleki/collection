@@ -1,12 +1,10 @@
 import { Link } from "react-router";
-import { siteMeta } from "@/data/site.ts";
 import { useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { MessagePage } from "@/ui/MessagePage.tsx";
 
-/** A page that isn't in the collection. */
 export function NotFound() {
-  const h1 = usePage(`Not found — ${siteMeta.title}`);
+  const h1 = usePage("Not found");
 
   useSky({ dim: 0.4, night: 1 });
 

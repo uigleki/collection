@@ -2,10 +2,8 @@ import {
   motion,
   type PanInfo,
   useDragControls,
-  useIsPresent,
   useReducedMotion,
 } from "motion/react";
-import { useEffect, useEffectEvent } from "react";
 import {
   Link,
   useLocation,
@@ -13,15 +11,16 @@ import {
   useNavigationType,
   useParams,
 } from "react-router";
-import { siteMeta } from "@/data/site.ts";
+import { workPath } from "@/data/site.ts";
 import type { Work } from "@/data/types.ts";
 import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
 import { MOVE } from "@/lib/motion.ts";
 import { useSky } from "@/lib/sky.ts";
 import { type Step, stepOf } from "@/lib/step.ts";
+import { useKeydown } from "@/lib/useKeydown.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Cover } from "@/ui/Cover.tsx";
-import { Icon } from "@/ui/Icon.tsx";
+import { Chevron } from "@/ui/Icon.tsx";
 import { EdgeButton, PageNav } from "@/ui/PageNav.tsx";
 import { NotFound } from "../NotFound.tsx";
 
@@ -38,7 +37,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
   const navigate = useNavigate();
   const { work, night, category, ordinal } = entry;
   const { title, slug, lang, accent } = work;
-  const h1 = usePage(`${title} — ${siteMeta.title}`);
+  const h1 = usePage(title);
   const { prev, next } = neighbors(slug);
 
   useSky({ dim: 1, night });
@@ -47,23 +46,14 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
   const goToNeighbor = (step: Step) => {
     const to = step === 1 ? next : prev;
     if (to)
-      navigate(`/works/${to.work.slug}`, { replace: true, state: { step } });
+      navigate(workPath(to.work.slug), { replace: true, state: { step } });
   };
 
-  // The arrow keys go to the previous or next work. The listener is attached
-  // only while this page is present: an exiting page is still mounted and
-  // would otherwise handle the keys too.
-  const present = useIsPresent();
-  const onKey = useEffectEvent((e: KeyboardEvent) => {
+  useKeydown((e) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
     if (e.key === "ArrowRight") goToNeighbor(1);
     if (e.key === "ArrowLeft") goToNeighbor(-1);
   });
-  useEffect(() => {
-    if (!present) return;
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [present]);
 
   // A horizontal touch drag also goes to the previous or next work. The page
   // follows the finger 1:1, with strong resistance past the first and last
@@ -88,7 +78,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
   // The article's parts animate in on mount, not on scroll: a work page
   // opens at its top, so its content is in view at once. Each part starts a
   // little later than the one before (index.css: .enter, .rise).
-  const at = (ms: number) => ({ "--at": `${ms}ms` }) as React.CSSProperties;
+  const at = (ms: number) => ({ "--at": `${ms}ms` });
 
   return (
     <main
@@ -99,14 +89,14 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
       <PageNav>
         {prev ? (
           <EdgeButton
-            side="prev"
+            step={-1}
             work={prev.work}
             onClick={() => goToNeighbor(-1)}
           />
         ) : null}
         {next ? (
           <EdgeButton
-            side="next"
+            step={1}
             work={next.work}
             onClick={() => goToNeighbor(1)}
           />
@@ -137,12 +127,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
         className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16"
       >
         <div className="md:sticky md:top-20 md:self-start">
-          <Cover
-            work={work}
-            morph
-            priority
-            className="mx-auto max-w-sm md:mx-0"
-          />
+          <Cover work={work} priority className="mx-auto max-w-sm md:mx-0" />
         </div>
 
         <article className="max-w-2xl pb-10">
@@ -198,9 +183,11 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
               className="enter mt-14 border-l border-border pl-6"
               style={at(200 + work.review.length * 50)}
             >
-              <h2 className="text-body font-medium text-muted">Shortcomings</h2>
+              <h2 className="text-body font-medium text-muted">
+                {work.flaws.heading}
+              </h2>
               <dl className="mt-5 space-y-6">
-                {work.flaws.map((point) => (
+                {work.flaws.points.map((point) => (
                   <div key={point.label}>
                     <dt className="text-body font-medium text-muted">
                       {point.label}
@@ -236,7 +223,7 @@ function NeighborLink({ step, work }: { step: 1 | -1; work: Work }) {
   const isNext = step === 1;
   return (
     <Link
-      to={`/works/${work.slug}`}
+      to={workPath(work.slug)}
       replace
       state={{ step }}
       className={`flex flex-col gap-1 ${isNext ? "col-start-2 items-end text-right" : "items-start"}`}
@@ -244,9 +231,7 @@ function NeighborLink({ step, work }: { step: 1 | -1; work: Work }) {
       <span
         className={`flex items-center gap-1.5 font-mono text-caption text-muted ${isNext ? "flex-row-reverse" : ""}`}
       >
-        <Icon>
-          {isNext ? <path d="M9 6l6 6-6 6" /> : <path d="M15 18l-6-6 6-6" />}
-        </Icon>
+        <Chevron step={step} />
         {isNext ? "Next" : "Previous"}
       </span>
       <span lang={work.lang} className="text-body text-balance">

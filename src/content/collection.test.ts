@@ -11,7 +11,6 @@ const readme: Readme = {
 const review = (subtitle: string): Review => ({
   subtitle,
   points: [{ label: "Dialogue as art", text: "Rapid-fire wordplay." }],
-  flaws: [],
 });
 
 const reviews = () =>
@@ -19,7 +18,7 @@ const reviews = () =>
     ["化物語", review("Supernatural tales of adolescent awakening")],
     [
       "COP feat. 洛天依 - 凉雨",
-      { subtitle: "When the rain finally stops", points: [], flaws: [] },
+      { subtitle: "When the rain finally stops", points: [] },
     ],
   ]);
 
@@ -42,7 +41,6 @@ describe("assemble", () => {
   // out of each work instead of shipping it to the browser.
   it("joins each title to its review and its catalog entry", () => {
     const collection = assemble(readme, reviews(), catalog());
-    expect(collection.tagline).toBe("Works that enrich rather than diminish.");
     expect(collection.categories).toEqual([
       {
         name: "Anime",
@@ -72,14 +70,15 @@ describe("assemble", () => {
   });
 
   it("sets flaws on a work only when its review has shortcomings", () => {
+    const flaws = {
+      heading: "Shortcomings",
+      points: [{ label: "Slow start", text: "It takes a while." }],
+    };
     const flawed = reviews();
-    const review = flawed.get("化物語");
-    review?.flaws.push({ label: "Slow start", text: "It takes a while." });
+    flawed.set("化物語", { ...review("A subtitle"), flaws });
     const [work] =
       assemble(readme, flawed, catalog()).categories[0]?.works ?? [];
-    expect(work?.flaws).toEqual([
-      { label: "Slow start", text: "It takes a while." },
-    ]);
+    expect(work?.flaws).toEqual(flaws);
   });
 
   it("throws for a work with no catalog entry", () => {

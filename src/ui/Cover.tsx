@@ -5,11 +5,6 @@ import { trackCover } from "@/lib/coverTransition.ts";
 
 interface CoverProps {
   work: Work;
-  /**
-   * animate between pages, so the home row's cover and the work page's
-   * cover appear as one moving element (coverTransition.ts)
-   */
-  morph?: boolean;
   /** eager-load with high fetch priority (a work page's cover is its LCP) */
   priority?: boolean;
   className?: string;
@@ -33,12 +28,7 @@ const usePrerendered = () =>
  * scroll-restoration drift). A work without licensed art gets a panel with
  * the first character of its title instead.
  */
-export function Cover({
-  work,
-  morph = false,
-  priority = false,
-  className = "",
-}: CoverProps) {
+export function Cover({ work, priority = false, className = "" }: CoverProps) {
   const { title, slug, lang } = work;
   const cover = coverFor(slug);
   // An image already shown during this visit is in memory, so it paints at
@@ -51,10 +41,7 @@ export function Cover({
   const [loaded, setLoaded] = useState(
     () => !!cover && (prerendered || shown.has(cover.url)),
   );
-  const coverRef = useMemo(
-    () => (morph ? trackCover(slug) : undefined),
-    [morph, slug],
-  );
+  const coverRef = useMemo(() => trackCover(slug), [slug]);
 
   if (!cover) {
     return (

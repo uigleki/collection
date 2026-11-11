@@ -1,5 +1,6 @@
 import { thumbHashToDataURL } from "thumbhash";
-import { type CoverMeta, covers } from "@/data/generated/covers.ts";
+import { covers } from "@/data/generated/covers.ts";
+import type { CoverMeta } from "@/data/types.ts";
 
 // Vite resolves every cover to its hashed asset URL at build time.
 const urls = import.meta.glob<string>("../assets/works/*.webp", {

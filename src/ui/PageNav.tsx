@@ -1,8 +1,8 @@
-import { useIsPresent } from "motion/react";
-import { type ReactNode, useCallback, useEffect } from "react";
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
 import type { Work } from "@/data/types.ts";
-import { Icon } from "./Icon.tsx";
+import { useKeydown } from "@/lib/useKeydown.ts";
+import { Chevron, Icon } from "./Icon.tsx";
 
 /**
  * A page's fixed navigation controls. There is no bar and no gradient: the
@@ -14,43 +14,32 @@ import { Icon } from "./Icon.tsx";
  */
 export function PageNav({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
-  // An exiting page is still mounted; it must not handle key presses.
-  const present = useIsPresent();
 
   // Decide on the history index, not location.key: a replace navigation
   // creates a new key but keeps idx 0 when the page was opened directly, and
   // navigate(-1) from idx 0 would take the visitor off the site.
-  // useCallback keeps the identity stable, so the Escape listener below is
-  // attached once, not on every render.
-  const goBack = useCallback(() => {
+  const goBack = () => {
     const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
     if (idx > 0) navigate(-1);
     else navigate("/");
-  }, [navigate]);
+  };
 
-  useEffect(() => {
-    if (!present) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") goBack();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [goBack, present]);
+  useKeydown((e) => {
+    if (e.key === "Escape") goBack();
+  });
 
   return (
     <>
       {/* clicking the empty side margins also goes back (for mouse users;
           keyboard users have the back button and Escape) */}
-      <div
-        aria-hidden="true"
-        onClick={goBack}
-        className="fixed inset-y-0 left-0 z-10 hidden w-[max(0px,calc((100vw-72rem)/2-1rem))] cursor-pointer lg:block"
-      />
-      <div
-        aria-hidden="true"
-        onClick={goBack}
-        className="fixed inset-y-0 right-0 z-10 hidden w-[max(0px,calc((100vw-72rem)/2-1rem))] cursor-pointer lg:block"
-      />
+      {["left-0", "right-0"].map((side) => (
+        <div
+          key={side}
+          aria-hidden="true"
+          onClick={goBack}
+          className={`fixed inset-y-0 z-10 hidden w-[max(0px,calc((100vw-72rem)/2-1rem))] cursor-pointer lg:block ${side}`}
+        />
+      ))}
       <button
         type="button"
         onClick={goBack}
@@ -68,16 +57,16 @@ export function PageNav({ children }: { children?: ReactNode }) {
 }
 
 export function EdgeButton({
-  side,
+  step,
   work,
   onClick,
 }: {
-  side: "prev" | "next";
+  step: 1 | -1;
   work: Work;
   onClick: () => void;
 }) {
   const { title, lang } = work;
-  const edge = side === "prev" ? "left-5 flex-row" : "right-5 flex-row-reverse";
+  const edge = step === 1 ? "right-5 flex-row-reverse" : "left-5 flex-row";
   // Hidden on narrow screens, where a mid-height button would cover the
   // text column: there the links are at the end of the article (NeighborLink,
   // WorkPage.tsx).
@@ -88,21 +77,15 @@ export function EdgeButton({
       <button
         type="button"
         onClick={onClick}
-        aria-label={`${side === "prev" ? "Previous" : "Next"}: ${title}`}
+        aria-label={`${step === 1 ? "Next" : "Previous"}: ${title}`}
         className="icon-button"
       >
-        <Icon>
-          {side === "prev" ? (
-            <path d="M15 18l-6-6 6-6" />
-          ) : (
-            <path d="M9 6l6 6-6 6" />
-          )}
-        </Icon>
+        <Chevron step={step} />
       </button>
       <span
         lang={lang}
         aria-hidden="true"
-        className="hidden max-w-48 truncate rounded-full border border-border/50 bg-surface/70 px-3 py-1 text-caption text-muted opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/edge:opacity-100 md:block"
+        className="max-w-48 truncate rounded-full border border-border/50 bg-surface/70 px-3 py-1 text-caption text-muted opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/edge:opacity-100"
       >
         {title}
       </span>
