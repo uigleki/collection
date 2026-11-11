@@ -11,9 +11,8 @@ test.describe("entrance animations", () => {
     await page.goto("/");
     const link = row(page, "少女終末旅行");
     await expect(link).toBeAttached();
-    await page.evaluate(() => {
-      const el = document.querySelector('a[aria-label="少女終末旅行 — open"]');
-      const top = (el?.getBoundingClientRect().top ?? 0) + window.scrollY;
+    await link.evaluate((el) => {
+      const top = el.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
         top: top - window.innerHeight / 3,
         behavior: "instant",

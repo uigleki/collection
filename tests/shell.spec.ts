@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { origin } from "../src/data/site.ts";
+import { origin, pageFile } from "../src/data/site.ts";
 import { expect, HOME, heading, NOT_FOUND, row, test } from "./helpers.ts";
 
 // dist/ is what the preview server is already serving (see playwright.config).
@@ -54,9 +54,7 @@ test.describe("built site", () => {
     });
     await page.addInitScript(() =>
       document.addEventListener("securitypolicyviolation", (e) =>
-        (window as unknown as { blocked: (what: string) => void }).blocked(
-          `${e.effectiveDirective} blocked ${e.blockedURI}`,
-        ),
+        window.blocked(`${e.effectiveDirective} blocked ${e.blockedURI}`),
       ),
     );
     page.on("console", (m) => {
@@ -222,7 +220,7 @@ test.describe("prerendered pages", () => {
 
   test("declare their charset within the first 1024 bytes", () => {
     for (const [path] of PRERENDERED) {
-      const file = path === "/" ? "index.html" : `${path.slice(1)}.html`;
+      const file = pageFile(path);
       // The HTML spec has a browser determine the encoding from a page's
       // first 1024 bytes, before parsing them
       const firstBytes = Buffer.from(dist(file)).subarray(0, 1024);

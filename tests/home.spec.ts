@@ -1,4 +1,4 @@
-import { expect, HOME, heading, test } from "./helpers.ts";
+import { expect, HOME, heading, rows, test } from "./helpers.ts";
 
 test.describe("home page", () => {
   test("shows the Perfect Collection heading", async ({ page }) => {
@@ -15,7 +15,7 @@ test.describe("home page", () => {
         page.getByRole("heading", { level: 2, name }),
       ).toBeAttached();
     }
-    await expect(page.locator('a[aria-label$="— open"]')).toHaveCount(14);
+    await expect(rows(page)).toHaveCount(14);
     await expect(page.getByText("カントク").first()).toBeAttached();
   });
 

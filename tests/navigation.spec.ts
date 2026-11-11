@@ -1,6 +1,7 @@
 import type { Locator, Page } from "@playwright/test";
 import {
   expect,
+  expectTheme,
   HOME,
   heading,
   NOT_FOUND,
@@ -286,15 +287,13 @@ test.describe("work pages", () => {
   test("the theme toggle switches theme; the choice survives a reload", async ({
     page,
   }) => {
-    const theme = (value: string) =>
-      expect(page.locator("html")).toHaveAttribute("data-theme", value);
     await page.goto("/");
     await page.getByRole("button", { name: "Switch to day" }).click();
-    await theme("light");
+    await expectTheme(page, "light");
     await page.reload();
-    await theme("light");
+    await expectTheme(page, "light");
     await page.getByRole("button", { name: "Switch to night" }).click();
-    await theme("dark");
+    await expectTheme(page, "dark");
   });
 
   test("theme-color matches the page background after a theme switch", async ({
@@ -330,10 +329,10 @@ test.describe("work pages", () => {
     // the system scheme stays dark (playwright.config.ts): the light theme
     // here is the visitor's own choice
     await page.getByRole("button", { name: "Switch to day" }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expectTheme(page, "light");
     await expectSame();
     await page.reload();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expectTheme(page, "light");
     await expectSame();
   });
 
@@ -375,7 +374,7 @@ test.describe("work pages", () => {
     expect(seen.between).not.toBe(seen.dark);
     // …and it was sampled mid-transition, not already at the light value
     expect(seen.between).not.toBe("rgb(242, 236, 224)");
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expectTheme(page, "dark");
     await expect
       .poll(() =>
         page.evaluate(() =>
@@ -402,11 +401,11 @@ test.describe("work pages", () => {
       await route.continue();
     });
     await page.goto("/", { waitUntil: "commit" });
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await expectTheme(page, "dark");
     await page.emulateMedia({ colorScheme: "light" });
     release();
     await expect(heading(page, HOME)).toBeVisible();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await expectTheme(page, "light");
   });
 });
 
@@ -427,7 +426,6 @@ test.describe("cover transition", () => {
       }
       throw new Error("no cover of " + title + " on " + page);
     };`;
-  type MeasureCover = (title: string, page: string) => Promise<DOMRect>;
   const HOME_H1 = "Perfect Collection";
 
   test.beforeEach(async ({ page }) => {
@@ -441,16 +439,17 @@ test.describe("cover transition", () => {
   test("the cover animates from its row to its place on the work page", async ({
     page,
   }) => {
-    const { from, early, final } = await page.evaluate(async (home) => {
-      const cover = (window as unknown as { __cover: MeasureCover }).__cover;
-      const from = await cover("化物語", home);
-      document
-        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
-        ?.click();
-      const early = await cover("化物語", "化物語");
-      await new Promise((r) => setTimeout(r, 1500));
-      return { from, early, final: await cover("化物語", "化物語") };
-    }, HOME_H1);
+    const { from, early, final } = await row(page, "化物語").evaluate(
+      async (link: HTMLElement, home) => {
+        const cover = window.__cover;
+        const from = await cover("化物語", home);
+        link.click();
+        const early = await cover("化物語", "化物語");
+        await new Promise((r) => setTimeout(r, 1500));
+        return { from, early, final: await cover("化物語", "化物語") };
+      },
+      HOME_H1,
+    );
     // It starts at its position in the row…
     expect(Math.abs(early.left - from.left)).toBeLessThan(60);
     expect(Math.abs(early.top - from.top)).toBeLessThan(60);
@@ -461,42 +460,43 @@ test.describe("cover transition", () => {
   test("the cover stays visible throughout the transition", async ({
     page,
   }) => {
-    const frames = await page.evaluate(async () => {
-      document
-        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
-        ?.click();
-      const seen: { opacity: number; visible: boolean }[] = [];
-      // Count frames from the first one with the cover on the work page,
-      // not from the click: the time the work page's code takes to load is
-      // not part of the transition.
-      for (let i = 0; i < 120 && seen.length < 8; i++) {
-        await new Promise(requestAnimationFrame);
-        const img = [
-          ...document.querySelectorAll<HTMLElement>(
-            'img[alt="Cover art of 化物語"]',
-          ),
-        ].find(
-          (img) =>
-            !img.closest("[inert]") &&
-            img.closest("main")?.querySelector("h1")?.textContent === "化物語",
-        );
-        // not yet on the work page
-        if (!img) continue;
-        // effective opacity: the product of the opacities up to the
-        // popover. It is in the top layer, so opacity on its ancestors does
-        // not apply to it.
-        let opacity = 1;
-        for (let el: Element | null = img; el; el = el.parentElement) {
-          opacity *= Number(getComputedStyle(el).opacity);
-          if (el.matches(":popover-open")) break;
+    const frames = await row(page, "化物語").evaluate(
+      async (link: HTMLElement) => {
+        link.click();
+        const seen: { opacity: number; visible: boolean }[] = [];
+        // Count frames from the first one with the cover on the work page,
+        // not from the click: the time the work page's code takes to load is
+        // not part of the transition.
+        for (let i = 0; i < 120 && seen.length < 8; i++) {
+          await new Promise(requestAnimationFrame);
+          const img = [
+            ...document.querySelectorAll<HTMLElement>(
+              'img[alt="Cover art of 化物語"]',
+            ),
+          ].find(
+            (img) =>
+              !img.closest("[inert]") &&
+              img.closest("main")?.querySelector("h1")?.textContent ===
+                "化物語",
+          );
+          // not yet on the work page
+          if (!img) continue;
+          // effective opacity: the product of the opacities up to the
+          // popover. It is in the top layer, so opacity on its ancestors does
+          // not apply to it.
+          let opacity = 1;
+          for (let el: Element | null = img; el; el = el.parentElement) {
+            opacity *= Number(getComputedStyle(el).opacity);
+            if (el.matches(":popover-open")) break;
+          }
+          seen.push({
+            opacity,
+            visible: getComputedStyle(img).visibility === "visible",
+          });
         }
-        seen.push({
-          opacity,
-          visible: getComputedStyle(img).visibility === "visible",
-        });
-      }
-      return seen;
-    });
+        return seen;
+      },
+    );
     expect(frames.length).toBeGreaterThan(4);
     for (const frame of frames) {
       expect(frame.visible).toBe(true);
@@ -507,17 +507,18 @@ test.describe("cover transition", () => {
   test("going back mid-transition reverses the cover from where it is", async ({
     page,
   }) => {
-    const { before, after } = await page.evaluate(async (home) => {
-      const cover = (window as unknown as { __cover: MeasureCover }).__cover;
-      document
-        .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
-        ?.click();
-      await cover("化物語", "化物語");
-      await new Promise((r) => setTimeout(r, 160));
-      const before = await cover("化物語", "化物語");
-      window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-      return { before, after: await cover("化物語", home) };
-    }, HOME_H1);
+    const { before, after } = await row(page, "化物語").evaluate(
+      async (link: HTMLElement, home) => {
+        const cover = window.__cover;
+        link.click();
+        await cover("化物語", "化物語");
+        await new Promise((r) => setTimeout(r, 160));
+        const before = await cover("化物語", "化物語");
+        window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+        return { before, after: await cover("化物語", home) };
+      },
+      HOME_H1,
+    );
     // no jump: it continues from where it was, not from its position in the
     // row or on the work page
     expect(Math.abs(after.left - before.left)).toBeLessThan(60);

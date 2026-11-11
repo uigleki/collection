@@ -1,4 +1,4 @@
-import { expect, test } from "./helpers.ts";
+import { expect, row, test } from "./helpers.ts";
 
 // Runs against the development server, where React's StrictMode unmounts
 // and remounts each component right after mounting it. These tests check
@@ -8,12 +8,10 @@ test("in development mode the cover transition still runs", async ({
   page,
 }) => {
   await page.goto("/");
-  const row = page.getByRole("link", { name: "化物語 — open" });
-  await row.scrollIntoViewIfNeeded();
-  const overlayFrames = await page.evaluate(async () => {
-    document
-      .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
-      ?.click();
+  const link = row(page, "化物語");
+  await link.scrollIntoViewIfNeeded();
+  const overlayFrames = await link.evaluate(async (el: HTMLElement) => {
+    el.click();
     let frames = 0;
     for (let i = 0; i < 60; i++) {
       await new Promise(requestAnimationFrame);
@@ -33,7 +31,7 @@ test("in development mode the first page shows without a fade-in", async ({
 }) => {
   await page.addInitScript(() => {
     const opacities: number[] = [];
-    (window as unknown as { __opacities: number[] }).__opacities = opacities;
+    window.__opacities = opacities;
     const sample = () => {
       const layer = document.querySelector("[data-page-layer]");
       if (layer) opacities.push(Number(getComputedStyle(layer).opacity));
@@ -43,14 +41,8 @@ test("in development mode the first page shows without a fade-in", async ({
   });
   await page.goto("/");
   await expect
-    .poll(() =>
-      page.evaluate(
-        () => (window as unknown as { __opacities: number[] }).__opacities,
-      ),
-    )
+    .poll(() => page.evaluate(() => window.__opacities))
     .toHaveLength(30);
-  const opacities = await page.evaluate(
-    () => (window as unknown as { __opacities: number[] }).__opacities,
-  );
+  const opacities = await page.evaluate(() => window.__opacities);
   expect(Math.min(...opacities)).toBe(1);
 });

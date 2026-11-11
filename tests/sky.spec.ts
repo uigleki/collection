@@ -1,13 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./helpers.ts";
 
-declare global {
-  interface Window {
-    skyDraws: number;
-    webglRequests: number;
-  }
-}
-
 /**
  * Loads the home page with reduced motion and returns a counter of WebGL
  * draw calls. ?gl keeps the sky running on a software rasterizer, where
@@ -35,8 +28,7 @@ async function reducedMotionSky(page: Page): Promise<() => Promise<number>> {
       }
     }
   });
-  await page.goto("/?gl", { waitUntil: "load" });
-  await page.waitForFunction(() => history.scrollRestoration === "manual");
+  await page.goto("/?gl");
   test.skip(
     (await page.locator("canvas").count()) === 0,
     "no WebGL in this browser: only the poster fallback is shown",

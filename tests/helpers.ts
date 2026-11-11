@@ -1,5 +1,16 @@
 import { test as base, expect, type Page } from "@playwright/test";
 
+// What the specs' init scripts put on the page's window.
+declare global {
+  interface Window {
+    __cover: (title: string, page: string) => Promise<DOMRect>;
+    __opacities: number[];
+    blocked: (what: string) => void;
+    skyDraws: number;
+    webglRequests: number;
+  }
+}
+
 /**
  * Every page is prerendered at build time (vite.config.ts) and hydrated a
  * moment after it loads; until then no key press, swipe or history change is
@@ -35,6 +46,14 @@ export const HOME = /Perfect\s*Collection/;
  */
 export const row = (page: Page, title: string) =>
   page.getByRole("link", { name: `${title} — open` });
+
+/** Every work's row on the home page. */
+export const rows = (page: Page) =>
+  page.getByRole("link", { name: / — open$/ });
+
+/** Expects the document to be in the given theme. */
+export const expectTheme = (page: Page, theme: "dark" | "light") =>
+  expect(page.locator("html")).toHaveAttribute("data-theme", theme);
 
 /** The heading of the not-found page (src/pages/NotFound.tsx). */
 export const NOT_FOUND = "Nothing stands here.";
