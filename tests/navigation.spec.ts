@@ -441,7 +441,9 @@ test.describe("the cover's flight", () => {
         .querySelector<HTMLElement>('a[aria-label="化物語 — open"]')
         ?.click();
       const seen: { opacity: number; visible: boolean }[] = [];
-      for (let i = 0; i < 12; i++) {
+      // Counted from the cover's first frame in the room, not from the
+      // click: how long the room's code takes to arrive is not the flight's.
+      for (let i = 0; i < 120 && seen.length < 8; i++) {
         await new Promise(requestAnimationFrame);
         const img = [
           ...document.querySelectorAll<HTMLElement>(
