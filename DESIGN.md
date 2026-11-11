@@ -3,21 +3,7 @@
 Design notes for the site.
 The design tokens are defined in `src/styles/index.css` (`@theme`) and `src/content/catalog.ts`; this document explains them.
 The site should meet the three criteria the collection applies to works (docs/why.md): creative love, internal coherence, authentic beauty.
-
-## The Five Rules
-
-These come from the collection's author and outrank everything below.
-
-1. **Latin text is set in Ubuntu.**
-2. **Every title stands in its original language.**
-   化物語 is 化物語.
-3. **Every narrative line is verbatim from docs/why.md.**
-   UI utility copy (buttons, navigation, the 404) is the only exception.
-4. **Light and dark both exist.**
-   The site follows the system until the visitor chooses, and remembers the choice.
-5. **Motion is fluid** — what Apple calls a fluid interface.
-   Everything that moves behaves like a physical object on a spring: it answers at once, follows a finger 1:1, and can be caught, reversed, or redirected at any moment, carrying on from where it is and as fast as it was going — never restarting.
-   Nothing freezes the page while it moves.
+The user's decisions are in `docs/adr/` and outrank these notes.
 
 ## Overview
 
@@ -55,7 +41,7 @@ How the design applies the criteria in docs/why.md:
 
 ## Content
 
-All text comes from the Markdown files.
+What the site says about the works comes from the Markdown files (docs/adr/0003).
 `src/content` parses README.md, docs/reviews.md and docs/why.md at build time.
 `src/content/catalog.ts` holds the data Markdown cannot carry: slugs, accent colors, cover sources, and the language of each non-Latin name.
 To add a work, add it to the Markdown and add one catalog entry.
@@ -92,8 +78,7 @@ Contrast: at least WCAG AA (4.5:1 body text, 3:1 large text) in both themes.
 
 ## Typography
 
-- Latin text: Ubuntu.
-  Ubuntu Mono for tabular and navigation data.
+- Tabular and navigation data: Ubuntu Mono.
 - CJK text: CollectionCJK (a Noto Sans SC subset) by default, CollectionCJK-JP for `:lang(ja)`.
   Han unification gives Chinese and Japanese the same code points with different glyph shapes, so Japanese titles need the JP font.
   Each title's language is stored as data (`lang`), not guessed from its characters.

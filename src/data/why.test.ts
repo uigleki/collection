@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { data, displayLines } from "./why.ts";
 
-// Every narrative line on the site is verbatim from docs/why.md (DESIGN.md).
+// The essay is shown verbatim from docs/why.md (docs/adr/0003).
 // The home page's two split sentences (displayLines) are the only text typed
 // into the code instead of parsed from the essay, so they are the only text
 // that could differ from it. These tests compare them with the essay.
