@@ -12,13 +12,6 @@ export const sky = {
    */
   targetNight: 1,
   /**
-   * set by a page whose scroll covers the whole month (home): past its
-   * works the moon must be full, even after an instant jump there. Opt-in
-   * only: a work page's scroll must not change the phase, because that
-   * looks like the moon moving at random.
-   */
-  fullMoonByScroll: false,
-  /**
    * 0..1, 1 while the music section is in view (lib/sky.ts): brightens the
    * moon's reflection on the water
    */

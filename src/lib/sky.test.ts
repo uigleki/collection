@@ -5,19 +5,14 @@ import { requestSky } from "./sky.ts";
 describe("requestSky", () => {
   beforeEach(() => {
     sky.dim = 0;
-    sky.fullMoonByScroll = false;
     sky.targetNight = 1;
   });
 
   it("applies the newest request", () => {
-    const home = requestSky({ fullMoonByScroll: true });
-    expect(sky.fullMoonByScroll).toBe(true);
+    const home = requestSky({ dim: 0 });
+    expect(sky.dim).toBe(0);
     const work = requestSky({ dim: 1, night: 5 });
-    expect(sky).toMatchObject({
-      dim: 1,
-      fullMoonByScroll: false,
-      targetNight: 5,
-    });
+    expect(sky).toMatchObject({ dim: 1, targetNight: 5 });
     work();
     home();
   });
@@ -33,11 +28,11 @@ describe("requestSky", () => {
   });
 
   it("falls back to the previous request when the newest is removed", () => {
-    const home = requestSky({ fullMoonByScroll: true });
+    const why = requestSky({ dim: 0.75 });
     const work = requestSky({ dim: 1, night: 5 });
     work();
-    expect(sky).toMatchObject({ dim: 0, fullMoonByScroll: true });
-    home();
-    expect(sky).toMatchObject({ dim: 0, fullMoonByScroll: false });
+    expect(sky.dim).toBe(0.75);
+    why();
+    expect(sky.dim).toBe(0);
   });
 });

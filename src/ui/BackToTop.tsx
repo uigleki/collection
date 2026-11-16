@@ -33,7 +33,7 @@ export function BackToTop() {
       placement="bottom-right"
       onClick={backToTop}
       inert={!shown}
-      className={`fixed right-(--control-inset) bottom-(--control-inset) z-50 ${shown ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+      className={`fixed right-(--control-inset) bottom-(--control-inset) z-50 ${shown ? "opacity-100" : "opacity-0"}`}
       icon={
         <Icon>
           <path d="M12 19V5M6 11l6-6 6 6" />

@@ -1,7 +1,7 @@
 export interface PageMeta {
   title: string;
   description: string;
-  footer?: string;
+  footer: string;
 }
 
 export interface ReviewPoint {

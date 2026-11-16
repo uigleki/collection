@@ -5,16 +5,16 @@ import { useKeydown } from "@/lib/useKeydown.ts";
 import { HintButton } from "./HintButton.tsx";
 import { Chevron, Icon } from "./Icon.tsx";
 
+const OPEN_HINT = '[popover="hint"]:popover-open';
+
 /**
  * A page's fixed navigation controls. There is no bar and no gradient: the
  * controls are .icon-button buttons like the theme toggle. Back is
  * top-left. On a work page the previous and next works are at mid-height on
  * the left and right edges (EdgeButton), like an image gallery's pager, and
- * show the work's title on hover and focus. Escape goes back, and so does a click on
- * the empty side margins, as in a lightbox.
+ * show the work's title on hover and focus. Escape goes back, and so does a
+ * click on the empty side margins, as in a lightbox.
  */
-const OPEN_HINT = '[popover="hint"]:popover-open';
-
 export function PageNav({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
 

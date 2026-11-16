@@ -18,7 +18,7 @@ import {
   type CoverSnapshot,
   snapshotCovers,
 } from "@/lib/coverTransition.ts";
-import { PAGE_FADE } from "@/lib/motion.ts";
+import { PAGE_FADE, reducedMotion } from "@/lib/motion.ts";
 import { savedScrollY } from "@/lib/scroll.ts";
 import { stepOf } from "@/lib/step.ts";
 
@@ -195,8 +195,7 @@ class PageChange extends Component<{
     });
     animateCovers(
       snapshot.covers,
-      this.props.instant ||
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      this.props.instant || reducedMotion().matches,
     );
   }
 

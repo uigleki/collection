@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, useSpring } from "motion/react";
 import { Link } from "react-router";
 import { workPath } from "@/data/site.ts";
-import type { WorkEntry } from "@/data/works.ts";
+import { entryLabel, type WorkEntry } from "@/data/works.ts";
 import { FOLLOW } from "@/lib/motion.ts";
 import { useNight } from "@/lib/sky.ts";
 import { Cover } from "@/ui/Cover.tsx";
@@ -11,7 +11,7 @@ import { Cover } from "@/ui/Cover.tsx";
 export function WorkRow({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const ref = useNight(entry.night);
-  const { work, category, ordinal } = entry;
+  const { work } = entry;
   const { title, slug, lang, accent } = work;
 
   // Lift and tilt use the same spring settings (FOLLOW), so the cover rises
@@ -79,7 +79,7 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
             {work.subtitle}
           </p>
           <p className="mt-5 font-mono text-caption text-muted tabular-nums">
-            {category} {String(ordinal).padStart(2, "0")}
+            {entryLabel(entry)}
           </p>
         </div>
       </Link>

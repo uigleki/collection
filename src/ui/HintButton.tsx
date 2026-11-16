@@ -1,7 +1,7 @@
 import { type ReactNode, useId } from "react";
 
 /** Where the hint sits: beside the control, toward the page's middle. */
-export type HintPlacement =
+type HintPlacement =
   | "top-left"
   | "top-right"
   | "bottom-right"

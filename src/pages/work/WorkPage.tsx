@@ -13,7 +13,12 @@ import {
 } from "react-router";
 import { workPath } from "@/data/site.ts";
 import type { Work } from "@/data/types.ts";
-import { neighbors, type WorkEntry, workBySlug } from "@/data/works.ts";
+import {
+  entryLabel,
+  neighbors,
+  type WorkEntry,
+  workBySlug,
+} from "@/data/works.ts";
 import { MOVE } from "@/lib/motion.ts";
 import { useSky } from "@/lib/sky.ts";
 import { type Step, stepOf } from "@/lib/step.ts";
@@ -21,6 +26,7 @@ import { useKeydown } from "@/lib/useKeydown.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { Cover } from "@/ui/Cover.tsx";
 import { Chevron } from "@/ui/Icon.tsx";
+import { Line } from "@/ui/Line.tsx";
 import { EdgeButton, PageNav } from "@/ui/PageNav.tsx";
 import { NotFound } from "../NotFound.tsx";
 
@@ -35,10 +41,14 @@ export function WorkPage() {
 function WorkPageBody({ entry }: { entry: WorkEntry }) {
   const reduced = useReducedMotion();
   const navigate = useNavigate();
-  const { work, night, category, ordinal } = entry;
+  const { work, night } = entry;
   const { title, slug, lang, accent } = work;
   const h1 = usePage(title);
   const { prev, next } = neighbors(slug);
+  const sides = [
+    [-1, prev],
+    [1, next],
+  ] as const;
 
   useSky({ dim: 1, night });
 
@@ -88,20 +98,16 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
       className="relative mx-auto max-w-6xl touch-pan-y px-5 md:px-12"
     >
       <PageNav>
-        {prev ? (
-          <EdgeButton
-            step={-1}
-            work={prev.work}
-            onClick={() => goToNeighbor(-1)}
-          />
-        ) : null}
-        {next ? (
-          <EdgeButton
-            step={1}
-            work={next.work}
-            onClick={() => goToNeighbor(1)}
-          />
-        ) : null}
+        {sides.map(([step, to]) =>
+          to ? (
+            <EdgeButton
+              key={step}
+              step={step}
+              work={to.work}
+              onClick={() => goToNeighbor(step)}
+            />
+          ) : null,
+        )}
       </PageNav>
 
       {/* Going to the previous or next work slides the page sideways: the
@@ -141,7 +147,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
             className="enter mb-6 font-mono text-caption text-muted tabular-nums"
             style={at(40)}
           >
-            {category} {String(ordinal).padStart(2, "0")}
+            {entryLabel(entry)}
           </p>
 
           <h1
@@ -150,9 +156,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
             lang={lang}
             className="text-display font-normal tracking-tight"
           >
-            <span className="block overflow-hidden">
-              <span className="rise block">{title}</span>
-            </span>
+            <Line>{title}</Line>
           </h1>
 
           <p className="enter mt-5 text-lead text-muted italic" style={at(80)}>
@@ -204,8 +208,11 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
             className="enter mt-16 grid grid-cols-2 gap-x-6 md:hidden"
             style={at(250 + work.review.length * 50)}
           >
-            {prev ? <NeighborLink step={-1} work={prev.work} /> : null}
-            {next ? <NeighborLink step={1} work={next.work} /> : null}
+            {sides.map(([step, to]) =>
+              to ? (
+                <NeighborLink key={step} step={step} work={to.work} />
+              ) : null,
+            )}
           </nav>
         </article>
       </motion.div>

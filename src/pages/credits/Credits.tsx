@@ -1,3 +1,4 @@
+import { contentLicense } from "@/data/site.ts";
 import { allWorks } from "@/data/works.ts";
 import { coverFor } from "@/lib/covers.ts";
 import { useSky } from "@/lib/sky.ts";
@@ -8,8 +9,7 @@ import { TextPage } from "@/ui/TextPage.tsx";
 // cover, not by reading the generated covers file. A cover the fetch script
 // failed to produce leaves its work without a credit, and this page must
 // never omit a rights holder: works.test.ts checks that every work with an
-// art source has a credited cover. The list is the same on every render, so
-// it is built once.
+// art source has a credited cover.
 const CREDITED = allWorks.flatMap(({ work }) => {
   const cover = coverFor(work.slug);
   return cover ? [{ work, cover }] : [];
@@ -92,11 +92,11 @@ export function Credits() {
         <p className="mt-4 text-body text-muted">
           Text and curation{" "}
           <a
-            href="https://creativecommons.org/licenses/by-sa/4.0/"
+            href={contentLicense.url}
             rel="license noopener"
             className="link-draw hover:text-foreground"
           >
-            CC BY-SA 4.0
+            {contentLicense.name}
           </a>
           ; code{" "}
           <a

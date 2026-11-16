@@ -36,8 +36,8 @@ function band(rootMargin: string) {
  * still cross the viewport while it fades out, and they must not change
  * the sky.
  */
-function useBand(rootMargin: string, onCross: Cross) {
-  const ref = useRef<HTMLElement>(null);
+function useBand<T extends HTMLElement>(rootMargin: string, onCross: Cross) {
+  const ref = useRef<T>(null);
   const present = useIsPresent();
   const cross = useEffectEvent((visible: boolean) => {
     if (present) onCross(visible);
@@ -61,8 +61,8 @@ function useBand(rootMargin: string, onCross: Cross) {
  * night becomes the sky's target. This is how scrolling advances the moon's
  * phase: one night per work, matching the work in the middle of the screen.
  */
-export function useNight(night: number) {
-  return useBand("-40% 0px -40% 0px", (visible) => {
+export function useNight<T extends HTMLElement = HTMLElement>(night: number) {
+  return useBand<T>("-40% 0px -40% 0px", (visible) => {
     if (visible) sky.targetNight = night;
   });
 }
@@ -77,13 +77,11 @@ export function useReflectionOnly() {
   });
 }
 
-export interface SkyRequest {
+interface SkyRequest {
   /** how far the sky is dimmed behind the page content, 0..1 */
   dim?: number | undefined;
   /** the night the page sets when it becomes the current page */
   night?: number | undefined;
-  /** whether scroll progress can set the full moon (see skyState.ts) */
-  fullMoonByScroll?: boolean | undefined;
 }
 
 // The requests of every mounted page, oldest first. Pages overlap during a
@@ -93,9 +91,8 @@ export interface SkyRequest {
 const requests: SkyRequest[] = [];
 
 function applyNewest() {
-  const { dim = 0, night, fullMoonByScroll = false } = requests.at(-1) ?? {};
+  const { dim = 0, night } = requests.at(-1) ?? {};
   sky.dim = dim;
-  sky.fullMoonByScroll = fullMoonByScroll;
   if (night !== undefined) sky.targetNight = night;
 }
 
@@ -111,10 +108,10 @@ export function requestSky(request: SkyRequest): () => void {
 }
 
 /** A route's request for the sky, kept while it is the current page. */
-export function useSky({ dim, night, fullMoonByScroll }: SkyRequest) {
+export function useSky({ dim, night }: SkyRequest) {
   const present = useIsPresent();
   useEffect(
-    () => (present ? requestSky({ dim, night, fullMoonByScroll }) : undefined),
-    [present, dim, night, fullMoonByScroll],
+    () => (present ? requestSky({ dim, night }) : undefined),
+    [present, dim, night],
   );
 }

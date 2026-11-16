@@ -1,5 +1,6 @@
 import { sections } from "@/data/works.ts";
-import { useSky } from "@/lib/sky.ts";
+import { FULL_NIGHT } from "@/lib/moon.ts";
+import { useNight, useSky } from "@/lib/sky.ts";
 import { usePage } from "@/lib/usePage.ts";
 import { CategoryHeading } from "./CategoryHeading.tsx";
 import { ClosingSection } from "./ClosingSection.tsx";
@@ -10,9 +11,10 @@ import { WorkRow } from "./WorkRow.tsx";
 
 export function Home() {
   const h1 = usePage();
-
-  // The only page where scroll progress advances the moon's phase.
-  useSky({ fullMoonByScroll: true });
+  useSky({ dim: 0 });
+  // One band over everything after the works, so the moon is full wherever
+  // past them the reader lands, a jump to the end included.
+  const tail = useNight<HTMLDivElement>(FULL_NIGHT);
 
   return (
     <main id="main" className="relative">
@@ -34,9 +36,11 @@ export function Home() {
             ))}
           </div>
 
-          <EpigraphSection />
-          <MusicSection />
-          <ClosingSection />
+          <div ref={tail}>
+            <EpigraphSection />
+            <MusicSection />
+            <ClosingSection />
+          </div>
         </div>
       </div>
     </main>

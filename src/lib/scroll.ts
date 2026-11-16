@@ -1,13 +1,16 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
+import { reducedMotion } from "./motion.ts";
 
 /**
  * Scroll to the top with the browser's native smooth scroll: it runs off
  * the main thread, and wheel or touch input interrupts it immediately.
  */
 export function scrollToTop(): void {
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
+  window.scrollTo({
+    top: 0,
+    behavior: reducedMotion().matches ? "instant" : "smooth",
+  });
 }
 
 // The scroll position the reader left each path at. Saved on every scroll

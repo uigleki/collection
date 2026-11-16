@@ -24,28 +24,30 @@ const STYLES = resolve(import.meta.dirname, "src/styles/index.css");
 const PRERENDER_OUT = resolve(import.meta.dirname, "node_modules/.prerender");
 
 /**
- * Each theme's background color (--color-background), read from
+ * A palette color's value in each theme (--color-<name>), read from
  * src/styles/index.css. DESIGN.md defines the palette there and nowhere
- * else, but the browser-UI colors in the document head must be literal
- * values, because they apply before any stylesheet does. So they are read
- * from the stylesheet at build time instead of copied by hand, and a
- * renamed token fails the build instead of leaving the address bar the
- * wrong color.
+ * else, but the browser-UI colors in the document head and the sky shader's
+ * colors must be literal values. So they are read from the stylesheet at
+ * build time instead of copied by hand, and a renamed token fails the build
+ * instead of leaving the address bar or the sky the wrong color.
  */
-function backgroundColors(): { dark: string; light: string } {
+function paletteColor(name: string): { dark: string; light: string } {
   const css = readFileSync(STYLES, "utf8");
   const match = css.match(
-    /--color-background:\s*light-dark\(\s*([^,\s]+)\s*,\s*([^)\s]+)\s*\)/,
+    new RegExp(
+      `--color-${name}:\\s*light-dark\\(\\s*(#[0-9a-f]{6})\\s*,\\s*(#[0-9a-f]{6})\\s*\\)`,
+      "i",
+    ),
   );
   if (!match?.[1] || !match[2])
     throw new Error(
-      "site-metadata: no --color-background: light-dark(light, dark) in index.css",
+      `no --color-${name}: light-dark(#rrggbb, #rrggbb) in index.css`,
     );
   return { light: match[1], dark: match[2] };
 }
 
 const manifest = () => {
-  const { dark } = backgroundColors();
+  const { dark } = paletteColor("background");
   return JSON.stringify(
     {
       id: "/",
@@ -296,7 +298,7 @@ function siteMetadata(): Plugin {
     transformIndexHtml: {
       order: "pre",
       handler: (html) => {
-        const { dark, light } = backgroundColors();
+        const { dark, light } = paletteColor("background");
         const values: Record<string, string> = {
           __SITE_TITLE__: siteTitle,
           __SITE_DESCRIPTION__: escapeHtml(load().tagline),
@@ -364,6 +366,13 @@ function siteMetadata(): Plugin {
 
 export default defineConfig({
   plugins: [content(), siteMetadata(), react(), tailwindcss()],
+  define: {
+    __PALETTE__: JSON.stringify({
+      background: paletteColor("background"),
+      foreground: paletteColor("foreground"),
+      accent: paletteColor("accent"),
+    }),
+  },
   css: {
     lightningcss: {
       // The minifier would rewrite light-dark() into variables that only

@@ -1,24 +1,10 @@
 import type { RefObject } from "react";
 import { displayLines } from "@/data/why.ts";
 import { useNight } from "@/lib/sky.ts";
+import { Line } from "@/ui/Line.tsx";
 
 // The essay's opening question, verbatim from docs/why.md.
 const [questionA, questionB] = displayLines.opening;
-
-/**
- * One line of text that slides up from behind its own overflow mask (.rise)
- * after a delay of `at` ms. Callers stagger `at` so the lines follow one
- * another.
- */
-function Line({ at, children }: { at: number; children: string }) {
-  return (
-    <span className="block overflow-hidden">
-      <span className="rise block" style={{ "--at": `${at}ms` }}>
-        {children}
-      </span>
-    </span>
-  );
-}
 
 /** The home page's first section. It shows no loader (DESIGN.md). */
 export function Hero({ h1 }: { h1: RefObject<HTMLHeadingElement | null> }) {

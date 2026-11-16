@@ -1,4 +1,3 @@
-import text from "@fontsource/ubuntu/files/ubuntu-latin-400-normal.woff2?url";
 import { StrictMode } from "react";
 import { renderToString } from "react-dom/server";
 import {
@@ -15,7 +14,7 @@ import { routes } from "./routes.tsx";
  * a stylesheet's fonts only once a layout needs them; the build preloads
  * this one from the page's HTML (vite.config.ts).
  */
-export const textFontUrl = text;
+export { default as textFontUrl } from "@fontsource/ubuntu/files/ubuntu-latin-400-normal.woff2?url";
 
 /**
  * Renders one page for the build (vite.config.ts): the HTML that goes into

@@ -21,6 +21,12 @@ export const pages = [
   { path: "/credits", priority: "0.3" },
 ] as const;
 
+/** The license of the collection's text and curation. */
+export const contentLicense = {
+  name: "CC BY-SA 4.0",
+  url: "https://creativecommons.org/licenses/by-sa/4.0/",
+} as const;
+
 /** The path of a work's page. */
 export const workPath = (slug: string) => `/works/${slug}`;
 

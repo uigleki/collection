@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { contentLicense } from "@/data/site.ts";
 import { displayLines, meta } from "@/data/why.ts";
 
 // The essay's last sentence, verbatim (displayLines, data/why.ts). It answers
@@ -29,11 +30,11 @@ export function ClosingSection() {
         </p>
         <p>
           <a
-            href="https://creativecommons.org/licenses/by-sa/4.0/"
+            href={contentLicense.url}
             rel="license noopener"
             className="link-draw"
           >
-            CC BY-SA 4.0
+            {contentLicense.name}
           </a>
         </p>
         <p className="italic">{meta.footer}</p>

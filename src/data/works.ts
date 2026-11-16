@@ -13,6 +13,13 @@ export const { categories, music } = collection;
  */
 export const trackName = (track: Track) => `${track.artist} · ${track.title}`;
 
+/** A count or position as two digits, as the site shows them: 01, 12. */
+export const twoDigits = (n: number) => String(n).padStart(2, "0");
+
+/** A work's medium and position, as its row and its page label it. */
+export const entryLabel = ({ category, ordinal }: WorkEntry) =>
+  `${category} ${twoDigits(ordinal)}`;
+
 /** A work together with its position in the collection. */
 export interface WorkEntry {
   readonly work: Work;

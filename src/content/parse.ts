@@ -47,7 +47,7 @@ export interface Review {
 }
 
 export interface Why {
-  meta: Required<PageMeta>;
+  meta: PageMeta;
   data: WhyData;
 }
 

@@ -1,6 +1,7 @@
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { useEffect, useRef } from "react";
 import { FULL_NIGHT, terminator } from "@/lib/moon.ts";
+import { reducedMotion } from "@/lib/motion.ts";
 import { governor } from "./governor.ts";
 import { ease, sky } from "./skyState.ts";
 
@@ -12,6 +13,14 @@ import { ease, sky } from "./skyState.ts";
  * uses a dusk palette. Without WebGL only the CSS `.poster` background
  * shows.
  */
+
+/** A #rrggbb color as a GLSL vec3 literal. */
+function vec3(hex: string): string {
+  const n = Number.parseInt(hex.slice(1), 16);
+  const channels = [16, 8, 0].map((shift) => ((n >> shift) & 255) / 255);
+  return `vec3(${channels.map((c) => c.toFixed(3)).join(", ")})`;
+}
+const { background, foreground, accent } = __PALETTE__;
 
 const VERT = /* glsl */ `
 attribute vec2 position;
@@ -35,10 +44,11 @@ const float WATER = 0.30;
 const float MOON_R = 0.075;
 
 // ---- palette (DESIGN.md tokens) -------------------------------------------
-const vec3 NIGHT_TOP = vec3(0.043, 0.055, 0.090);  // --color-background (dark)
+const vec3 NIGHT_TOP = ${vec3(background.dark)};
+const vec3 DAY_PAGE  = ${vec3(background.light)};
 const vec3 NIGHT_HOR = vec3(0.102, 0.133, 0.204);  // horizon haze
-const vec3 MOON_C    = vec3(0.918, 0.945, 0.973);  // --color-foreground (dark)
-const vec3 WARM      = vec3(0.803, 0.706, 0.537);  // --color-accent (dark)
+const vec3 MOON_C    = ${vec3(foreground.dark)};
+const vec3 WARM      = ${vec3(accent.dark)};
 // The light theme is bright: pastel periwinkle over pale gold, so dark
 // text is readable anywhere on it. Only the moon (GOLD) is saturated.
 const vec3 DUSK_TOP  = vec3(0.740, 0.750, 0.880);
@@ -85,7 +95,8 @@ float litMask(vec2 q) {
   return smoothstep(uPhase * band - 0.04, uPhase * band + 0.04, q.x);
 }
 
-vec3 skyColor(vec2 uv, float aspect, float stars) {
+// The sky without its stars: the water reflects only this.
+vec3 skyGradient(vec2 uv) {
   float h = smoothstep(WATER, 1.0, uv.y);
   vec3 night = mix(NIGHT_HOR, NIGHT_TOP, h);
   vec3 dusk = mix(DUSK_HOR, DUSK_TOP, pow(h, 0.8));
@@ -93,7 +104,11 @@ vec3 skyColor(vec2 uv, float aspect, float stars) {
 
   // dawn: a faint warm band above the horizon near the end of the page
   float dawnBand = (1.0 - smoothstep(WATER, 0.62, uv.y)) * uDawn * (1.0 - uLightTheme);
-  c = mix(c, DAWN, dawnBand * 0.45);
+  return mix(c, DAWN, dawnBand * 0.45);
+}
+
+vec3 skyColor(vec2 uv, float aspect) {
+  vec3 c = skyGradient(uv);
 
   // stars: sparse, hashed, slow twinkle; gone by day and dawn
   vec2 cell = uv * vec2(aspect, 1.0) * 42.0;
@@ -106,7 +121,7 @@ vec3 skyColor(vec2 uv, float aspect, float stars) {
   // no stars inside the moon's halo
   float nearMoon = 1.0 - smoothstep(0.1, 0.34, distance(uv * vec2(aspect, 1.0), uMoon * vec2(aspect, 1.0)));
   glow *= (1.0 - nearMoon) * (1.0 - uLightTheme) * (1.0 - uDawn * 0.8);
-  c += MOON_C * glow * 0.85 * stars;
+  c += MOON_C * glow * 0.85;
   return c;
 }
 
@@ -206,8 +221,8 @@ vec3 waterColor(vec2 uv, float aspect) {
   vec3 r = reflect(ray, n);
   r.y = abs(r.y);                              // the reflected ray points up
 
-  // The reflection: the same sky function, sampled along the reflected ray.
-  vec3 sky = skyColor(screenOf(r, aspect), aspect, 0.0);
+  // The reflection: the sky, sampled along the reflected ray.
+  vec3 sky = skyGradient(screenOf(r, aspect));
 
   // The moon's reflection. The surface reflects the moon to the camera
   // where its normal is halfway between the direction to the camera and
@@ -241,7 +256,7 @@ vec3 waterColor(vec2 uv, float aspect) {
 
   // distant water fades into the horizon color: no hard edge at the horizon
   float haze = exp(-dist * 0.012);
-  return mix(skyColor(vec2(uv.x, WATER), aspect, 0.0), c, haze);
+  return mix(skyGradient(vec2(uv.x, WATER)), c, haze);
 }
 
 void main() {
@@ -250,14 +265,14 @@ void main() {
 
   vec3 col;
   if (uv.y >= WATER) {
-    col = skyColor(uv, aspect, 1.0);
+    col = skyColor(uv, aspect);
     col = moonLayer(col, uv, aspect);
   } else {
     col = waterColor(uv, aspect);
   }
 
   // uDim: blend toward the page background so text is readable over it
-  vec3 background = mix(NIGHT_TOP, vec3(0.949, 0.925, 0.878), uLightTheme);
+  vec3 background = mix(NIGHT_TOP, DAY_PAGE, uLightTheme);
   col = mix(col, background, uDim * 0.62);
 
   // dither removes gradient banding in the night sky
@@ -334,7 +349,7 @@ export function MoonSky() {
     }
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reduced = reducedMotion();
 
     // Both of these are layout reads, and both only change when something
     // resizes — measured here rather than in the frame loop, where they cost
@@ -400,8 +415,6 @@ export function MoonSky() {
     let time = 0;
     let reflectionOnly = 0;
     let dim = 0;
-    // The eased values (reflectionOnly, dim, night) are read only inside this
-    // loop, so they are locals and not fields of `sky` (skyState.ts).
     let night = 1;
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -419,21 +432,8 @@ export function MoonSky() {
       // scroll position.
       const still = reduced.matches;
 
-      // Scroll position. Read here rather than in a separate rAF: only the
-      // sky uses it, and this loop already runs every frame.
       const y = window.scrollY;
       const progress = scrollRange > 0 ? y / scrollRange : 0;
-      // An instant jump (deep link, keyboard End) can skip every observer
-      // band that sets a night (lib/sky.ts), so the full moon is also set
-      // from scroll progress. A page opts in with `sky.fullMoonByScroll`.
-      if (
-        sky.fullMoonByScroll &&
-        progress > 0.6 &&
-        sky.targetNight < FULL_NIGHT
-      ) {
-        sky.targetNight = FULL_NIGHT;
-      }
-
       // The water animates on elapsed time only, never on scroll: waves that
       // follow the scroll wheel look like a screen effect, not water.
       if (!still) time += dt;

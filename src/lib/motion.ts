@@ -12,11 +12,15 @@ import { cssSpring, type Spring } from "./spring.ts";
  * is their timeline (index.css: .reveal).
  */
 
+/** The reader's reduced-motion preference, for code outside React. */
+export const reducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)");
+
 /** Display text (the largest type) sliding up into place behind its mask. */
-export const RISE = { stiffness: 60, damping: 18 } as const satisfies Spring;
+const RISE = { stiffness: 60, damping: 18 } as const satisfies Spring;
 
 /** A block of body content entering when its page mounts. */
-export const ENTER = { stiffness: 70, damping: 20 } as const satisfies Spring;
+const ENTER = { stiffness: 70, damping: 20 } as const satisfies Spring;
 
 /** Live cursor tracking: stiff enough to feel attached to the pointer. */
 export const FOLLOW = { stiffness: 160, damping: 20 } as const;
@@ -42,10 +46,10 @@ export const PAGE_FADE = {
 } as const;
 
 /** Hover on a control: a small overshoot, then rest. */
-export const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;
+const HOVER = { stiffness: 300, damping: 24 } as const satisfies Spring;
 
 /** A press: stiff, so the control responds immediately. */
-export const PRESS = { stiffness: 900, damping: 50 } as const satisfies Spring;
+const PRESS = { stiffness: 900, damping: 50 } as const satisfies Spring;
 
 /**
  * The springs CSS uses, as custom properties (index.css reads
