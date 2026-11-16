@@ -56,10 +56,5 @@ test("keyboard: the skip link jumps to #main", async ({ page }) => {
 test("route change moves focus to the new heading", async ({ page }) => {
   await page.goto("/");
   await row(page, "化物語").click();
-  await expect(page).toHaveURL(/bakemonogatari/);
-  await expect
-    .poll(() => page.evaluate(() => document.activeElement?.tagName), {
-      timeout: 4000,
-    })
-    .toBe("H1");
+  await expect(heading(page, "化物語")).toBeFocused();
 });

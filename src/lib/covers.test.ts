@@ -18,3 +18,15 @@ describe("cover placeholders", () => {
     expect(cover?.placeholder).toMatch(/^data:image\/png;base64,/);
   });
 });
+
+describe("cover files", () => {
+  // A cover with a missing file is left out and its work shows the
+  // typographic panel instead, with no error.
+  it("finds every file of every fetched cover", () => {
+    for (const { slug, widths, width } of covers) {
+      const cover = coverFor(slug);
+      expect(cover?.srcset.split(", "), slug).toHaveLength(widths.length);
+      expect(widths.at(-1), slug).toBe(width);
+    }
+  });
+});

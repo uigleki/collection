@@ -84,6 +84,7 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
     <main
       id="main"
       onPointerDown={onPointerDown}
+      style={{ "--work-accent": accent }}
       className="relative mx-auto max-w-6xl touch-pan-y px-5 md:px-12"
     >
       <PageNav>
@@ -127,7 +128,12 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
         className="grid gap-10 pt-20 pb-24 md:grid-cols-[minmax(0,26rem)_1fr] md:gap-16"
       >
         <div className="md:sticky md:top-20 md:self-start">
-          <Cover work={work} priority className="mx-auto max-w-sm md:mx-0" />
+          <Cover
+            work={work}
+            priority
+            sizes="(width >= 48rem) 24rem, min(24rem, 100vw - 2.5rem)"
+            className="mx-auto max-w-sm md:mx-0"
+          />
         </div>
 
         <article className="max-w-2xl pb-10">
@@ -155,22 +161,14 @@ function WorkPageBody({ entry }: { entry: WorkEntry }) {
 
           <div
             aria-hidden="true"
-            className="enter my-10 h-px"
-            style={{
-              ...at(120),
-              background: `linear-gradient(90deg, color-mix(in oklab, ${accent} 60%, transparent), transparent)`,
-            }}
+            className="accent-rule enter my-10 h-px"
+            style={at(120)}
           />
 
           <dl className="space-y-9">
             {work.review.map((point, i) => (
               <div key={point.label} className="enter" style={at(160 + i * 50)}>
-                <dt
-                  className="text-body font-medium"
-                  style={{
-                    color: `color-mix(in oklab, ${accent} 55%, var(--color-foreground))`,
-                  }}
-                >
+                <dt className="accent-label text-body font-medium">
                   {point.label}
                 </dt>
                 <dd className="mt-2 text-body text-muted">{point.text}</dd>

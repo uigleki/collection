@@ -22,7 +22,7 @@ export function Home() {
         <div className="mx-auto max-w-6xl px-5 md:px-12">
           <div className="md:max-w-[58%]">
             {sections.map((section) => (
-              <section key={section.name} aria-label={section.name}>
+              <section key={section.name}>
                 <CategoryHeading
                   name={section.name}
                   count={section.entries.length}

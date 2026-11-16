@@ -3,6 +3,7 @@ import { StrictMode, startTransition } from "react";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { createBrowserRouter, matchRoutes } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { supportInterestInvokers } from "@/lib/interest.ts";
 import { trackBrowserTransitions } from "./PageTransition.tsx";
 import { prefetchPages, routes } from "./routes.tsx";
 
@@ -19,6 +20,7 @@ for (const { route } of matchRoutes(routes, window.location) ?? []) {
 }
 
 trackBrowserTransitions();
+supportInterestInvokers();
 const app = (
   <StrictMode>
     <RouterProvider router={createBrowserRouter(routes)} />

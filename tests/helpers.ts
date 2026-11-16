@@ -51,9 +51,18 @@ export const row = (page: Page, title: string) =>
 export const rows = (page: Page) =>
   page.getByRole("link", { name: / — open$/ });
 
-/** Expects the document to be in the given theme. */
+/** Each theme's page background (--color-background in index.css). */
+export const BACKGROUND = {
+  dark: "rgb(11, 14, 23)",
+  light: "rgb(242, 236, 224)",
+};
+
+/**
+ * Expects the page to show the given theme, by its background color. Waits
+ * for the color transition to finish.
+ */
 export const expectTheme = (page: Page, theme: "dark" | "light") =>
-  expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+  expect(page.locator("html")).toHaveCSS("background-color", BACKGROUND[theme]);
 
 /** The heading of the not-found page (src/pages/NotFound.tsx). */
 export const NOT_FOUND = "Nothing stands here.";
@@ -83,3 +92,9 @@ export async function settledScrollY(page: Page): Promise<number> {
 /** A page's h1, which receives focus after a route change. */
 export const heading = (page: Page, name: string | RegExp) =>
   page.getByRole("heading", { level: 1, name });
+
+/** The home page's music section, found by its heading. */
+export const musicSection = (page: Page) =>
+  page
+    .locator("section")
+    .filter({ has: page.getByRole("heading", { level: 2, name: "Music" }) });

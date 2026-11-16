@@ -1,7 +1,15 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { origin, pageFile } from "../src/data/site.ts";
-import { expect, HOME, heading, NOT_FOUND, row, test } from "./helpers.ts";
+import {
+  expect,
+  expectTheme,
+  HOME,
+  heading,
+  NOT_FOUND,
+  row,
+  test,
+} from "./helpers.ts";
 
 // dist/ is what the preview server is already serving (see playwright.config).
 const dist = (file: string) =>
@@ -139,7 +147,7 @@ test.describe("prerendered pages", () => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
 
-    const cover = page.waitForResponse(/\/assets\/bakemonogatari-[^/]*\.webp$/);
+    const cover = page.waitForResponse(/\/assets\/bakemonogatari-[^/]*\.avif$/);
     await page.goto("/works/bakemonogatari");
     expect((await cover).ok()).toBe(true);
     await expect(page.getByAltText("Cover art of 化物語")).toHaveCSS(
@@ -153,6 +161,21 @@ test.describe("prerendered pages", () => {
       await expect(page).toHaveTitle(title);
     }
     await context.close();
+  });
+
+  test("follow the system theme with JavaScript disabled", async ({
+    browser,
+  }) => {
+    for (const theme of ["light", "dark"] as const) {
+      const context = await browser.newContext({
+        javaScriptEnabled: false,
+        colorScheme: theme,
+      });
+      const page = await context.newPage();
+      await page.goto("/");
+      await expectTheme(page, theme);
+      await context.close();
+    }
   });
 
   for (const settings of [

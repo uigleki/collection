@@ -10,7 +10,7 @@ describe("terminator", () => {
     expect(terminator((1 + FULL_NIGHT) / 2)).toBeCloseTo(0, 10);
   });
 
-  it("is -1 on night 15 (full)", () => {
+  it("is -1 on the full-moon night", () => {
     expect(terminator(FULL_NIGHT)).toBeCloseTo(-1, 10);
   });
 

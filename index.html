@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="text-scale" content="scale" />
 
         <title>__SITE_TITLE__</title>
         <meta
@@ -20,31 +21,43 @@
         <meta property="og:image:height" content="630" />
         <meta name="twitter:card" content="summary_large_image" />
 
-        <meta name="color-scheme" content="dark light" />
+        <meta name="color-scheme" content="light dark" />
         <meta
             name="theme-color"
+            media="(prefers-color-scheme: light)"
+            content="__BACKGROUND_LIGHT__"
+            data-theme="light"
+            data-color="__BACKGROUND_LIGHT__"
+        />
+        <meta
+            name="theme-color"
+            media="(prefers-color-scheme: dark)"
             content="__BACKGROUND_DARK__"
-            data-dark="__BACKGROUND_DARK__"
-            data-light="__BACKGROUND_LIGHT__"
+            data-theme="dark"
+            data-color="__BACKGROUND_DARK__"
         />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="manifest" href="/manifest.webmanifest" />
 
         <script>
-            // Runs before first paint, so the wrong theme is never shown.
+            // Runs before first paint, so a stored choice of theme is never
+            // shown in the other theme first. Without a choice the page
+            // follows the system theme, in CSS alone.
             try {
                 const t = localStorage.getItem("theme");
-                const theme =
-                    t === "light" || t === "dark"
-                        ? t
-                        : matchMedia("(prefers-color-scheme: light)").matches
-                          ? "light"
-                          : "dark";
-                document.documentElement.dataset.theme = theme;
-                const meta = document.querySelector(
-                    'meta[name="theme-color"]',
-                );
-                meta.content = meta.dataset[theme];
+                if (t === "light" || t === "dark") {
+                    document.documentElement.dataset.theme = t;
+                    document.querySelector(
+                        'meta[name="color-scheme"]',
+                    ).content = t;
+                    const color = document.querySelector(
+                        `meta[name="theme-color"][data-theme="${t}"]`,
+                    ).dataset.color;
+                    for (const m of document.querySelectorAll(
+                        'meta[name="theme-color"]',
+                    ))
+                        m.content = color;
+                }
             } catch {}
         </script>
     </head>

@@ -49,8 +49,11 @@ export interface Work extends Titled {
 /** A work's cover art, as scripts/fetch-covers.ts records it. */
 export interface CoverMeta {
   slug: string;
+  /** the largest file's size, px */
   width: number;
   height: number;
+  /** the width of each file, ascending; the last is `width` */
+  widths: readonly number[];
   /** base64 thumbhash of the art, decoded into its placeholder on the page */
   thumbhash: string;
   credit: string;

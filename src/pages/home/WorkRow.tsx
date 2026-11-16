@@ -47,7 +47,7 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
         aria-label={`${title} — open`}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
-        style={{ "--glow": accent }}
+        style={{ "--work-accent": accent }}
         className="group grid gap-7 md:grid-cols-[11rem_1fr] md:gap-10 lg:grid-cols-[13rem_1fr]"
       >
         <motion.div
@@ -60,7 +60,10 @@ export function WorkRow({ entry }: { entry: WorkEntry }) {
           }}
           className="cover-glow w-40 md:w-auto"
         >
-          <Cover work={work} />
+          <Cover
+            work={work}
+            sizes="(width >= 64rem) 13rem, (width >= 48rem) 11rem, 10rem"
+          />
         </motion.div>
 
         <div className="max-w-xl self-center">

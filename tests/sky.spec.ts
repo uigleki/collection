@@ -45,7 +45,10 @@ test.describe("sky with reduced motion", () => {
   }) => {
     const draws = await reducedMotionSky(page);
     const settled = await draws();
-    await page.waitForTimeout(500);
+    // thirty frames in which the sky could have drawn
+    await page.evaluate(async () => {
+      for (let i = 0; i < 30; i++) await new Promise(requestAnimationFrame);
+    });
     expect((await draws()) - settled).toBe(0);
 
     await page.getByRole("button", { name: "Switch to day" }).click();

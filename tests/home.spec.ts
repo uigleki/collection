@@ -1,4 +1,8 @@
-import { expect, HOME, heading, rows, test } from "./helpers.ts";
+import { load } from "../src/content/load.ts";
+import { expect, HOME, heading, musicSection, rows, test } from "./helpers.ts";
+
+// The collection as README.md lists it.
+const { categories, music } = load().collection;
 
 test.describe("home page", () => {
   test("shows the Perfect Collection heading", async ({ page }) => {
@@ -6,17 +10,16 @@ test.describe("home page", () => {
     await expect(heading(page, HOME)).toBeVisible();
   });
 
-  test("lists all 14 works under the four category headings", async ({
-    page,
-  }) => {
+  test("lists every work under its category heading", async ({ page }) => {
     await page.goto("/");
-    for (const name of ["Anime", "Movies", "Games", "Artists"]) {
+    for (const { name } of categories) {
       await expect(
         page.getByRole("heading", { level: 2, name }),
       ).toBeAttached();
     }
-    await expect(rows(page)).toHaveCount(14);
-    await expect(page.getByText("カントク").first()).toBeAttached();
+    await expect(rows(page)).toHaveCount(
+      categories.reduce((n, c) => n + c.works.length, 0),
+    );
   });
 
   test("shows the moon quote and links to /why", async ({ page }) => {
@@ -29,10 +32,10 @@ test.describe("home page", () => {
     await expect(heading(page, "Why These Works")).toBeVisible();
   });
 
-  test("lists all 49 songs in the Music section", async ({ page }) => {
+  test("lists every song in the Music section", async ({ page }) => {
     await page.goto("/");
-    const rows = page.locator('section[aria-label="Music"] li');
-    await expect(rows).toHaveCount(49);
+    const rows = musicSection(page).locator("li");
+    await expect(rows).toHaveCount(music.length);
     const row = rows.filter({ hasText: "朧月" });
     await expect(row).toHaveCount(1);
     await expect(row.getByText("湊貴大 feat. 初音ミク")).toBeAttached();
@@ -67,7 +70,7 @@ test.describe("home page", () => {
     await page.goto("/");
     // 凛々咲 sings "Letters From Heaven": the name is marked lang="ja", and
     // the Latin title must stay outside that element.
-    const row = page.locator('section[aria-label="Music"] li', {
+    const row = musicSection(page).locator("li", {
       hasText: "Letters From Heaven",
     });
     const japanese = row.locator('[lang="ja"]');

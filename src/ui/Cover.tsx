@@ -7,6 +7,8 @@ interface CoverProps {
   work: Work;
   /** eager-load with high fetch priority (a work page's cover is its LCP) */
   priority?: boolean;
+  /** the <img> sizes attribute: the width the cover is shown at */
+  sizes: string;
   className?: string;
 }
 
@@ -28,7 +30,12 @@ const usePrerendered = () =>
  * scroll-restoration drift). A work without licensed art gets a panel with
  * the first character of its title instead.
  */
-export function Cover({ work, priority = false, className = "" }: CoverProps) {
+export function Cover({
+  work,
+  priority = false,
+  sizes,
+  className = "",
+}: CoverProps) {
   const { title, slug, lang } = work;
   const cover = coverFor(slug);
   // An image already shown during this visit is in memory, so it paints at
@@ -64,7 +71,10 @@ export function Cover({ work, priority = false, className = "" }: CoverProps) {
 
   return (
     <div
-      style={{ aspectRatio: `${cover.width} / ${cover.height}` }}
+      style={{
+        aspectRatio: `${cover.width} / ${cover.height}`,
+        "--work-accent": work.accent,
+      }}
       className={`relative ${className}`}
     >
       {/* the element that animates between pages; the parent box keeps its
@@ -79,13 +89,17 @@ export function Cover({ work, priority = false, className = "" }: CoverProps) {
           aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover"
         />
+        {/* loading, srcset and sizes come before src: a browser starts the
+            request when src is set, using the attributes set by then */}
         <img
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          srcSet={cover.srcset}
+          sizes={sizes}
           src={cover.url}
           alt={`Cover art of ${title}`}
           width={cover.width}
           height={cover.height}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
           decoding={loaded ? "sync" : "async"}
           ref={(img) => {
             if (img?.complete && img.naturalWidth > 0) shown.add(cover.url);
@@ -98,10 +112,7 @@ export function Cover({ work, priority = false, className = "" }: CoverProps) {
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-sm"
-          style={{
-            boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${work.accent} 45%, transparent)`,
-          }}
+          className="cover-frame pointer-events-none absolute inset-0 rounded-sm"
         />
       </div>
     </div>

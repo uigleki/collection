@@ -4,6 +4,7 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { Features } from "lightningcss";
 import type { Plugin } from "vite";
 import { defineConfig } from "vitest/config";
 import { load } from "./src/content/load.ts";
@@ -33,26 +34,21 @@ const PRERENDER_OUT = resolve(import.meta.dirname, "node_modules/.prerender");
  */
 function backgroundColors(): { dark: string; light: string } {
   const css = readFileSync(STYLES, "utf8");
-  const read = (block: RegExp, where: string) => {
-    const scope = css.match(block)?.[1];
-    const value = scope?.match(/--color-background:\s*([^;]+);/)?.[1]?.trim();
-    if (!value)
-      throw new Error(`site-metadata: no --color-background in ${where}`);
-    return value;
-  };
-  return {
-    dark: read(/@theme\s*\{([\s\S]*?)\n\}/, "@theme"),
-    light: read(
-      /:root\[data-theme="light"\]\s*\{([\s\S]*?)\n\}/,
-      "the light theme",
-    ),
-  };
+  const match = css.match(
+    /--color-background:\s*light-dark\(\s*([^,\s]+)\s*,\s*([^)\s]+)\s*\)/,
+  );
+  if (!match?.[1] || !match[2])
+    throw new Error(
+      "site-metadata: no --color-background: light-dark(light, dark) in index.css",
+    );
+  return { light: match[1], dark: match[2] };
 }
 
 const manifest = () => {
   const { dark } = backgroundColors();
   return JSON.stringify(
     {
+      id: "/",
       name: siteTitle,
       short_name: "Collection",
       description: load().tagline,
@@ -239,12 +235,17 @@ async function writePages(dist: string): Promise<void> {
     // the same priority as the page's main image and its text font, and a
     // connection serves requests of equal priority in the order they were
     // made, which in index.html's own order is scripts first.
-    const cover = html
-      .match(/<img[^>]*fetchpriority="high"[^>]*>/i)?.[0]
-      .match(/ src="([^"]+)"/)?.[1];
+    // The preload carries the image's srcset and sizes, so it requests the
+    // same file the <img> will choose.
+    const img = html.match(/<img[^>]*fetchpriority="high"[^>]*>/i)?.[0];
+    const attr = (name: string) =>
+      img?.match(new RegExp(` ${name}="([^"]+)"`, "i"))?.[1];
+    const [srcset, sizes] = [attr("srcset"), attr("sizes")];
+    if (img && (!srcset || !sizes))
+      throw new Error(`site-metadata: ${path}'s main image has no srcset`);
     const first = [
-      cover &&
-        `<link rel="preload" as="image" fetchpriority="high" href="${cover}" />`,
+      img &&
+        `<link rel="preload" as="image" fetchpriority="high" imagesrcset="${srcset}" imagesizes="${sizes}" />`,
       `<link rel="preload" as="font" type="font/woff2" crossorigin href="${textFontUrl}" />`,
     ].filter(Boolean);
     page = fill(
@@ -363,6 +364,16 @@ function siteMetadata(): Plugin {
 
 export default defineConfig({
   plugins: [content(), siteMetadata(), react(), tailwindcss()],
+  css: {
+    lightningcss: {
+      // The minifier would rewrite light-dark() into variables that only
+      // work where it also sees color-scheme declared. The palette relies on
+      // native light-dark(); where it is unsupported, each registered
+      // palette color falls back to its @property initial value, which is
+      // the dark theme's color.
+      exclude: Features.LightDark,
+    },
+  },
   resolve: {
     alias: {
       "@": resolve(import.meta.dirname, "src"),

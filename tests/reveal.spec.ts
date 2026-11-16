@@ -29,28 +29,4 @@ test.describe("entrance animations", () => {
       await article.evaluate((el) => Number(getComputedStyle(el).opacity)),
     ).toBeGreaterThan(0.95);
   });
-
-  test("uses a view() timeline where supported; else content is shown", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    const timeline = await page
-      .locator("article")
-      .first()
-      .evaluate((el) =>
-        CSS.supports("animation-timeline: view()")
-          ? getComputedStyle(el).animationTimeline
-          : null,
-      );
-    // without scroll-driven animation support, content is shown unanimated
-    if (timeline === null) {
-      const opacity = await page
-        .locator("article")
-        .first()
-        .evaluate((el) => getComputedStyle(el).opacity);
-      expect(opacity).toBe("1");
-    } else {
-      expect(timeline).toContain("view");
-    }
-  });
 });

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
 import type { Work } from "@/data/types.ts";
 import { useKeydown } from "@/lib/useKeydown.ts";
+import { HintButton } from "./HintButton.tsx";
 import { Chevron, Icon } from "./Icon.tsx";
 
 /**
@@ -9,9 +10,11 @@ import { Chevron, Icon } from "./Icon.tsx";
  * controls are .icon-button buttons like the theme toggle. Back is
  * top-left. On a work page the previous and next works are at mid-height on
  * the left and right edges (EdgeButton), like an image gallery's pager, and
- * show the work's title on hover. Escape goes back, and so does a click on
+ * show the work's title on hover and focus. Escape goes back, and so does a click on
  * the empty side margins, as in a lightbox.
  */
+const OPEN_HINT = '[popover="hint"]:popover-open';
+
 export function PageNav({ children }: { children?: ReactNode }) {
   const navigate = useNavigate();
 
@@ -24,8 +27,10 @@ export function PageNav({ children }: { children?: ReactNode }) {
     else navigate("/");
   };
 
+  // Escape first closes an open hint (HintButton); only an Escape with no
+  // hint open goes back. The hint closes after this listener has run.
   useKeydown((e) => {
-    if (e.key === "Escape") goBack();
+    if (e.key === "Escape" && !document.querySelector(OPEN_HINT)) goBack();
   });
 
   return (
@@ -40,17 +45,17 @@ export function PageNav({ children }: { children?: ReactNode }) {
           className={`fixed inset-y-0 z-10 hidden w-[max(0px,calc((100vw-72rem)/2-1rem))] cursor-pointer lg:block ${side}`}
         />
       ))}
-      <button
-        type="button"
+      <HintButton
+        hint="Back to the collection"
+        placement="top-left"
         onClick={goBack}
-        aria-label="Back to the collection"
-        title="Back to the collection"
-        className="icon-button fixed top-5 left-5 z-50"
-      >
-        <Icon>
-          <path d="M19 12H5M11 18l-6-6 6-6" />
-        </Icon>
-      </button>
+        className="fixed top-(--control-inset) left-(--control-inset) z-50"
+        icon={
+          <Icon>
+            <path d="M19 12H5M11 18l-6-6 6-6" />
+          </Icon>
+        }
+      />
       {children}
     </>
   );
@@ -66,29 +71,24 @@ export function EdgeButton({
   onClick: () => void;
 }) {
   const { title, lang } = work;
-  const edge = step === 1 ? "right-5 flex-row-reverse" : "left-5 flex-row";
+  const next = step === 1;
   // Hidden on narrow screens, where a mid-height button would cover the
   // text column: there the links are at the end of the article (NeighborLink,
   // WorkPage.tsx).
   return (
-    <div
-      className={`group/edge fixed top-1/2 z-50 hidden -translate-y-1/2 items-center gap-3 md:flex ${edge}`}
-    >
-      <button
-        type="button"
+    <div className="hidden md:contents">
+      <HintButton
+        hint={
+          <>
+            <span className="sr-only">{next ? "Next" : "Previous"}: </span>
+            <span lang={lang}>{title}</span>
+          </>
+        }
+        placement={next ? "middle-right" : "middle-left"}
         onClick={onClick}
-        aria-label={`${step === 1 ? "Next" : "Previous"}: ${title}`}
-        className="icon-button"
-      >
-        <Chevron step={step} />
-      </button>
-      <span
-        lang={lang}
-        aria-hidden="true"
-        className="max-w-48 truncate rounded-full border border-border/50 bg-surface/70 px-3 py-1 text-caption text-muted opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover/edge:opacity-100"
-      >
-        {title}
-      </span>
+        className={`fixed top-1/2 z-50 -translate-y-1/2 ${next ? "right-(--control-inset)" : "left-(--control-inset)"}`}
+        icon={<Chevron step={step} />}
+      />
     </div>
   );
 }

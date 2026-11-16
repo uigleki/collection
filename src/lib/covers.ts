@@ -3,14 +3,17 @@ import { covers } from "@/data/generated/covers.ts";
 import type { CoverMeta } from "@/data/types.ts";
 
 // Vite resolves every cover to its hashed asset URL at build time.
-const urls = import.meta.glob<string>("../assets/works/*.webp", {
+const urls = import.meta.glob<string>("../assets/works/*.avif", {
   eager: true,
   query: "?url",
   import: "default",
 });
 
 interface Cover extends CoverMeta {
+  /** the largest file */
   url: string;
+  /** every file, as an <img> srcset */
+  srcset: string;
   /** the blurred placeholder, as a data URL */
   readonly placeholder: string;
 }
@@ -27,12 +30,17 @@ function decode(hash: string): string {
 // is decoded on first access: a work page shows one, the credits page none.
 const bySlug: ReadonlyMap<string, Cover> = new Map(
   covers.flatMap((cover) => {
-    const url = urls[`../assets/works/${cover.slug}.webp`];
-    if (!url) return [];
+    const files = cover.widths.map((w) => ({
+      w,
+      url: urls[`../assets/works/${cover.slug}-${w}.avif`],
+    }));
+    const url = files.at(-1)?.url;
+    if (!url || files.some((f) => !f.url)) return [];
     let placeholder: string | undefined;
     const entry: Cover = {
       ...cover,
       url,
+      srcset: files.map((f) => `${f.url} ${f.w}w`).join(", "),
       get placeholder() {
         placeholder ??= decode(cover.thumbhash);
         return placeholder;

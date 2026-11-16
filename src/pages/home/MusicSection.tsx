@@ -6,7 +6,7 @@ export function MusicSection() {
   const ref = useReflectionOnly();
 
   return (
-    <section ref={ref} aria-label="Music" className="relative py-20 md:py-28">
+    <section ref={ref} className="relative py-20 md:py-28">
       <CategoryHeading
         name="Music"
         count={music.length}

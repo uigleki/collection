@@ -1,5 +1,6 @@
 import type { Locator, Page } from "@playwright/test";
 import {
+  BACKGROUND,
   expect,
   expectTheme,
   HOME,
@@ -296,6 +297,32 @@ test.describe("work pages", () => {
     await expectTheme(page, "dark");
   });
 
+  test("choosing the system theme again follows the system after it changes", async ({
+    page,
+  }) => {
+    // the system scheme is dark (playwright.config.ts)
+    await page.goto("/");
+    const scheme = page.locator('meta[name="color-scheme"]');
+    await page.getByRole("button", { name: "Switch to day" }).click();
+    await expect(scheme).toHaveAttribute("content", "light");
+    await page.reload();
+    await expect(scheme).toHaveAttribute("content", "light");
+    await page.getByRole("button", { name: "Switch to night" }).click();
+    await expect(scheme).toHaveAttribute("content", "light dark");
+    expect(await page.evaluate(() => localStorage.getItem("theme"))).toBeNull();
+    await page.emulateMedia({ colorScheme: "light" });
+    await expectTheme(page, "light");
+  });
+
+  test("a theme chosen in another tab is applied", async ({ context }) => {
+    const [first, second] = [await context.newPage(), await context.newPage()];
+    await first.goto("/");
+    await second.goto("/");
+    await expect(heading(first, HOME)).toBeVisible();
+    await second.getByRole("button", { name: "Switch to day" }).click();
+    await expectTheme(first, "light");
+  });
+
   test("theme-color matches the page background after a theme switch", async ({
     page,
   }) => {
@@ -342,7 +369,7 @@ test.describe("work pages", () => {
     await page.goto("/");
     const toggle = page.getByRole("button", { name: /^Switch to/ });
     await expect(toggle).toBeVisible();
-    const seen = await page.evaluate(async () => {
+    const seen = await toggle.evaluate(async (button: HTMLElement) => {
       const background = () =>
         getComputedStyle(document.documentElement)
           .getPropertyValue("--color-background")
@@ -355,10 +382,7 @@ test.describe("work pages", () => {
           usedViewTransition = true;
           return vt(...args);
         };
-      const button = document.querySelector<HTMLElement>(
-        'button[aria-label^="Switch to"]',
-      );
-      button?.click();
+      button.click();
       // wait for the first frame in which the background color has changed
       let between = dark;
       for (let i = 0; i < 60 && between === dark; i++) {
@@ -366,14 +390,14 @@ test.describe("work pages", () => {
         between = background();
       }
       // toggle back before the light theme's color is reached
-      button?.click();
+      button.click();
       return { dark, between, usedViewTransition };
     });
     // no view transition (a snapshot of the page) runs while the colors change
     expect(seen.usedViewTransition).toBe(false);
     expect(seen.between).not.toBe(seen.dark);
     // …and it was sampled mid-transition, not already at the light value
-    expect(seen.between).not.toBe("rgb(242, 236, 224)");
+    expect(seen.between).not.toBe(BACKGROUND.light);
     await expectTheme(page, "dark");
     await expect
       .poll(() =>
@@ -439,14 +463,12 @@ test.describe("cover transition", () => {
   test("the cover animates from its row to its place on the work page", async ({
     page,
   }) => {
-    const { from, early, final } = await row(page, "化物語").evaluate(
+    const { from, early } = await row(page, "化物語").evaluate(
       async (link: HTMLElement, home) => {
         const cover = window.__cover;
         const from = await cover("化物語", home);
         link.click();
-        const early = await cover("化物語", "化物語");
-        await new Promise((r) => setTimeout(r, 1500));
-        return { from, early, final: await cover("化物語", "化物語") };
+        return { from, early: await cover("化物語", "化物語") };
       },
       HOME_H1,
     );
@@ -454,7 +476,13 @@ test.describe("cover transition", () => {
     expect(Math.abs(early.left - from.left)).toBeLessThan(60);
     expect(Math.abs(early.top - from.top)).toBeLessThan(60);
     // …and ends at a different size: its place on the work page.
-    expect(Math.abs(final.width - from.width)).toBeGreaterThan(40);
+    await expect
+      .poll(() =>
+        page.evaluate(
+          async () => (await window.__cover("化物語", "化物語")).width,
+        ),
+      )
+      .toBeGreaterThan(from.width + 40);
   });
 
   test("the cover stays visible throughout the transition", async ({
@@ -507,22 +535,136 @@ test.describe("cover transition", () => {
   test("going back mid-transition reverses the cover from where it is", async ({
     page,
   }) => {
-    const { before, after } = await row(page, "化物語").evaluate(
-      async (link: HTMLElement, home) => {
-        const cover = window.__cover;
+    // The cover's on-screen box is sampled once per frame. Escape is pressed
+    // as soon as the cover has left its row, so even with the velocity it
+    // carries, the next frame cannot reach the work page's place by moving.
+    // A cover that jumps instead shows up at one of the two places the
+    // transition can wrongly restart from: its place in the row or its
+    // place on the work page.
+    const measure = () =>
+      row(page, "化物語").evaluate(async (link: HTMLElement) => {
+        type Box = { left: number; top: number; width: number };
+        const box = ({ left, top, width }: DOMRect): Box => ({
+          left,
+          top,
+          width,
+        });
+        const distance = (a: Box, b: Box) =>
+          Math.max(
+            Math.abs(a.left - b.left),
+            Math.abs(a.top - b.top),
+            Math.abs(a.width - b.width),
+          );
+        // the visible cover, and the box it moves toward (its parent's parent
+        // keeps the cover's place in the layout: coverTransition.ts)
+        const visible = () => {
+          const img = [
+            ...document.querySelectorAll<HTMLElement>(
+              'img[alt="Cover art of 化物語"]',
+            ),
+          ].find(
+            (img) =>
+              !img.closest("[inert]") &&
+              getComputedStyle(img).visibility === "visible",
+          );
+          const place = img?.parentElement?.parentElement;
+          return img && place
+            ? { at: box(img.getBoundingClientRect()), place, img }
+            : null;
+        };
+        const inRow = visible();
+        if (!inRow) throw new Error("no cover in the row");
+        const rowBox = inRow.at;
+
         link.click();
-        await cover("化物語", "化物語");
-        await new Promise((r) => setTimeout(r, 160));
-        const before = await cover("化物語", "化物語");
+        let before: Box | undefined;
+        let workBox: Box | undefined;
+        for (let i = 0; i < 300 && !before; i++) {
+          await new Promise(requestAnimationFrame);
+          const now = visible();
+          if (!now || now.img === inRow.img) continue;
+          const target = box(now.place.getBoundingClientRect());
+          const moved = distance(now.at, rowBox);
+          if (moved > 0.05 * distance(target, rowBox)) {
+            before = now.at;
+            workBox = target;
+          }
+        }
+        if (!before || !workBox) throw new Error("the cover never moved");
         window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
-        return { before, after: await cover("化物語", home) };
-      },
-      HOME_H1,
-    );
-    // no jump: it continues from where it was, not from its position in the
-    // row or on the work page
-    expect(Math.abs(after.left - before.left)).toBeLessThan(60);
-    expect(Math.abs(after.top - before.top)).toBeLessThan(60);
-    expect(Math.abs(after.width - before.width)).toBeLessThan(60);
+
+        let after: Box | undefined;
+        for (let i = 0; i < 300 && !after; i++) {
+          await new Promise(requestAnimationFrame);
+          after = visible()?.at;
+        }
+        if (!after) throw new Error("no cover after going back");
+        return {
+          span: distance(workBox, rowBox),
+          beforeFromWork: distance(before, workBox),
+          afterFromRow: distance(after, rowBox),
+          afterFromWork: distance(after, workBox),
+          rowBox,
+        };
+      });
+    // A frame that runs long (Firefox, on a loaded machine) can carry the
+    // cover most of the way before Escape is pressed; that try says nothing
+    // about a jump, so it is repeated from the home page.
+    let result = await measure();
+    for (let i = 0; i < 2 && result.beforeFromWork <= result.span / 2; i++) {
+      await page.goto("/");
+      await row(page, "化物語").scrollIntoViewIfNeeded();
+      await settledScrollY(page);
+      result = await measure();
+    }
+    // Escape was pressed with most of the way still ahead
+    expect(result.beforeFromWork).toBeGreaterThan(result.span / 2);
+    // …and the next frame shows the cover at neither end
+    expect(result.afterFromRow).toBeGreaterThan(5);
+    expect(result.afterFromWork).toBeGreaterThan(5);
+    // it then returns to its row
+    await expect
+      .poll(async () => {
+        const at = await page
+          .getByAltText("Cover art of 化物語")
+          .first()
+          .boundingBox();
+        return at && Math.abs(at.y - result.rowBox.top);
+      })
+      .toBeLessThan(2);
+  });
+});
+
+test.describe("control hints", () => {
+  const hint = (page: Page, text: string) =>
+    page.locator('[popover="hint"]', { hasText: text });
+
+  test("a control's label shows on hover and on keyboard focus", async ({
+    page,
+  }) => {
+    await page.goto("/works/bakemonogatari");
+    const back = page.getByRole("button", { name: "Back to the collection" });
+    await expect(hint(page, "Back to the collection")).toBeHidden();
+    await back.hover();
+    await expect(hint(page, "Back to the collection")).toBeVisible();
+    await page.mouse.move(600, 400);
+    await expect(hint(page, "Back to the collection")).toBeHidden();
+
+    await back.focus();
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Shift+Tab");
+    await expect(back).toBeFocused();
+    await expect(hint(page, "Back to the collection")).toBeVisible();
+  });
+
+  test("Escape closes an open hint before it goes back", async ({ page }) => {
+    await page.goto("/works/bakemonogatari");
+    await page.getByRole("button", { name: "Back to the collection" }).hover();
+    await expect(hint(page, "Back to the collection")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(hint(page, "Back to the collection")).toBeHidden();
+    await expect(heading(page, "化物語")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(heading(page, HOME)).toBeVisible();
   });
 });
