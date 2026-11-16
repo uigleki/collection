@@ -51,6 +51,13 @@ export const row = (page: Page, title: string) =>
 export const rows = (page: Page) =>
   page.getByRole("link", { name: / — open$/ });
 
+/**
+ * Store a theme before any page script runs, so the next page loads in it:
+ * the inline theme script reads the stored theme at document start.
+ */
+export const presetTheme = (page: Page, theme: "dark" | "light") =>
+  page.addInitScript((t) => localStorage.setItem("theme", t), theme);
+
 /** Each theme's page background (--color-background in index.css). */
 export const BACKGROUND = {
   dark: "rgb(11, 14, 23)",

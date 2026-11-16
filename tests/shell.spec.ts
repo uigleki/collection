@@ -7,6 +7,7 @@ import {
   HOME,
   heading,
   NOT_FOUND,
+  presetTheme,
   row,
   test,
 } from "./helpers.ts";
@@ -196,9 +197,7 @@ test.describe("prerendered pages", () => {
         if (m.type() === "error") record(m.text());
       });
       await page.emulateMedia({ reducedMotion: settings.reducedMotion });
-      await page.addInitScript((theme) => {
-        localStorage.setItem("theme", theme);
-      }, settings.theme);
+      await presetTheme(page, settings.theme);
 
       // The page's scripts are held back until released, so the page can be
       // inspected before hydration.

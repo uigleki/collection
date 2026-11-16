@@ -1,4 +1,5 @@
 import type { Locator, Page } from "@playwright/test";
+import { siteTitle } from "../src/data/site.ts";
 import {
   BACKGROUND,
   expect,
@@ -450,7 +451,6 @@ test.describe("cover transition", () => {
       }
       throw new Error("no cover of " + title + " on " + page);
     };`;
-  const HOME_H1 = "Perfect Collection";
 
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(script);
@@ -470,7 +470,7 @@ test.describe("cover transition", () => {
         link.click();
         return { from, early: await cover("化物語", "化物語") };
       },
-      HOME_H1,
+      siteTitle,
     );
     // It starts at its position in the row…
     expect(Math.abs(early.left - from.left)).toBeLessThan(60);

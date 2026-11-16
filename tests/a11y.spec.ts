@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { pages } from "../src/data/site.ts";
-import { expect, HOME, heading, row, test } from "./helpers.ts";
+import { expect, HOME, heading, presetTheme, row, test } from "./helpers.ts";
 
 // The static pages are read from src/data/site.ts, which also feeds the
 // sitemap, so a page added there is audited without editing this list. The
@@ -22,12 +22,7 @@ test.beforeEach(async ({ page }) => {
 for (const theme of THEMES) {
   for (const route of ROUTES) {
     test(`axe: ${route} (${theme})`, async ({ page }) => {
-      // Set before any page script runs, so the page loads in the theme
-      // under test. Setting it after a goto and reloading would load every
-      // route twice; the inline theme script reads it at document start.
-      await page.addInitScript((t) => {
-        localStorage.setItem("theme", t);
-      }, theme);
+      await presetTheme(page, theme);
       await page.goto(route);
       // Wait for the h1, not a fixed time: routes are lazy-loaded, and axe
       // reports no violations on a page whose chunk has not mounted yet.
