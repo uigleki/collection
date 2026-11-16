@@ -18,6 +18,7 @@ import { rgbaToThumbHash } from "thumbhash";
 import { catalog } from "../src/content/catalog.ts";
 import type { WorkMeta } from "../src/content/collection.ts";
 import type { CoverMeta } from "../src/data/types.ts";
+import { download } from "./download.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ASSETS = resolve(ROOT, "src/assets/works");
@@ -63,16 +64,6 @@ function steam(appid: number): Fetched {
   };
 }
 
-async function download(url: string) {
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent": "perfect-collection/1.0 (personal, non-commercial)",
-    },
-  });
-  if (!res.ok) throw new Error(`download ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
-}
-
 /**
  * The widths each cover is encoded at, capped at the source's own width. A
  * home-page row shows a cover at most 13rem wide, which 320px covers at
@@ -82,28 +73,30 @@ async function download(url: string) {
 const WIDTHS = [320, 640];
 
 async function process(slug: string, meta: Fetched): Promise<CoverMeta> {
-  const raw = await download(meta.url);
-  const source = await sharp(raw).metadata();
+  const image = sharp(await download(meta.url));
+  const source = await image.metadata();
   const widths = [
     ...new Set(WIDTHS.map((w) => Math.min(w, source.width ?? w))),
   ];
-  let height = 0;
-  for (const w of widths) {
-    const out = await sharp(raw)
-      .resize({ width: w })
-      .avif({ quality: 60, effort: 6 })
-      .toFile(resolve(ASSETS, `${slug}-${w}.avif`));
-    height = out.height;
-  }
-  const width = widths.at(-1) ?? 0;
-
   // The blurred placeholder is stored as its thumbhash; the page decodes it
   // (src/lib/covers.ts; covers.test.ts next to it explains why).
-  const small = await sharp(raw)
-    .resize(90, 90, { fit: "inside" })
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
+  const [small, ...files] = await Promise.all([
+    image
+      .clone()
+      .resize(90, 90, { fit: "inside" })
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true }),
+    ...widths.map((w) =>
+      image
+        .clone()
+        .resize({ width: w })
+        .avif({ quality: 60, effort: 6 })
+        .toFile(resolve(ASSETS, `${slug}-${w}.avif`)),
+    ),
+  ]);
+  const width = widths.at(-1) ?? 0;
+  const height = files.at(-1)?.height ?? 0;
   const thumbhash = Buffer.from(
     rgbaToThumbHash(small.info.width, small.info.height, small.data),
   ).toString("base64");

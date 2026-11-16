@@ -20,6 +20,7 @@ import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import subsetFont from "subset-font";
 import { SOURCES as MARKDOWN } from "../src/content/load.ts";
+import { download } from "./download.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const SRC = resolve(ROOT, "src");
@@ -73,13 +74,7 @@ async function collectGlyphs(): Promise<string> {
 
 async function build(glyphs: string, face: (typeof FACES)[number]) {
   console.log(`[${face.label}] downloading source face…`);
-  const res = await fetch(face.source, {
-    headers: {
-      "User-Agent": "perfect-collection/1.0 (personal, non-commercial)",
-    },
-  });
-  if (!res.ok) throw new Error(`[${face.label}] source ${res.status}`);
-  const src = Buffer.from(await res.arrayBuffer());
+  const src = await download(face.source);
   console.log(`[${face.label}]   source ${(src.length / 1e6).toFixed(1)} MB`);
 
   const woff2 = await subsetFont(src, glyphs, {
