@@ -32,6 +32,8 @@ Works that enrich rather than diminish — created from love, not manipulation.
 
 ## 🎵 Music
 
+<!-- keep-sorted start -->
+
 - COP feat. 乐正绫 - 同归世界线
 - COP feat. 洛天依 & 言和 - 灰烬 (重制)
 - COP feat. 洛天依 - 世末积雨云 (重新混缩)
@@ -81,6 +83,8 @@ Works that enrich rather than diminish — created from love, not manipulation.
 - 竹達彩奈 & 巽悠衣子 - バランスKISS
 - 茶太 - 夢笑顔
 - 高橋李依 - 気まぐれロマンティック
+
+<!-- keep-sorted end -->
 
 <!-- markdownlint-enable MD013 -->
 

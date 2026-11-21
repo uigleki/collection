@@ -32,10 +32,12 @@
             inputsFrom = [ config.pre-commit.devShell ];
 
             packages = with pkgs; [
+              # keep-sorted start
               nixd
               nodejs-slim
               playwright-driver.browsers
               pnpm
+              # keep-sorted end
             ];
 
             shellHook = ''
@@ -66,6 +68,7 @@
               biome.enable = true;
               convco.enable = true;
               deadnix.enable = true;
+              keep-sorted.enable = true;
 
               nil = {
                 enable = true;
