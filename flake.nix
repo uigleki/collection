@@ -50,8 +50,6 @@
           };
 
           pre-commit.settings = {
-            package = pkgs.prek;
-
             hooks = {
               actionlint.enable = true;
 
@@ -100,6 +98,8 @@
                 settings.lint-only = false;
               };
             };
+
+            package = pkgs.prek;
           };
         };
 
